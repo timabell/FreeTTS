@@ -61,7 +61,7 @@ public class USEnglish {
     /** default -illion regular expression */
     public static final String RX_DEFAULT_ILLION = ".*illion";
     /** default digits2dash (e.g. 999-999-999) regular expression */
-    public static final String RX_DEFAULT_DIGITS2DASH = "[0-9]+(-[0-9]+)+";
+    public static final String RX_DEFAULT_DIGITS2DASH = "[0-9]+(-[0-9]+)(-[0-9]+)+";
     /** default digits/digits (e.g. 999/999) regular expression */
     public static final String RX_DEFAULT_DIGITSSLASHDIGITS = "[0-9]+/[0-9]+";
     /** default number time regular expression */
