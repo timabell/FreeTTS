@@ -1,5 +1,6 @@
 /**
  * Copyright 2002 DFKI GmbH.
+ * Portions Copyright 2002 Sun Microsystems, Inc.
  * All Rights Reserved.  Use is subject to license terms.
  *
  * See the file "license.terms" for information on usage and
@@ -34,13 +35,7 @@ public class MbrolaVoice extends CMUVoice {
 
     private String databaseDirectory; // where the voice database is
     private String database;          // name of the voice database
-        
-    /**
-     * Creates a simple voice
-     */
-    public MbrolaVoice() {
-	this(false);
-    }
+
 
     /**
      * Creates an MbrolaVoice.
@@ -77,37 +72,63 @@ public class MbrolaVoice extends CMUVoice {
     }
 
     /**
-     * Returns the command line for that invokes the MBROLA executable
-     * which synthesizes speech using this Voice. The command will be
-     * in the form of:
+     * Returns the command line that invokes the MBROLA executable.
+     * The command will be in the form of:
      *
-     * <code> {mbrolaExecutable} -e -I {mbrolaRenameTable} 
-     * {mbrolaVoiceDB} - -.raw </code>
+     * <pre> {mbrolaExecutable} -e -I {mbrolaRenameTable} {mbrolaVoiceDB} 
+     * - -.raw </pre>
      */
     protected String getMbrolaCommand() {
-        
-        String mbrolaBase = System.getProperty("mbrola.base");
-
-        // Path to the binary:
-        String mbrola = mbrolaBase + File.separator + "mbrola";
-
-        // Path to the mbrola voice db to be used:
-        String mbrolaVoiceDB = mbrolaBase + File.separator + 
-            databaseDirectory + File.separator + database;
-        
-        // Path to the segment name conversion file:
-        String mbrolaRenameTable = mbrolaBase + File.separator + "us1" +
-            File.separator + "us1mrpa";
 
         // Construct the mbrola command in such a way that
         // mbrola reads from stdin and writes raw, headerless audio data
         // to stdout; translates CMU us radio to sampa phonetic symbols;
         // and only complains, but does not abort, when encountering an
         // unknown diphone:
-        String cmd = mbrola + " -e -I " + mbrolaRenameTable + " " + 
-            mbrolaVoiceDB + " - -.raw";
+        String cmd = getMbrolaBinary() + " -e -I " + getRenameTable() + " " + 
+            getDatabase() + " - -.raw";
         
         return cmd;
+    }
+
+    /**
+     * Returns the absolute name of the MBROLA directory.
+     *
+     * @return the absolute name of the MBROLA directory
+     */
+    public String getMbrolaBase() {
+        return System.getProperty("mbrola.base");
+    }
+
+    /**
+     * Returns the absolute file name of the MBROLA binary.
+     *
+     * @return the absolute file name of the MBROLA binary
+     */
+    public String getMbrolaBinary() {
+        return getMbrolaBase() + File.separator + "mbrola";
+    }
+
+    /**
+     * Returns the absolute file name of the MBROLA phonetic symbols
+     * rename table.
+     *
+     * @return the absolute file name of the rename table
+     */
+    public String getRenameTable() {
+        return getMbrolaBase() + File.separator + "us1" + 
+            File.separator + "us1mrpa";
+    }
+
+    /**
+     * Returns the absolute file name of the Voice database
+     * this MbrolaVoice uses.
+     *
+     * @return the absolute file name of the Voice database
+     */
+    public String getDatabase() {
+        return getMbrolaBase() + File.separator + 
+            databaseDirectory + File.separator + database;
     }
 
     /**
