@@ -426,7 +426,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 	//
 	// com.sun.speech.freetts.audio.AudioPlayer.closeDelay
 	// 
-	// The default close delay is zero (which reverts to 
+	// 
 			try {
 			    if (closeDelay > 0L) {
 				Thread.sleep(closeDelay);
