@@ -18,6 +18,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Iterator;
 
 import javax.speech.AudioException;
 import javax.speech.Central;
@@ -53,6 +56,7 @@ public class PlayerModelImpl implements PlayerModel {
     private DefaultComboBoxModel voiceList;
     private float volume = -1;
     private static boolean debug = false;
+    private Set loadedSynthesizers;
 
     
     /**
@@ -62,6 +66,7 @@ public class PlayerModelImpl implements PlayerModel {
 	playList = new DefaultListModel();
 	synthesizerList = new DefaultComboBoxModel();
 	voiceList = new DefaultComboBoxModel();
+	loadedSynthesizers = new HashSet();
     }
     
 
@@ -303,10 +308,13 @@ public class PlayerModelImpl implements PlayerModel {
      * Close this playable
      */
     public void close() {
-	try {
-	    synthesizer.deallocate();
-	} catch (EngineException ee) {
-	    System.out.println("Trouble closing the synthesizer: " + ee);
+	for (Iterator i = loadedSynthesizers.iterator(); i.hasNext();) {
+	    Synthesizer synth = (Synthesizer) i.next();
+	    try {
+		synth.deallocate();
+	    } catch (EngineException ee) {
+		System.out.println("Trouble closing the synthesizer: " + ee);
+	    }
 	}
     }
 
@@ -414,6 +422,8 @@ public class PlayerModelImpl implements PlayerModel {
 	    } else {
 		myModeDesc.loadSynthesizer();
 	    }
+
+	    loadedSynthesizers.add(synthesizer);
 	}
     }
     
