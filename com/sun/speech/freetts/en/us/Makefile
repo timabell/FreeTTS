@@ -29,7 +29,7 @@ DATA_FILES = phrasing_cart.txt durz_cart.txt dur_stat.txt \
 	     part_of_speech.txt phoneset.txt f0_lr_terms.txt \
 	     cmulex_compiled.txt cmulex_addenda.txt cmulex_lts.txt \
 	     cmutimelex_compiled.txt cmutimelex_addenda.txt cmutimelex_lts.txt \
-	      nums_cart.txt 
+	      nums_cart.txt prefix_fsm.txt suffix_fsm.txt
 
 DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 

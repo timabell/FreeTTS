@@ -138,8 +138,8 @@ public class TokenToWords implements UtteranceProcessor {
 	"'s", "'ll", "'ve", "'d" };
 
     // Finite state machines to check if a Token is pronounceable
-    private static PrefixFSM prefixFSM = null;
-    private static SuffixFSM suffixFSM = null;
+    private PronounceableFSM prefixFSM = null;
+    private PronounceableFSM suffixFSM = null;
 
     // List of US states abbreviations and their full names
     private static String[][] usStates =
@@ -287,8 +287,12 @@ public class TokenToWords implements UtteranceProcessor {
      *
      * @param usNumbersCART the cart to use to classify numbers
      */
-    public TokenToWords(CART usNumbersCART) {
+    public TokenToWords(CART usNumbersCART,
+			PronounceableFSM prefixFSM,
+			PronounceableFSM suffixFSM) {
 	this.cart = usNumbersCART;
+	this.prefixFSM = prefixFSM;
+	this.suffixFSM = suffixFSM;
     }
 
 
@@ -1032,12 +1036,6 @@ public class TokenToWords implements UtteranceProcessor {
      * @return true if the word is pronounceable, false otherwise
      */
     public boolean isPronounceable(String word) {
-	if (prefixFSM == null) {
-	    prefixFSM = new PrefixFSM();
-	}
-	if (suffixFSM == null) {
-	    suffixFSM = new SuffixFSM();
-	}
 	String lowerCaseWord = word.toLowerCase();
 	return (prefixFSM.accept(lowerCaseWord) &&
 		suffixFSM.accept(lowerCaseWord));

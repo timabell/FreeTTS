@@ -136,8 +136,12 @@ public class SimpleVoice extends Voice {
 	BulkTimer.LOAD.start("UtteranceProcessors");
         PhoneDurations phoneDurations = new PhoneDurationsImpl(
             this.getClass().getResource("dur_stat.txt"));
+	PronounceableFSM prefixFSM = new PrefixFSM
+	    (this.getClass().getResource("prefix_fsm.txt"));
+	PronounceableFSM suffixFSM = new SuffixFSM
+	    (this.getClass().getResource("suffix_fsm.txt"));
         
-	processors.add(new TokenToWords(numbersCart));
+	processors.add(new TokenToWords(numbersCart, prefixFSM, suffixFSM));
 	processors.add(new PartOfSpeechTagger());
 	processors.add(new Phraser(phrasingCart));
 	processors.add(new Segmenter());
