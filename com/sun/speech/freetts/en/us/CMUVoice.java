@@ -230,6 +230,8 @@ public abstract class CMUVoice extends Voice {
 	addFeatureProcessor("month_range", new FeatureProcessors.MonthRange());
 	addFeatureProcessor("token_pos_guess", 
 		new FeatureProcessors.TokenPosGuess());
+	addFeatureProcessor("segment_duration", 
+		new FeatureProcessors.SegmentDuration());
 	addFeatureProcessor("sub_phrases", new FeatureProcessors.SubPhrases());
 	addFeatureProcessor("asyl_in", new FeatureProcessors.AccentedSylIn());
 	addFeatureProcessor("last_accent", new FeatureProcessors.LastAccent());
@@ -248,8 +250,24 @@ public abstract class CMUVoice extends Voice {
 
 	addFeatureProcessor("seg_coda_fric", new
 		FeatureProcessors.SegCodaFric());
+	addFeatureProcessor("seg_onset_fric", new
+		FeatureProcessors.SegOnsetFric());
+
+	addFeatureProcessor("seg_coda_stop", new
+		FeatureProcessors.SegCodaStop());
 	addFeatureProcessor("seg_onset_stop", new
 		FeatureProcessors.SegOnsetStop());
+
+	addFeatureProcessor("seg_coda_nasal", new
+		FeatureProcessors.SegCodaNasal());
+	addFeatureProcessor("seg_onset_nasal", new
+		FeatureProcessors.SegOnsetNasal());
+
+	addFeatureProcessor("seg_coda_glide", new
+		FeatureProcessors.SegCodaGlide());
+	addFeatureProcessor("seg_onset_glide", new
+		FeatureProcessors.SegOnsetGlide());
+
 	addFeatureProcessor("seg_onsetcoda", new
 		FeatureProcessors.SegOnsetCoda());
 	addFeatureProcessor("syl_codasize", new

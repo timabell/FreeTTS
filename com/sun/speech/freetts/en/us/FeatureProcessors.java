@@ -46,6 +46,11 @@ class FeatureProcessors {
       "R:SylStructure.parent.R:Phrase.parent.daughtern.R:SylStructure.daughter",
       false);
 
+    private final static PathExtractor LAST_LAST_SYLLABLE_PATH = 
+	new PathExtractorImpl(
+  "R:SylStructure.parent.R:Phrase.parent.daughtern.R:SylStructure.daughtern",
+      false);
+
     private final static PathExtractor SUB_PHRASE_PATH = 
 	new PathExtractorImpl("R:SylStructure.parent.R:Phrase.parent.p", false);
 
@@ -229,12 +234,14 @@ class FeatureProcessors {
 	    Item ss = item.getItemAs(Relation.SYLLABLE);
 	    Item firstSyllable  = FIRST_SYLLABLE_PATH.findItem(item);
 
-	    for (Item p = ss.getPrevious(); p != null; p = p.getPrevious() )  {
+	    // this should include the first syllable, but
+	    // flite 1.1 and festival don't.
+
+	    for (Item p = ss.getPrevious(); 
+		    p != null && !p.equalsShared(firstSyllable);
+		    p = p.getPrevious() )  {
 		if ("1".equals(p.getFeatures().getString("stress"))) {
 		    count++;
-		}
-		if (p.equalsShared(firstSyllable)) {
-		    break;
 		}
 	    }
 	    return Integer.toString(rail(count));
@@ -544,9 +551,9 @@ class FeatureProcessors {
 	public String process(Item item) throws ProcessException {
 	    int count = 0;
 	    Item ss = item.getItemAs(Relation.SYLLABLE);
-	    Item firstSyllable  = FIRST_SYLLABLE_PATH.findItem(item);
+	    Item firstSyllable  = LAST_LAST_SYLLABLE_PATH.findItem(item);
 
-	    for (Item p = ss; p != null; p = p.getPrevious() )  {
+	    for (Item p = ss; p != null; p = p.getNext() )  {
 		if (p.equalsShared(firstSyllable)) {
 		    break;
 		}
@@ -916,23 +923,33 @@ class FeatureProcessors {
 	 * processing
 	 */
 	public String process(Item seg) throws ProcessException {
-	    Item daughter 
-		= seg.getItemAs(
-                    Relation.SYLLABLE_STRUCTURE).getParent().getLastDaughter();
-
-	    while (daughter != null) {
-		if ("+".equals(getPhoneFeature(daughter, "vc"))) {
-		    return "0";
-		}
-		if ("f".equals(getPhoneFeature(daughter, "ctype"))) {
-		    return "1";
-		}
-
-		daughter = daughter.getPrevious();
-	    }
-	    return "0";
+	    return segCodaCtype(seg, "f");
 	}
     }
+
+    /**
+     * Checks for fricative
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegOnsetFric implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  syl  the item to process
+	 * 
+	 * @return "1" if fricative; else "0"
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    return segOnsetCtype(seg, "f");
+	}
+    }
+
+
 
     /**
      * Checks for coda stop
@@ -952,20 +969,7 @@ class FeatureProcessors {
 	 * processing
 	 */
 	public String process(Item seg) throws ProcessException {
-	    Item daughter = seg.getItemAs(
-                Relation.SYLLABLE_STRUCTURE).getParent().getLastDaughter();
-
-	    while (daughter != null) {
-		if ("+".equals(getPhoneFeature(daughter, "vc"))) {
-		    return "0";
-		}
-		if ("s".equals(getPhoneFeature(daughter, "ctype"))) {
-		    return "1";
-		}
-
-		daughter = daughter.getPrevious();
-	    }
-	    return "0";
+	    return segCodaCtype(seg, "s");
 	}
     }
 
@@ -987,22 +991,104 @@ class FeatureProcessors {
 	 * processing
 	 */
 	public String process(Item seg) throws ProcessException {
-	    Item daughter = seg.getItemAs(
-                Relation.SYLLABLE_STRUCTURE).getParent().getDaughter();
-
-	    while (daughter != null) {
-		if ("+".equals(getPhoneFeature(daughter, "vc"))) {
-		    return "0";
-		}
-		if ("s".equals(getPhoneFeature(daughter, "ctype"))) {
-		    return "1";
-		}
-
-		daughter = daughter.getNext();
-	    }
-	    return "0";
+	    return segOnsetCtype(seg, "s");
 	}
     }
+
+    /**
+     * Checks for coda nasal
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegCodaNasal implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  syl  the item to process
+	 *
+	 * @return if coda stop "1"; otherwise "0"
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    return segCodaCtype(seg, "n");
+	}
+    }
+
+    /**
+     * Checks for onset nasal
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegOnsetNasal implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  syl  the item to process
+	 *
+	 * @return if Onset Stop "1"; otherwise "0"
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    return segOnsetCtype(seg, "n");
+	}
+    }
+
+    /**
+     * Checks for coda glide
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegCodaGlide implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  syl  the item to process
+	 *
+	 * @return if coda stop "1"; otherwise "0"
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    if (segCodaCtype(seg, "r").equals("0")) {
+		return segCodaCtype(seg, "l");
+	    }
+	    return "1";
+	}
+    }
+
+    /**
+     * Checks for onset glide
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegOnsetGlide implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  syl  the item to process
+	 *
+	 * @return if coda stop "1"; otherwise "0"
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    if (segOnsetCtype(seg, "r").equals("0")) {
+		return segOnsetCtype(seg, "l");
+	    }
+	    return "1";
+	}
+    }
+
 
     /**
      * Checks for onset coda 
@@ -1061,6 +1147,37 @@ class FeatureProcessors {
 		count++;
 	    }
 	    return Integer.toString(rail(count));
+	}
+    }
+
+    /**
+     * Returns the duration of the given segment
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class SegmentDuration implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  seg  the item to process
+	 *
+	 * @return the duration of the segment as a string.
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item seg) throws ProcessException {
+	    if (seg == null) {
+		return "0";
+	    } else if (seg.getPrevious() == null) {
+		return seg.getFeatures().getObject("end").toString();
+	    } else {
+		return Float.toString(
+			seg.getFeatures().getFloat("end") -
+		        seg.getPrevious().getFeatures().getFloat("end")
+		   );
+	    }
 	}
     }
 
@@ -1127,6 +1244,58 @@ class FeatureProcessors {
 		return "";
 	    }
 	}
+    }
+
+    /**
+     * Tests the coda ctype of the given segment.
+     *
+     * @param seg the segment to test
+     * @param ctype the ctype to check for
+     * 
+     * @return "1" on match "0" on no match
+     */
+    private static String segCodaCtype(Item seg, String ctype) {
+	Item daughter 
+	    = seg.getItemAs(
+		Relation.SYLLABLE_STRUCTURE).getParent().getLastDaughter();
+
+	while (daughter != null) {
+	    if ("+".equals(getPhoneFeature(daughter, "vc"))) {
+		return "0";
+	    }
+	    if (ctype.equals(getPhoneFeature(daughter, "ctype"))) {
+		return "1";
+	    }
+
+	    daughter = daughter.getPrevious();
+	}
+	return "0";
+    }
+
+    /**
+     * Tests the onset ctype of the given segment.
+     *
+     * @param  seg  the segment to test to process
+     * @param ctype the ctype to check for
+     *
+     * @return if Onset Stop "1"; otherwise "0"
+     *
+     */
+    private static  String segOnsetCtype(Item seg, String ctype) {
+	Item daughter = seg.getItemAs(
+	    Relation.SYLLABLE_STRUCTURE).getParent().getDaughter();
+
+	while (daughter != null) {
+	    if ("+".equals(getPhoneFeature(daughter, "vc"))) {
+		return "0";
+	    }
+	    if (ctype.equals(getPhoneFeature(daughter, "ctype"))) {
+		return "1";
+	    }
+
+	    daughter = daughter.getNext();
+	}
+	return "0";
     }
 
     /**
