@@ -36,11 +36,11 @@ public class HelloWorld {
 		String message = "Can't find synthesizer.\n" +
 		    "Make sure that there is a \"speech.properties\" file " +
 		    "at either of these locations: \n";
-		message += "user.home: " + 
+		message += "user.home    : " + 
 		    System.getProperty("user.home") + "\n";
-		message += "java.home: " + 
-		    System.getProperty("java.home") + File.separator + "lib" + "\n";
-
+		message += "java.home/lib: " + System.getProperty("java.home")
+		    + File.separator + "lib\n";
+		
 		System.err.println(message);
 		System.exit(1);
 	    }

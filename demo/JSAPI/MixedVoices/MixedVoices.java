@@ -5,6 +5,7 @@
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
+import java.io.File;
 import java.util.Locale;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,8 +31,9 @@ public class MixedVoices {
         String message = "Can't find " + synthesizer + ".\n" +
             "Make sure that there is a \"speech.properties\" file at either " +
             "of these locations: \n";
-        message += "user.home: " + System.getProperty("user.home") + "\n";
-        message += "java.home: " + System.getProperty("java.home") + "\n";
+        message += "user.home    : " + System.getProperty("user.home") + "\n";
+        message += "java.home/lib: " + System.getProperty("java.home")
+	    + File.separator + "lib\n";
         return message;
     }
      

@@ -101,7 +101,7 @@ public class PlayerModelImpl implements PlayerModel {
     /**
      * Returns a "no synthesizer" message, and asks 
      * the user to check if the "speech.properties" file is
-     * at <code>user.home</code> or <code>java.home</code>.
+     * at <code>user.home</code> or <code>java.home/lib</code>.
      *
      * @return a no synthesizer message
      */
@@ -109,8 +109,9 @@ public class PlayerModelImpl implements PlayerModel {
 	String message = "PlayerModelImpl: no available synthesizers.\n" +
 	    "Make sure that there is a \"speech.properties\" file at either " +
 	    "of these locations: \n";
-	message += "user.home: " + System.getProperty("user.home") + "\n";
-	message += "java.home: " + System.getProperty("java.home") + "\n";
+        message += "user.home    : " + System.getProperty("user.home") + "\n";
+        message += "java.home/lib: " + System.getProperty("java.home")
+	    + File.separator + "lib\n";
 	return message;
     }
 
