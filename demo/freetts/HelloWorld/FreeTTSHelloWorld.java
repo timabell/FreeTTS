@@ -5,10 +5,13 @@
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
+import com.sun.speech.freetts.ValidationException;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
+import de.dfki.lt.freetts.en.us.MbrolaVoice;
+import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
 
 /**
  * Simple program to demonstrate the use of the FreeTTS speech synthesizer.
@@ -28,6 +31,16 @@ public class FreeTTSHelloWorld {
 
 	    Voice helloVoice = (Voice) voiceClass.newInstance();
 
+            if (helloVoice instanceof MbrolaVoice) {
+                try {
+                    (new MbrolaVoiceValidator((MbrolaVoice) helloVoice)).
+                        validate();
+                } catch (ValidationException ve) {
+                    System.err.println(ve.getMessage());
+                    throw new IllegalStateException
+                        ("Problem starting MBROLA voice");
+                }
+            }
 	    
 	    // sets the lexicon to CMU lexicon
 
