@@ -7,7 +7,6 @@
  */
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
-import com.sun.speech.freetts.audio.AudioPlayerStdOut;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
 
