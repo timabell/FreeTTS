@@ -1,0 +1,56 @@
+How to setup MBROLA with FreeTTS
+================================
+
+MBROLA comes under many platforms in the form of a standalone binary.
+A large number of diphone voice databases exist for many languages.
+Three US English voices exist, named us1 (female), us2 (male) and
+us3 (male). Binaries and dbs can be downloaded free for non-commercial,
+non-military use at:
+
+	http://tcts.fpms.ac.be/synthesis/mbrola.html
+
+The MBROLA databases are based on the SAMPA phonetic alphabet, but a 
+translation table from the phonetic alphabet which Festival (and 
+therefore FreeTTS) uses is provided with voice us1 (it is called "us1mrpa").
+
+
+How to set up the MBROLA files
+------------------------------
+
+Decide for a base directory where to put both mbrola binary and mbrola 
+voice databases. Let's assume this is /home/jim/mbr. The mbrola binary 
+for the correct platform must be downloaded from
+
+	http://tcts.fpms.ac.be/synthesis/mbrola.html
+
+and placed into that directory (i.e., it is /home/jim/mbr/mbrola).
+All voice databases (but at least us1) must be downloaded and
+unpacked in the mbrola base directory:
+
+cd /home/jim/mbr
+unzip us1-980512.zip 
+
+such that the actual database is the binary file /home/jim/mbr/us1/us1).
+For all three voices, the translation table is assumed to be located in 
+/home/jim/mbr/us1/us1mrpa. This translation table only ships with us1, 
+not with us2 or us3. Therefore, only downloading us2 will produce an 
+error.
+
+
+*IMPORTANT*:
+-----------
+
+To use MBROLA with FreeTTS, you must specify your MBROLA directory
+as the Java system property "mbrola.base". Java system properties 
+are usually specified at the command line with he "-D" switch, e.g.,
+
+java -Dmbrola.base=/home/jim/mbr
+
+For all the FreeTTS demos, you should set the environment variable
+MBROLA_DIR (e.g., "setenv MBROLA_DIR /home/jim/mbr" in csh).
+This will automatically set the Java system property "mbrola.base".
+
+
+
+                         --- END OF DOCUMENT ---
+
