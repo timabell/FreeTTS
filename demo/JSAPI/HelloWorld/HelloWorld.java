@@ -146,7 +146,7 @@ public class HelloWorld {
 	    /* The the synthesizer to speak and wait for it to
              * complete.
              */
-	    synthesizer.speakPlainText("Hello, world!", null);
+	    synthesizer.speakPlainText("Hello world!", null);
 	    synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
 	    
 	    /* Clean up and leave.
