@@ -1,5 +1,4 @@
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral; 
-import com.sun.speech.freetts.jsapi.FreeTTSSynthesizerModeDesc;
 
 import java.util.Locale;
 
@@ -23,18 +22,14 @@ public class JSAPIClock extends Clock {
 
         String synthesizerName =
             "Limited domain FreeTTS Speech Synthesizer from Sun Labs";
-        String lexiconName =
-            "com.sun.speech.freetts.en.us.CMULexicon";
-        String playerName =
-            "com.sun.speech.freetts.audio.JavaClipAudioPlayer";
 
         try {
             SynthesizerModeDesc desc = 
-                new FreeTTSSynthesizerModeDesc(synthesizerName, 
-                                               null,
-                                               Locale.US, 
-                                               lexiconName,
-                                               playerName);
+                new SynthesizerModeDesc(synthesizerName, 
+                                        null,
+                                        Locale.US, 
+                                        Boolean.FALSE,
+                                        null);
 
             FreeTTSEngineCentral central = new FreeTTSEngineCentral();
             EngineList list = central.createEngineList(desc); 
@@ -67,7 +62,7 @@ public class JSAPIClock extends Clock {
 
 
     /**
-     * main() method to run the WebStartClock.
+     * main() method to run the JSAPIClock.
      */
     public static void main(String args[]) {
         Clock frame = new JSAPIClock();

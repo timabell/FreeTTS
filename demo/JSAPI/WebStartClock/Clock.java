@@ -50,7 +50,7 @@ public abstract class Clock extends JFrame {
      * Constructs a default WebStartClock.
      */
     public Clock() {
-        super("WebStart Clock");
+        super("FreeTTS Clock");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JPanel timePanel = new JPanel(new BorderLayout());
