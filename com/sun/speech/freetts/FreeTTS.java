@@ -370,6 +370,7 @@ public class FreeTTS {
 	System.out.println("    -url path       : speak text from given URL");
         System.out.println("    -verbose        : verbose output");
         System.out.println("    -version        : shows version number");
+        System.out.println("    -voice VOICE    : kevin or kevin16 ");
     }
 
     /**
@@ -474,6 +475,8 @@ public class FreeTTS {
 			voiceName = "cmu_kal/diphone_units16.bin";
 		    } else {
 			System.out.println("Invalid voice: " + voiceName);
+			System.out.println(
+				"  Valid voices are kevin and kevin16");
 			System.exit(1);
 		    }
 
