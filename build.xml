@@ -680,7 +680,8 @@ environment to use JSAPI.
 
     <fileset id="docs"
 	     dir="."
-	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/*.html,
+	     includes="overview.html,README.txt,RELEASE_NOTES,
+                       docs/**,mbrola/*.html,
                        javadoc/**"
              excludes="docs/*.awk"/>
 

@@ -29,7 +29,7 @@ Here are the steps to release a new version of FreeTTS:
 
    and that everything compiles by doing a
 
-       ant clean all
+       ant clean all javadoc
 
 3. Check out a clean version of FreeTTS
 
@@ -82,8 +82,7 @@ Here are the steps to release a new version of FreeTTS:
      o unpacking jsapi
      o running all demos from the jar files
      o unpacking srcs and tests
-     o unpacking docs
-     o viewing docs
+     o viewing docs (also run a link checker such as linklint)
      o compiling all sources and tests
      o running all tests (note that some tests don't run on NT, last I knew).
 
@@ -134,6 +133,6 @@ Here are the steps to release a new version of FreeTTS:
         [TBS]
 
 
-13. Update the index.html page
+13. Update the FreeTTS.SourceForge.net web page
 
         [TBS]
