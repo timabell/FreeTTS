@@ -445,12 +445,16 @@ public class VoiceManager {
                     //System.out.println("TEST: reading url " + jarURL);
                     JarURLConnection jarConnection = (JarURLConnection)
                         jarURL.openConnection();
-                    Attributes attributes = jarConnection.getMainAttributes();
-                    String isVoice =
-                        attributes.getValue("FreeTTSVoiceDefinition");
+                    // if it is not a real jar file, we will end up
+                    // with a null set of attributes.
 
-                    if (isVoice != null && isVoice.trim().equals("true")) {
-                        voiceJarURLs.add(jarURL);
+                    Attributes attributes = jarConnection.getMainAttributes();
+                    if (attributes != null) {
+                        String isVoice =
+                            attributes.getValue("FreeTTSVoiceDefinition");
+                        if (isVoice != null && isVoice.trim().equals("true")) {
+                            voiceJarURLs.add(jarURL);
+                        }
                     }
                 }
             }
