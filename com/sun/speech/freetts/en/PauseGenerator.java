@@ -80,7 +80,9 @@ public class PauseGenerator implements UtteranceProcessor {
 	    Item word = phrase.getLastDaughter();
 	    while (word != null) {
 		Item seg = segmentPath.findItem(word);
-		if (seg != null && !"".equals(puncPath.findFeature(word))) {
+	    // was this an explicit change or a lost bug fix
+	    //if (seg != null && !"".equals(puncPath.findFeature(word))) {
+		if (seg != null) {
 		    Item pause = seg.appendItem(null);
 		    pause.getFeatures().setString("name", silence);
 		    break;

@@ -19,6 +19,8 @@ import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.PhoneDuration;
 import com.sun.speech.freetts.PhoneDurations;
+import com.sun.speech.freetts.PathExtractorImpl;
+import com.sun.speech.freetts.PathExtractor;
 
 import java.util.Iterator;
 
@@ -51,6 +53,12 @@ public class Durator implements UtteranceProcessor {
      * It is passed into the constructor.
      */
     protected PhoneDurations durations;
+
+
+    private static final PathExtractor DURATION_STRETCH_PATH  =
+	new PathExtractorImpl(
+        "R:SylStructure.parent.parent.R:Token.parent.local_duration_stretch", 
+	true);
     
     /**
      * Creates a new duration UtteranceProcessor with the given
@@ -83,10 +91,11 @@ public class Durator implements UtteranceProcessor {
     public void processUtterance(Utterance utterance) throws ProcessException {
         float durStretch;        
         PhoneDuration durStat;
-        FeatureSet voiceFeatures = utterance.getVoice().getFeatures();
+        float durationStretch = utterance.getVoice().getDurationStretch();
         float zdur;
         float dur;
         float end = 0.0f;
+	float localDurationStretch;
         
         // Figure out how far to stretch the durations (speed things
         // up or slow them down.
@@ -104,7 +113,17 @@ public class Durator implements UtteranceProcessor {
             zdur = ((Float) cart.interpret(segment)).floatValue();
             durStat = durations.getPhoneDuration(
                 segment.getFeatures().getString("name"));
-            dur = durStretch * ((zdur*durStat.getStandardDeviation())
+
+	    Object tval = DURATION_STRETCH_PATH.findFeature(segment);
+	    localDurationStretch = Float.parseFloat(tval.toString());
+
+	    if (localDurationStretch == 0.0) {
+		localDurationStretch = durationStretch;
+	    } else {
+		localDurationStretch *= durationStretch;
+	    }
+
+            dur = localDurationStretch * ((zdur*durStat.getStandardDeviation())
                                  + durStat.getMean());
             end += dur;
             segment.getFeatures().setFloat("end", end);
