@@ -14,7 +14,6 @@ import com.sun.speech.freetts.ProcessException;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
-import com.sun.speech.freetts.audio.PoliteStreamingAudioPlayer;
 
 import javax.sound.sampled.AudioFormat;
 
