@@ -969,6 +969,12 @@
              <tarfileset dir="${src_dir}/demo/JSAPI/WebStartClock"
 			 includes="clock.jnlp"/>
         </tar>
+        <echo message="${deploy_dir}/WebStartClock.tar created."/>
+        <echo message=
+            "scp it to the following directory on freetts.sourceforge.net:"/>
+        <echo message=
+            "    /home/groups/f/fr/freetts/htdocs/WebStartClock"/>
+        <echo message="Then ssh to freetts.sourceforge.net and untar it."/>
     </target>
 
 
