@@ -1010,6 +1010,7 @@ jsapi.exe from the lib directory.
     <fileset id="docs"
 	     dir="."
 	     includes="index.html,overview.html,README.txt,RELEASE_NOTES,
+                       ANNOUNCE.txt,
                        docs/**,mbrola/*.html,
                        javadoc/**"
              excludes="docs/*.awk"/>
@@ -1130,6 +1131,7 @@ jsapi.exe from the lib directory.
                       includes="build.xml,
                                 demo.xml,
 		                overview.html,
+                                ANNOUNCE.txt,
                                 README.txt,
 		                RELEASE_NOTES,
 		                acknowledgments.txt,
