@@ -17,7 +17,7 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="version"		value="1.2beta2"/>
+    <property name="version"		value="1.2"/>
     <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
@@ -891,7 +891,7 @@ jsapi.exe from the lib directory.
     <!-- * Generates the javadoc                                  * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="javadoc_desc"	value="FreeTTS 1.2beta2"/>
+    <property name="javadoc_desc"	value="FreeTTS 1.2"/>
     <property name="javadoc_pkgs"	
 	      value="com.sun.speech.engine,
 	             com.sun.speech.engine.synthesis,
