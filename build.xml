@@ -35,24 +35,80 @@
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
+    <!-- * Determine which sources should be compiled depending   * -->
+    <!-- * on the availability of lib/jsapi.jar.  This creates a  * -->
+    <!-- * property called "patternset_to_compile" and sets its   * -->
+    <!-- * val to either "all_files" or "no_jsapi", which refers  * -->
+    <!-- * to the name of a patternset. The value of              * -->
+    <!-- * srcs_to_compile will be used in the javac target as a  * -->
+    <!-- * patternset refid.                                      * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <patternset id="all_files" 
+                includes="com/**,de/**"/>
+
+    <patternset id="no_jsapi" 
+                includes="com/**,de/**"
+	        excludes="com/sun/speech/engine/**,
+		          com/sun/speech/freetts/jsapi/**"/>
+             
+    <target name="set_patternset_to_compile">
+        <condition property="patternset_to_compile"
+                   value="all_files">
+            <available file="lib/jsapi.jar"/>
+        </condition>
+        <condition property="patternset_to_compile"
+                   value="no_jsapi">
+            <not>
+                <available file="lib/jsapi.jar"/>
+            </not>
+        </condition>
+    </target>
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Handle JSAPI:                                          * -->
+    <!-- *                                                        * -->
+    <!-- *    1) If a jsapi.jar file can be found, use it and     * --> 
+    <!-- *       compile all the sources.                         * -->
+    <!-- *                                                        * -->
+    <!-- *    2) If a jsapi.jar file cannot be found, issue a     * -->
+    <!-- *       message and just compile the sources that do     * -->
+    <!-- *       not depend upon jsapi.jar.                       * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="check_jsapi_jar.isPresent">
+        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
+    </target>
+
+    <target name="issue_jsapi_warning"
+            unless="jsapi_jar.isPresent">
+        <echo>
+Cannot find lib/jsapi.jar needed to build Java Speech API
+(JSAPI) support for FreeTTS.  Will not build any sources
+that require jsapi.jar.  If you'd like to enable JSAPI
+support, please extract jsapi.jar by running jsapi.sh or 
+jsapi.exe from the lib directory.
+        </echo>
+    </target>
+
+    <target name="handle_jsapi"
+            depends="check_jsapi_jar.isPresent,
+                     issue_jsapi_warning,
+                     set_patternset_to_compile"/>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
     <!-- * Builds srcs, voices, lexicons, jars, demos             * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="all"
-	    depends="check_jsapi_jar.isPresent,compile,jars,demos"
+	    depends="compile,jars,demos"
 	    description="Build everything">
 	<echo message="Build complete."/>
     </target>
 
-    <target name="check_jsapi_jar.isPresent">
-        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
-        <fail unless="jsapi_jar.isPresent">
-
-Cannot find lib/jsapi.jar needed to build FreeTTS.  See 
-docs/jsapi_setup.html for information on setting up your 
-environment to use JSAPI.
-        </fail>
-    </target>
 
     <!-- compile everything -->
     <target name="compile"
@@ -62,17 +118,41 @@ environment to use JSAPI.
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
-    <!-- * Builds just the srcs.                                  * -->
+    <!-- * Builds just the srcs.  The tests are omitted.          * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="compile_src"
+	    depends="check_jsapi_jar.isPresent,
+	             issue_jsapi_warning,
+	             set_patternset_to_compile"
 	    description="Build just the srcs">
 	<mkdir dir="${classes_dir}"/>
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
 	       srcdir="${src_dir}"
-	       includes="com/**,de/**,tests/**"
+	       excludes="tests/**"
+	       destdir="${classes_dir}">
+            <patternset refid="${patternset_to_compile}"/>
+	    <classpath refid="libs"/>
+	</javac>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Builds just the tests - these need JUnit.              * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="compile_tests"
+	    depends="compile"
+	    description="Build just the tests">
+	<mkdir dir="${classes_dir}"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}"
+	       includes="tests/**"
 	       destdir="${classes_dir}">
 	    <classpath refid="libs"/>
 	</javac>

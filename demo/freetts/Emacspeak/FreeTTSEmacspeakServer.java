@@ -64,7 +64,19 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 
 
     /**
+     * Sets the speaking rate of the voice.
+     *
+     * @param wpm the speaking rate (words per minute)
+     */
+    public void setRate(float wpm) {
+        emacsVoice.setRate(wpm);
+    }
+    
+        
+    /**
      * Starts this TTS Server.
+     *
+     * Usage: FreeTTSEmacspeakServer [voicename [speaking rate]]
      */
     public static void main(String[] args) {
         String voiceName = (args.length > 0)
@@ -77,6 +89,11 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 
 	FreeTTSEmacspeakServer server = new FreeTTSEmacspeakServer(voiceName);
 
+        if (args.length > 1) {
+            float wpm = Float.parseFloat(args[1]);
+            server.setRate(wpm);
+        }
+        
 	(new Thread(server)).start();
     }
 }

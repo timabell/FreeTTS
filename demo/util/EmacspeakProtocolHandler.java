@@ -5,6 +5,8 @@
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
+import com.sun.speech.freetts.util.Utilities;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -45,6 +47,17 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 
     private boolean debug = false;
 
+    /**
+     * Sometimes emacspeak will embed DECTalk escape sequences in the
+     * text.  These sequences are not meant to be spoken, and FreeTTS
+     * currently does not interpret them.  This simple flag provides
+     * a mechanism for FreeTTS to cut strings of the form "[...]"
+     * out of text to be spoken (DECTalk escape sequences are of the
+     * form "[...]").  Since this is a relatively heavy-handed thing
+     * to do, this feature is turned off by default.  To turn it on,
+     * add -DstripDECTalk=true to the command line.
+     */
+    private boolean stripDECTalk = false;
 
     /**
      * Sets the Socket to be used by this ProtocolHandler.
@@ -128,7 +141,7 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 	return type;
     }
 
-
+    
     /**
      * Returns the text of the given input that is within curly
      * brackets.  If there are no curly brackets (allowed in the
@@ -160,6 +173,39 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 
 
     /**
+     * Strips DECTalk commands from the input text.  The DECTalk
+     * commands are anything inside "[" and "]".
+     */
+    public String stripDECTalkCommands(String content) {
+        int startPos = content.indexOf('[');
+        while (startPos != -1) {
+            int endPos = content.indexOf(']');
+            if (endPos != -1) {
+                if (startPos == 0) {
+                    if (endPos == (content.length() - 1)) {
+                        content = "";
+                    } else {
+                        content = content.substring(endPos + 1);
+                    }
+                } else {
+                    if (endPos == (content.length() - 1)) {
+                        content = content.substring(0, startPos);
+                    } else {
+                        String firstPart = content.substring(0, startPos);
+                        String secondPart = content.substring(endPos + 1);
+                        content = firstPart + " " + secondPart;
+                    }
+                }
+                startPos = content.indexOf('[');
+            } else {
+                break;
+            }
+        }
+        return content;
+    }
+
+    
+    /**
      * Speaks the given input text.
      *
      * @param input the input text to speak.
@@ -187,6 +233,7 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
     public synchronized void run() {
         try {
             String command = "";
+            stripDECTalk = Utilities.getBoolean("stripDECTalk");
             while (isSocketLive()) {
                 command = reader.readLine();
                 if (command != null) {
@@ -209,6 +256,9 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
                         }
                     } else if (commandType != NOT_HANDLED_COMMAND) {
                         String content = textInCurlyBrackets(command);
+                        if (stripDECTalk) {
+                            content = stripDECTalkCommands(content);
+                        }
                         if (content.length() > 0) {
                             speak(content);
                         }

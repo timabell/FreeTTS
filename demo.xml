@@ -32,6 +32,34 @@
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
+    <!-- * Handle JSAPI:                                          * -->
+    <!-- *                                                        * -->
+    <!-- *    1) If a jsapi.jar file can be found, use it and     * --> 
+    <!-- *       compile all the sources.                         * -->
+    <!-- *                                                        * -->
+    <!-- *    2) If a jsapi.jar file cannot be found, issue a     * -->
+    <!-- *       message and just compile the sources that do     * -->
+    <!-- *       not depend upon jsapi.jar.                       * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="check_jsapi_jar.isPresent">
+        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
+    </target>
+
+    <target name="issue_jsapi_warning"
+            unless="jsapi_jar.isPresent">
+        <echo>
+Cannot find lib/jsapi.jar needed to build Java Speech API
+(JSAPI) support for FreeTTS.  Will not build any sources
+that require jsapi.jar.  If you'd like to enable JSAPI
+support, please extract jsapi.jar by running jsapi.sh or 
+jsapi.exe from the lib directory.
+        </echo>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
     <!-- * Builds just the demos (using package names for the     * -->
     <!-- * demos would have made this easier).                    * -->
     <!-- *                                                        * -->
@@ -55,6 +83,9 @@
 	       deprecation="true"
 	       srcdir="${src_dir}/demo/util"
 	       destdir="${demo_classes_dir}/util">
+	    <classpath>
+		<path refid="libs"/>
+	    </classpath>
         </javac>
     </target>
 
@@ -148,6 +179,7 @@
     <!-- JSAPI demos -->
     <target name="compile_jsapi_demos"
 	    depends="check_jsapi_jar.isPresent,
+	             issue_jsapi_warning,
 	             compile_jsapi_emacspeak,
 	             compile_jsapi_helloworld,
 	             compile_jsapi_jtime,
@@ -156,18 +188,9 @@
 	             compile_jsapi_webstartclock"
 	    description="Compiles freetts demos that use JSAPI"/>
 
-    <target name="check_jsapi_jar.isPresent">
-        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
-        <fail unless="jsapi_jar.isPresent">
-
-Cannot find lib/jsapi.jar.  Will not build JSAPI demos.  
-See docs/jsapi_setup.html for information on setting up 
-your environment to use JSAPI.
-        </fail>
-    </target>
-
     <target name="compile_jsapi_emacspeak"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
 	<javac debug="true"
 	       source="1.4"
@@ -193,7 +216,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="compile_jsapi_helloworld"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/HelloWorld"/>
 	<javac debug="true"
 	       source="1.4"
@@ -214,7 +238,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="compile_jsapi_jtime"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/JTime"/>
 	<javac debug="true"
 	       source="1.4"
@@ -238,7 +263,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="compile_jsapi_mixedvoices"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/MixedVoices"/>
 	<javac debug="true"
 	       source="1.4"
@@ -259,7 +285,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="compile_jsapi_player"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/Player"/>
 	<javac debug="true"
 	       source="1.4"
@@ -280,7 +307,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="compile_jsapi_webstartclock"
-	    depends="compile_demo_util">
+	    depends="compile_demo_util"
+	    if="jsapi_jar.isPresent">
 	<mkdir dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
 	<javac debug="true"
 	       source="1.4"
@@ -315,7 +343,8 @@ your environment to use JSAPI.
         <available file="${keystore}" property="keystore.isPresent"/>
     </target>
     <target name="genkey" 
-	    depends="check_keystore.isPresent" 
+	    depends="check_keystore.isPresent"
+	    if="jsapi_jar.isPresent"
 	    unless="keystore.isPresent">
 	<mkdir dir="${webstart_bld_dir}"/>
         <genkey alias="freetts"
@@ -334,7 +363,8 @@ your environment to use JSAPI.
     </target>
 
     <target name="deploy_webstartclock"
-	    depends="all,compile_jsapi_webstartclock,genkey">
+	    depends="all,compile_jsapi_webstartclock,genkey"
+	    if="jsapi_jar.isPresent">
         <copy file="lib/jsapi.jar" todir="${webstart_bld_dir}"/>
         <signjar jar="${webstart_bld_dir}/jsapi.jar"
 		 alias="freetts"
