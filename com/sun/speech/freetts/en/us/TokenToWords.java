@@ -793,8 +793,6 @@ public class TokenToWords implements UtteranceProcessor {
 	    String pName = (String) tokenItem.findFeature("p.name");
 	    String nName = (String) tokenItem.findFeature("n.name");
 
-	    System.out.println(drStString + " " + pName + " " + nName);
-
 	    char p0 = pName.charAt(0);
 	    char n0 = nName.charAt(0);
 
