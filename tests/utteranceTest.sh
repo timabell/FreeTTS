@@ -17,8 +17,6 @@
 # a voice because I've been meaning to tell you how much I care.")
 #
 
-TOP_DIR=..
-CUR_PWD=`pwd`
 REF=reference.res
 
 if [ -f utteranceTest.res ]; then
@@ -29,11 +27,12 @@ if [ -f utteranceTest.diff ]; then
 	rm utteranceTest.diff
 fi
 
-cd $TOP_DIR/bin
+sh ../bin/freetts -dumpRelations -silent -file ../data/alice2 > utteranceTest.res 
 
-./freetts -dumpRelations -silent -file ../data/alice2 >$CUR_PWD/utteranceTest.res 
-
-cd $CUR_PWD
 rm -f $REF
-cp $TOP_DIR/data/alice2.flite.v1.1-beta.rel $REF
-./testUtt
+cp ../data/alice2.flite.v1.1-beta.rel $REF
+sh testUtt
+
+
+
+

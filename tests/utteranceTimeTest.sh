@@ -9,9 +9,6 @@
 # coming to you from inside the java virtual machine. I'm happy to have
 # a voice because I've been meaning to tell you how much I care.")
 #
-
-TOP_DIR=..
-CUR_PWD=`pwd`
 REF=reference.res
 
 if [ -f utteranceTest.res ]; then
@@ -22,11 +19,8 @@ if [ -f utteranceTest.diff ]; then
 	rm utteranceTest.diff
 fi
 
-cd $TOP_DIR/bin
+sh ../bin/jtime -dumpRelations -silent -time 06:51 > utteranceTest.res 
 
-./jtime -dumpRelations -silent -time 06:51 > $CUR_PWD/utteranceTest.res 
-
-cd $CUR_PWD
 rm -f $REF
-cp $TOP_DIR/data/flite_time.v1.1.rel $REF
-./testTimeUtt
+cp ../data/flite_time.v1.1.rel $REF
+sh testTimeUtt

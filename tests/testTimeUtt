@@ -1,14 +1,14 @@
-./compareUtt Unit
-./compareUtt target_end
+sh compareUtt Unit
+sh compareUtt target_end
 # ./compareUtt end
-./compareNumericUtt f0
-./compareUtt accent
-./compareUtt stress
-./compareUtt Segment
-./compareUtt SylStructure
-./compareUtt Word
-./compareUtt Phrase
-./compareUtt Token
-./compareUtt pos
-./compareUtt endtone
-./compareUtt file_pos
+sh compareNumericUtt f0
+sh compareUtt accent
+sh compareUtt stress
+sh compareUtt Segment
+sh compareUtt SylStructure
+sh compareUtt Word
+sh compareUtt Phrase
+sh compareUtt Token
+sh compareUtt pos
+sh compareUtt endtone
+sh compareUtt file_pos

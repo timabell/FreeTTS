@@ -6,18 +6,18 @@
 # redistribution of this file, and for a DISCLAIMER OF ALL 
 # WARRANTIES.
 #
-./compareUtt Unit
-./compareUtt target_end
-./compareNumericUtt f0
-./compareUtt accent
-./compareUtt stress
-./compareUtt Segment
-./compareUtt SylStructure
-./compareUtt Word
-./compareUtt Phrase
-./compareUtt Token
-./compareUtt pos
-./compareUtt endtone
+sh compareUtt Unit
+sh compareUtt target_end
+sh compareNumericUtt f0
+sh compareUtt accent
+sh compareUtt stress
+sh compareUtt Segment
+sh compareUtt SylStructure
+sh compareUtt Word
+sh compareUtt Phrase
+sh compareUtt Token
+sh compareUtt pos
+sh compareUtt endtone
 
 # The file_pos test has been removed. A refactoring
 # of the tokenization process now causes freetts to
