@@ -32,7 +32,7 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
             try {
                 validator.validate();
             } catch (ValidationException ve) {
-                throw new Error("Problem starting MBROLA voice");
+                throw new Error("Problem starting MBROLA voice: " + ve);
             }
         }
 
