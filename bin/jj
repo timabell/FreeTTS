@@ -1,2 +1,2 @@
 #!/bin/sh
-`dirname $0`/baseFreeTTS $@ com.sun.speech.freetts.FreeTTS  -silent -run alice -metrics -file ../data/journey.txt
+`dirname $0`/baseFreeTTS $@ com.sun.speech.freetts.FreeTTS  -silent -run journey -metrics -file ../data/journey.txt

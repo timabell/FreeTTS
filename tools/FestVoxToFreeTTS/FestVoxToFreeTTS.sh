@@ -307,7 +307,7 @@ setGender() {
         echo "     1 Neutral"
         echo "     2 Male"
         echo "     3 Female"
-        echo "     Q <Quit>"
+        echo "     Q <Quit>: Abort the conversion process."
         read 
 
         if [ "$REPLY" = "0" ]; then
@@ -338,7 +338,7 @@ setAge() {
         echo "     4 Younger Adult: Age roughly 20 to 40 years."
         echo "     5 Middle Adult:  Age roughly 40 to 60 years."
         echo "     6 Older Adult:   Age roughly 60 years and up."
-        echo "     Q <Quit>"
+        echo "     Q <Quit>:        Abort the conversion process."
         read
 
         if [ "$REPLY" = "0" ]; then
@@ -380,30 +380,22 @@ if [ "$2" = "install" ]; then
             exit -1;
         fi
         VP_DOMAIN="general"
-    elif [ "$FV_TYPE" = "ldom" ]; then
-        # [[[TODO: other ldom domains? ]]]
-        if ! [ "$FV_LANG" = "time" ]; then
-            echo
-            echo "Warning: This script is only designed for the 'time' domain."
-            echo "The script may or may not work.  If this is for a US/English"
-            echo "voice, then this process will probably work.  Afterward, it is"
-            echo "recommended that you check the java voice directory class"
-            echo "to confirm that it is using the correct lexicon."
-            echo
-            echo "Press <Enter> to continue"
-            read
+    elif [ "$FV_TYPE" = "ldom" ] || [ "$FV_TYPE" = "clunits" ]; then
+        if [ "$FV_TYPE" = "clunits" ]; then
+            VP_DOMAIN="general"
         fi
-    elif [ "$FV_TYPE" = "clunits" ]; then
-        echo "Warning: It is recommended that you double-check the output"
-        echo "of the install phase of this process.  The result for"
-        echo "clunits may not be exactly what you want. (For example,"
-        echo "the lexicon)."
         echo
-        echo "Press <Enter> to continue"
+        echo "Warning: This script will default to a full us english"
+        echo "lexicon.  If you need a different lexicon, you can change"
+        echo "that in the java voice directory after the install"
+        echo "phase is finished."
+        echo "If this is a non US/English voice, you may want to cancel."
+        echo
+        echo "Press <Enter> to continue, or <Ctrl-C> to cancel"
         read
     else
         echo
-        echo "Only diphone and ldom types are supported by this operation."
+        echo "Only diphone, clunits, and ldom types are supported by this operation."
         echo "Aborting."
         exit -1;
     fi
@@ -418,25 +410,27 @@ if [ "$2" = "install" ]; then
 
     while true; do
         echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
         echo "Current properties of this voice:"
         echo "     0 <continue with installation>"
-        echo "     1 Name:        '$VP_NAME'"
-        echo "     2 Gender:      '$VP_GENDER'"
-        echo "     3 Age:         '$VP_AGE'"
-        echo "     4 Description: '$VP_DESCRIPTION'"
-        echo "     5 Full Name:   '$VP_FULL_NAME'"
-        echo "     Q <quit>"
+        echo "     1 Name:         '$VP_NAME'"
+        echo "     2 Gender:       '$VP_GENDER'"
+        echo "     3 Age:          '$VP_AGE'"
+        echo "     4 Description:  '$VP_DESCRIPTION'"
+        echo "     5 Full Name:    '$VP_FULL_NAME'"
+        echo "     6 Domain:       '$VP_DOMAIN'"
+        echo "     7 Organization: '$VP_ORGANIZATION'"
+        echo "     H <Help>"
+        echo "     Q <Quit>:       Abort the conversion process."
         echo
-        echo "  Name: generally a one-word name by which you want this"
-        echo "    voice to be known, such as \"kevin\", \"alan\", or \"dave\"."
-        echo "  Description: a sentence or so that describes this voice."
-        echo "  Full Name: the name that will be used for the FreeTTS files"
-        echo "    for this voice.  The Full Name must be unique name from"
-        echo "    all other voices in FreeTTS.  It is HIGHLY recommended"
-        echo "    that you do NOT change this property unless it conflicts"
-        echo "    with an existing voice."
-        echo "  All properties can be changed manually after the conversion"
-        echo "   process, but it is easiest to do it now."
         echo
         echo "Enter the number for the property you would like to change,"
         echo "'0' if everything looks correct, or 'Q' to exit:"
@@ -444,6 +438,34 @@ if [ "$2" = "install" ]; then
 
         if [ "$REPLY" = "Q" ] || [ "$REPLY" = "q" ]; then
             exit 0
+        elif [ "$REPLY" = "H" ] || [ "$REPLY" = "h" ]; then
+            echo
+            echo
+            echo
+            echo
+            echo
+            echo
+            echo "  Name: generally a one-word name by which you want this"
+            echo "    voice to be known, such as \"kevin\", \"alan\","
+            echo "    or \"dave\"."
+            echo "  Description: a sentence or so that describes this voice."
+            echo "  Gender: male, female, or neutral"
+            echo "  Age: one of: Neutral, Child, Teenager, Younger Adult,"
+            echo "    Middle Adult, Older Adult"
+            echo "  Full Name: the name that will be used for the FreeTTS"
+            echo "    files for this voice.  The Full Name must be unique"
+            echo "    name from all other voices in FreeTTS.  It is HIGHLY"
+            echo "    recommended that you do NOT change this property unless"
+            echo "    it conflicts with an existing voice."
+            echo "  Domain: the domain for limited domain voices (such as"
+            echo "    \"time\" or \"weather\"), otherwise \"general\"."
+            echo "  Organization: the organization which recorded the voice,"
+            echo "    such as \"sun\" or \"cmu\"."
+            echo "  All properties can be changed manually after the conversion"
+            echo "    process, but it is easiest to do it now."
+            echo
+            echo "Press <Enter> to return to the menu."
+            read UNUSED
         elif [ "$REPLY" = "0" ]; then  # only way to exit while loop
             if [ -d "$EN_US_DIR/$VP_FULL_NAME" ]; then
                 echo
@@ -493,6 +515,14 @@ if [ "$2" = "install" ]; then
             echo
             echo "Enter a new Full Name: "
             read VP_FULL_NAME
+        elif [ "$REPLY" = "6" ]; then
+            echo
+            echo "Enter a new domain (\"general\" for unlimited domains) : "
+            read VP_DOMAIN
+        elif [ "$REPLY" = "7" ]; then
+            echo
+            echo "Enter the organization which created this voice: "
+            read VP_ORGANIZATION
         fi
     done
 
@@ -532,9 +562,8 @@ if [ "$2" = "install" ]; then
         echo
         echo "Please confirm that $VOICEDIRECTORY_CLASS.java and"
         echo "voice.Manifest contain the correct information."
-        echo "(If you created a ldom voice with a domain other than 'time',"
-        echo "you may need to update the location of the lexicon in"
-        echo "both files)."
+        echo "(If you created a ldom voice, it is still configured to use"
+        echo "a full US/English lexicon.  You may wish to change that)."
     ) > "$EN_US_DIR/$VP_FULL_NAME/README"
 
 
@@ -545,11 +574,13 @@ if [ "$2" = "install" ]; then
     echo "Class-Path: cmulex.jar" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
 
     if [ "$FV_TYPE" = "diphone" ]; then
-        VD_TEMPLATE="$HELPERDIR/CMU_USDiphoneTemplate.java"
+        VD_TEMPLATE="$HELPERDIR/CMU_USDiphoneTemplate.java.template"
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
+        MAKEFILE_EXCLUDE="CLUNITS_ONLY"
     else #clunit
-        VD_TEMPLATE="$HELPERDIR/CMU_USLdomTemplate.java"
+        VD_TEMPLATE="$HELPERDIR/CMU_USClunitTemplate.java.template"
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
+        MAKEFILE_EXCLUDE="DIPHONE_ONLY"
     fi
 
     # create the voice directory class
@@ -564,10 +595,10 @@ if [ "$2" = "install" ]; then
         > "$EN_US_DIR/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS.java"
 
     # create the Makefile
-    cat "$HELPERDIR/VoiceMakefileTemplate.txt" \
+    cat "$HELPERDIR/VoiceMakefile.template" \
         | sed "s/%VOICENAME%/$VP_FULL_NAME/g" \
         | sed "s/%UNIT_DATABASE_CLASS%/$UNIT_DATABASE_CLASS/g" \
-        | grep -v "DIPHONE_ONLY" \
+        | grep -v "$MAKEFILE_EXCLUDE" \
         > "$EN_US_DIR/$VP_FULL_NAME/Makefile"
 
 
@@ -576,13 +607,13 @@ if [ "$2" = "install" ]; then
         echo "$FULL_VOICEDIRECTORY_CLASS" >> "$FREETTSDIR/lib/voices.txt"
     fi
 
-    echo "Installation complete"
+    echo "The voice has been successfully installed in"
+    echo "$EN_US_DIR/$VP_FULL_NAME/"
 fi
 
 
 if [ "$2" = "compile" ]; then
     (cd "$FREETTSDIR";
         make
-        make jars
     )
 fi

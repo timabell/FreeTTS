@@ -515,6 +515,7 @@ public class FreeTTS {
                 i++;
 	    } else if (args[i].equals("-help")) {
 		usage(voices);
+                System.exit(0);
 	    } else if (args[i].equals("-text")) {
 		freetts.setInputMode(InputMode.TEXT);
 		// add the rest of the args as text

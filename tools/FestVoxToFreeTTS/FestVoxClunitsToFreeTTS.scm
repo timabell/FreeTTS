@@ -193,8 +193,9 @@
             (set! current_node 0)
             (let ((tree (cadr cart))
                   (name (car cart)))
-              (format cart_file "CART %s %d\n" name (length tree))
-              (format cart_file "%s" (print_cart_nodes tree))
+              (set! cart_nodes_text (format nil "%s" (print_cart_nodes tree)))
+              (format cart_file "CART %s %d\n" name current_node)
+              (format cart_file "%s" cart_nodes_text)
             )
         )
     sorted_clunits_selection_trees)
@@ -346,7 +347,7 @@ Ouput this MCEP frame."
 (define (print_cart_list l)
     (cond
         ((null? l))
-        ((cdr l) (format nil "%f %s" (caar l) (print_cart_list (cdr l))))
+        ((cdr l) (format nil "%f,%s" (caar l) (print_cart_list (cdr l))))
         (t (format nil "%f" (caar l)))
 ))
 

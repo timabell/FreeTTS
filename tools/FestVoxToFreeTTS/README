@@ -104,8 +104,8 @@ the scope of this document.
 Voice Properties:
  Name - The name you want to call this voice.  For example "kevin",
      "kevin16", "alan", or "dave".
- Gender - The gender of the voice.
- Age - The age of the voice.
+ Gender - The gender of the voice.  See Help for a full listing.
+ Age - The age of the voice.  See Help for a full listing.
  Description - A sentence or so that describes this voice for others.
  Full Name - This is the name that will be used to name the voice
      files and directory.  It must be unique to this installation
@@ -119,6 +119,10 @@ Voice Properties:
      identity.  For limited domain voices, you can put the limited
      domain down instead of locale.For example, cmu_us_kal,
      cmu_time_awb, sun_us_dtv.
+ Domain - The domain if this is a limited (ldom) voice, otherwise
+     it must be set to "general".
+ Organization - The organization which recorded the voice.  For example
+     "cmu" or "sun".
 
 If there already exists a voice with the same Full Name, you are given
 the option to over-write it, cancel, or change the properties.

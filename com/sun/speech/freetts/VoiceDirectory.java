@@ -59,7 +59,7 @@ public abstract class VoiceDirectory {
             + newline;
 
         for (int i = 0; i < voices.length; i++) {
-            s += voices[i].getName() + newline
+            s += newline + "Name: " + voices[i].getName() + newline
              + "\tDescription: " + voices[i].getDescription() + newline
              + "\tOrganization: " + voices[i].getOrganization() + newline
              + "\tDomain: " + voices[i].getDomain() + newline
