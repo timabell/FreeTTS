@@ -495,7 +495,7 @@ public class LPCResult {
 	boolean firstPlay = true;
 
 	// for each frame in the LPC result
-	player.begin(getNumberOfSamples() * 2);
+	player.begin(numberSamples);
 	for (int r = 0, i = 0; ok && i < numberOfFrames; i++) {
 	    
 	    // unpack the LPC coefficients
@@ -540,13 +540,16 @@ public class LPCResult {
 	    }
 	}
 
-	if (ok && s > 0) {
-	    ok = player.write(samples, 0, s);
-	    if (ok) {
-		ok = player.end();
-	    }
-	    s = 0;
-	}
+        // write out the very last samples
+        if (s > 0) {
+            ok = player.write(samples, 0, s);
+            s = 0;
+        }
+
+        // tell the AudioPlayer it is the end of Utterance
+	if (ok) {
+            ok = player.end();
+        }
 
 	return ok;
     }

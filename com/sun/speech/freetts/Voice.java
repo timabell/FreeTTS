@@ -416,7 +416,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    if (ok && utterance.isLast()) {
 		audioPlayer.drain();
 		speakable.completed();
-		log(" --- completed ---");
+                log(" --- completed ---");
 	    } else if (!ok) {
 		audioPlayer.drain();
 		speakable.cancelled();
@@ -746,7 +746,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * @see #isVerbose
      */
     public void log(String message) {
-	if (verbose) {
+	if (!verbose) {
 	    System.out.println(message);
 	}
     }
@@ -1164,12 +1164,14 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		    utterance.setSpeakable(speakable);
 		    utterance.setFirst(first);
 		    first = false;
-		    utterance.setLast(!tok.hasMoreTokens());
+                    boolean isLast = 
+                        (!tok.hasMoreTokens() && savedToken == null);
+		    utterance.setLast(isLast);
 		    return utterance;
 		}
 
 		public void remove() {
-		  throw new UnsupportedOperationException("remove");  
+                    throw new UnsupportedOperationException("remove");  
 		}
 	    };
 	}
