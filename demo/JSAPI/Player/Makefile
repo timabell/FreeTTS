@@ -24,13 +24,13 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: 
-	$(JAVA_CMD) Player
+	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player
 
 runbig: 
-	$(JAVA_CMD) Player -fontsize 20
+	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -fontsize 20
 
 runmonitor: 
-	$(JAVA_CMD) Player -monitor
+	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor
 
 
 # you can define multiple instance of plaintext, textfile, jsmltext,
@@ -43,7 +43,7 @@ runmonitor:
 #	"jsmlfile:$(PWD)/test1.jsml"\
 
 input: 
-	$(JAVA_CMD) Player -monitor -input $(INPUT)
+	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(INPUT)
 
 PLAINTEXTS = \
 	"plaintext:Welcome to the jay sappy demo synthesis program. I can help you test this program. My name is kevin. First, I'll count for you"\
@@ -66,4 +66,4 @@ PLAINTEXTS = \
 	"plaintext:that all men are created equal."
 
 plaintext: 
-	$(JAVA_CMD) Player -monitor -input $(PLAINTEXTS)
+	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(PLAINTEXTS)
