@@ -67,6 +67,39 @@ public class MbrolaVoice extends CMUVoice {
         return new ParametersToMbrolaConverter();
     }
 
+    /**
+     * Returns the command line for that invokes the MBROLA executable
+     * which synthesizes speech using this Voice. The command will be
+     * in the form of:
+     *
+     * <code> {mbrolaExecutable} -e -I {mbrolaRenameTable} 
+     * {mbrolaVoiceDB} - -.raw </code>
+     */
+    protected String getMbrolaCommand(String databaseDir, String database) {
+        
+        String mbrolaBase = System.getProperty("mbrola.base");
+
+        // Path to the binary:
+        String mbrola = mbrolaBase + File.separator + "mbrola";
+
+        // Path to the mbrola voice db to be used:
+        String mbrolaVoiceDB = mbrolaBase + File.separator + databaseDir +
+            File.separator + database;
+        
+        // Path to the segment name conversion file:
+        String mbrolaRenameTable = mbrolaBase + File.separator + "us1" +
+            File.separator + "us1mrpa";
+
+        // Construct the mbrola command in such a way that
+        // mbrola reads from stdin and writes raw, headerless audio data
+        // to stdout; translates CMU us radio to sampa phonetic symbols;
+        // and only complains, but does not abort, when encountering an
+        // unknown diphone:
+        String cmd = mbrola + " -e -I " + mbrolaRenameTable + " " + 
+            mbrolaVoiceDB + " - -.raw";
+        
+        return cmd;
+    }
 
     /**
      * Returns the unit concatenator to be used by this voice.
@@ -81,6 +114,13 @@ public class MbrolaVoice extends CMUVoice {
         return null;
     }
 
+    /**
+     * Returns the audio output used by this voice.
+     *
+     * @return the audio output used by this voice
+     *
+     * @throws IOException if an I/O error occurs
+     */
     protected UtteranceProcessor getAudioOutput() throws IOException {
         return new MbrolaAudioOutput();
     }

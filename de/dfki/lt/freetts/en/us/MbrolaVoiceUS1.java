@@ -61,23 +61,9 @@ public class MbrolaVoiceUS1 extends MbrolaVoice {
      *     processor
      */
     protected UtteranceProcessor getUnitConcatenator() throws IOException {
-        String mbrolaBase = System.getProperty("mbrola.base");
-        // Path to the binary:
-        String mbrola = mbrolaBase + File.separator + "mbrola";
-        // Path to the mbrola voice db to be used:
-        String mbrolaVoiceDB = mbrolaBase + File.separator + "us1" +
-            File.separator + "us1";
-        // Path to the segment name conversion file:
-        String mbrolaRenameTable = mbrolaBase + File.separator + "us1" +
-            File.separator + "us1mrpa";
-        // Construct the mbrola command in such a way that
-        // mbrola reads from stdin and writes raw, headerless audio data
-        // to stdout; translates CMU us radio to sampa phonetic symbols;
-        // and only complains, but does not abort, when encountering an
-        // unknown diphone:
-        String cmd = mbrola + " -e -I " + mbrolaRenameTable + " "
-            + mbrolaVoiceDB + " - -.raw";
-	return new MbrolaCaller(cmd);
+        String databaseDir = "us1";
+        String databaseName = "us1";
+	return new MbrolaCaller(getMbrolaCommand(databaseDir, databaseName));
     }
 
     /**
