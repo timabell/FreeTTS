@@ -22,9 +22,9 @@ import com.sun.speech.freetts.en.us.SimpleVoice;
 public class UnitDatabaseTests extends TestCase {
     DiphoneUnitDatabase udb;
     private final static String BINARY_DB =
-    "file:../classes/com/sun/speech/freetts/en/us/cmu_kal/diphone_units.bin";
+    "file:../classes/com/sun/speech/freetts/en/us/cmu_us_kal/cmu_us_kal.bin";
     private final static String TEXT_DB =
-    "file:../classes/com/sun/speech/freetts/en/us/cmu_kal/diphone_units.txt";
+    "file:../classes/com/sun/speech/freetts/en/us/cmu_us_kal/cmu_us_kal.txt";
 
     /**
      * Creates the set of UtteranceTests

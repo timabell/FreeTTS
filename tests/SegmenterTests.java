@@ -10,7 +10,6 @@ import junit.framework.*;
 import java.util.*;
 import java.io.*;
 import com.sun.speech.freetts.*;
-import com.sun.speech.freetts.en.us.SimpleVoice;
 
 /**
  * Tests for the Utterance class
@@ -41,7 +40,8 @@ public class SegmenterTests extends TestCase {
      * @return the utterance
      */
     public Utterance  getSyllables(String text) {
-	voice = new SimpleVoice(true);
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        voice = voiceManager.getVoice("kevin");
 	voice.allocate();
 	utterance = new Utterance(voice);
 	Relation words = utterance.createRelation("Word");

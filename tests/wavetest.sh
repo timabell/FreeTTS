@@ -26,13 +26,8 @@ if [ -f wavetest.diff ]; then
 	rm wavetest.diff
 fi
 
-FREETTS_CLASSES=../classes
-if [ -z "${JAVA_HOME}" ] ; then
-    JAVA_HOME=/lab/speech/java/j2sdk1.4.0
-fi
-
-${JAVA_HOME}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
-	com.sun.speech.freetts.FreeTTS -silent -dumpWave wavetest.res -file $1
+`dirname $0`/../bin/baseFreeTTS \
+	com.sun.speech.freetts.FreeTTS -voice kevin -silent -dumpWave wavetest.res -file $1
 
 diff -b wavetest.res $2 > wavetest.diff
 
