@@ -49,7 +49,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private int curIndex = 0;
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
-    private long closeDelay;
+    private long closeDelay;	// workaround for linux sound bug
 
     /**
      * Constructs a default JavaClipAudioPlayer 
