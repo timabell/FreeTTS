@@ -13,7 +13,7 @@ TAR = tar
 ZIP = zip
 
 # List any sub directories that need to be built
-SUBDIRS = javax com demo bin tests docs
+SUBDIRS = com demo bin tests docs
 
 # List src dirs that get deployed
 # SRCDIRS = javax com
@@ -81,7 +81,7 @@ DEPLOY_EXCLUDED_DIRECTORIES = \
 
 DEPLOY_DOCS_TARGET = freettsdocs.tar
 DOC_STAGING_AREA = ./htdocs
-DEPLOY_DOCS = demo docs license.terms acknowledgments.txt index.html
+DEPLOY_DOCS = demo docs license.terms RELEASE_NOTES overview.html README.txt acknowledgments.txt index.html license.terms
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
 
 ##########################################################################
