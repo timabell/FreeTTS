@@ -107,8 +107,8 @@ public class EmacspeakServer extends TTSServer {
      */
     protected void spawnProtocolHandler(Socket socket) {
 	try {
-	    EmacspeakProtocolHandler handler =
-		new EmacspeakProtocolHandler(socket, synthesizer);
+	    JSAPIEmacspeakHandler handler =
+		new JSAPIEmacspeakHandler(socket, synthesizer);
 	    (new Thread(handler)).start();
 	} catch (Exception e) {
 	    e.printStackTrace();

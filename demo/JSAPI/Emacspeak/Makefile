@@ -27,4 +27,4 @@ all:: ${CLASSES} ${STUBS}
 # "synthesizerName".
 
 run: 
-	$(JAVA_CMD) -Dport=2222 -DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" EmacspeakServer
+	$(JAVA_CMD) -Ddebug=true -Dport=2222 -DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" EmacspeakServer

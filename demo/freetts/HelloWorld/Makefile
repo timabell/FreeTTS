@@ -25,3 +25,12 @@ all:: ${CLASSES} ${STUBS}
 
 run: all
 	$(JAVA_CMD) FreeTTSHelloWorld
+
+audio: all
+	$(JAVA_CMD) Audio
+
+audioOutput: all
+	$(JAVA_CMD) AudioOutput audio.out
+
+convert: all
+	$(JAVA_CMD) JavaSoundWavTest

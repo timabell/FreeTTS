@@ -7,6 +7,7 @@
  */
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
+import com.sun.speech.freetts.audio.AudioPlayerStdOut;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
 
@@ -36,7 +37,8 @@ public class FreeTTSHelloWorld {
 
 	    // sets the AudioPlayer to the Java clip player
 
-	    helloVoice.setAudioPlayer(new JavaClipAudioPlayer());
+	    helloVoice.setAudioPlayer(new AudioPlayerStdOut());
+            // (new JavaClipAudioPlayer());
 	    
 
 	    // loads the Voice, which mainly is loading the lexicon
