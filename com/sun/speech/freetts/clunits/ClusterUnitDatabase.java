@@ -506,7 +506,7 @@ public class ClusterUnitDatabase {
 	} catch (NoSuchElementException nse) {
 	    throw new Error("Error parsing db " + nse.getMessage());
 	} catch (NumberFormatException nfe) {
-	    throw new Error("Error parsing numbers in db " + nfe.getMessage());
+	    throw new Error("Error parsing numbers in db line `" + line + "':" + nfe.getMessage());
 	}
     }
 
