@@ -80,11 +80,6 @@ DOC_STAGING_AREA = ./htdocs
 DEPLOY_DOCS = demo docs license.terms acknowledgments.txt index.html
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
 
-XP_DEPLOY_DOCS_TARGET = xpfreettsdocs.tar
-XP_DOC_STAGING_AREA = ./xpdocs
-
-
-
 ##########################################################################
 
 include ${TOP}/build/Makefile.config
@@ -98,7 +93,6 @@ clean::
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
 	rm -rf $(DOC_STAGING_AREA)
-	rm -rf $(XP_DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 
 
@@ -131,18 +125,6 @@ deploy_docs:
 	tar cvf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
 	gzip $(DEPLOY_DOCS_TARGET)
 	rm -rf $(DOC_STAGING_AREA)
-
-deploy_xp_docs:
-	rm -f $(XP_DEPLOY_DOCS_TARGET) $(XP_DEPLOY_DOCS_TARGET).gz
-	rm -rf $(XP_DOC_STAGING_AREA)
-	mkdir $(XP_DOC_STAGING_AREA)
-	cp -r docs/audio $(XP_DOC_STAGING_AREA)/audio
-	cp license.terms acknowledgments.txt $(XP_DOC_STAGING_AREA)
-	cp docs/FreeTTSStuff.html $(XP_DOC_STAGING_AREA)
-	-find $(XP_DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
-	tar cvf $(XP_DEPLOY_DOCS_TARGET) $(XP_DOC_STAGING_AREA)
-	gzip $(XP_DEPLOY_DOCS_TARGET)
-	rm -rf $(XP_DOC_STAGING_AREA)
 
 all::
 
