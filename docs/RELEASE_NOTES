@@ -8,9 +8,11 @@
 
 Change history for FreeTTS.
 --------------------------
-December 21, 2001	V1.0.3  - Added .bat files for win32 demos
-December 20, 2001	V1.0.2  - Added jsapi.exe - win32 jsapi installer
-December 20, 2001	V1.0.1  - Added jsapi.sh - unix jsapi installer
-December 14, 2001 	V1.0   	- First public release
-November  7, 2001 	V0.9    - Internal Test Release
+January   8, 2002 V1.0.4  - Fixed speech.properties path message in demos.
+			  - Added SourceForge news to docs front page.
+December 21, 2001 V1.0.3  - Added .bat files for win32 demos
+December 20, 2001 V1.0.2  - Added jsapi.exe - win32 jsapi installer
+December 20, 2001 V1.0.1  - Added jsapi.sh - unix jsapi installer
+December 14, 2001 V1.0    - First public release
+November  7, 2001 V0.9    - Internal Test Release
 
