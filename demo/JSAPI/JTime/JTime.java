@@ -22,7 +22,6 @@ import javax.speech.EngineException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
-import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Simple program showing how to use the Limited Domain (time)
@@ -76,8 +75,6 @@ public class JTime {
      * Starts interactive mode. Reads text
      * from the console and gives it to the synthesizer to speak.
      * terminates on end of file.
-     *
-     * @param freetts the engine
      */
     public void interactiveMode() {
         try {

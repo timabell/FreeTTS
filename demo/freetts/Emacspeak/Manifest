@@ -1,0 +1,2 @@
+Main-Class: FreeTTSEmacspeakServer
+Class-Path: ../lib/freetts.jar

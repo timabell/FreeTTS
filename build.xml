@@ -13,7 +13,9 @@
     <property name="src_dir"		value="."/>
     <property name="build_dir"		value="bld"/>
     <property name="classes_dir"	value="${build_dir}/classes"/>
+    <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
     <property name="lib_dir"            value="${build_dir}/lib"/>
+    <property name="bin_dir"            value="${build_dir}/bin"/>
 
 
     <!-- ********************************************************** -->
@@ -22,7 +24,7 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="all"
-	    depends="compile,jars"
+	    depends="compile,jars,demos"
 	    description="Build everything">
 	<echo message="Build complete."/>
     </target>
@@ -313,37 +315,23 @@
     <!-- freetts.jar -->
     <property name="freetts_jar" value="${lib_dir}/freetts.jar"/>
 
-    <fileset id="freetts_jar_binaries"
-	     dir="${classes_dir}"
-	     excludes="com/sun/speech/freetts/en/**,
-	               test/**,
-		       **/*.bin,
-		       **/*.idx"/>
-
-    <fileset id="freetts_jar_files"
-	     dir="${src_dir}"
-	     includes="com/sun/speech/freetts/internal_voices.txt"/>
-
-    <target name="check_freetts_jar.isUpToDate"
-	    description="Determines if freetts.jar needs to be rebuilt">
-        <uptodate property="freetts_jar.isUpToDate">
-            <srcfiles refid="freetts_jar_binaries"/> 
-            <srcfiles refid="freetts_jar_files"/> 
-            <mapper type="merge" to="${freetts_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="freetts_jar" 
-	    depends="compile_src,check_freetts_jar.isUpToDate"
-	    unless="freetts_jar.isUpToDate"
+	    depends="compile_src"
 	    description="Create ${lib_dir}/freetts.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${freetts_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/freetts.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="freetts_jar_binaries"/>
-            <fileset refid="freetts_jar_files"/>
+            <fileset 
+                dir="${classes_dir}"
+	        excludes="com/sun/speech/freetts/en/**,
+		          test/**,
+		          **/*.bin,
+		          **/*.idx"/>
+            <fileset
+	        dir="${src_dir}"
+	        includes="com/sun/speech/freetts/internal_voices.txt"/>
         </jar>
     </target>
 
@@ -351,36 +339,22 @@
     <!-- en_us.jar -->
     <property name="en_us_jar" value="${lib_dir}/en_us.jar"/>
 
-    <fileset id="en_us_jar_binaries"
-	     dir="${classes_dir}"
-	     includes="com/sun/speech/freetts/en/*.class,
-	               com/sun/speech/freetts/en/us/*.class"/>
-
-    <fileset id="en_us_jar_files"
-	     dir="${src_dir}"
-	     includes="com/sun/speech/freetts/en/us/*.txt"
-	     excludes="**/cmu*lex*.txt"/>
-
-    <target name="check_en_us_jar.isUpToDate"
-	    description="Determines if en_us.jar needs to be rebuilt">
-        <uptodate property="en_us_jar.isUpToDate">
-            <srcfiles refid="en_us_jar_binaries"/> 
-            <srcfiles refid="en_us_jar_files"/> 
-            <mapper type="merge" to="${en_us_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="en_us_jar" 
-	    depends="compile_src,check_en_us_jar.isUpToDate"
-	    unless="en_us_jar.isUpToDate"
+	    depends="compile_src"
 	    description="Create ${lib_dir}/en_us.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${en_us_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/en/us/en_us.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="en_us_jar_binaries"/>
-            <fileset refid="en_us_jar_files"/>
+            <fileset
+	        dir="${classes_dir}"
+	        includes="com/sun/speech/freetts/en/*.class,
+	                  com/sun/speech/freetts/en/us/*.class"/>
+            <fileset
+	        dir="${src_dir}"
+	        includes="com/sun/speech/freetts/en/us/*.txt"
+	        excludes="**/cmu*lex*.txt"/>
         </jar>
     </target>
 
@@ -388,28 +362,17 @@
     <!-- cmulex.jar -->
     <property name="cmulex_jar" value="${lib_dir}/cmulex.jar"/>
 
-    <fileset id="cmulex_jar_binaries"
-	     dir="${classes_dir}"
-	     includes="com/sun/speech/freetts/en/us/cmulex_*.bin"/>
-
-    <target name="check_cmulex_jar.isUpToDate"
-	    description="Determines if cmulex.jar needs to be rebuilt">
-        <uptodate property="cmulex_jar.isUpToDate">
-            <srcfiles refid="cmulex_jar_binaries"/> 
-            <mapper type="merge" to="${cmulex_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="cmulex_jar" 
-	    depends="compile_lexicons,check_cmulex_jar.isUpToDate"
-	    unless="cmulex_jar.isUpToDate"
+	    depends="compile_lexicons"
 	    description="Create ${lib_dir}/cmulex.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${cmulex_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmulex.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="cmulex_jar_binaries"/>
+            <fileset
+	        dir="${classes_dir}"
+	        includes="com/sun/speech/freetts/en/us/cmulex_*.bin"/>
         </jar>
     </target>
 
@@ -417,28 +380,18 @@
     <!-- cmutimelex.jar -->
     <property name="cmutimelex_jar" value="${lib_dir}/cmutimelex.jar"/>
 
-    <fileset id="cmutimelex_jar_binaries"
-	     dir="${classes_dir}"
-	     includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin"/>
-
-    <target name="check_cmutimelex_jar.isUpToDate"
-	    description="Determines if cmutimelex.jar needs to be rebuilt">
-        <uptodate property="cmutimelex_jar.isUpToDate">
-            <srcfiles refid="cmutimelex_jar_binaries"/> 
-            <mapper type="merge" to="${cmutimelex_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="cmutimelex_jar" 
-	    depends="compile_lexicons,check_cmutimelex_jar.isUpToDate"
-	    unless="cmutimelex_jar.isUpToDate"
+	    depends="compile_lexicons"
 	    description="Create ${lib_dir}/cmutimelex.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${cmutimelex_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmutimelex.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="cmutimelex_jar_binaries"/>
+            <fileset
+	        dir="${classes_dir}"
+	        includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin"/>
+
         </jar>
     </target>
 
@@ -446,28 +399,17 @@
     <!-- cmu_us_kal.jar -->
     <property name="cmu_us_kal_jar" value="${lib_dir}/cmu_us_kal.jar"/>
 
-    <fileset id="cmu_us_kal_jar_binaries"
-	     dir="${classes_dir}"
-	     includes="com/sun/speech/freetts/en/us/cmu_us_kal/*"/>
-
-    <target name="check_cmu_us_kal_jar.isUpToDate"
-	    description="Determines if cmu_us_kal.jar needs to be rebuilt">
-        <uptodate property="cmu_us_kal_jar.isUpToDate">
-            <srcfiles refid="cmu_us_kal_jar_binaries"/> 
-            <mapper type="merge" to="${cmu_us_kal_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="cmu_us_kal_jar" 
-	    depends="compile_lexicons,check_cmu_us_kal_jar.isUpToDate"
-	    unless="cmu_us_kal_jar.isUpToDate"
+	    depends="compile_lexicons"
 	    description="Create ${lib_dir}/cmu_us_kal.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${cmu_us_kal_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_us_kal/voice.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="cmu_us_kal_jar_binaries"/>
+            <fileset
+	        dir="${classes_dir}"
+	        includes="com/sun/speech/freetts/en/us/cmu_us_kal/*"/>
         </jar>
     </target>
 
@@ -475,28 +417,17 @@
     <!-- cmu_time_awb.jar -->
     <property name="cmu_time_awb_jar" value="${lib_dir}/cmu_time_awb.jar"/>
 
-    <fileset id="cmu_time_awb_jar_binaries"
-	     dir="${classes_dir}"
-	     includes="com/sun/speech/freetts/en/us/cmu_time_awb/*"/>
-
-    <target name="check_cmu_time_awb_jar.isUpToDate"
-	    description="Determines if cmu_time_awb.jar needs to be rebuilt">
-        <uptodate property="cmu_time_awb_jar.isUpToDate">
-            <srcfiles refid="cmu_time_awb_jar_binaries"/> 
-            <mapper type="merge" to="${cmu_time_awb_jar}"/>
-        </uptodate>
-    </target>
-
     <target name="cmu_time_awb_jar" 
-	    depends="compile_lexicons,check_cmu_time_awb_jar.isUpToDate"
-	    unless="cmu_time_awb_jar.isUpToDate"
+	    depends="compile_lexicons"
 	    description="Create ${lib_dir}/cmu_time_awb.jar">
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${cmu_time_awb_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_time_awb/voice.Manifest"
 	     filesonly="true"
 	     compress="true">
-            <fileset refid="cmu_time_awb_jar_binaries"/>
+            <fileset
+	        dir="${classes_dir}"
+	        includes="com/sun/speech/freetts/en/us/cmu_time_awb/*"/>
         </jar>
     </target>
 
@@ -540,6 +471,261 @@
 	    <classpath refid="extra_libs"/>
         </javadoc>
     </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Builds just the demos (using package names for the     * -->
+    <!-- * demos would have made this easier).                    * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="demos"
+	    depends="compile_demo_util,
+	             compile_freetts_demos,
+	             compile_jsapi_demos"
+	    description="Compiles and jars the demos"/>
+
+
+    <target name="compile_demo_util"
+	    description="Compiles utilities used by some of the demos">
+	<mkdir dir="${demo_classes_dir}/util"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/util"
+	       destdir="${demo_classes_dir}/util">
+        </javac>
+    </target>
+
+
+    <!-- freetts (non-JSAPI) demos -->
+    <target name="compile_freetts_demos"
+	    depends="compile_freetts_clientserver,
+	             compile_freetts_emacspeak,
+	             compile_freetts_helloworld"
+	    description="Compiles freetts demos that do not use JSAPI"/>
+
+    <target name="compile_freetts_clientserver"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/freetts/ClientServer"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/freetts/ClientServer"
+	       destdir="${demo_classes_dir}/freetts/ClientServer">
+	    <classpath>
+		<pathelement location="${freetts_jar}"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+	<mkdir dir="${bin_dir}"/>
+        <jar destfile="${bin_dir}/Client.jar" 
+	     manifest="${src_dir}/demo/freetts/ClientServer/client.Manifest"
+	     basedir="${demo_classes_dir}/freetts/ClientServer"
+	     includes="Client.class"
+	     filesonly="true"
+	     compress="true"/>
+        <jar destfile="${bin_dir}/Server.jar" 
+	     manifest="${src_dir}/demo/freetts/ClientServer/server.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset dir="${demo_classes_dir}/freetts/ClientServer"
+	             excludes="Client.class"/>
+            <fileset dir="${demo_classes_dir}/util"
+	             includes="TTSServer.class"/>
+        </jar>
+    </target>
+
+    <target name="compile_freetts_emacspeak"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/freetts/Emacspeak"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/freetts/Emacspeak"
+	       destdir="${demo_classes_dir}/freetts/Emacspeak">
+	    <classpath>
+		<pathelement location="${freetts_jar}"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/FreeTTSEmacspeakServer.jar" 
+	     manifest="${src_dir}/demo/freetts/Emacspeak/Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset dir="${demo_classes_dir}/freetts/Emacspeak"/>
+            <fileset dir="${demo_classes_dir}/util"
+	             includes="EmacspeakProtocolHandler.class,
+		               TTSServer.class"/>
+        </jar>
+    </target>
+
+    <target name="compile_freetts_helloworld"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/freetts/HelloWorld"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/freetts/HelloWorld"
+	       destdir="${demo_classes_dir}/freetts/HelloWorld">
+	    <classpath>
+		<pathelement location="${freetts_jar}"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+	<mkdir dir="${bin_dir}"/>
+        <jar destfile="${bin_dir}/FreeTTSHelloWorld.jar" 
+	     manifest="${src_dir}/demo/freetts/HelloWorld/Manifest"
+	     basedir="${demo_classes_dir}/freetts/HelloWorld"
+	     includes="*.class"
+	     filesonly="true"
+	     compress="true"/>
+    </target>
+
+
+    <!-- JSAPI demos -->
+    <target name="compile_jsapi_demos"
+	    depends="compile_jsapi_emacspeak,
+	             compile_jsapi_helloworld,
+	             compile_jsapi_jtime,
+	             compile_jsapi_mixedvoices,
+	             compile_jsapi_player,
+	             compile_jsapi_webstartclock"
+	    description="Compiles freetts demos that use JSAPI"/>
+
+    <target name="compile_jsapi_emacspeak"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/Emacspeak"
+	       destdir="${demo_classes_dir}/JSAPI/Emacspeak">
+	    <classpath>
+		<path refid="extra_libs"/>
+		<pathelement location="${freetts_jar}"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/EmacspeakServer.jar" 
+	     manifest="${src_dir}/demo/JSAPI/Emacspeak/Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
+            <fileset dir="${demo_classes_dir}/util"
+	             includes="EmacspeakProtocolHandler.class,
+		               TTSServer.class"/>
+        </jar>
+    </target>
+
+    <target name="compile_jsapi_helloworld"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/HelloWorld"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/HelloWorld"
+	       destdir="${demo_classes_dir}/JSAPI/HelloWorld">
+	    <classpath>
+		<path refid="extra_libs"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/HelloWorld.jar" 
+	     manifest="${src_dir}/demo/JSAPI/HelloWorld/Manifest"
+	     basedir="${demo_classes_dir}/JSAPI/HelloWorld"
+	     includes="*.class"
+	     filesonly="true"
+	     compress="true"/>
+    </target>
+
+    <target name="compile_jsapi_jtime"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/JTime"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/JTime"
+	       destdir="${demo_classes_dir}/JSAPI/JTime">
+	    <classpath>
+		<path refid="extra_libs"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/JTime.jar" 
+	     manifest="${src_dir}/demo/JSAPI/JTime/Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset dir="${demo_classes_dir}/JSAPI/JTime"/>
+            <fileset dir="${demo_classes_dir}/util"
+	             includes="TimeUtils.class"/>
+        </jar>
+    </target>
+
+    <target name="compile_jsapi_mixedvoices"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/MixedVoices"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/MixedVoices"
+	       destdir="${demo_classes_dir}/JSAPI/MixedVoices">
+	    <classpath>
+		<path refid="extra_libs"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/MixedVoices.jar" 
+	     manifest="${src_dir}/demo/JSAPI/MixedVoices/Manifest"
+	     basedir="${demo_classes_dir}/JSAPI/MixedVoices"
+	     includes="*.class"
+	     filesonly="true"
+	     compress="true"/>
+    </target>
+
+    <target name="compile_jsapi_player"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/Player"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/Player"
+	       destdir="${demo_classes_dir}/JSAPI/Player">
+	    <classpath>
+		<path refid="extra_libs"/>
+		<pathelement location="${freetts_jar}"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/Player.jar" 
+	     manifest="${src_dir}/demo/JSAPI/Player/Manifest"
+	     basedir="${demo_classes_dir}/JSAPI/Player"
+	     includes="*.class"
+	     filesonly="true"
+	     compress="true"/>
+    </target>
+
+    <target name="compile_jsapi_webstartclock"
+	    depends="freetts_jar,compile_demo_util">
+	<mkdir dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}/demo/JSAPI/WebStartClock"
+	       destdir="${demo_classes_dir}/JSAPI/WebStartClock">
+	    <classpath>
+		<path refid="extra_libs"/>
+		<pathelement location="${freetts_jar}"/>
+		<pathelement location="${demo_classes_dir}/util"/>
+	    </classpath>
+	</javac>
+        <jar destfile="${bin_dir}/WebStartClock.jar" 
+	     manifest="${src_dir}/demo/JSAPI/WebStartClock/Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
+            <fileset dir="${demo_classes_dir}/util"
+	             includes="TimeUtils.class"/>
+        </jar>
+    </target>
+
 
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->

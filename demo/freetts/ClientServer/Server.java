@@ -8,7 +8,6 @@
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
-import com.sun.speech.freetts.en.us.CMULexicon;
 
 import com.sun.speech.freetts.util.Utilities;
 

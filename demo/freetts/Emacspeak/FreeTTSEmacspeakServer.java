@@ -12,7 +12,6 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
-import com.sun.speech.freetts.en.us.CMULexicon;
 
 import java.net.Socket;
 
