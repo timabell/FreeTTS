@@ -205,8 +205,9 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	boolean posted = false;
 
 	audioPlayer.startFirstSampleTimer();
+
 	for (Iterator i = tokenize(speakable); 
-		!speakable.isCompleted() && i.hasNext() ; ) {
+             !speakable.isCompleted() && i.hasNext() ; ) {
 	    try {
 		Utterance utterance = (Utterance) i.next();
 		if (utterance != null) {
@@ -219,9 +220,10 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	}
 	if (ok && posted) {
 	    runTimer.start("WaitAudio");
-	    ok = speakable.waitCompleted();
-	    runTimer.stop("WaitAudio");
+            ok = speakable.waitCompleted();
+            runTimer.stop("WaitAudio");
 	}
+        log("speak(FreeTTSSpeakable) completed");
 	return ok;
     }
 
@@ -318,6 +320,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		runProcessor(processors[i], u, runTimer);
 	    }
 	    if (outputQueue == null) {
+                log("To AudioOutput");
 		outputUtterance(u, runTimer);
 	    } else {
 		runTimer.start("..post");
@@ -384,7 +387,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		    if (utterance != null) {
 			Voice voice = utterance.getVoice();
 			voice.log("OUT: " + utterance.getString("input_text"));
-			voice.outputUtterance(utterance, voice.threadTimer);
+                        voice.outputUtterance(utterance, voice.threadTimer);
 		    }
 		} while (utterance != null);
 	    }
@@ -427,16 +430,20 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    }
 	    if (ok && utterance.isLast()) {
 		audioPlayer.drain();
-		speakable.completed();
                 log(" --- completed ---");
 	    } else if (!ok) {
 		audioPlayer.drain();
 		speakable.cancelled();
-		log(" --- cancelled ---");
-	    }
-	} else {
+                log(" --- cancelled ---");
+	    } else {
+                log(" --- not last: " + speakable.getText() + " --- ");
+            }
+            log("Calling speakable.completed() on " + speakable.getText());
+        } else {
 	    ok = false;
+            log("STRANGE: speakable already completed: " +speakable.getText());
 	}
+        speakable.completed();
 	return ok;
     }
 
@@ -452,8 +459,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      *     the utterance
      */
     private void runProcessor(UtteranceProcessor processor, 
-	    			Utterance utterance, BulkTimer timer) 
-				    throws ProcessException {
+                              Utterance utterance, BulkTimer timer) 
+        throws ProcessException {
 	if (processor != null) {
 	    String processorName = ".." + processor.toString();
 	    log("   Running " + processorName);
@@ -759,8 +766,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public void log(String message) {
 	if (verbose) {
-	    System.out.println(message);
-	}
+	    System.out.println(toString() + ": " + message);
+        }
     }
 
     /**
@@ -1092,6 +1099,15 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     protected URL getResource(String resource) {
         return this.getClass().getResource(resource);
+    }
+
+    /**
+     * Returns the name of this Voice.
+     *
+     * @return the name of this Voice
+     */
+    public String toString() {
+        return "Voice";
     }
 
     /**
