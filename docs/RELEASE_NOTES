@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2001,2002 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -9,8 +9,7 @@
 Change history for FreeTTS.
 --------------------------
 
-January 24, 2002  Release 1.1
-
+January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page
     - Added a very small, time-domain specific lexicon 
     - Updated voice to allow easier switching betwen different
@@ -47,19 +46,25 @@ January 24, 2002  Release 1.1
     - Output of regression tests are more consistent
     - Workaround for the Linux sound bug reduces JVM crashes.
 
+January   8, 2002 Release V1.0.5  
+	- Fixed Locale.US problem in JSAPI demos.
 
+January   8, 2002 Release V1.0.4  
+	- Fixed speech.properties path message in demos.
+        - Added SourceForge news to docs front page.
 
-January  16, 2002 V1.1.	  - New ClusterUnitDatabase layout for festvox
-                            compatibility.
-                            Incorporated DurationStretch code 
-			    ContourGenerator. All tests still pass.
-			    FeatureFunction updates
-January   8, 2002 V1.0.5  - Fixed Locale.US problem in JSAPI demos.
-January   8, 2002 V1.0.4  - Fixed speech.properties path message in demos.
-			  - Added SourceForge news to docs front page.
-December 21, 2001 V1.0.3  - Added .bat files for win32 demos
-December 20, 2001 V1.0.2  - Added jsapi.exe - win32 jsapi installer
-December 20, 2001 V1.0.1  - Added jsapi.sh - unix jsapi installer
-December 14, 2001 V1.0    - First public release
-November  7, 2001 V0.9    - Internal Test Release
+December 21, 2001 Release V1.0.3  
+	- Added .bat files for win32 demos
+
+December 20, 2001 Release V1.0.2  
+	- Added jsapi.exe - win32 jsapi installer
+
+December 20, 2001 Release V1.0.1  
+	- Added jsapi.sh - unix jsapi installer
+
+December 14, 2001 Release V1.0    
+	- First public release
+
+November  7, 2001 Release V0.9    
+	- Internal Test Release
 
