@@ -24,4 +24,4 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: 
-	$(JAVA_CMD) -Dport=2222 FreeTTSEmacspeakServer
+	$(JAVA_CMD) -Ddebug=false -Dport=2222 FreeTTSEmacspeakServer

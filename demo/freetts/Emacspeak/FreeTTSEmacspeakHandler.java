@@ -42,6 +42,7 @@ public class FreeTTSEmacspeakHandler implements Runnable {
     private static final int STOP_COMMAND = 5;
     private int lastSpokenCommandType;
 
+    private static boolean debug = false;
 
     /**
      * Constructs a Emacspeak ProtocolHandler
@@ -54,6 +55,7 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 	this.emacsVoice = voice;
 	this.speakCommandHandler = new SpeakCommandHandler(voice);
 	this.speakCommandHandler.start();
+	debug = Boolean.getBoolean("debug");
     }
 
 
@@ -158,7 +160,7 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 		command = reader.readLine();
 		if (command != null) {
 		    command = command.trim();
-		    System.out.println("IN   : " + command);
+		    debugPrintln("IN   : " + command);
 
 		    int commandType = getCommandType(command);
 
@@ -174,12 +176,25 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 			lastSpokenCommandType = commandType;
 
 		    } else {
-			System.out.println("SPEAK:");
+			debugPrintln("SPEAK:");
 		    }
 		}
 	    }
 	} catch (IOException ioe) {
 	    ioe.printStackTrace();
+	}
+    }
+
+
+    /**
+     * Prints the given message if the <code>debug</code> System property
+     * is set to <code>true</code>.
+     *
+     * @param message the message to print
+     */ 
+    protected static void debugPrintln(String message) {
+	if (debug) {
+	    System.out.println(message);
 	}
     }
 }
@@ -212,6 +227,7 @@ class SpeakCommandHandler extends Thread {
      */
     public void run() {
 	while (!done) {
+	    Object firstCommand = null;
 	    synchronized (commandList) {
 		while (commandList.size() == 0 && !done) {
 		    try {
@@ -219,12 +235,13 @@ class SpeakCommandHandler extends Thread {
 		    } catch (InterruptedException ie) {
 			ie.printStackTrace();
 		    }
-		}
+		}		
+		firstCommand = commandList.remove(0);
 	    }
-	    Object firstCommand = commandList.remove(0);
 	    if (firstCommand != null) {
 		voice.speak((String) firstCommand);
-		System.out.println("SPEAK: \"" + firstCommand + "\"");
+		FreeTTSEmacspeakHandler.debugPrintln
+		    ("SPEAK: \"" + firstCommand + "\"");
 	    }
 	}
     }
