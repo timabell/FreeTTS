@@ -136,15 +136,20 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	    InputStream is = new SequenceInputStream(outputList.elements());
 	    AudioInputStream ais = new AudioInputStream(is,
 		    currentFormat, totBytes / currentFormat.getFrameSize());
+            if (false) {
+                System.out.println("Avail " + ais.available());
+                System.out.println("totBytes " + totBytes);
+                System.out.println("FS " + currentFormat.getFrameSize());
+                System.out.println("Wrote synthesized speech to " + baseName);
+            }
 	    AudioSystem.write(ais, outputType, file);
-            System.out.println("Wrote synthesized speech to " + baseName);
 	} catch (IOException ioe) {
 	    System.err.println("Can't write audio to " + baseName);
 	} catch (IllegalArgumentException iae) {
 	    System.err.println("Can't write audio type " + outputType);
 	}
     }
-        
+
 
     /**
      * Returns the current volume.
