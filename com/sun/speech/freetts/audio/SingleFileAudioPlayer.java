@@ -140,8 +140,8 @@ public class SingleFileAudioPlayer implements AudioPlayer {
                 System.out.println("Avail " + ais.available());
                 System.out.println("totBytes " + totBytes);
                 System.out.println("FS " + currentFormat.getFrameSize());
-                System.out.println("Wrote synthesized speech to " + baseName);
             }
+            System.out.println("Wrote synthesized speech to " + baseName);
 	    AudioSystem.write(ais, outputType, file);
 	} catch (IOException ioe) {
 	    System.err.println("Can't write audio to " + baseName);
