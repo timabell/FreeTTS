@@ -25,7 +25,7 @@ TESTSDIRS = wave data bin tests
 #	lib/cmuawb.jar lib/jsapi.jar 
 
 JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
-	lib/cmuawb.jar
+	lib/cmuawb.jar lib/cmutime.jar
 
 ZIPS = javadoc.zip src.zip tests.zip
 
@@ -35,7 +35,11 @@ API_DIR = docs/api
 
 CMULEX_FILES =  com/sun/speech/freetts/en/us/cmulex_compiled.bin \
 		com/sun/speech/freetts/en/us/cmulex_addenda.bin  \
-		com/sun/speech/freetts/en/us/cmu6_lts.bin 
+		com/sun/speech/freetts/en/us/cmulex_lts.bin  
+
+CMUTIME_FILES= com/sun/speech/freetts/en/us/cmutime_compiled.bin \
+		com/sun/speech/freetts/en/us/cmutime_addenda.bin  \
+		com/sun/speech/freetts/en/us/cmutime_lts.bin  \
    
 CMUKAL8_FILES = com/sun/speech/freetts/en/us/cmu_kal/diphone_units.bin \
 		com/sun/speech/freetts/en/us/cmu_kal/diphone_units.idx 
@@ -141,7 +145,7 @@ zips:  $(ZIPS)
 
 src.zip: 
 	$(RM) -f $(CMUAWB_FILES) $(CMUKAL16_FILES) \
-		$(CMUKAL8_FILES) $(CMULEX_FILES)
+		$(CMUKAL8_FILES) $(CMULEX_FILES) $(CMUTIME_FILES)
 	find $(SRCDIRS) -name CVS -prune  -o -print | zip $@ -@ 
 
 tests.zip: 
@@ -152,6 +156,9 @@ javadocs:
 
 lib/cmulex.jar: 
 	$(JAR) cf $@ -C classes $(CMULEX_FILES)
+
+lib/cmutime.jar: 
+	$(JAR) cf $@ -C classes $(CMUTIME_FILES)
 
 lib/cmukal8.jar: 
 	$(JAR) cf $@ -C classes $(CMUKAL8_FILES)

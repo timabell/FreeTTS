@@ -39,8 +39,6 @@ import com.sun.speech.freetts.PathExtractorImpl;
 public class ClusterUnitSelector implements UtteranceProcessor {
 
     final static boolean DEBUG = false;
-    final static FrameDistance FRAME_DISTANCE_A = new FrameDistanceA();
-    final static FrameDistance FRAME_DISTANCE_B = new FrameDistanceB();
     private final static PathExtractor DNAME = new PathExtractorImpl(
 	    "R:SylStructure.parent.parent.name", true);
     private ClusterUnitDatabase clunitDB;
