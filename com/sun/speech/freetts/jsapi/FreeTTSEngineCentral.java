@@ -352,28 +352,30 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	
 	String style = props.getProperty(propPrefix + "style", "standard");
 	try {
-	    float pitch = Float.parseFloat(
-			props.getProperty(propPrefix + "pitch", "100"));
-	    float pitchRange = Float.parseFloat(
-			props.getProperty(propPrefix + "pitchRange", "10"));
-	    float speakingRate = Float.parseFloat(
-			props.getProperty(propPrefix + "speakingRate", "150"));
-	    float volume = Float.parseFloat(
-			props.getProperty(propPrefix + "volume", "1.0"));
+	    float pitch = Float.parseFloat
+                (props.getProperty(propPrefix + "pitch", "100"));
+	    float pitchRange = Float.parseFloat
+                (props.getProperty(propPrefix + "pitchRange", "10"));
+	    float speakingRate = Float.parseFloat
+                (props.getProperty(propPrefix + "speakingRate", "150"));
+	    float volume = Float.parseFloat
+                (props.getProperty(propPrefix + "volume", "1.0"));
 	    String className = props.getProperty(propPrefix + "class");
 	    String dbName = props.getProperty(propPrefix + "dbName");
-	    int gender = stringToGender(
-		    props.getProperty(propPrefix + "gender", "GENDER_NEUTRAL"));
+	    int gender = stringToGender
+                (props.getProperty(propPrefix + "gender", "GENDER_NEUTRAL"));
 	    int age = stringToAge(props.getProperty(propPrefix + "age", 
-		    "AGE_NEUTRAL"));
+                                                    "AGE_NEUTRAL"));
+            String validatorName = props.getProperty
+                (propPrefix + "validator");
 
 	    if (className != null)  {
-		voice = new FreeTTSVoice(synthName + "." + modeName 
-		    + "." + voiceName, voiceName, 
-		    gender, age,
-		    style, pitch, pitchRange, speakingRate, 
-		    volume, className, dbName);
-	    } 
+		voice = new FreeTTSVoice
+                    (synthName + "." + modeName + "." + voiceName,
+                     voiceName, gender, age,
+                     style, pitch, pitchRange, speakingRate, 
+                     volume, className, dbName, validatorName);
+	    }
 
 	} catch (NumberFormatException nfe) {
 	    System.err.println("Error while parsing voice property data");
@@ -459,7 +461,8 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	for (Iterator i = descriptors.iterator(); i.hasNext();) {
 	    FreeTTSSynthesizerModeDesc desc =
 		(FreeTTSSynthesizerModeDesc) i.next();
-	    if (require == null || desc.match(require)) {
+	    if (require == null || 
+                (desc.isValid() && desc.match(require))) {
 		if (el == null) {
 		    el = new EngineList();
 		}
