@@ -25,7 +25,7 @@ TESTSDIRS = wave data bin tests
 #	lib/cmuawb.jar lib/jsapi.jar 
 
 JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
-	lib/cmuawb.jar lib/cmutime.jar
+	lib/cmuawb.jar lib/cmutimelex.jar
 
 ZIPS = javadoc.zip src.zip tests.zip
 
@@ -37,9 +37,9 @@ CMULEX_FILES =  com/sun/speech/freetts/en/us/cmulex_compiled.bin \
 		com/sun/speech/freetts/en/us/cmulex_addenda.bin  \
 		com/sun/speech/freetts/en/us/cmulex_lts.bin  
 
-CMUTIME_FILES= com/sun/speech/freetts/en/us/cmutime_compiled.bin \
-		com/sun/speech/freetts/en/us/cmutime_addenda.bin  \
-		com/sun/speech/freetts/en/us/cmutime_lts.bin  \
+CMUTIME_FILES= com/sun/speech/freetts/en/us/cmutimelex_compiled.bin \
+		com/sun/speech/freetts/en/us/cmutimelex_addenda.bin  \
+		com/sun/speech/freetts/en/us/cmutimelex_lts.bin  \
    
 CMUKAL8_FILES = com/sun/speech/freetts/en/us/cmu_kal/diphone_units.bin \
 		com/sun/speech/freetts/en/us/cmu_kal/diphone_units.idx 
@@ -157,7 +157,7 @@ javadocs:
 lib/cmulex.jar: 
 	$(JAR) cf $@ -C classes $(CMULEX_FILES)
 
-lib/cmutime.jar: 
+lib/cmutimelex.jar: 
 	$(JAR) cf $@ -C classes $(CMUTIME_FILES)
 
 lib/cmukal8.jar: 

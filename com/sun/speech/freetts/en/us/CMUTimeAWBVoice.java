@@ -21,7 +21,7 @@ public class CMUTimeAWBVoice extends CMUClusterUnitVoice {
      */
     public CMUTimeAWBVoice() {
 	super(false);
-	setLexicon(new CMULexicon("cmutime"));
+	setLexicon(new CMULexicon("cmutimelex"));
     }
 
     /**
