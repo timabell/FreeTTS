@@ -44,11 +44,28 @@ fi
 
 . $VOICEDIR/etc/voice.defs
 
+# Description of freetts-specific properties. Try to read them
+# from voice dir, or assume default values. This is only needed
+# for the "install" and "compile" steps.
+if [ -e "$VOICEDIR/etc/freetts.properties" ]; then
+  . $VOICEDIR/etc/freetts.properties
+else
+  # defaults
+  VP_NAME="$FV_NAME"
+  VP_GENDER="NEUTRAL"
+  VP_AGE="NEUTRAL"
+  VP_DESCRIPTION="description not available"
+  VP_FULL_NAME="$FV_VOICENAME"
+  VP_LOCALE="en_US"
+  LOCALEPATH="en/us"
+  VOICETARGETBASE="com/sun/speech/freetts"
+fi
+
 if [ "$2" = "compile" ]; then
     if [ "$FV_TYPE" = "diphone" ]; then
-        ant -Ddiphone_voice=$FV_VOICENAME -find build.xml
+        ant -Ddiphone_voice=$VP_FULL_NAME -Duser_voice_base_path=$VOICETARGETBASE/$LOCALEPATH -find build.xml
     elif [ "$FV_TYPE" = "ldom" ] || [ "$FV_TYPE" = "clunits" ]; then
-        ant -Dclunit_voice=$FV_VOICENAME -find build.xml
+        ant -Dclunit_voice=$VP_FULL_NAME -Duser_voice_base_path=$VOICETARGETBASE/$LOCALEPATH -find build.xml
     fi
     exit 0
 fi
@@ -134,7 +151,6 @@ HELPERDIR=`dirname $0`
 
 # This assumes that FreeTTS is configured with this directory structure
 FREETTSDIR="$HELPERDIR/../.."
-EN_US_DIR="$FREETTSDIR/com/sun/speech/freetts/en/us"
 
 #This is where some temperary files are generated as well as the final voice
 OUTDIR=$VOICEDIR/FreeTTS
@@ -404,11 +420,12 @@ if [ "$2" = "install" ]; then
             VP_DOMAIN="general"
         fi
         echo
-        echo "Warning: This script will default to a full us english"
-        echo "lexicon.  If you need a different lexicon, you can change"
+        echo "Warning: For US/English voices, this script will default to a full"
+        echo "lexicon. For non US/English voices, no lexicon will be set;"
+        echo "manual work will be required to make the voice usable."
+	echo "If you need to adapt the lexicon settings, you can change"
         echo "that in the java voice directory after the install"
         echo "phase is finished."
-        echo "If this is a non US/English voice, you may want to cancel."
         echo
         echo "Press <Enter> to continue, or <Ctrl-C> to cancel"
         read
@@ -420,20 +437,7 @@ if [ "$2" = "install" ]; then
     fi
 
 
-    # defaults
-    VP_NAME="$FV_NAME"
-    VP_GENDER="NEUTRAL"
-    VP_AGE="NEUTRAL"
-    VP_DESCRIPTION="description not available"
-    VP_FULL_NAME="$FV_VOICENAME"
-
     while true; do
-        echo
-        echo
-        echo
-        echo
-        echo
-        echo
         echo
         echo
         echo
@@ -447,6 +451,8 @@ if [ "$2" = "install" ]; then
         echo "     5 Full Name:    '$VP_FULL_NAME'"
         echo "     6 Domain:       '$VP_DOMAIN'"
         echo "     7 Organization: '$VP_ORGANIZATION'"
+	echo "     8 Language:     '$VP_LOCALE'"
+	echo "     9 Voice base path: '$VOICETARGETBASE'"
         echo "     H <Help>"
         echo "     Q <Quit>:       Abort the conversion process."
         echo
@@ -486,11 +492,29 @@ if [ "$2" = "install" ]; then
             echo "Press <Enter> to return to the menu."
             read UNUSED
         elif [ "$REPLY" = "0" ]; then  # only way to exit while loop
-            if [ -d "$EN_US_DIR/$VP_FULL_NAME" ]; then
+	    LOCALEPATH=`echo $VP_LOCALE | sed "s|_|/|g" | tr A-Z a-z`
+
+	    # OK, user agreed to these settings -- let's remember them
+            # for the future (i.e., compile).
+            (
+              echo "# Description of this voice for FreeTTS"
+              echo "VP_NAME=\"$VP_NAME\""
+              echo "VP_GENDER=\"$VP_GENDER\""
+              echo "VP_AGE=\"$VP_AGE\""
+              echo "VP_DESCRIPTION=\"$VP_DESCRIPTION\""
+              echo "VP_FULL_NAME=\"$VP_FULL_NAME\""
+              echo "VP_LOCALE=\"$VP_LOCALE\""
+              echo "LOCALEPATH=\"$LOCALEPATH\""
+              echo "VOICETARGETBASE=\"$VOICETARGETBASE\""
+
+            ) > $VOICEDIR/etc/freetts.properties
+
+	    VOICETARGETDIR=$FREETTSDIR/$VOICETARGETBASE/$LOCALEPATH
+            if [ -d "$VOICETARGETDIR/$VP_FULL_NAME" ]; then
                 echo
                 echo "Warning: the voice '$FV_VOICENAME' is already installed"
-                echo "in this version of FreeTTS.  Please enter the number "
-                echo "corresponding to the action you would like to take: "
+                echo "in this version of FreeTTS (in $VOICETARGETDIR)."
+                echo "Please enter the number corresponding to the action you would like to take: "
                 echo "     0 Cancel conversion process"
                 echo "     1 Over-write existing voice"
                 echo "     2 Change your voice's Full Name"
@@ -542,23 +566,35 @@ if [ "$2" = "install" ]; then
             echo
             echo "Enter the organization which created this voice: "
             read VP_ORGANIZATION
+	elif [ "$REPLY" = "8" ]; then
+	    echo
+	    echo "Enter the ISO Locale code for the language you are using,"
+            echo "e.g., 'en_US' or 'de': "
+	    read VP_LOCALE
+	elif [ "$REPLY" = "9" ]; then
+	    echo
+	    echo "Enter the path where to install the voice:"
+	    read VOICETARGETBASE
         fi
     done
 
     # start from a clean slate
-    rm -rf "$EN_US_DIR/$VP_FULL_NAME" 2>/dev/null
-    mkdir "$EN_US_DIR/$VP_FULL_NAME" 2>/dev/null
+    rm -rf "$VOICETARGETDIR/$VP_FULL_NAME" 2>/dev/null
+    mkdir -p "$VOICETARGETDIR/$VP_FULL_NAME" 2>/dev/null
 
-    if ! [ -d "$EN_US_DIR/$VP_FULL_NAME" ]; then
+    if ! [ -d "$VOICETARGETDIR/$VP_FULL_NAME" ]; then
         echo
-        echo "ERROR: Unable to create $EN_US_DIR/$VP_FULL_NAME."
+        echo "ERROR: Unable to create $VOICETARGETDIR/$VP_FULL_NAME."
         echo "Aborting."
     fi
     
     # java class names should begin with a capital letter
     VOICEDIRECTORY_CLASS=`echo $VP_NAME | awk '{ print(toupper(substr($0,1,1)) substr($0,2)) }'`"VoiceDirectory"
-    FULL_VOICEDIRECTORY_CLASS="com.sun.speech.freetts.en.us.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
-
+    if [ "$VP_LOCALE" = "en_US" ]; then
+	FULL_VOICEDIRECTORY_CLASS="com.sun.speech.freetts.en.us.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
+    else
+	FULL_VOICEDIRECTORY_CLASS="de.dfki.lt.freetts.de.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
+    fi
     (
         echo "Copyright 2003 Sun Microsystems, Inc."
         echo 
@@ -584,24 +620,31 @@ if [ "$2" = "install" ]; then
         echo "voice.Manifest contain the correct information."
         echo "(If you created a ldom voice, it is still configured to use"
         echo "a full US/English lexicon.  You may wish to change that)."
-    ) > "$EN_US_DIR/$VP_FULL_NAME/README"
+    ) > "$VOICETARGETDIR/$VP_FULL_NAME/README"
 
 
 
-    cp -f "$OUTDIR/$FV_FULLVOICENAME.txt" "$EN_US_DIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
-    echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
-    echo "FreeTTSVoiceDefinition: true" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
-    echo "Class-Path: cmulex.jar" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
-
+    cp -f "$OUTDIR/$FV_FULLVOICENAME.txt" "$VOICETARGETDIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
+    echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
+    echo "FreeTTSVoiceDefinition: true" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
+    if [ "$VP_LOCALE" = "en_US" ]; then
+	echo "ClassPath: cmulex.jar" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
+    fi
     if [ "$FV_TYPE" = "diphone" ]; then
         VD_TEMPLATE="$HELPERDIR/CMU_USDiphoneTemplate.java.template"
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
         MAKEFILE_EXCLUDE="CLUNITS_ONLY"
     else #clunit
-        VD_TEMPLATE="$HELPERDIR/CMU_USClunitTemplate.java.template"
+	if [ "$VP_LOCALE" = "en_US" ]; then
+	    VD_TEMPLATE="$HELPERDIR/CMU_USClunitTemplate.java.template"
+	else
+	    VD_TEMPLATE="$HELPERDIR/GeneralClunitTemplate.java.template"
+	fi
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
         MAKEFILE_EXCLUDE="DIPHONE_ONLY"
     fi
+
+    JAVALOCALE=`echo $VP_LOCALE | sed "s/_/\", \"/g"`
 
     # create the voice directory class
     cat $VD_TEMPLATE | sed "s/%CLASSNAME%/$VOICEDIRECTORY_CLASS/g" \
@@ -612,8 +655,9 @@ if [ "$2" = "install" ]; then
         | sed "s/%DESCRIPTION%/$VP_DESCRIPTION/g" \
         | sed "s/%DOMAIN%/$VP_DOMAIN/g" \
         | sed "s/%ORGANIZATION%/$VP_ORGANIZATION/g" \
-        > "$EN_US_DIR/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS.java"
+	| sed "s/%LOCALE%/$JAVALOCALE/g" \
+        > "$VOICETARGETDIR/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS.java"
 
     echo "The voice has been successfully installed in"
-    echo "$EN_US_DIR/$VP_FULL_NAME/"
+    echo "$VOICETARGETDIR/$VP_FULL_NAME/"
 fi
