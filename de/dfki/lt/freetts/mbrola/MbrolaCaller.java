@@ -48,7 +48,7 @@ public class MbrolaCaller implements UtteranceProcessor {
         try {
             process = Runtime.getRuntime().exec(cmd);
         } catch (Exception e) {
-            throw new ProcessException("Cannot start mbrola program");
+            throw new ProcessException("Cannot start mbrola program: " + cmd);
         }
         PrintWriter toMbrola = new PrintWriter(process.getOutputStream());
         BufferedInputStream fromMbrola =
