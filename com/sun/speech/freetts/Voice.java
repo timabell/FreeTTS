@@ -314,7 +314,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
         processors = (UtteranceProcessor[])
             utteranceProcessors.toArray(processors);
         
-	log("Processing Utterance");
+	log("Processing Utterance: " + u.getString("input_text"));
 	try {
 	    for (int i = 0; i < processors.length; i++) {
 		runProcessor(processors[i], u, runTimer);
@@ -333,7 +333,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    u.getSpeakable().cancelled();
 	}
 
-	log("Done Processing Utterance");
+	log("Done Processing Utterance: " + u.getString("input_text"));
 	runTimer.stop("processing");
 
 	if (dumpUtterance) {
@@ -430,6 +430,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    }
 	    if (ok && utterance.isLast()) {
 		audioPlayer.drain();
+                speakable.completed();
                 log(" --- completed ---");
 	    } else if (!ok) {
 		audioPlayer.drain();
@@ -443,7 +444,10 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    ok = false;
             log("STRANGE: speakable already completed: " +speakable.getText());
 	}
-        speakable.completed();
+
+        if (utterance.isLast()) {
+            speakable.completed();
+        }
 	return ok;
     }
 
