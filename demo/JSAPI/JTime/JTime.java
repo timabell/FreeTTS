@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import javax.speech.Central;
 import javax.speech.Engine;
+import javax.speech.EngineException;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
@@ -88,7 +89,7 @@ public class JTime {
                 System.out.flush();
                 text = reader.readLine();
                 if ((text == null) || (text.length() == 0)) {
-		    System.exit(0);
+		    break;
                 } else {
 		    timeToSpeech(text);
                 }
@@ -167,11 +168,23 @@ public class JTime {
         timeToSpeech(hour, min);
     }
 
+    /**
+     * Closes things down
+     */
+    public void close() {
+	try {
+	    synthesizer.deallocate();
+	} catch (EngineException ee) {
+	    System.out.println("Trouble deallocating synthesizer: " + ee);
+	}
+    }
+
     public static void main(String[] argv) {
 	try {
 	    JTime jtime = new JTime();
 	    jtime.speakNow();
 	    jtime.interactiveMode();
+	    jtime.close();
 	}
 	catch (Exception e) {
 	    e.printStackTrace();
