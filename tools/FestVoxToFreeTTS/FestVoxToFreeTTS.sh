@@ -21,7 +21,7 @@ usage() {
     echo
     echo "The ESTDIR environment variable must point to the directory"
     echo "  containing a compiled version of the Edinbourough Speech Tools."
-    echo "festival, java, and javac must be in your path."
+    echo "festival, ant, java, and javac must be in your path."
     echo
     echo "Running with no second parameter will run the stages in order:"
     echo "  (lpc,sts,mcep,idx,install,compile)."
@@ -76,13 +76,22 @@ if [ ! -f $VOICEDIR/etc/voice.defs ]; then
 fi
 
 if ! festival --version; then
-    echo "Error: festival not in path."
+    echo
+    echo "ERROR: festival not in path."
     echo
     usage
 fi
 
 if ! java -version >/dev/null 2>/dev/null || ! javac -help 2>/dev/null; then
-    echo "Error: java and javac must be in path."
+    echo
+    echo "ERROR: java and javac must be in path."
+    echo
+    usage
+fi
+
+if ! ant -version; then
+    echo
+    echo "ERROR: ant not in path."
     echo
     usage
 fi
@@ -541,7 +550,8 @@ if [ "$2" = "install" ]; then
     mkdir "$EN_US_DIR/$VP_FULL_NAME" 2>/dev/null
 
     if ! [ -d "$EN_US_DIR/$VP_FULL_NAME" ]; then
-        echo "Error: Unable to create $EN_US_DIR/$VP_FULL_NAME."
+        echo
+        echo "ERROR: Unable to create $EN_US_DIR/$VP_FULL_NAME."
         echo "Aborting."
     fi
     
