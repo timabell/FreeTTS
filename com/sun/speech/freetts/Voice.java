@@ -89,6 +89,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     private String waveDumpFile = null;
     private BulkTimer runTimer = new BulkTimer();
     private BulkTimer threadTimer = new BulkTimer();
+    private boolean externalOutputQueue = false;
 
 
     private float nominalRate = 150;	// nominal speaking rate for this voice
@@ -515,7 +516,12 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Sets the output queue for this voice. If no output queue is set
      * for the voice when the voice is loaded, a queue and thread will
-     * be created when the voice is loaded.
+     * be created when the voice is loaded.  If the outputQueue is set
+     * by an external entity by calling setOutputQueue, the caller is
+     * responsible for shutting down the output thread. That is, if
+     * you call 'setOutputQueue' then you are responsible for shutting
+     * down the output thread on your own. This is necessary since the
+     * output queue may be shared by a number of voices.
      *
      * <p>Utterances are placed on the
      *    queue to be output by an output thread. This queue is
@@ -528,6 +534,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * @param queue the output queue
      */
     public void setOutputQueue(OutputQueue queue) {
+	externalOutputQueue = true;
 	outputQueue = queue;
     }
 
@@ -889,6 +896,9 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public void close() {
 	loaded = false;
+	if (!externalOutputQueue) {
+	    outputQueue.post(null);
+	}
     }
 
     /**
