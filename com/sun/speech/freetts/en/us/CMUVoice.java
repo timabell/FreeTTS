@@ -40,8 +40,6 @@ import com.sun.speech.freetts.en.PauseGenerator;
 import com.sun.speech.freetts.en.ContourGenerator;
 
 import com.sun.speech.freetts.relp.AudioOutput;
-import com.sun.speech.freetts.clunits.ClusterUnitSelector;
-import com.sun.speech.freetts.clunits.ClusterUnitDatabase;
 
 import java.util.List;
 import java.io.IOException;

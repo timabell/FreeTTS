@@ -17,6 +17,7 @@ Release 1.1.1
     - Fixed race condition in com.sun.speech.engine.EngineMontior that
       would cause a NullPointerException in the Player demo on
       occasion.
+    - Added emacspeak deply options
 
 January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page

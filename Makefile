@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2001 Sun Microsystems, Inc.docs/
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -84,6 +84,31 @@ DOC_STAGING_AREA = ./htdocs
 DEPLOY_DOCS = demo docs license.terms RELEASE_NOTES overview.html README.txt acknowledgments.txt index.html license.terms
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
 
+
+########### EmacsServer deploy macros ########################
+EMACS_SERVER_FILES =  		\
+	    acknowledgments.txt \
+	    build 		\
+	    demo 		\
+	    license.terms 	\
+	    Makefile		\
+	    README.txt 		\
+	    RELEASE_NOTES 	\
+	    docs/emacspeak_index.html \
+	    $(SRCDIRS) 		\
+
+
+EMACS_SERVER_EXCLUDES =  				\
+	    $(STAGING_AREA)/demo/JSAPI 			\
+	    $(STAGING_AREA)/demo/NuanceClock		\
+	    $(STAGING_AREA)/com/sun/speech/engine 	\
+	    $(STAGING_AREA)/com/sun/speech/freetts/jsapi \
+	    $(STAGING_AREA)/com/sun/speech/freetts/clunits \
+	    $(STAGING_AREA)/$(API_DIR)			\
+	    $(STAGING_AREA)/com/sun/speech/freetts/en/us/cmu_awb/ \
+	    $(STAGING_AREA)/com/sun/speech/freetts/en/us/CMUClusterUnitVoice.java \
+	    $(STAGING_AREA)/com/sun/speech/freetts/en/us/CMUTimeAWBVoice.java 
+
 ##########################################################################
 
 include ${TOP}/build/Makefile.config
@@ -116,10 +141,23 @@ deploy: all jars zips
 	rm -rf $(ZIPS)
 	rm -rf $(STAGING_AREA)
 
+emacspeak-server:
+	rm -f emacspeak.tar emacspeak.tar.gz
+	rm -rf $(STAGING_AREA)
+	mkdir $(STAGING_AREA)
+	cp -r $(EMACS_SERVER_FILES) $(STAGING_AREA)
+	rm -rf $(EMACS_SERVER_EXCLUDES) 
+	-find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
+	mv $(STAGING_AREA)/emacspeak_index.html $(STAGING_AREA)/index.html
+	tar cf emacspeak.tar $(STAGING_AREA)
+	gzip emacspeak.tar
+	# rm -rf $(STAGING_AREA)
+	
+
 deploy_docs:
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 	rm -rf $(DOC_STAGING_AREA)
-	$(MAKE) javadocs
+	$(MAKE) emacsdocs
 	(cd docs; $(MAKE) deploy)
 	mkdir $(DOC_STAGING_AREA)
 	cp -r $(DEPLOY_DOCS) $(DOC_STAGING_AREA)
@@ -151,6 +189,8 @@ tests.zip:
 
 javadocs:
 	$(MAKE)  DOC_DEST=$(API_DIR) docs
+
+emacsdocs:
 
 lib/cmulex.jar: 
 	(cd classes; $(JAR) cf ../$@ $(CMULEX_FILES))
