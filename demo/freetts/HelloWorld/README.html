@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,50 +13,69 @@
 -->
 
 <html>
+    <head><title>FreeTTS HelloWorld Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>FreeTTS HelloWorld Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>FreeTTS HelloWorld! Demo</title>
-  </head>
+        <p>This demo provides a very simple example of how to use
+        FreeTTS without requiring the Java Speech API.</p>
 
-  <body bgcolor="#FFFFFF">
+        <h3>Running</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/FreeTTSHelloWorld.jar</code></p>
+        </ul>
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-	      <h1>FreeTTS HelloWorld! Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <p>You will hear:</p>
+        <ul>
+            <p><b>"Thank you for giving me a voice. 
+	    I'm so glad to say hello to this world."</b></p>
+            <p><img src="../../../docs/images/speaker1.gif"> Click 
+            <a href="helloworld.au">AU</a> or 
+            <a href="helloworld.wav">WAV</a> to listen to it.</p>
+	</ul>
 
-    <pre>
+        <h3>Specifying a Voice</h3> 
 
-<h3>FreeTTS Default Voice</h3>
-To run this FreeTTS HelloWorld! demo, type:
-
-   gmake run
-
-You will hear:
-
-<b>"Thank you for giving me a voice. I'm so glad to say hello to this world."</b>
-
-<img src="../../../docs/images/speaker1.gif"> Click <a href="helloworld.au">AU</a> or <a href="helloworld.wav">WAV</a> to listen to it.
-
-    </pre>
+        <p>By default, this application will use the "kevin16" voice
+        that comes with the lib/cmu_us_kal.jar file.  You can, however,
+        specify a voice by passing the name of a voice as the
+        first (and only) parameter on the command line:</p>
+        <ul>
+            <p><code>java -jar bin/FreeTTSHelloWorld.jar kevin</code>
+            <br><code>java -jar bin/FreeTTSHelloWorld.jar kevin16</code>
+            <br><code>java -Dmbrola.base=/usr/local/mbrola -jar
+            bin/FreeTTSHelloWorld.jar mbrola_us1</code> (*)</p>
+	</ul>
     
+        <p>To get the names of the available voices, running any
+        of the voice jar files that come with FreeTTS will produce
+      list of the names of the voices supported by that jar file:</p>
+        <ul>
+             <p><code>java -jar lib/cmu_us_kal.jar</code>
+             <br><code>java -jar lib/cmu_time_awb.jar</code>
+             <br><code>java -Dmbrola.base=/usr/local/mbrola -jar
+             lib/mbrola.jar</code> (*)</p>
+        </ul>
 
-<h3>MBROLA Voices</h3>
-      
-      <ol>
-	<li>Download the MBROLA binary and voices from the <a href="http://tcts.fpms.ac.be/synthesis/mbrola.html">MBROLA Project Homepage</a>. Refer to <a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for installation instructions. <p>
-	<li>Set the <code>MBROLA_DIR</code> environment variable to your MBROLA directory. <p>
-	<li>Type one of: <br> <code><br>gmake runMbrola1 (woman's voice)<br>gmake runMbrola2 (man's voice)<br>gmake runMbrola3 (man's voice)</code>
-      </ol>
+        <p>(*) You must <a href="../../../mbrola/README.html">setup
+        and install MBROLA</a> before using MBROLA voices.</p>
 
-   <hr>
+        <hr>
 
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-  </body>
-
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
+</html>

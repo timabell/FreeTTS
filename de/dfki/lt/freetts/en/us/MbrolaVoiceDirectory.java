@@ -33,17 +33,20 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
             
             Voice mbrola1 = new MbrolaVoice
                 ("us1", "us1", 150f, 180F, 22F,
-                 "mbrola1", Gender.FEMALE, Age.YOUNGER_ADULT, "MBROLA Voice 1",
+                 "mbrola_us1", Gender.FEMALE, Age.YOUNGER_ADULT,
+                 "MBROLA Voice us1",
                  Locale.US, "general", "mbrola", lexicon);
 
             Voice mbrola2 = new MbrolaVoice
                 ("us2", "us2", 150f, 115F, 12F,
-                 "mbrola2", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 2",
+                 "mbrola_us2", Gender.MALE, Age.YOUNGER_ADULT,
+                 "MBROLA Voice us2",
                  Locale.US, "general", "mbrola", lexicon);
 
             Voice mbrola3 = new MbrolaVoice
                 ("us3", "us3", 150f, 125F, 12F,
-                 "mbrola3", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 3",
+                 "mbrola_us3", Gender.MALE, Age.YOUNGER_ADULT,
+                 "MBROLA Voice us3",
                  Locale.US, "general", "mbrola", lexicon);
 
             Voice[] voices = {mbrola1, mbrola2, mbrola3};
