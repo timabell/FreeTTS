@@ -211,6 +211,8 @@
       </ul>
       <li>Support for <a href="../tools/FestVoxToFreeTTS/README.html">
           importing voices from FestVox (US English only)</a></li>
+      <li>Specific support for <a href="../tools/ArcticToFreeTTS/README.html">
+          importing CMU ARCTIC voices from FestVox (US English only)</a></li>
       <li><a href="../mbrola/README.html">Support for MBROLA voices</a> 
           (downloaded separately):</li>
       <ul>
@@ -365,7 +367,7 @@ following directory structure:</p>
     lib                 Jars for FreeTTS
     mbrola              Support for MBROLA
     tests               Sources and scripts for JUnit and regression tests
-    tools               Tools for importing FestVox voice data
+    tools               Tools for importing CMU ARCTIC and FestVox voice data
 </pre>
 
 <p>FreeTTS makes liberal use of the "Class-Path" attribute of a jar
@@ -671,6 +673,17 @@ FestVoxToFreeTTS</a> page to learn how to create your own
 voices for FreeTTS.  It's not trivial, and it requires using
 Festival and FestVox.
 
+<h4><a name="festvox">Importing CMU ARCTIC Voice Data</a></h4>
+<p>FreeTTS now has the ability to import CMU ARCTIC voice data from
+FestVox (US English only).  The CMU ARCTIC voices are quite large
+and require a little extra work, so we created tools just for these
+voices.
+
+<p>Visit our <a href="../tools/ArcticToFreeTTS/README.html">
+ArcticToFreeTTS</a> page to learn how to import the CMU ARCTIC voices
+into FreeTTS.
+
+
 <hr>
 
 <h3>Documentation</h3>
@@ -858,7 +871,9 @@ Festival and FestVox.
       so bad?</b></a>
     <p>First of all, we're happy to say you can now 
        <a href="../tools/FestVoxToFreeTTS/README.html">create your own
-       voices for FreeTTS</a>.  It's not trivial, and it requires using
+       voices for FreeTTS</a>, and you can also 
+       <a href="../tools/ArcticToFreeTTS/README.html">import CMU
+       ARCTIC voices</a>.  It's not trivial, and it requires using
        Festival and FestVox.
 
     <p>However, the ability to create your own voices doesn't explain
@@ -912,7 +927,9 @@ Festival and FestVox.
       from Festival and FestVox?</b></a>
      <p>As of FreeTTS 1.2, we provide a 
         <a href="../tools/FestVoxToFreeTTS/README.html">set of tools</a>
-        that allow you to import FestVox voice data directly.  
+        that allow you to import FestVox voice data directly, and we
+        also have tools that allows you to <a
+        href="../tools/ArcticToFreeTTS/README.html">import CMU ARCTIC voices</a>.
   </li>
 
   <li><b><a name="How_do_I_add_support_for_a_voice_with"></a>

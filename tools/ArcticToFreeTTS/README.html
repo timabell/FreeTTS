@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<!--
+
+/**
+ * Copyright 2004 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+
+-->
+
+<html>
+    <head><title>CMU ARCTIC to FreeTTS</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>CMU ARCTIC To FreeTTS</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
+
+        <p>This page provides details on importing <a
+        href="http://festvox.org/cmu_arctic/">CMU ARCTIC</a> voices to
+        FreeTTS.  Note that this is very preliminary documentation
+        meant to help those who are chomping at the bit to get CMU
+        ARCTIC voices into FreeTTS.  There is still some work to do
+        (e.g., the resulting voices do not sound exactly like they do
+        in Festival), but the work is ready for people to give it a
+        shot.</p>
+
+
+        <h3>Obtaining the CMU ARCTIC Voices</h3>
+        <p>Many many thanks to the folks behind the CMU ARCTIC
+        voices.  They have given the world a great wealth of 
+        knowledge and data.
+
+        <p>You can obtain a CMU ARCTIC voice from the
+        <a href="http://festvox.org/cmu_arctic/">CMU ARCTIC</a>
+        web site.  We've succesfully imported the bdl, slt, jmk,
+        and awb voices (note: the awb voice requires you do a 
+        little extra work - see the note at the end of this page).</p>
+
+        <p>As of the writing of this document (August 2004), we
+        have not attempted to create a CMU ARCTIC voice ourselves,
+        but expect the tools provided by FreeTTS will support
+        new CMU ARCTIC voices that you create.</p>
+
+
+        <h3>Preparing to Import a CMU ARCTIC Voice</h3>
+        <p>You need to have downloaded, built, and installed the
+        <a href="http://festvox.org/festival/index.html">Festival
+        Speech Synthesis System</a>.
+
+        <p>The script to import a CMU ARCTIC Voice is
+        tools/ArcticToFreeTTS/ArcticToFreeTTS.sh.  It is designed to
+        be run from the voice directory that contains the CMU ARCTIC
+        data.  Before running the script, you need to edit it to
+        ensure that the following variables are set specifically to
+        your environment:
+        <ul>
+            <li><code>JAVA_HOME</code> - points to your installation
+            of the Java platform.</li> 
+       
+            <li><code>ESTDIR</code> - points to the speech_tools
+            directory of the Festival installation.</li>
+
+            <li><code>FESTIVALDIR</code> - points to the festival
+            directory of the Festival installation.</li>
+
+            <li><code>FESTVOXDIR</code> - points to the festvox
+            directory of the FestVox installation.</li>
+
+            <li><code>FREETTSDIR</code> - points to the FreeTTS
+            directory of the FreeTTS installation.</li>
+        </ul> 
+        <p>At some point, we will probably make life a little
+        easier for you (or perhaps you'd like to make life easier for
+        us and submit your changes back to this open source effort),
+        but right now, please just edit the script.</p>
+
+        <h3>Importing a CMU ARCTIC Voice into FreeTTS</h3>
+        <p>The procedure for importing a CMU ARCTIC voice into FreeTTS
+        is rather simple:</p>
+        <ol>
+            <li>Make sure you've edited the
+            tools/ArcticToFreeTTS/ArcticToFreeTTS.sh script as
+            described above.
+            </li>
+            <li>Download the voice you'd like to import, and unpack
+	        it in a directory.  For example:
+                <ul>
+	            <p><code>~/work/festival/custom_voices/cmu_us_slt_arctic</code>
+                </ul>
+            </li>
+            <li>cd to the directory where you unpacked the voice.
+            The contents of this directory should look something like
+            the following:
+                <ul>
+                    <pre>
+AREADME         emu             festvox         pm
+COPYING         etc             lab             pm_lab
+README          f0              lpc             sts
+bin             festival        mcep            wav
+                    </pre>
+                </ul>
+            </li>
+            <li>Run the ArcticToFreeTTS.sh script:
+                <ul>
+                    <p><code>~/work/SourceForge/FreeTTS/FreeTTS/tools/ArcticToFreeTTS/ArcticToFreeTTS.sh</code>
+                    </p>
+                </ul>
+            </li>
+        </ol>
+
+        <p>The script will output a fair amount of information and
+        will take a fair amount of time to complete (about 1 hour on a
+        867MHz PowerBook G4 Mac OS X system).  The script creates a
+        new voice directory under your FreeTTS installation.  For
+        example, assume you imported the slt voice.  The script will
+        create the following contents in the following directory:
+        <ul>
+        <pre>
+com/sun/speech/freetts/en/us/cmu_us_slt_arctic/
+
+ArcticVoice.java                nums_cart.txt
+ArcticVoiceDirectory.java       part_of_speech.txt
+cmu_us_slt_arctic.txt           phoneset.txt
+dur_stat.txt                    phrasing_cart.txt
+durz_cart.txt                   prefix_fsm.txt
+f0_lr_terms.txt                 suffix_fsm.txt
+int_accent_cart.txt             voice.Manifest
+int_tone_cart.txt
+        </pre>
+        </ul>
+
+        The script also compiles the voice for you and places the
+        resulting jar in the FreeTTS lib directory.  For example,
+        lib/cmu_us_slt_arctic.jar.  At this point, the voice is ready
+        to be used.  You can test the voice as follows.
+
+        <ol>
+           <li>Make sure the jar file is OK:
+               <ul>
+               <pre>
+java -jar lib/cmu_us_slt_arctic.jar 
+
+VoiceDirectory 'com.sun.speech.freetts.en.us.cmu_us_slt_arctic.ArcticVoiceDirectory'
+
+Name: slt_arctic
+        Description: CMU ARCTIC Cluster Unit Voice
+        Organization: cmu
+        Domain: general
+        Locale: en_US
+        Style: standard
+        Gender: MALE
+        Age: YOUNGER_ADULT
+        Pitch: 100.0
+        Pitch Range: 12.0
+        Pitch Shift: 1.0
+        Rate: 150.0
+        Volume: 1.0
+               </pre>
+               </ul>
+           </li> 
+           <li>Test the voice using the freetts demo
+           application.  Note that the CMU ARCTIC voices are very
+           large.  As such, it may take several minutes before FreeTTS
+           has loaded the voice and made it ready for use.
+               <ul>
+               <pre>
+java -mx512m -jar lib/freetts.jar -voice slt_arctic
+Enter text: Hello.
+               </pre>
+               </ul>
+           </li>
+        </ol>
+        
+        <h3>Note on the AWB CMU ARCTIC Voice</h3>
+
+        <p>The AWB CMU ARCTIC voice uses a different unit selection
+        algorithm than the other CMU ARCTIC voices.  That is, whereas
+        the other CMU ARCTIC voices select units based upon phone,
+        stress, onset, and coda features, the AWB CMU ARCTIC voice
+        selects units based solely on phone and stress features.  As
+        such, the AWB CMU ARCTIC voice needs a little extra work to
+        import it to FreeTTS.</p>
+
+        <p>The extra work involves modifying the ArcticVoice.java 
+        that was created in
+        com/sun/speech/freetts/en/us/cmu_us_awb_arctic/
+        when you imported the voice.  The modification tells the
+        voice to use a different unit selector, and requires that
+        you override the "getUnitSelector" method.  First, you'll
+        need to add an extra import to the file:
+
+        <ul>
+           <pre>
+import com.sun.speech.freetts.clunits.ClusterUnitSelector;
+           </pre>
+        </ul>
+
+        <p>Next, you'll need to override the getUnitSelector method:
+
+        <ul>
+           <pre>
+    protected UtteranceProcessor getUnitSelector() throws IOException {
+        return new AwbUnitSelector(getDatabase());
+    }
+           </pre>
+        </ul>
+ 
+        <p>Finally, you'll need
+        to define the new unit selector.  This can be added as a
+        class at the end of the ArcticVoice.java file:
+        <ul>
+            <pre>
+class AwbUnitSelector extends ClusterUnitSelector {
+    private static final String VOWELS = "aeiou";
+
+    public AwbUnitSelector(URL url) throws IOException {
+        super(url);
+    }
+
+    /**
+     * Sets the cluster unit name given the segment.
+     *
+     * @param seg the segment item that gets the name
+     */
+    protected void setUnitName(Item seg) {
+        String cname = null;
+
+        String segName = seg.getFeatures().getString("name");
+
+        /* If we have a vowel, then the unit name is the segment name
+         * plus a 0 or 1, depending upon the stress of the parent.
+         * Otherwise, the unit name is the segment name plus "coda"
+         * or "onset" based upon the seg_onsetcoda feature processor.
+         */
+        if (VOWELS.indexOf(segName.charAt(0)) >= 0) {
+            cname = segName + seg.findFeature("R:SylStructure.parent.stress");
+        } else {
+            cname = segName;
+        }
+        seg.getFeatures().setString("clunit_name", cname);
+    }
+}
+            </pre>
+        </ul>
+
+        <p>Once you've made these changes to the ArcticVoice.java
+        file, you can rebuild the voice as follows:
+        <ul>
+            <p><code>ant -Darctic_voice=cmu_us_awb_arctic -find build.xml</code>
+        </ul>
+
+        <p>Good luck, and have fun.</p>
+        <hr>
+
+        <p>See the <a href="../../license.terms">license terms</a>
+        and <a href="../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2004 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
+</html>
