@@ -31,16 +31,30 @@ public class MixedVoices {
 	System.out.println("MixedVoices [-showEvents] [-showPropertyChanges]");
     }
 
-    public static String noSynthesizerMessage(String synthesizer) {
-        String message = "Can't find " + synthesizer + ".\n"
-            + "Make sure that there is a \"speech.properties\" file at "
-            + "either of these locations: \n";
+    /**
+     * Returns a "no synthesizer" message, and asks 
+     * the user to check if the "speech.properties" file is
+     * at <code>user.home</code> or <code>java.home/lib</code>.
+     *
+     * @return a no synthesizer message
+     */
+    static private String noSynthesizerMessage(String synthesizer) {
+        String message =
+            "Cannot find " + synthesizer + ".\n" +
+            "This may be the result of any number of problems.  It's\n" +
+            "typically due to a missing \"speech.properties\" file that\n" +
+            "should be at either of these locations: \n\n";
         message += "user.home    : " + System.getProperty("user.home") + "\n";
-        message += "java.home/lib: " + System.getProperty("java.home")
-            + File.separator + "lib\n";
+        message += "java.home/lib: " + System.getProperty("java.home") +
+	    File.separator + "lib\n\n" +
+            "Another cause of this problem might be corrupt or missing\n" +
+            "voice jar files in the freetts lib directory.  This problem\n" +
+            "also sometimes arises when the freetts.jar file is corrupt\n" +
+            "or missing.  Sorry about that.  Please check for these\n" +
+            "various conditions and then try again.\n";
         return message;
     }
-    
+
     public static void main(String[] argv) {
 	boolean showEvents = false;
 	boolean showPropertyChanges = false;

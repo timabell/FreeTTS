@@ -24,6 +24,30 @@ import javax.speech.synthesis.Voice;
 public class HelloWorld {
 
     /**
+     * Returns a "no synthesizer" message, and asks 
+     * the user to check if the "speech.properties" file is
+     * at <code>user.home</code> or <code>java.home/lib</code>.
+     *
+     * @return a no synthesizer message
+     */
+    static private String noSynthesizerMessage() {
+        String message =
+            "No synthesizer created.  This may be the result of any\n" +
+            "number of problems.  It's typically due to a missing\n" +
+            "\"speech.properties\" file that should be at either of\n" +
+            "these locations: \n\n";
+        message += "user.home    : " + System.getProperty("user.home") + "\n";
+        message += "java.home/lib: " + System.getProperty("java.home") +
+	    File.separator + "lib\n\n" +
+            "Another cause of this problem might be corrupt or missing\n" +
+            "voice jar files in the freetts lib directory.  This problem\n" +
+            "also sometimes arises when the freetts.jar file is corrupt\n" +
+            "or missing.  Sorry about that.  Please check for these\n" +
+            "various conditions and then try again.\n";
+        return message;
+    }
+
+    /**
      * Example of how to list all the known voices for a specific
      * mode using just JSAPI.  FreeTTS maps the domain name to the
      * JSAPI mode name.  The currently supported domains are
@@ -107,15 +131,7 @@ public class HelloWorld {
              * set up their speech.properties file. 
              */
 	    if (synthesizer == null) {
-		String message = "\nCan't find synthesizer.\n"
-                    + "Make sure that there is a \"speech.properties\" file "
-                    + "at either of these locations: \n";
-		message += "user.home    : "
-                    + System.getProperty("user.home") + "\n";
-		message += "java.home/lib: " + System.getProperty("java.home")
-		    + File.separator + "lib\n";
-		
-		System.err.println(message);
+		System.err.println(noSynthesizerMessage());
 		System.exit(1);
 	    }
 

@@ -103,7 +103,6 @@ public class PlayerModelImpl implements PlayerModel {
         }
     }
 
-
     /**
      * Returns a "no synthesizer" message, and asks 
      * the user to check if the "speech.properties" file is
@@ -111,16 +110,22 @@ public class PlayerModelImpl implements PlayerModel {
      *
      * @return a no synthesizer message
      */
-    private String noSynthesizerMessage() {
-	String message = "PlayerModelImpl: no available synthesizers.\n" +
-	    "Make sure that there is a \"speech.properties\" file at either " +
-	    "of these locations: \n";
+    static private String noSynthesizerMessage() {
+        String message =
+            "No synthesizer created.  This may be the result of any\n" +
+            "number of problems.  It's typically due to a missing\n" +
+            "\"speech.properties\" file that should be at either of\n" +
+            "these locations: \n\n";
         message += "user.home    : " + System.getProperty("user.home") + "\n";
-        message += "java.home/lib: " + System.getProperty("java.home")
-	    + File.separator + "lib\n";
-	return message;
+        message += "java.home/lib: " + System.getProperty("java.home") +
+	    File.separator + "lib\n\n" +
+            "Another cause of this problem might be corrupt or missing\n" +
+            "voice jar files in the freetts lib directory.  This problem\n" +
+            "also sometimes arises when the freetts.jar file is corrupt\n" +
+            "or missing.  Sorry about that.  Please check for these\n" +
+            "various conditions and then try again.\n";
+        return message;
     }
-
 	    
     /**
      * Performs TTS on the given Playable.

@@ -10,9 +10,10 @@ Change history for FreeTTS.
 --------------------------
 
 XXXX,XX, 2005 Release 1.2XXX
-    - Added pronunciations for Linux terms (see bug 1006630)
-    - Added JUnit to prerequisites list (see bug 975557)
-    - Fixed -dump{Multi}Audio problem in freetts app (see bug 986503).
+    - Modified missing speech.properties message (rfe 1041437 and bug 1041296)
+    - Added pronunciations for Linux terms (bug 1006630)
+    - Added JUnit to prerequisites list (bug 975557)
+    - Fixed -dump{Multi}Audio problem in freetts app (bug 986503).
     - Added importing tools specifically for CMU ARCTIC Voices.
     - Fixed problem in mbrola phonem remapping.
     - In the Voice class, removed the call to AudioPlayer.drain() 
