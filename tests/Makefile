@@ -32,17 +32,17 @@ all:: ${CLASSES} ${STUBS}
 
 wavetest: all
 	@chmod +x wavetest.sh waveTimeTest.sh
-	./waveTimeTest.sh
-	./wavetest.sh
+	sh ./waveTimeTest.sh
+	sh ./wavetest.sh
 
 lpctest: all
 	@chmod +x lpctest.sh
-	./lpctest.sh
+	sh ./lpctest.sh
 
 utttest: all
 	@chmod +x utteranceTest.sh compareNumericUtt compareUtt testUtt utteranceTimeTest.sh testTimeUtt compareNumericUtt
-	./utteranceTest.sh
-	./utteranceTimeTest.sh
+	sh ./utteranceTest.sh
+	sh ./utteranceTimeTest.sh
 
 
 alltests: all
