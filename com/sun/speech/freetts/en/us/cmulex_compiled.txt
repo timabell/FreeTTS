@@ -15692,6 +15692,7 @@ doerflinger0	d ao1 r f ax l ih ng er
 doering0	d uw er ih ng 
 doernberg0	d ao1 r n b er g 
 doers0	d uw er z 
+does0	d ah1 z 
 doesn	d ow1 z 
 doesv	d ah1 z 
 dofasco0	d ax f ae1 s k ow 
