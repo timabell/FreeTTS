@@ -1,0 +1,283 @@
+# ----------------------------- loading CMUDiphoneVoice for TinySet-----------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.7030s   3.7030s   3.7030s   3.7030s   3.7030s   100.00%
+Lexicon         1     1.5930s   1.5930s   1.5930s   1.5930s   1.5930s   43.02%
+LTS             1     0.1580s   0.1580s   0.1580s   0.1580s   0.1580s   4.27%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.3840s   0.3840s   0.3840s   0.3840s   0.3840s   10.37%
+UtteranceProces 1     1.3770s   1.3770s   1.3770s   1.3770s   1.3770s   37.19%
+FeatureProcessi 1     0.1510s   0.1510s   0.1510s   0.1510s   0.1510s   4.08%
+# ----------------------------- TinySet run-----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.6260s   0.6260s   0.6260s   0.6260s   0.6260s   100.00%
+processing      4     0.0020s   0.0020s   0.3910s   0.1195s   0.4780s   76.36%
+..TokenToWords  4     0.0000s   0.0000s   0.0310s   0.0088s   0.0350s   5.59%
+..PartOfSpeechT 4     0.0000s   0.0000s   0.0010s   0.0002s   0.0010s   0.16%
+..CARTPhraser   4     0.0000s   0.0000s   0.0090s   0.0025s   0.0100s   1.60%
+..Segmenter     4     0.0000s   0.0000s   0.0200s   0.0062s   0.0250s   3.99%
+..PauseGenerato 4     0.0000s   0.0000s   0.0010s   0.0005s   0.0020s   0.32%
+..CARTIntonator 4     0.0000s   0.0000s   0.1310s   0.0332s   0.1330s   21.25%
+..PostLexicalAn 4     0.0000s   0.0000s   0.0050s   0.0012s   0.0050s   0.80%
+..CARTDurator   4     0.0000s   0.0000s   0.0610s   0.0200s   0.0800s   12.78%
+..ContourGenera 4     0.0000s   0.0000s   0.0500s   0.0138s   0.0550s   8.79%
+..DiphoneUnitSe 4     0.0000s   0.0000s   0.0210s   0.0100s   0.0400s   6.39%
+..DiphonePitchm 4     0.0000s   0.0000s   0.0270s   0.0120s   0.0480s   7.67%
+..UnitConcatena 4     0.0000s   0.0000s   0.0330s   0.0100s   0.0400s   6.39%
+..post          4     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+WaitAudio       1     0.0590s   0.0590s   0.0590s   0.0590s   0.0590s   9.42%
+# ----------------------------- TinySet thread--------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   3     0.0080s   0.0080s   0.1080s   0.0487s   0.1460s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.5000s   0.5000s   0.5000s   0.5000s   0.5000s   0.00%
+AudioOutput     1     0.1470s   0.1470s   0.1470s   0.1470s   0.1470s   0.00%
+Memory Use    : 14247k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice for SmallSet----------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.4510s   3.4510s   3.4510s   3.4510s   3.4510s   100.00%
+Lexicon         1     1.4860s   1.4860s   1.4860s   1.4860s   1.4860s   43.06%
+LTS             1     0.1580s   0.1580s   0.1580s   0.1580s   0.1580s   4.58%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.3890s   0.3890s   0.3890s   0.3890s   0.3890s   11.27%
+UtteranceProces 1     1.2350s   1.2350s   1.2350s   1.2350s   1.2350s   35.79%
+FeatureProcessi 1     0.1420s   0.1420s   0.1420s   0.1420s   0.1420s   4.11%
+# ----------------------------- SmallSet run----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     1.0160s   1.0160s   1.0160s   1.0160s   1.0160s   100.00%
+processing      5     0.0010s   0.0010s   0.3420s   0.1780s   0.8900s   87.60%
+..TokenToWords  5     0.0000s   0.0000s   0.0590s   0.0236s   0.1180s   11.61%
+..PartOfSpeechT 5     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+..CARTPhraser   5     0.0000s   0.0000s   0.0120s   0.0026s   0.0130s   1.28%
+..Segmenter     5     0.0000s   0.0000s   0.0320s   0.0158s   0.0790s   7.78%
+..PauseGenerato 5     0.0000s   0.0000s   0.0010s   0.0002s   0.0010s   0.10%
+..CARTIntonator 5     0.0000s   0.0000s   0.0930s   0.0382s   0.1910s   18.80%
+..PostLexicalAn 5     0.0000s   0.0000s   0.0030s   0.0012s   0.0060s   0.59%
+..CARTDurator   5     0.0000s   0.0000s   0.0640s   0.0324s   0.1620s   15.94%
+..ContourGenera 5     0.0000s   0.0000s   0.0430s   0.0282s   0.1410s   13.88%
+..DiphoneUnitSe 5     0.0000s   0.0000s   0.0150s   0.0084s   0.0420s   4.13%
+..DiphonePitchm 5     0.0000s   0.0000s   0.0240s   0.0098s   0.0490s   4.82%
+..UnitConcatena 5     0.0000s   0.0000s   0.0330s   0.0170s   0.0850s   8.37%
+..post          5     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+WaitAudio       1     0.0370s   0.0370s   0.0370s   0.0370s   0.0370s   3.64%
+# ----------------------------- SmallSet thread-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   4     0.0380s   0.0380s   0.0970s   0.0618s   0.2470s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.4300s   0.4300s   0.4300s   0.4300s   0.4300s   0.00%
+AudioOutput     1     0.6070s   0.6070s   0.6070s   0.6070s   0.6070s   0.00%
+Memory Use    : 15121k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice for gettysburg_address
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.7450s   3.7450s   3.7450s   3.7450s   3.7450s   100.00%
+Lexicon         1     1.7050s   1.7050s   1.7050s   1.7050s   1.7050s   45.53%
+LTS             1     0.1440s   0.1440s   0.1440s   0.1440s   0.1440s   3.85%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.3480s   0.3480s   0.3480s   0.3480s   0.3480s   9.29%
+UtteranceProces 1     1.3350s   1.3350s   1.3350s   1.3350s   1.3350s   35.65%
+FeatureProcessi 1     0.1740s   0.1740s   0.1740s   0.1740s   0.1740s   4.65%
+# ----------------------------- gettysburg_address run------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     2.2960s   2.2960s   2.2960s   2.2960s   2.2960s   100.00%
+processing      11    0.0540s   0.0340s   0.6060s   0.1791s   1.9700s   85.80%
+..TokenToWords  11    0.0000s   0.0000s   0.3100s   0.0480s   0.5280s   23.00%
+..PartOfSpeechT 11    0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+..CARTPhraser   11    0.0000s   0.0000s   0.0150s   0.0022s   0.0240s   1.05%
+..Segmenter     11    0.0530s   0.0030s   0.0530s   0.0201s   0.2210s   9.63%
+..PauseGenerato 11    0.0000s   0.0000s   0.0020s   0.0002s   0.0020s   0.09%
+..CARTIntonator 11    0.0000s   0.0000s   0.1770s   0.0264s   0.2900s   12.63%
+..PostLexicalAn 11    0.0000s   0.0000s   0.0060s   0.0020s   0.0220s   0.96%
+..CARTDurator   11    0.0000s   0.0000s   0.0800s   0.0235s   0.2580s   11.24%
+..ContourGenera 11    0.0000s   0.0000s   0.1200s   0.0257s   0.2830s   12.33%
+..DiphoneUnitSe 11    0.0000s   0.0000s   0.0460s   0.0135s   0.1490s   6.49%
+..DiphonePitchm 11    0.0000s   0.0000s   0.0310s   0.0056s   0.0620s   2.70%
+..UnitConcatena 11    0.0000s   0.0000s   0.0490s   0.0105s   0.1160s   5.05%
+..post          11    0.0000s   0.0000s   0.0010s   0.0001s   0.0010s   0.04%
+WaitAudio       1     0.1760s   0.1760s   0.1760s   0.1760s   0.1760s   7.67%
+# ----------------------------- gettysburg_address thread---------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   10    0.2300s   0.0280s   0.3370s   0.1176s   1.1760s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.7080s   0.7080s   0.7080s   0.7080s   0.7080s   0.00%
+AudioOutput     1     1.6100s   1.6100s   1.6100s   1.6100s   1.6100s   0.00%
+Memory Use    : 17507k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice for alice-------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.4210s   3.4210s   3.4210s   3.4210s   3.4210s   100.00%
+Lexicon         1     1.5120s   1.5120s   1.5120s   1.5120s   1.5120s   44.20%
+LTS             1     0.1600s   0.1600s   0.1600s   0.1600s   0.1600s   4.68%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.3450s   0.3450s   0.3450s   0.3450s   0.3450s   10.08%
+UtteranceProces 1     1.2170s   1.2170s   1.2170s   1.2170s   1.2170s   35.57%
+FeatureProcessi 1     0.1430s   0.1430s   0.1430s   0.1430s   0.1430s   4.18%
+# ----------------------------- alice run-------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     16.9810s  16.9810s  16.9810s  16.9810s  16.9810s  100.00%
+processing      252   0.0400s   0.0030s   0.5410s   0.0639s   16.1020s  94.82%
+..TokenToWords  252   0.0000s   0.0000s   0.1000s   0.0054s   1.3700s   8.07%
+..PartOfSpeechT 252   0.0000s   0.0000s   0.0010s   0.0000s   0.0040s   0.02%
+..CARTPhraser   252   0.0000s   0.0000s   0.0110s   0.0005s   0.1140s   0.67%
+..Segmenter     252   0.0000s   0.0000s   0.1650s   0.0040s   1.0110s   5.95%
+..PauseGenerato 252   0.0000s   0.0000s   0.0160s   0.0001s   0.0360s   0.21%
+..CARTIntonator 252   0.0000s   0.0000s   0.0980s   0.0062s   1.5650s   9.22%
+..PostLexicalAn 252   0.0000s   0.0000s   0.0460s   0.0008s   0.2000s   1.18%
+..CARTDurator   252   0.0000s   0.0000s   0.3470s   0.0101s   2.5350s   14.93%
+..ContourGenera 252   0.0000s   0.0000s   0.1310s   0.0089s   2.2510s   13.26%
+..DiphoneUnitSe 252   0.0000s   0.0000s   0.1430s   0.0058s   1.4650s   8.63%
+..DiphonePitchm 252   0.0000s   0.0000s   0.0260s   0.0008s   0.2090s   1.23%
+..UnitConcatena 252   0.0000s   0.0000s   0.0390s   0.0028s   0.7090s   4.18%
+..post          252   0.0400s   0.0000s   0.1870s   0.0179s   4.5080s   26.55%
+WaitAudio       1     0.3100s   0.3100s   0.3100s   0.3100s   0.3100s   1.83%
+# ----------------------------- alice thread----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   251   0.0330s   0.0060s   0.3610s   0.0611s   15.3440s  0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.4010s   0.4010s   0.4010s   0.4010s   0.4010s   0.00%
+AudioOutput     1     16.6010s  16.6010s  16.6010s  16.6010s  16.6010s  0.00%
+Memory Use    : 37388k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice for aliceServer-------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     4.1850s   4.1850s   4.1850s   4.1850s   4.1850s   100.00%
+Lexicon         1     1.9460s   1.9460s   1.9460s   1.9460s   1.9460s   46.50%
+LTS             1     0.3200s   0.3200s   0.3200s   0.3200s   0.3200s   7.65%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.5270s   0.5270s   0.5270s   0.5270s   0.5270s   12.59%
+UtteranceProces 1     1.1190s   1.1190s   1.1190s   1.1190s   1.1190s   26.74%
+FeatureProcessi 1     0.2240s   0.2240s   0.2240s   0.2240s   0.2240s   5.35%
+# ----------------------------- aliceServer run-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     19.1720s  19.1720s  19.1720s  19.1720s  19.1720s  100.00%
+processing      252   0.0010s   0.0010s   1.8660s   0.0725s   18.2680s  95.28%
+..TokenToWords  252   0.0000s   0.0000s   0.1430s   0.0131s   3.2960s   17.19%
+..PartOfSpeechT 252   0.0000s   0.0000s   0.0010s   0.0000s   0.0030s   0.02%
+..CARTPhraser   252   0.0000s   0.0000s   0.0120s   0.0006s   0.1420s   0.74%
+..Segmenter     252   0.0000s   0.0000s   0.1060s   0.0073s   1.8290s   9.54%
+..PauseGenerato 252   0.0000s   0.0000s   0.0010s   0.0001s   0.0350s   0.18%
+..CARTIntonator 252   0.0000s   0.0000s   1.2190s   0.0152s   3.8280s   19.97%
+..PostLexicalAn 252   0.0000s   0.0000s   0.0120s   0.0009s   0.2350s   1.23%
+..CARTDurator   252   0.0000s   0.0000s   0.1990s   0.0126s   3.1760s   16.57%
+..ContourGenera 252   0.0000s   0.0000s   0.1830s   0.0130s   3.2680s   17.05%
+..DiphoneUnitSe 252   0.0010s   0.0000s   0.0650s   0.0045s   1.1230s   5.86%
+..DiphonePitchm 252   0.0000s   0.0000s   0.0270s   0.0009s   0.2260s   1.18%
+..UnitConcatena 252   0.0000s   0.0000s   0.0490s   0.0034s   0.8680s   4.53%
+..post          252   0.0000s   0.0000s   0.0400s   0.0003s   0.0870s   0.45%
+WaitAudio       1     0.0700s   0.0700s   0.0700s   0.0700s   0.0700s   0.37%
+# ----------------------------- aliceServer thread----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   251   0.0200s   0.0040s   0.1950s   0.0331s   8.3200s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.4710s   0.4710s   0.4710s   0.4710s   0.4710s   0.00%
+AudioOutput     1     18.7230s  18.7230s  18.7230s  18.7230s  18.7230s  0.00%
+Memory Use    : 17837k  of 64896k
+# ----------------------------- loading CMUTimeAWBVoice for ClunitsTest-------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     1.7940s   1.7940s   1.7940s   1.7940s   1.7940s   100.00%
+Lexicon         1     0.1140s   0.1140s   0.1140s   0.1140s   0.1140s   6.35%
+LTS             1     0.0020s   0.0020s   0.0020s   0.0020s   0.0020s   0.11%
+FeatureSet      1     0.0010s   0.0010s   0.0010s   0.0010s   0.0010s   0.06%
+CartLoading     1     0.4340s   0.4340s   0.4340s   0.4340s   0.4340s   24.19%
+UtteranceProces 1     1.0250s   1.0250s   1.0250s   1.0250s   1.0250s   57.13%
+ClusterUnitData 1     0.8080s   0.8080s   0.8080s   0.8080s   0.8080s   45.04%
+FeatureProcessi 1     0.1800s   0.1800s   0.1800s   0.1800s   0.1800s   10.03%
+# ----------------------------- ClunitsTest run-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     45.9680s  45.9680s  45.9680s  45.9680s  45.9680s  100.00%
+processing      100   0.3160s   0.3100s   1.1270s   0.3615s   36.1470s  78.64%
+..TokenToWords  100   0.0020s   0.0020s   0.1350s   0.0076s   0.7620s   1.66%
+..PartOfSpeechT 100   0.0000s   0.0000s   0.0030s   0.0000s   0.0050s   0.01%
+..CARTPhraser   100   0.0000s   0.0000s   0.0110s   0.0006s   0.0550s   0.12%
+..Segmenter     100   0.0020s   0.0010s   0.0540s   0.0043s   0.4280s   0.93%
+..PauseGenerato 100   0.0000s   0.0000s   0.0020s   0.0002s   0.0160s   0.03%
+..CARTIntonator 100   0.0030s   0.0030s   0.0970s   0.0057s   0.5660s   1.23%
+..PostLexicalAn 100   0.0000s   0.0000s   0.0300s   0.0007s   0.0720s   0.16%
+..CARTDurator   100   0.0050s   0.0050s   0.0860s   0.0081s   0.8090s   1.76%
+..ContourGenera 100   0.0050s   0.0040s   0.0500s   0.0079s   0.7870s   1.71%
+..ClusterUnitSe 100   0.2930s   0.2860s   0.7940s   0.3195s   31.9470s  69.50%
+..ClusterUnitPi 100   0.0020s   0.0010s   0.0170s   0.0021s   0.2100s   0.46%
+..UnitConcatena 100   0.0020s   0.0020s   0.0520s   0.0041s   0.4080s   0.89%
+..post          100   0.0010s   0.0000s   0.0010s   0.0001s   0.0120s   0.03%
+WaitAudio       100   0.0820s   0.0800s   0.1420s   0.0876s   8.7590s   19.05%
+# ----------------------------- ClunitsTest thread----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   100   0.0820s   0.0790s   0.1410s   0.0871s   8.7110s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 100   0.3180s   0.3110s   1.2420s   0.3662s   36.6190s  0.00%
+AudioOutput     100   0.0820s   0.0790s   0.1410s   0.0872s   8.7150s   0.00%
+Memory Use    : 28116k  of 65344k
+# ----------------------------- loading CMUTimeAWBVoice for ClunitsTestServer-
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     2.2940s   2.2940s   2.2940s   2.2940s   2.2940s   100.00%
+Lexicon         1     0.1500s   0.1500s   0.1500s   0.1500s   0.1500s   6.54%
+LTS             1     0.0020s   0.0020s   0.0020s   0.0020s   0.0020s   0.09%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.4730s   0.4730s   0.4730s   0.4730s   0.4730s   20.62%
+UtteranceProces 1     1.3960s   1.3960s   1.3960s   1.3960s   1.3960s   60.85%
+ClusterUnitData 1     1.1020s   1.1020s   1.1020s   1.1020s   1.1020s   48.04%
+FeatureProcessi 1     0.2260s   0.2260s   0.2260s   0.2260s   0.2260s   9.85%
+# ----------------------------- ClunitsTestServer run-------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     31.6470s  31.6470s  31.6470s  31.6470s  31.6470s  100.00%
+processing      100   0.2020s   0.1890s   1.3190s   0.2414s   24.1450s  76.29%
+..TokenToWords  100   0.0040s   0.0030s   0.0370s   0.0089s   0.8930s   2.82%
+..PartOfSpeechT 100   0.0000s   0.0000s   0.0010s   0.0000s   0.0020s   0.01%
+..CARTPhraser   100   0.0000s   0.0000s   0.0110s   0.0006s   0.0610s   0.19%
+..Segmenter     100   0.0020s   0.0020s   0.0200s   0.0050s   0.5030s   1.59%
+..PauseGenerato 100   0.0000s   0.0000s   0.0020s   0.0002s   0.0150s   0.05%
+..CARTIntonator 100   0.0030s   0.0020s   0.0750s   0.0066s   0.6640s   2.10%
+..PostLexicalAn 100   0.0010s   0.0000s   0.0060s   0.0010s   0.1000s   0.32%
+..CARTDurator   100   0.0050s   0.0050s   0.0790s   0.0112s   1.1230s   3.55%
+..ContourGenera 100   0.0050s   0.0040s   0.0820s   0.0105s   1.0460s   3.31%
+..ClusterUnitSe 100   0.1790s   0.1630s   0.9560s   0.1917s   19.1670s  60.56%
+..ClusterUnitPi 100   0.0000s   0.0000s   0.0230s   0.0009s   0.0880s   0.28%
+..UnitConcatena 100   0.0020s   0.0010s   0.0240s   0.0034s   0.3350s   1.06%
+..post          100   0.0000s   0.0000s   0.0100s   0.0002s   0.0210s   0.07%
+WaitAudio       100   0.0600s   0.0490s   0.2450s   0.0637s   6.3730s   20.14%
+# ----------------------------- ClunitsTestServer thread----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   100   0.0590s   0.0580s   0.2450s   0.0633s   6.3290s   0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 100   0.2060s   0.1910s   1.4100s   0.2462s   24.6180s  0.00%
+AudioOutput     100   0.0590s   0.0580s   0.2460s   0.0635s   6.3470s   0.00%
+Memory Use    : 23249k  of 64896k
+# ----------------------------- loading CMUDiphoneVoice for alice_from_jar----
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     7.5220s   7.5220s   7.5220s   7.5220s   7.5220s   100.00%
+Lexicon         1     2.1210s   2.1210s   2.1210s   2.1210s   2.1210s   28.20%
+LTS             1     2.9320s   2.9320s   2.9320s   2.9320s   2.9320s   38.98%
+FeatureSet      1     0.0000s   0.0000s   0.0000s   0.0000s   0.0000s   0.00%
+CartLoading     1     0.4220s   0.4220s   0.4220s   0.4220s   0.4220s   5.61%
+UtteranceProces 1     1.8280s   1.8280s   1.8280s   1.8280s   1.8280s   24.30%
+FeatureProcessi 1     0.1680s   0.1680s   0.1680s   0.1680s   0.1680s   2.23%
+# ----------------------------- alice_from_jar run----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     17.0500s  17.0500s  17.0500s  17.0500s  17.0500s  100.00%
+processing      252   0.0280s   0.0030s   0.4730s   0.0644s   16.2210s  95.14%
+..TokenToWords  252   0.0000s   0.0000s   0.1590s   0.0072s   1.8090s   10.61%
+..PartOfSpeechT 252   0.0000s   0.0000s   0.0010s   0.0000s   0.0060s   0.04%
+..CARTPhraser   252   0.0000s   0.0000s   0.0170s   0.0004s   0.1090s   0.64%
+..Segmenter     252   0.0000s   0.0000s   0.1830s   0.0059s   1.4790s   8.67%
+..PauseGenerato 252   0.0000s   0.0000s   0.0140s   0.0002s   0.0380s   0.22%
+..CARTIntonator 252   0.0000s   0.0000s   0.1010s   0.0067s   1.6950s   9.94%
+..PostLexicalAn 252   0.0000s   0.0000s   0.0690s   0.0009s   0.2300s   1.35%
+..CARTDurator   252   0.0000s   0.0000s   0.2240s   0.0103s   2.5960s   15.23%
+..ContourGenera 252   0.0000s   0.0000s   0.1380s   0.0094s   2.3720s   13.91%
+..DiphoneUnitSe 252   0.0000s   0.0000s   0.1970s   0.0039s   0.9930s   5.82%
+..DiphonePitchm 252   0.0000s   0.0000s   0.0240s   0.0009s   0.2150s   1.26%
+..UnitConcatena 252   0.0000s   0.0000s   0.0980s   0.0032s   0.8020s   4.70%
+..post          252   0.0270s   0.0000s   0.1730s   0.0149s   3.7440s   21.96%
+WaitAudio       1     0.2960s   0.2960s   0.2960s   0.2960s   0.2960s   1.74%
+# ----------------------------- alice_from_jar thread-------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+..AudioOutput   251   0.0330s   0.0050s   0.3840s   0.0615s   15.4430s  0.00%
+# ----------------------------- NullAudioPlayer-------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+AudioFirstSound 1     0.4230s   0.4230s   0.4230s   0.4230s   0.4230s   0.00%
+AudioOutput     1     16.6530s  16.6530s  16.6530s  16.6530s  16.6530s  0.00%
+Memory Use    : 41388k  of 65344k
+Metrics collected on sunlabs
