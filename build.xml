@@ -239,7 +239,7 @@ environment to use JSAPI.
             if="diphone_voice"
             unless="user_voice_db.isUpToDate"
             description="Generate user voice binaries">
-        <java classname="com.sun.speech.freetts.clunits.DiphoneUnitDatabase"
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
 	      failonerror="true" 
 	      fork="true">
             <classpath>
