@@ -6,14 +6,22 @@
 # WARRANTIES.
 #
 
-# Relative path to the "base" of the source tree
-TOP = ../..
+# Relative path to the top of the source tree
+TOP = ../../..
 
-# List any sub directories that need to be built.  Start with generic
-# packages going toward specialized.  That is, if one package depends
-# on another, put the dependent package later in the list.
-SUBDIRS = HelloWorld ClientServer Emacspeak WebStartClock
+# By default, build all of the .java files. 
+FILES = $(shell echo *.java)
+
+# List any sub directories that need to be built
+SUBDIRS = 
 
 ##########################################################################
 
 include ${TOP}/build/Makefile.config
+
+CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
+
+all:: ${CLASSES} ${STUBS}
+
+run: all
+	$(JAVA_CMD) WebStartClock
