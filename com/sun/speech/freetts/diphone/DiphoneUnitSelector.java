@@ -110,12 +110,14 @@ public class DiphoneUnitSelector implements UtteranceProcessor {
 	    targetEnd = (int) (end0 * 
 		    diphoneDatabase.getSampleInfo().getSampleRate());
 	    unitItem0 = createUnitItem(unitRelation, diphoneName, targetEnd, 1);
+	    segmentItem0.addDaughter(unitItem0);
 	    
 	    // Second half of diphone
 	    end1 = segmentItem1.getFeatures().getFloat("end");
 	    targetEnd = (int) (((end0 + end1)/2.0) * 
 		    	diphoneDatabase.getSampleInfo().getSampleRate());
 	    unitItem1 = createUnitItem(unitRelation, diphoneName, targetEnd, 2);
+	    segmentItem1.addDaughter(unitItem1);
 	}
     }
 
