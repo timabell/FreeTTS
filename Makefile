@@ -68,12 +68,17 @@ DEPLOY_EXCLUDED_DIRECTORIES = \
 	$(STAGING_AREA)/lib/jsapi.jar
 
 DEPLOY_TARGET = freetts.tar.gz
-DEPLOY_DOCS_TARGET = freettsdocs.tar
 STAGING_AREA = ./freetts
-DOC_STAGING_AREA = ./htdocs
 
+DEPLOY_DOCS_TARGET = freettsdocs.tar
+DOC_STAGING_AREA = ./htdocs
 DEPLOY_DOCS = demo docs license.terms acknowledgments.txt index.html
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
+
+XP_DEPLOY_DOCS_TARGET = xpfreettsdocs.tar
+XP_DOC_STAGING_AREA = ./xpdocs
+
+
 
 ##########################################################################
 
@@ -114,6 +119,17 @@ deploy_docs:
 	find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	tar cvf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
 	gzip $(DEPLOY_DOCS_TARGET)
+
+deploy_xp_docs:
+	rm -f $(XP_DEPLOY_DOCS_TARGET) $(XP_DEPLOY_DOCS_TARGET).gz
+	rm -rf $(XP_DOC_STAGING_AREA)
+	mkdir $(XP_DOC_STAGING_AREA)
+	cp -r docs/audio $(XP_DOC_STAGING_AREA)/audio
+	cp license.terms acknowledgments.txt $(XP_DOC_STAGING_AREA)
+	cp docs/FreeTTSStuff.html $(XP_DOC_STAGING_AREA)
+	find $(XP_DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
+	tar cvf $(XP_DEPLOY_DOCS_TARGET) $(XP_DOC_STAGING_AREA)
+	gzip $(XP_DEPLOY_DOCS_TARGET)
 
 all::
 	$(MAKE) jars
