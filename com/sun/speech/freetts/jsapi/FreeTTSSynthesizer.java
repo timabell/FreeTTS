@@ -165,6 +165,8 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	    audio.close();
 	}
 
+        outputQueue.close();
+        
         postEngineDeallocated(states[0], states[1]);
     }
     
