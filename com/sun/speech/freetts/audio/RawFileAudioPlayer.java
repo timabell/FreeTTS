@@ -87,6 +87,12 @@ public class RawFileAudioPlayer implements AudioPlayer {
      * Waits for all audio playback to stop, and closes this AudioPlayer.
      */
     public void close() {
+        try {
+            os.flush();
+            os.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
     }
         
 
