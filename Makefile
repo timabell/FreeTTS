@@ -30,7 +30,7 @@ PUSH_DEST_DOC_TEST = /home/groups/f/fr/freetts/htdocs/test
 
 # en/us voices are immediate subdirectories of en/us
 EN_US_DIR = com/sun/speech/freetts/en/us
-EN_US_VOICES:=$(shell (cd ${EN_US_DIR}; ls -l ) | egrep "^d" | awk '{ print $$9 }')
+EN_US_VOICES:=$(shell (cd ${EN_US_DIR}; ls -l ) | egrep "^d" | awk '{ print $$9 }' | grep -v CVS )
 EN_US_VOICES_JAR_FILES:=$(shell for i in ${EN_US_VOICES}; do echo $$i.jar; done)
 
 JAR_FILES = freetts.jar cmulex.jar \

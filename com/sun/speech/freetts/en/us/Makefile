@@ -16,7 +16,7 @@ DOC_DEST = /lab/speech/web/freetts
 FILES = $(shell echo *.java)
 
 # List any sub directories that need to be built
-SUBDIRS:=$(shell ls -l | egrep "^d" | awk '{ print $$9 }')
+SUBDIRS:=$(shell ls -l | egrep "^d" | awk '{ print $$9 }' | grep -v CVS)
 
 ##########################################################################
 
