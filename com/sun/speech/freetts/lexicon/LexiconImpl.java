@@ -384,22 +384,42 @@ abstract public class LexiconImpl implements Lexicon {
      * @return the list of phones for word or <code>null</code>
      */
     public String[] getPhones(String word, String partOfSpeech) {
-        String[] phones;
-
-        phones = getPhones(addenda, word, partOfSpeech);
-        if (phones == null) {
-            phones = getPhones(compiled, word, partOfSpeech);
-        }
-        if ((phones == null)
-            && (letterToSound != null)) {
-            phones = letterToSound.getPhones(word, partOfSpeech);
-        }
-
-	String[] copy = new String[phones.length];
-	System.arraycopy(phones, 0, copy, 0, phones.length);
-        return copy;
+    	return getPhones(word, partOfSpeech, true);
     }
 
+    /**
+     * Gets the phone list for a given word.  If a phone list cannot
+     * be found, <code>null</code> is returned.  The
+     * <code>partOfSpeech</code> is implementation dependent, but
+     * <code>null</code> always matches.
+     *
+     * @param word the word to find
+     * @param partOfSpeech the part of speech or <code>null</code>
+     * @param useLTS whether to use the letter-to-sound rules when
+     *        the word is not in the lexicon.
+     *
+     * @return the list of phones for word or null
+     */    
+    public String[] getPhones
+			(String word, String partOfSpeech, boolean useLTS){
+    	String[] phones = null;
+ 	phones = getPhones(addenda, word, partOfSpeech);
+    	if (phones == null) {
+    	    phones = getPhones(compiled, word, partOfSpeech);
+    	}
+    	if(useLTS){
+            if (phones == null && letterToSound != null) {
+                phones = letterToSound.getPhones(word, partOfSpeech);
+            }
+    	}
+    	if(phones != null){
+    	String[] copy = new String[phones.length];
+    	System.arraycopy(phones, 0, copy, 0, phones.length);
+            return copy;
+    	}
+    	else return null;
+    	
+    }
     /**
      * Gets a phone list for a word from a given lexicon.  If a phone
      * list cannot be found, returns <code>null</code>.  The format is 

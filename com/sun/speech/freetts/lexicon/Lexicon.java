@@ -42,7 +42,22 @@ public interface Lexicon {
      * @return the list of phones for word or null
      */
     public String[] getPhones(String word, String partOfSpeech);
-    
+
+    /**
+     * Gets the phone list for a given word.  If a phone list cannot
+     * be found, <code>null</code> is returned.  The
+     * <code>partOfSpeech</code> is implementation dependent, but
+     * <code>null</code> always matches.
+     *
+     * @param word the word to find
+     * @param partOfSpeech the part of speech or <code>null</code>
+     * @param useLTS whether to use the letter-to-sound rules when
+     *        the word is not in the lexicon.
+     *
+     * @return the list of phones for word or null
+     */    
+    public String[] getPhones(String word, String partOfSpeech, boolean useLTS);
+
     /**
      * Adds a word to the addenda.  The
      * part of speech is implementation dependent.
