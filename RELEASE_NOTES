@@ -9,6 +9,10 @@
 Change history for FreeTTS.
 --------------------------
 
+xxxxxxxxx x, 200x Release 1.1.x
+    - Fixed race condition in JavaStreamingAudioPlayer that would
+      cause output to not be totally cancelled.
+
 September 6, 2002 Release 1.1.1
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.

@@ -190,7 +190,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public synchronized void resume() {
 	if (isPaused()) {
 	    setPaused(false);
-	    if (!cancelled && line != null) {
+	    if (!isCancelled() && line != null) {
 		 line.start();
                  notify();
             }
@@ -235,7 +235,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	timer.start("audioOut");
         if (line != null) {
             waitResume();
-            if (cancelled && !done) {
+            if (isCancelled() && !isDone()) {
                 cancelled = false;
                 line.start();
             }
@@ -382,7 +382,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         }
 	timer.stop("audioOut");
 
-	return !cancelled;
+	return !isCancelled();
     }
 
     /**
@@ -443,7 +443,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 		+ " avail " + line.available() + " bsz " +
 		line.getBufferSize());
 
-	while  (bytesRemaining > 0 && !cancelled) {
+	while  (bytesRemaining > 0 && !isCancelled()) {
 
 	    if (!waitResume()) {
 		return false;
@@ -468,7 +468,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 		    + " bw " + bytesWritten);
 
 	}
-	return !cancelled && !done;
+	return !isCancelled() && !isDone();
     }
 
 
@@ -481,17 +481,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *     output has been cancelled or shutdown.
      */
     private synchronized boolean waitResume() {
-	synchronized(this) {
-	    while (isPaused() && !cancelled && !done) {
-		try {
-		    debugPrint("   paused waiting ");
-		    wait();
-		} catch (InterruptedException ie) {
-		}
+	while (isPaused() && !isCancelled() && !isDone()) {
+	    try {
+		debugPrint("   paused waiting ");
+		wait();
+	    } catch (InterruptedException ie) {
 	    }
 	}
 
-	return !cancelled && !done;
+	return !isCancelled() && !isDone();
     }
 
 
@@ -521,5 +519,27 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     public void showMetrics() {
 	timer.show("JavaStreamingAudioPlayer");
+    }
+
+    /**
+     * Determines if the output has been cancelled. Access to the
+     * cancelled variable should be within a synchronized block such
+     * as this to ensure that access is coherent.
+     *
+     * @return true if output has been cancelled
+     */
+    private synchronized boolean isCancelled() {
+	return cancelled;
+    }
+
+    /**
+     * Determines if the output is done. Access to the
+     * done variable should be within a synchronized block such
+     * as this to ensure that access is coherent.
+     *
+     * @return true if output has completed
+     */
+    private synchronized boolean isDone() {
+	return done;
     }
 }
