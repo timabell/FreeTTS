@@ -63,7 +63,8 @@ public class AudioOutput implements UtteranceProcessor {
      * Gets the current audio format.  
      * Given a sample info return an appropriate audio format. A cache
      * of common audio formats is used to reduce unnecessary object
-     * creation.
+     * creation. Note that this method always returns an AudioFormat
+     * that uses 16-bit samples.
      *
      * @param sampleInfo the sample info
      *
