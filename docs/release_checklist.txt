@@ -1,0 +1,140 @@
+Steps to Release a new FreeTTS Version
+======================================
+
+Before you do anything, read this document:
+
+   https://sourceforge.net/docman/display_doc.php?docid=6445&group_id=1
+
+Here are the steps to release a new version of FreeTTS:
+
+0. Update versioning and date info:
+
+   ./docs/index.html: <title>FreeTTS 1.2
+   ./docs/index.html: <h2><i>FreeTTS 1.2</i>
+   ./build.xml:    <property name="version"          value="1.2"/>
+   ./build.xml:    <property name="javadoc_desc"     value="FreeTTS 1.2beta"/>
+   ./demo.xml:     <property name="version"          value="1_2_0"/>
+   ./com/sun/speech/freetts/FreeTTS.java:    
+         private final static String VERSION = "FreeTTS 1.2, May, 2004";
+
+1. RELEASE_NOTES
+
+   Make sure that the RELEASE_NOTES file contain all the latest change
+   notes.
+
+2. Check in everything
+
+   Make sure that you have checked in all the changes by doing a
+   
+       cvs -nq update
+
+   and that everything compiles by doing a
+
+       ant clean all
+
+3. Check out a clean version of FreeTTS
+
+   Check out a clean CVS version of FreeTTS to make sure that the
+   tests results are not affected by other files in your FreeTTS
+   directory.
+
+   cvs -z3 -d:ext:developername@cvs.sourceforge.net:/cvsroot/freetts co FreeTTS
+
+4. Run the regression tests on all platforms
+
+   Do the following to run the tests:
+
+     cd lib
+     chmod a+x jsapi.sh
+     ./jsapi.sh
+     cd ..
+     ant
+     cd tests
+     chmod a+x regression.sh
+     ./regression.sh
+
+   Make sure that all tests pass.
+
+5. Run all Demos
+
+   Run each of the demos. Refer to the individual demo directories for
+   instructions.
+
+6. Build the release tarball
+
+   At the top level directory, type:
+   
+       ant deploy
+
+   This will create the freetts candidates.
+
+7. Test the tar ball
+
+   Testing the FreeTTS tarball before making a SourceForge release is
+   very important. Consider that several hundred people to several
+   thousand may download the tarball in a single day, making a mistake
+   will cause trouble for lots of people.
+
+   Test in the order that a typical new user would. This involves the
+   following steps:
+
+     o view release notes
+     o viewing index.html and programmer's guide
+     o unpacking jsapi
+     o running all demos from the jar files
+     o unpacking srcs and tests
+     o unpacking docs
+     o viewing docs
+     o compiling all sources and tests
+     o running all tests (note that some tests don't run on NT, last I knew).
+
+   In addition, also check the following:
+
+     o No unreleased code has leaked out
+     o All the license and acknowlegment files are in place
+
+   When we release a tarball we want to ideally test it on the
+   following platforms:
+ 
+     o Solaris
+     o Linux
+     o Win (cyg-win?)
+
+8. Tag the CVS tree
+
+   Now that you know all the code is fine, label the FreeTTS module
+   with the version number. (Note that you should replace '.' in the
+   version number with '-' since a CVS tag cannot contain a '.')
+
+       % cvs tag rel1_1_0 . 
+ 
+   is a good way to label release 1.1.0.
+
+9. Rebuild the tarball
+
+       ant deploy
+
+   This tarball will have the tags in it.
+
+10. FTP the tarball to SourceForge
+
+        % rftp upload.sourceforge.net   # login as 'anonymous', and type 
+                                        # in your email as password
+        ftp> bin
+        ftp> cd incoming
+        ftp> put freetts-VERSION.tar.gz
+
+11. Edit the packages page
+
+    Edit or add a release on this page:
+
+        https://sourceforge.net/project/admin/editpackages.php?group_id=42080
+
+12. Update the WebStartClock
+
+        [TBS]
+
+
+13. Update the index.html page
+
+        [TBS]
