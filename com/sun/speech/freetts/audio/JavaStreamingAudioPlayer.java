@@ -100,7 +100,14 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     private final static int AUDIO_BUFFER_SIZE = Utilities.getInteger(
      "com.sun.speech.freetts.audio.AudioPlayer.bufferSize", 8192).intValue();
-       
+
+    /**
+     * controls the number of bytes of audio to write to the buffer
+     * for each call to write()
+     */
+    private final static int BYTES_PER_WRITE = Utilities.getInteger
+        ("com.sun.speech.freetts.audio.AudioPlayer.bytesPerWrite", 160).intValue();
+
 
     /**
      * Constructs a default JavaStreamingAudioPlayer 
@@ -156,11 +163,12 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *     the given format
      */
     private synchronized void openLine(AudioFormat format) {
-	if (line != null) {
-	    // drain();
-	    line.close();
-	    line = null;
-	}
+	synchronized (lineLock) {
+            if (line != null) {
+                line.close();
+                line = null;
+            }
+        }
 	DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 	try {
 	    line = (SourceDataLine) AudioSystem.getLine(info);
@@ -225,9 +233,9 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      // stutter after using it for a while. Adding this sleep() fixed the
      // problem. If we later find out that this problem no longer exists,
      // we should remove the thread.sleep(). ]]]
-    public synchronized void cancel() {
+    public void cancel() {
         debugPrint("cancelling...");
-	cancelled = true;
+
         if (cancelDelay > 0) {
             try {
                 Thread.sleep(cancelDelay);
@@ -235,13 +243,20 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
                 ie.printStackTrace();
             }
         }
-        if (line != null) {
-            synchronized (lineLock) {
+
+        synchronized (lineLock) {
+            if (line != null) {
                 line.stop();
                 line.flush();
             }
+        }
+
+        /* sets 'cancelled' to false, which breaks the write while loop */
+        synchronized (this) {
+            cancelled = true;
             notify();
         }
+
         debugPrint("...cancelled");
     }
 
@@ -363,8 +378,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public synchronized boolean end()  {
         if (line != null) {
             drain();
-            line.close();
-            line = null;
+            synchronized (lineLock) {
+                line.close();
+                line = null;
+            }
             notify();
             debugPrint("ended stream...");
 	}
@@ -458,9 +475,9 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    timer.stop("firstAudio");
 	}
 	debugPrint(" au write " + bytesRemaining + 
-		" pos " + line.getMicrosecondPosition() 
-		+ " avail " + line.available() + " bsz " +
-		line.getBufferSize());
+                   " pos " + line.getMicrosecondPosition() 
+                   + " avail " + line.available() + " bsz " +
+                   line.getBufferSize());
 
 	while  (bytesRemaining > 0 && !isCancelled()) {
 
@@ -472,12 +489,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    int bytesWritten;
 	    
 	    synchronized (lineLock) {
-		bytesWritten = line.write(bytes, curIndex, bytesRemaining);
+		bytesWritten = line.write
+                    (bytes, curIndex, 
+                     Math.min(BYTES_PER_WRITE, bytesRemaining));
 		
 		if (bytesWritten != bytesWritten) {
 		    debugPrint
 			("RETRY! bw" +bytesWritten + " br " + bytesRemaining);
 		}
+                // System.out.println("BytesWritten: " + bytesWritten);
 		curIndex += bytesWritten;
 		bytesRemaining -= bytesWritten;
 	    }
