@@ -2,7 +2,7 @@
 #
 # Gather time to first sample data
 #
-FREETTS=../../bld/lib/freetts.jar
+FREETTS=../../lib/freetts.jar
 DATA=../data
 export FREETTS DATA
 

@@ -1,5 +1,5 @@
 #!/bin/sh
-FREETTS=../../bld/lib/freetts.jar
+FREETTS=../../lib/freetts.jar
 export FREETTS
 
 java -jar $FREETTS -silent -run TinySet -metrics -file ../data/TinySet.txt

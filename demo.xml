@@ -19,14 +19,13 @@
     <!-- ********************************************************** -->
     <property name="version"		value="1_2_0"/>
     <path id="libs">
-        <fileset dir="bld/lib" includes="**/*.jar"/>
         <fileset dir="lib" includes="**/*.jar"/>
     </path>
     <property name="src_dir"		value="."/>
     <property name="build_dir"		value="bld"/>
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
-    <property name="lib_dir"            value="${build_dir}/lib"/>
-    <property name="bin_dir"            value="${build_dir}/bin"/>
+    <property name="lib_dir"            value="lib"/>
+    <property name="bin_dir"            value="bin"/>
     <property name="webstart_dir"	value="${build_dir}/webstart"/>
     <property name="deploy_dir"		value="deploy"/>
 
@@ -343,40 +342,28 @@ your environment to use JSAPI.
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
 
-        <copy todir="${webstart_dir}">
-            <fileset dir="${lib_dir}" includes="**/freetts.jar"/>
-            <fileset dir="lib" includes="**/freetts.jar"/>
-        </copy>
+        <copy file="${lib_dir}/freetts.jar" todir="${webstart_dir}"/>
         <signjar jar="${webstart_dir}/freetts.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
 
-        <copy todir="${webstart_dir}">
-            <fileset dir="${lib_dir}" includes="**/en_us.jar"/>
-            <fileset dir="lib" includes="**/en_us.jar"/>
-        </copy>
+        <copy file="${lib_dir}/en_us.jar" todir="${webstart_dir}"/>
         <signjar jar="${webstart_dir}/en_us.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
 
-        <copy todir="${webstart_dir}">
-            <fileset dir="${lib_dir}" includes="**/cmutimelex.jar"/>
-            <fileset dir="lib" includes="**/cmutimelex.jar"/>
-        </copy>
+        <copy file="${lib_dir}/cmutimelex.jar" todir="${webstart_dir}"/>
         <signjar jar="${webstart_dir}/cmutimelex.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
 
-        <copy todir="${webstart_dir}">
-            <fileset dir="${lib_dir}" includes="**/cmu_time_awb.jar"/>
-            <fileset dir="lib" includes="**/cmu_time_awb.jar"/>
-        </copy>
+        <copy file="${lib_dir}/cmu_time_awb.jar" todir="${webstart_dir}"/>
         <signjar jar="${webstart_dir}/cmu_time_awb.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
@@ -411,10 +398,12 @@ your environment to use JSAPI.
     <!-- *                                                        * -->
     <!-- ********************************************************** --> 
     <target name="clean" description="Delete all build output">
-	<delete>
+	<delete quiet="true" includeEmptyDirs="true">
 	    <fileset defaultexcludes="no" dir="." includes="**/*~"/>
 	</delete>
+	<delete dir="${bin_dir}"/>
 	<delete dir="${build_dir}"/>
+	<delete dir="${deploy_dir}"/>
     </target>
 
 </project>

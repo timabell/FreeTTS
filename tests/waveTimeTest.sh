@@ -27,7 +27,7 @@ if [ -f utteranceTest.diff ]; then
 fi
 
 rm -f timeTest.wave
-java -cp ../bld/lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
+java -cp ../lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
     -dumpASCII timeTest.wave -silent -time $1
 
 diff -b $2 timeTest.wave | wc | awk '

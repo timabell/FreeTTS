@@ -22,7 +22,7 @@ if [ -f utteranceTest.diff ]; then
 	rm utteranceTest.diff
 fi
 
-java -cp ../bld/lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
+java -cp ../lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
     -dumpRelations -silent -time $TIME  > $NEW
 
 rm -f $REF

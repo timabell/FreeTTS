@@ -14,7 +14,7 @@ if [ -f lpctest.diff ]; then
 	rm lpctest.diff
 fi
 
-java -Dcom.sun.speech.freetts.outputLPC=true -jar ../bld/lib/freetts.jar \
+java -Dcom.sun.speech.freetts.outputLPC=true -jar ../lib/freetts.jar \
     -voice kevin -silent -file wave/08-01-01.wave.text | grep -v "^#" > \
     lpctest.res
 

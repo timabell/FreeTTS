@@ -3,7 +3,7 @@
 # Runs FreeTTS under the Java profiler. Collects profile information
 # in log.txt. Also prints out heap summary information.
 #
-FREETTS=../../bld/lib/freetts.jar
+FREETTS=../../lib/freetts.jar
 export FREETTS
 java -Xrunhprof:heap=dump,file=log.txt -jar $FREETTS $@
 egrep 'OBJ|ARR' log.txt  | sed 's/(//g' | sed 's/,//g' | sed ' s/=/ /g' | awk '

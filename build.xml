@@ -18,18 +18,17 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <property name="version"		value="1_2_0"/>
-    <path id="extra_libs">
+    <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
     <property name="src_dir"		value="."/>
     <property name="build_dir"		value="bld"/>
     <property name="classes_dir"	value="${build_dir}/classes"/>
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
-    <property name="lib_dir"            value="${build_dir}/lib"/>
-    <property name="mbrola_dir"         value="${build_dir}/mbrola"/>
-    <property name="bin_dir"            value="${build_dir}/bin"/>
-    <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
-    <property name="javadoc_zip"	value="javadoc.zip"/>
+    <property name="lib_dir"            value="lib"/>
+    <property name="mbrola_dir"         value="mbrola"/>
+    <property name="bin_dir"            value="bin"/>
+    <property name="javadoc_dir"	value="javadoc"/>
     <property name="webstart_dir"	value="${build_dir}/webstart"/>
     <property name="deploy_dir"		value="deploy"/>
 
@@ -68,7 +67,6 @@ environment to use JSAPI.
     <!-- ********************************************************** -->
     <target name="compile_src"
 	    description="Build just the srcs">
-        <copy file="lib/jsapi.jar" todir="${lib_dir}"/>
 	<mkdir dir="${classes_dir}"/>
 	<javac debug="true"
 	       source="1.4"
@@ -76,7 +74,7 @@ environment to use JSAPI.
 	       srcdir="${src_dir}"
 	       includes="com/**,de/**,tests/**"
 	       destdir="${classes_dir}">
-	    <classpath refid="extra_libs"/>
+	    <classpath refid="libs"/>
 	</javac>
     </target>
 
@@ -111,7 +109,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${kal8_path}"/>
@@ -139,7 +137,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${kal16_path}"/>
@@ -168,7 +166,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${time_awb_path}"/>
@@ -227,7 +225,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${user_voice_path}"/>
@@ -245,7 +243,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${user_voice_path}"/>
@@ -294,7 +292,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${cmulex_path}"/>
@@ -321,7 +319,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${cmulex_path}"/>
@@ -361,7 +359,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
@@ -390,7 +388,7 @@ environment to use JSAPI.
 	      failonerror="true" 
 	      fork="true">
             <classpath>
-                <path refid="extra_libs"/>
+                <path refid="libs"/>
                 <pathelement location="${classes_dir}"/>
             </classpath>
 	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
@@ -607,14 +605,14 @@ environment to use JSAPI.
 		 windowtitle="${javadoc_desc}"
                  doctitle="${javadoc_desc}"
                  access="protected">
-	    <classpath refid="extra_libs"/>
+	    <classpath refid="libs"/>
         </javadoc>
     </target>
 
     <target name="javadoc_zip"
 	    depends="javadoc">
-        <zip destfile="${build_dir}/${javadoc_zip}">
-            <fileset dir="${build_dir}" includes="javadoc/**"/>
+        <zip destfile="javadoc.zip">
+            <fileset dir="." includes="javadoc/**"/>
         </zip>
     </target>
 
@@ -647,7 +645,7 @@ environment to use JSAPI.
         <pathelement location="${classes_dir}"/>
         <pathelement location="${src_dir}"/>
         <pathelement location="${junit.jar}"/>
-        <path refid="extra_libs"/>
+        <path refid="libs"/>
     </path>
     <target name="junit" depends="jars">
         <junit dir="tests"
@@ -688,12 +686,12 @@ environment to use JSAPI.
 	               license.terms"/>
 
     <fileset id="javadoc_zip"
-	     dir="${build_dir}"
-	     includes="${javadoc_zip}"/>
+	     dir="."
+	     includes="javadoc.zip"/>
 
     <fileset id="docs"
 	     dir="."
-	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/**"
+	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/*.html"
              excludes="docs/*.awk"/>
 
     <fileset id="demos"
@@ -705,8 +703,8 @@ environment to use JSAPI.
 	     includes="tests/**"/>
 
     <fileset id="binaries"
-	     dir="${build_dir}"
-	     includes="lib/**,bin/**,mbrola/**"
+	     dir="."
+	     includes="lib/*.jar,bin/*.jar,mbrola/*.jar"
              excludes="lib/jsapi.jar"/>
 
     <fileset id="jsapi_sh"
@@ -783,11 +781,18 @@ environment to use JSAPI.
     <!-- *                                                        * -->
     <!-- ********************************************************** --> 
     <target name="clean" description="Delete all build output">
-	<delete>
+	<delete quiet="true" includeEmptyDirs="true">
 	    <fileset defaultexcludes="no" dir="." includes="**/*~"/>
+	    <fileset defaultexcludes="no" dir="lib" 
+		     includes="**/*.jar"
+		     excludes="**/jsapi.jar"/>
+	    <fileset defaultexcludes="no" dir="mbrola" 
+		     includes="**/mbrola.jar"/>
 	</delete>
-	<delete dir="${classes_dir}"/>
+	<delete dir="${bin_dir}"/>
 	<delete dir="${build_dir}"/>
+	<delete dir="${javadoc_dir}"/>
+	<delete dir="${deploy_dir}"/>
     </target>
 
 </project>

@@ -17,7 +17,7 @@ if [ -f wavetest.diff ]; then
 	rm wavetest.diff
 fi
 
-java -jar ../bld/lib/freetts.jar \
+java -jar ../lib/freetts.jar \
 	-Dcom.sun.speech.freetts.useCommandLine=true \
 	-Dcom.sun.speech.freetts.useStreamAudio=true \
 	-Dcom.sun.speech.freetts.pauseShowUtterance=true \
