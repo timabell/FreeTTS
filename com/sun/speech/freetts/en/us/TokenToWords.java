@@ -372,9 +372,8 @@ public class TokenToWords implements UtteranceProcessor {
 
 
     /**
-     * Converts the given Token into a list of words.
+     * Converts the given Token into (word) Items in the WordRelation.
      *
-     * @param  tokenItem  the Item that stores the token
      * @param  tokenVal the String value of the token, which may or may not be
      *                  same as the one in called "name" in flite
      *
@@ -577,11 +576,9 @@ public class TokenToWords implements UtteranceProcessor {
 	
     /**
      * Convert the given digit token with dashes (e.g. 999-999-999)
-     * into a list of words.
+     * into (word) Items in the WordRelation.
      *
-     * @param tokenItem the digit token item
      * @param tokenVal  the digit string
-     * @param wordRelation  the list to add the words to
      */
     private void digitsDashToWords(String tokenVal) {
 	int tokenLength = tokenVal.length();
@@ -598,11 +595,9 @@ public class TokenToWords implements UtteranceProcessor {
 
 	
     /**
-     * Convert the given digit token into a list of words.
+     * Convert the given digit token into (word) Items in the WordRelation.
      *
-     * @param tokenItem the digit token item
      * @param tokenVal  the digit string
-     * @param wordRelation  the list to add the words to
      */
     private void digitsToWords(String tokenVal) {
 	FeatureSet featureSet = tokenItem.getFeatures();
@@ -639,11 +634,10 @@ public class TokenToWords implements UtteranceProcessor {
     
     
     /**
-     * Converts the given Roman numeral string into a list of words.
+     * Converts the given Roman numeral string into (word) Items in the
+     * WordRelation.
      *
-     * @param tokenItem the roman token item
      * @param romanString the roman numeral string
-     * @param wordRelation the list to add words to
      */
     private void romanToWords(String romanString) {
 	String punctuation = (String) tokenItem.findFeature("p.punc");
@@ -724,12 +718,10 @@ public class TokenToWords implements UtteranceProcessor {
 
 
     /**
-     * Converts the given string containing "St" and "Dr" to a list
-     * of words.
+     * Converts the given string containing "St" and "Dr" to (word) Items
+     * in the WordRelation.
      *
-     * @param tokenItem the token item
      * @param drStString the string with "St" and "Dr"
-     * @param wordRelation the list to add words to
      */
     private void drStToWords(String drStString) {
 	String street = null;
@@ -784,11 +776,9 @@ public class TokenToWords implements UtteranceProcessor {
 		
 
     /**
-     * Converts US money string into a list of words.
+     * Converts US money string into (word) Items in the WordRelation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the US money string
-     * @param wordRelation the list to add words to
      */
     private void usMoneyToWords(String tokenVal) {
 	
@@ -840,11 +830,10 @@ public class TokenToWords implements UtteranceProcessor {
 
 
     /**
-     * Convert the given apostrophed word into a list of words.
+     * Convert the given apostrophed word into (word) Items in the Word
+     * Relation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the apostrophed word string
-     * @param wordRelation the list to add words to
      */
     private void postropheToWords(String tokenVal) {
 	int index = tokenVal.indexOf('\'');
@@ -870,11 +859,10 @@ public class TokenToWords implements UtteranceProcessor {
 
 
     /**
-     * Convert the given digits/digits string into a list of words.
+     * Convert the given digits/digits string into word (Items) in the
+     * WordRelation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the digits/digits string
-     * @param wordRelation the list to add words to
      */
     private void digitsSlashDigitsToWords(String tokenVal) {
 
@@ -908,11 +896,10 @@ public class TokenToWords implements UtteranceProcessor {
 
 
     /**
-     * Convert the given dashed string (e.g. "aaa-bbb") into a list of words.
+     * Convert the given dashed string (e.g. "aaa-bbb") into (word) Items
+     * in the WordRelation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the dashed string
-     * @param wordRelation the list to add words to
      */
     private void dashToWords(String tokenVal) {
 
@@ -937,11 +924,9 @@ public class TokenToWords implements UtteranceProcessor {
 
     /**
      * Convert the given string (which does not only consist of alphabet)
-     * into a list of words.
+     * into (word) Items in the WordRelation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the string
-     * @param wordRelation the list to add words to
      */
     private void notJustAlphasToWords(String tokenVal) {
 
@@ -982,11 +967,10 @@ public class TokenToWords implements UtteranceProcessor {
 
     /**
      * Returns true if the given token is the name of a US state.
-     * If it is, it will add the name of the state to the given word list.
+     * If it is, it will add the name of the state to (word) Items in the
+     * WordRelation.
      *
-     * @param tokenItem the token item
      * @param tokenVal the token string
-     * @param wordRelation the list to add words to
      */
     private boolean isStateName(String tokenVal) {
 

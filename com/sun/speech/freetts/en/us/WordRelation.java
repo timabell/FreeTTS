@@ -16,6 +16,9 @@ import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Utterance;
 
+/**
+ * Helper class to add words and breaks into a Relation object.
+ */
 public class WordRelation {
 
     private Relation relation;
@@ -28,6 +31,15 @@ public class WordRelation {
     }
 
 
+    /**
+     * Creates a WordRelation object with the given utterance and 
+     * TokenToWords.
+     *
+     * @param utterance the Utterance from which to create a Relation
+     * @param tokenToWords the TokenToWords object to use
+     *
+     * @return a WordRelation object
+     */
     public static WordRelation createWordRelation(Utterance utterance,
 						  TokenToWords tokenToWords) {
 	Relation relation = utterance.createRelation(Relation.WORD);
@@ -47,6 +59,11 @@ public class WordRelation {
     }
 
 
+    /**
+     * Adds a word as an Item to this WordRelation object.
+     *
+     * @param word the word to add
+     */
     public void addWord(String word) {
 	Item tokenItem = tokenToWords.getTokenItem();
 	assert (tokenItem != null);
@@ -57,13 +74,23 @@ public class WordRelation {
     }
 
 
+    /**
+     * Sets the last Item in this WordRelation to the given word.
+     *
+     * @param word the word to set
+     */
     public void setLastWord(String word) {
 	Item lastItem = relation.getTail();
 	FeatureSet featureSet = lastItem.getFeatures();
 	featureSet.setString("name", word);
     }
 
-    
+
+    /**
+     * Returns the last item in this WordRelation.
+     *
+     * @return the last item
+     */
     public Item getTail() {
 	return relation.getTail();
     }

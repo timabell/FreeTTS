@@ -110,7 +110,7 @@ public class NumberExpander {
      * For example, "1234" expands to "one two three four"
      *
      * @param  numberString  the digit string to expand.
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */ 
     public static void expandNumber(String numberString,
 				    WordRelation wordRelation) {
@@ -140,7 +140,7 @@ public class NumberExpander {
      * Expands a two-digit string into a list of English words.
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expand2DigitNumber(String numberString,
 					   WordRelation wordRelation) {
@@ -175,7 +175,7 @@ public class NumberExpander {
      * Expands a three-digit string into a list of English words.
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expand3DigitNumber(String numberString,
 					   WordRelation wordRelation) {
@@ -196,7 +196,7 @@ public class NumberExpander {
      * and thirty-three thousand".
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expandBelow7DigitNumber(String numberString,
 						WordRelation wordRelation) {
@@ -209,7 +209,7 @@ public class NumberExpander {
      * of English words. For example, "19000000" into nineteen million.
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expandBelow10DigitNumber(String numberString,
 						 WordRelation wordRelation) {
@@ -223,7 +223,7 @@ public class NumberExpander {
      * billion.
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expandBelow13DigitNumber(String numberString,
 						 WordRelation wordRelation) {
@@ -239,7 +239,7 @@ public class NumberExpander {
      * @param order either "thousand", "million", or "billion"
      * @param numberZeroes the number of zeroes, depending on the order, so
      *        its either 3, 6, or 9
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expandLargeNumber(String numberString,
 					  String order,
@@ -271,7 +271,7 @@ public class NumberExpander {
      *
      * @param numberString the string which is the number to expand
      * @param startIndex the starting position
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     private static void expandNumberAt(String numberString,
 				       int startIndex,
@@ -285,7 +285,7 @@ public class NumberExpander {
      * Expands given token to list of words pronouncing it as digits
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     public static void expandDigits(String numberString,
 				    WordRelation wordRelation) {
@@ -302,10 +302,10 @@ public class NumberExpander {
     
 
     /**
-     * Returns the digit string of an ordinal number.
+     * Expands the digit string of an ordinal number.
      *
      * @param rawNumberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     public static void expandOrdinal(String rawNumberString,
 				     WordRelation wordRelation) {
@@ -378,7 +378,7 @@ public class NumberExpander {
      * Expands the given number string as pairs as in years or IDs
      *
      * @param numberString the string which is the number to expand
-     * @param  wordRelation  words are added to this list
+     * @param  wordRelation  words are added to this Relation
      */
     public static void expandID(String numberString, WordRelation wordRelation) {
 	
@@ -406,7 +406,7 @@ public class NumberExpander {
      * Expands the given number string as a real number.
      *
      * @param numberString the string which is the real number to expand
-     * @param wordRelation words are added to this list
+     * @param wordRelation words are added to this Relation
      */
     public static void expandReal(String numberString, WordRelation wordRelation) {
 
@@ -446,10 +446,10 @@ public class NumberExpander {
     
 
     /**
-     * Returns the given string of letters as a list of single char symbols.
+     * Expands the given string of letters as a list of single char symbols.
      *
      * @param letters the string of letters to expand
-     * @param letterList words are added to this list
+     * @param letterList words are added to this Relation
      */
     public static void expandLetters(String letters, 
 				     WordRelation wordRelation) {
