@@ -45,7 +45,6 @@ public class MbrolaVoice extends CMUVoice {
     private static final String MRPA_TO_SAMPA_RENAME_LIST =
         "V ah i iy I ih U uh { ae @ ax r= er A aa O ao u uw E eh EI ey AI ay OI oy aU aw @U ow j y h hh N ng S sh T th Z zh D dh tS ch dZ jh _ pau";
     
-    
     /**
      * Creates an MbrolaVoice.
      *
@@ -112,9 +111,15 @@ public class MbrolaVoice extends CMUVoice {
         // and only complains, but does not abort, when encountering an
         // unknown diphone:
         String[] cmd = 
-            {getMbrolaBinary(), "-e", "-R", "\"" + getRenameList() + "\"", 
+             {getMbrolaBinary(), "-e", "-R",  getRenameList(), 
              getDatabase(), "-", "-.raw"};
-        // System.out.println(cmd);
+
+         if (false) {
+             for (int i = 0; i < cmd.length; i++) {
+                 System.out.println(cmd[i]);
+             }
+         }
+
         return cmd;
     }
 
