@@ -41,8 +41,17 @@ To run the Server, on the machine you want to run the server, type:
 
 gmake runserver
 
-You should see the following output:
+If you want to use MBROLA voices, please refer to the 
+<a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions.
+Remember that you must set the <code>MBROLA_DIR</code> environment 
+variable to your MBROLA directory. To use MBROLA voices, type one of:
 
+gmake runMbrola1Server
+gmake runMbrola2Server
+gmake runMbrola3Server
+
+
+You should see the following output:
 <b>
 Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=5555]
 </b>
