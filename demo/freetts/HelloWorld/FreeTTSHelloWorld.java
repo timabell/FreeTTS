@@ -37,8 +37,7 @@ public class FreeTTSHelloWorld {
 
 	    // sets the AudioPlayer to the Java clip player
 
-	    helloVoice.setAudioPlayer(new AudioPlayerStdOut());
-            // (new JavaClipAudioPlayer());
+	    helloVoice.setAudioPlayer(new JavaClipAudioPlayer());
 	    
 
 	    // loads the Voice, which mainly is loading the lexicon
