@@ -477,6 +477,75 @@ environment to use JSAPI.
     </target>
 
 
+    <!-- German dummy lexicon -->
+    <!-- As this is only a dummy at the moment, it is not added -->
+    <!-- to the general compile_lexicons targert -->
+    <property name="germanlex_data" value="germanlex"/>
+    <property name="germanlex_path"          
+              value="de/dfki/lt/freetts/de"/>
+
+    <!-- The *_{compiled,addenda}.bin files are created at once.
+         So, if any of the *.txt files are newer than one of these
+         files (I chose *_compiled.bin), then recreate the *.bin files.
+    -->
+    <target name="check_germanlex_db.isUpToDate"
+	    description="Compares timestamps of ASCII and binary">
+        <uptodate property="germanlex_db.isUpToDate"
+	     targetfile=
+                 "${classes_dir}/${germanlex_path}/${germanlex_data}_compiled.bin">
+              <srcfiles dir="${src_dir}/${germanlex_path}" 
+			includes="${germanlex_data}_*.txt"/>
+        </uptodate>
+    </target>
+
+    <target name="germanlex_db" 
+	    depends="compile_src,
+	             check_germanlex_db.isUpToDate,
+	             germanlex_lts_db" 
+	    unless="germanlex_db.isUpToDate"
+	    description="Generate compiled and addenda binaries">
+        <java classname="de.dfki.lt.freetts.de.GermanLexicon"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${germanlex_path}"/>
+            <arg line="-dest ${classes_dir}/${germanlex_path}"/>
+            <arg line="-name ${germanlex_data}"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
+    <target name="check_germanlex_lts_db.isUpToDate"
+	    description="Compares timestamps of germanlex_lts ASCII and binary">
+        <uptodate 
+	    property="germanlex_lts_db.isUpToDate"
+	    srcfile="${src_dir}/${germanlex_path}/${germanlex_data}_lts.txt"
+	    targetfile="${classes_dir}/${germanlex_path}/${germanlex_data}_lts.bin"/>
+    </target>
+
+    <target name="germanlex_lts_db" 
+	    depends="compile_src,check_germanlex_lts_db.isUpToDate" 
+	    unless="germanlex_lts_db.isUpToDate"
+            description="Generate germanlex lts binary">
+        <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${germanlex_path}"/>
+            <arg line="-dest ${classes_dir}/${germanlex_path}"/>
+            <arg line="-name ${germanlex_data}_lts"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
     <!-- * Generates the jar files.                               * -->
@@ -509,7 +578,9 @@ environment to use JSAPI.
             <fileset 
                 dir="${classes_dir}"
 	        excludes="com/sun/speech/freetts/en/**,
-		          de/**,
+		          de/dfki/lt/freetts/en/**,
+		          de/dfki/lt/freetts/de/**,
+		          de/dfki/lt/freetts/mbrola/**,
 		          tests/**,
 		          **/*.bin,
 		          **/*.idx"/>
@@ -532,7 +603,8 @@ environment to use JSAPI.
 	     compress="true">
             <fileset 
                 dir="${classes_dir}"
-		includes="de/**"/>
+		includes="de/dfki/lt/freetts/mbrola/**,
+                          de/dfki/lt/freetts/en/us//**"/>
         </jar>
     </target>
 
@@ -556,6 +628,29 @@ environment to use JSAPI.
 	        dir="${src_dir}"
 	        includes="com/sun/speech/freetts/en/us/*.txt"
 	        excludes="**/cmu*lex*.txt"/>
+        </jar>
+    </target>
+
+    <!-- de.jar -->
+    <!-- As this is only a dummy at the moment, it is not added -->
+    <!-- to the general jars target -->
+    <property name="de_jar" value="${lib_dir}/de.jar"/>
+
+    <target name="de_jar" 
+	    depends="compile_src"
+	    description="Create ${lib_dir}/de.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${de_jar}" 
+	     manifest="${src_dir}/de/dfki/lt/freetts/de/de.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset
+	        dir="${classes_dir}"
+	        includes="de/dfki/lt/freetts/de/*.class"/>
+            <fileset
+	        dir="${src_dir}"
+	        includes="de/dfki/lt/freetts/de/*.txt"
+	        excludes="**/*lex*.txt"/>
         </jar>
     </target>
 
@@ -611,6 +706,26 @@ environment to use JSAPI.
 	        dir="${classes_dir}"
 	        includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin"/>
 
+        </jar>
+    </target>
+
+
+    <!-- germanlex.jar -->
+    <!-- As this is only a dummy at the moment, it is not added -->
+    <!-- to the general jars target -->
+    <property name="germanlex_jar" value="${lib_dir}/germanlex.jar"/>
+
+    <target name="germanlex_jar" 
+	    depends="germanlex_db"
+	    description="Create ${lib_dir}/germanlex.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${germanlex_jar}" 
+	     manifest="${src_dir}/de/dfki/lt/freetts/de/germanlex.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset
+	        dir="${classes_dir}"
+	        includes="de/dfki/lt/freetts/de/germanlex_*.bin"/>
         </jar>
     </target>
 
