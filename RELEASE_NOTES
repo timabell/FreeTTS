@@ -9,6 +9,11 @@
 Change history for FreeTTS.
 --------------------------
 
+Release 1.1.1
+    - Fixed index.html so that it looks for the RELEASE_NOTES in 
+      the proper spot.
+    - Added RELEASE_NOTES to the deploy_doc Make target.
+
 January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page
     - Added a very small, time-domain specific lexicon 
