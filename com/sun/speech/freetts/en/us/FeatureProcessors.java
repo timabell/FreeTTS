@@ -34,7 +34,7 @@ import java.util.Set;
  * Provides the set of feature processors that are used by this
  * language as part of the CART processing.
  */
-class FeatureProcessors {
+public class FeatureProcessors {
 
     private final static PathExtractor FIRST_SYLLABLE_PATH = 
 	new PathExtractorImpl(
@@ -119,7 +119,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class Gpos implements FeatureProcessor {
+    public static class Gpos implements FeatureProcessor {
 	PartOfSpeech pos;
 	/**
 	 * Creates a GPOS with the given part-of-speech table
@@ -151,7 +151,7 @@ class FeatureProcessors {
      * word.  This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class WordNumSyls implements FeatureProcessor {
+    public static class WordNumSyls implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -180,7 +180,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class AccentedSylIn implements FeatureProcessor {
+    public static class AccentedSylIn implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -216,7 +216,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class StressedSylIn implements FeatureProcessor {
+    public static class StressedSylIn implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -253,7 +253,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class StressedSylOut implements FeatureProcessor {
+    public static class StressedSylOut implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -288,7 +288,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class NumDigits implements FeatureProcessor {
+    public static class NumDigits implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -313,7 +313,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class MonthRange implements FeatureProcessor {
+    public static class MonthRange implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -341,7 +341,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class TokenPosGuess implements FeatureProcessor {
+    public static class TokenPosGuess implements FeatureProcessor {
 	/**
 	 * Performs some processing on the given item.
 	 *
@@ -380,7 +380,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class Accented implements FeatureProcessor {
+    public static class Accented implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -405,7 +405,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class LastAccent implements FeatureProcessor {
+    public static class LastAccent implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -435,7 +435,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PosInSyl implements FeatureProcessor {
+    public static class PosInSyl implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -463,7 +463,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PositionType implements FeatureProcessor {
+    public static class PositionType implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -503,7 +503,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SylIn implements FeatureProcessor {
+    public static class SylIn implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -535,7 +535,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SylOut implements FeatureProcessor {
+    public static class SylOut implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -569,7 +569,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SylBreak implements FeatureProcessor {
+    public static class SylBreak implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -602,7 +602,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class WordBreak implements FeatureProcessor {
+    public static class WordBreak implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -624,7 +624,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class WordPunc implements FeatureProcessor {
+    public static class WordPunc implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -648,7 +648,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_CPlace implements FeatureProcessor {
+    public static class PH_CPlace implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -672,7 +672,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_CType implements FeatureProcessor {
+    public static class PH_CType implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -696,7 +696,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_CVox implements FeatureProcessor {
+    public static class PH_CVox implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -720,7 +720,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_VC implements FeatureProcessor {
+    public static class PH_VC implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -744,7 +744,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_VFront implements FeatureProcessor {
+    public static class PH_VFront implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -768,7 +768,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_VHeight implements FeatureProcessor {
+    public static class PH_VHeight implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -793,7 +793,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_VLength implements FeatureProcessor {
+    public static class PH_VLength implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -820,7 +820,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class PH_VRnd implements FeatureProcessor {
+    public static class PH_VRnd implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -842,7 +842,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SylOnsetSize implements FeatureProcessor {
+    public static class SylOnsetSize implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -875,7 +875,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SylCodaSize implements FeatureProcessor {
+    public static class SylCodaSize implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -910,7 +910,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegCodaFric implements FeatureProcessor {
+    public static class SegCodaFric implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -932,7 +932,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegOnsetFric implements FeatureProcessor {
+    public static class SegOnsetFric implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -956,7 +956,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegCodaStop implements FeatureProcessor {
+    public static class SegCodaStop implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -978,7 +978,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegOnsetStop implements FeatureProcessor {
+    public static class SegOnsetStop implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1000,7 +1000,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegCodaNasal implements FeatureProcessor {
+    public static class SegCodaNasal implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1022,7 +1022,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegOnsetNasal implements FeatureProcessor {
+    public static class SegOnsetNasal implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1044,7 +1044,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegCodaGlide implements FeatureProcessor {
+    public static class SegCodaGlide implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1069,7 +1069,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegOnsetGlide implements FeatureProcessor {
+    public static class SegOnsetGlide implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1095,7 +1095,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegOnsetCoda implements FeatureProcessor {
+    public static class SegOnsetCoda implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1127,7 +1127,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SubPhrases implements FeatureProcessor {
+    public static class SubPhrases implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.
@@ -1155,7 +1155,7 @@ class FeatureProcessors {
      * This is a feature processor. A feature processor takes an item,
      * performs some sort of processing on the item and returns an object.
      */
-    static class SegmentDuration implements FeatureProcessor {
+    public static class SegmentDuration implements FeatureProcessor {
 
 	/**
 	 * Performs some processing on the given item.

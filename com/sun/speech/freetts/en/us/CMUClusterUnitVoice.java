@@ -73,7 +73,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
 	}
 
 	return new ClusterUnitSelector(
-		this.getClass().getResource(unitDatabaseName));
+		getResource(unitDatabaseName));
     }
 
     /**

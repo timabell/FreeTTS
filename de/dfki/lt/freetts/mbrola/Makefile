@@ -1,0 +1,31 @@
+# Copyright 2001 Sun Microsystems, Inc.
+# All Rights Reserved.  Use is subject to license terms.
+# 
+# See the file "license.terms" for information on usage and
+# redistribution of this file, and for a DISCLAIMER OF ALL 
+# WARRANTIES.
+#
+# @(#)Makefile	1.3 01/07/16
+
+# Relative path to the top of the source tree
+TOP = ../../../../..
+PACKAGE_PATH = de/dfki/lt/freetts/mbrola
+DOC_DEST = /lab/speech/web/freetts
+
+# By default, build all of the .java files. 
+FILES = $(shell echo *.java)
+
+# List any sub directories that need to be built
+SUBDIRS = 
+
+##########################################################################
+
+include ${TOP}/build/Makefile.config
+
+CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
+
+all:: ${CLASSES}
+clean::
+
+release_doc:
+	$(JDK)/bin/javadoc -windowtitle "FreeTTS" -d $(DOC_DEST)  $(FILES)

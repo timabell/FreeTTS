@@ -121,7 +121,7 @@ public class CMUDiphoneVoice extends CMUVoice {
 	}
 
 	return new DiphoneUnitSelector(
-	    this.getClass().getResource(unitDatabaseName));
+	    getResource(unitDatabaseName));
     }
 
     

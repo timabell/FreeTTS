@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
@@ -1069,6 +1070,16 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public AudioPlayer getAudioPlayer() {
 	return audioPlayer;
+    }
+
+    /**
+     * Get a resource for this voice.
+     * By default, the voice is searched for in the package
+     * to which the voice class belongs. Subclasses are free to
+     * override this behaviour.
+     */
+    protected URL getResource(String resource) {
+        return this.getClass().getResource(resource);
     }
 
     /**

@@ -122,24 +122,24 @@ public class SimpleVoice extends Voice {
 
 	BulkTimer.LOAD.start("CartLoading");
 	CARTImpl numbersCart = new CARTImpl
-	    (this.getClass().getResource("nums_cart.txt"));
+	    (getResource("nums_cart.txt"));
 	CARTImpl phrasingCart = new CARTImpl( 
-            this.getClass().getResource("phrasing_cart.txt"));
+            getResource("phrasing_cart.txt"));
         CARTImpl accentCart = new CARTImpl( 
-            this.getClass().getResource("int_accent_cart.txt"));
+            getResource("int_accent_cart.txt"));
         CARTImpl toneCart = new CARTImpl( 
-            this.getClass().getResource("int_tone_cart.txt"));
+            getResource("int_tone_cart.txt"));
         CARTImpl durzCart = new CARTImpl(
-            this.getClass().getResource("durz_cart.txt"));
+            getResource("durz_cart.txt"));
 	BulkTimer.LOAD.stop("CartLoading");
 
 	BulkTimer.LOAD.start("UtteranceProcessors");
         PhoneDurations phoneDurations = new PhoneDurationsImpl(
-            this.getClass().getResource("dur_stat.txt"));
+            getResource("dur_stat.txt"));
 	PronounceableFSM prefixFSM = new PrefixFSM
-	    (this.getClass().getResource("prefix_fsm.txt"));
+	    (getResource("prefix_fsm.txt"));
 	PronounceableFSM suffixFSM = new SuffixFSM
-	    (this.getClass().getResource("suffix_fsm.txt"));
+	    (getResource("suffix_fsm.txt"));
         
 	processors.add(new TokenToWords(numbersCart, prefixFSM, suffixFSM));
 	processors.add(new PartOfSpeechTagger());
@@ -150,10 +150,10 @@ public class SimpleVoice extends Voice {
 	processors.add(new SimpleVoicePostLexicalAnalyzer());
 	processors.add(new Durator(durzCart, 150.0f, phoneDurations));
 	processors.add(new ContourGenerator
-	   (this.getClass().getResource("f0_lr_terms.txt"), 170.0f, 34.0f));
+	   (getResource("f0_lr_terms.txt"), 170.0f, 34.0f));
 
 	processors.add(new DiphoneUnitSelector(
-		    this.getClass().getResource(
+		    getResource(
 		useBinaryIO ? "cmu_kal/diphone_units.bin" :
 			      "cmu_kal/diphone_units.txt"
 			)));
@@ -169,11 +169,11 @@ public class SimpleVoice extends Voice {
     protected void setupFeatureProcessors() throws IOException {
 	BulkTimer.LOAD.start("FeatureProcessing");
         PartOfSpeech pos = new PartOfSpeechImpl( 
-            this.getClass().getResource("part_of_speech.txt"),
+            getResource("part_of_speech.txt"),
 	    "content");
 
         phoneSet  = new PhoneSetImpl( 
-            this.getClass().getResource("phoneset.txt"));
+            getResource("phoneset.txt"));
 
 	addFeatureProcessor("gpos", new FeatureProcessors.Gpos(pos));
 	addFeatureProcessor("word_numsyls",new FeatureProcessors.WordNumSyls());

@@ -13,11 +13,11 @@ TAR = tar
 ZIP = zip
 
 # List any sub directories that need to be built
-SUBDIRS = com demo bin tests docs
+SUBDIRS = com de demo bin tests docs
 
 # List src dirs that get deployed
 # SRCDIRS = javax com
-SRCDIRS = com
+SRCDIRS = com de
 TESTSDIRS = wave data bin tests
 
 
