@@ -215,6 +215,8 @@ public abstract class CMUVoice extends Voice {
         phoneSet  = new PhoneSetImpl( 
             this.getClass().getResource("phoneset.txt"));
 
+	addFeatureProcessor("word_break", new FeatureProcessors.WordBreak());
+	addFeatureProcessor("word_punc", new FeatureProcessors.WordPunc());
 	addFeatureProcessor("gpos", new FeatureProcessors.Gpos(pos));
 	addFeatureProcessor("word_numsyls",new FeatureProcessors.WordNumSyls());
 	addFeatureProcessor("ssyl_in", new FeatureProcessors.StressedSylIn());

@@ -588,6 +588,52 @@ class FeatureProcessors {
 	}
     }
 
+
+
+    /**
+     * Determines the word break.
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class WordBreak implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  word  the item to process
+	 *
+	 * @return the break level for this word
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item word) throws ProcessException {
+	    return wordPunc(word);
+	}
+    }
+
+    /**
+     * Determines the word punctuation.
+     * This is a feature processor. A feature processor takes an item,
+     * performs some sort of processing on the item and returns an object.
+     */
+    static class WordPunc implements FeatureProcessor {
+
+	/**
+	 * Performs some processing on the given item.
+	 *
+	 * @param  word  the item to process
+	 *
+	 * @return the punctuation for this word
+	 *
+	 * @throws ProcessException if an exception occurred during the
+	 * processing
+	 */
+	public String process(Item word) throws ProcessException {
+	    return wordPunc(word);
+	}
+    }
+
     /**
      * Return consonant cplace 
      *   l-labial a-alveolar p-palatal b-labio_dental d-dental v-velar
@@ -1056,6 +1102,29 @@ class FeatureProcessors {
 		return "3";
 	    } else {
 		return "1";
+	    }
+	}
+    }
+
+    /**
+     * Gets the punctuation associated with the word
+     *
+     * @param  word  the word to process
+     *
+     * @return  the punctuation associated with the word
+     *
+     * @throws ProcessException if an exception occurred during the
+     * processing
+     */
+    public static String wordPunc(Item item) throws ProcessException {
+	Item ww = item.getItemAs(Relation.TOKEN);
+	if (ww != null && ww.getNext() != null) {
+	    return "";
+	} else {
+	    if (ww != null && ww.getParent() != null) {
+		return ww.getParent().getFeatures().getString("punc");
+	    } else {
+		return "";
 	    }
 	}
     }
