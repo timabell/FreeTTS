@@ -260,7 +260,7 @@ public class Item implements Dumpable {
      * item feature name. If the feature function exists it will be
      * called with the item specified by the path, otherwise, a
      * feature will be retrieved with the given name. If neither exist
-     * than a null is returned.
+     * than a String "0" is returned.
      *
      * @param pathAndFeature the path to follow
      */
