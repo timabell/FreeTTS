@@ -117,7 +117,9 @@
 
       <h3>Installation</h3>
       <ul>
+        <li><a href="#download_and_install">Downloading and Installing</a></li>
         <li><a href="#quick_start">Quick Start</a></li>
+        <li><a href="#how_app">Building Applications with FreeTTS</a></li>
         <li><a href="#how_build">Building FreeTTS</a></li>
         <li><a href="#how_test">Testing FreeTTS</a></li>
       </ul>
@@ -312,6 +314,7 @@
 <hr>
 
 <h3>Installation</h3>
+
 <p>FreeTTS has been tested on the Solaris<sup>
    <font size="-1">TM</font></sup> Operating Environment, Mac OS X,
    Linux and Win32 operating systems.  
@@ -322,6 +325,60 @@
    http://java.sun.com/j2se/1.4/</a>.  Make sure you set your
    JAVA_HOME environment variable to point your installation (e.g.,
    JAVA_HOME=/usr/java/j2sdk1.4.0).
+
+<h4><a name="download_and_install">Downloading and Installing</a></h4>
+
+<p>FreeTTS has three packages available for 
+   <a href="http://sourceforge.net/project/showfiles.php?group_id=42080"> 
+   download</a>:
+<ul>
+  <li><b>bin</b>: provides the jar files, documentation, and demos</li>
+  <li><b>srcs</b>: provides the sources, documentation, and demos</li>
+  <li><b>tests</b>: provides the JUnit and regression tests; requires the srcs
+      package</li>
+</ul>
+
+<p>If you plan on just creating applications with FreeTTS, the <b>bin</b>
+package will be sufficient.  If you plan on making modifications to FreeTTS
+itself, however, you should use the <b>srcs</b> package.  The <b>tests</b>
+package will be useful if you wish to make sure any changes you made to
+FreeTTS did not introduce any bugs or regressions.
+
+<p>Download and unpack the package(s) appropriate for what you want to do.
+Depending upon what you download, you will end up with all or part of the 
+following directory structure:</p>
+
+<pre>
+    bin                 Binaries for the demos
+    build.xml           Ant file for building the sources
+    com                 FreeTTS sources
+    de                  Sources for MBROLA support
+    demo                Sources for the demos
+    demo.xml            Ant file for building the demos
+    docs                System documentation
+    javadoc.zip         Javadoc for FreeTTS (unzip this to view the javadoc)
+    lib                 Jars for FreeTTS
+    mbrola              Support for MBROLA
+    tests               Sources and scripts for JUnit and regression tests
+    tools               Tools for importing FestVox voice data
+</pre>
+
+<p>FreeTTS makes liberal use of the "Class-Path" attribute of a jar
+Manifest.  As such, you need to place very little in your classpath
+when you run applications.  The only things you need to do are the
+following:
+<ul>
+  <li>Place the <b>lib</b> directory anywhere you want.
+  <li>Make sure <b>lib/freetts.jar</b> is in your classpath.
+</ul>
+
+<p>Note that the <a href="#run_demo">demonstration applications</a> 
+also use a jar Manifest that uses the "Class-Path" attribute.  The
+build places the jar files for FreeTTS in the <b>lib</b> directory, and
+the jar files for the demos in the <b>bin</b> directory.  The jar manifests
+for the demos depend on the <b>lib</b> and <b>bin</b> directories being
+in the same top level directory.  If you change this, the demos may not
+work properly.
 
 <h4><a name="quick_start">Quick Start</a></h4>
   <p>If you are not interested in building FreeTTS, then you only need to 
@@ -336,6 +393,20 @@
     <li><a href="#run_demo">Run any of the demos</a>.
     </li>
   </ol>
+
+<h4><a name="how_app"><b>Building Applications with FreeTTS</b></a></h4>
+
+<p>We have provided a number of <a href="#run_demo">demonstration 
+applications</a> that use FreeTTS.  We highly suggest that you use
+these as examples for how to create your own applications.  As noted
+above, FreeTTS makes liberal use of the "Class-Path" attribute of a jar
+Manifest.  As such, you need to place very little in your classpath
+when you run applications.  The only things you need to do are the
+following:
+<ul>
+  <li>Place the <b>lib</b> directory anywhere you want.
+  <li>Make sure <b>lib/freetts.jar</b> is in your classpath.
+</ul>
 
 <h4><a name="how_build"><b>Building FreeTTS</b></a></h4>
 <p>The prerequisites for building FreeTTS are as follows:
@@ -497,6 +568,14 @@
      from the FreeTTS source distribution available on the
      <a href="http://sourceforge.net/project/showfiles.php?group_id=42080">
      FreeTTS Download Page</a>.  
+
+<p>Note also that the <a href="#run_demo">demonstration applications</a> 
+also use a jar Manifest that uses the "Class-Path" attribute.  The
+build places the jar files for FreeTTS in the <b>lib</b> directory, and
+the jar files for the demos in the <b>bin</b> directory.  The jar manifests
+for the demos depend on the <b>lib</b> and <b>bin</b> directories being
+in the same top level directory.  If you change this, the demos may not
+work properly.
 
   <hr>
 
