@@ -12,7 +12,6 @@ import java.io.*;
 import java.net.URL;
 import com.sun.speech.freetts.*;
 import com.sun.speech.freetts.diphone.DiphoneUnitDatabase;
-import com.sun.speech.freetts.en.us.SimpleVoice;
 
 /**
  * JUnit Tests for the DiphoneUnitDatabase test. 

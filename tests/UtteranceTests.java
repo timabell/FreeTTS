@@ -10,7 +10,6 @@ import junit.framework.*;
 import java.util.*;
 import java.io.*;
 import com.sun.speech.freetts.*;
-import com.sun.speech.freetts.en.us.SimpleVoice;
 
 /**
  * JUNIT Tests for the Utterance class
@@ -34,7 +33,7 @@ public class UtteranceTests extends TestCase {
      * Common code run before each test
      */
     protected void setUp() {
-	voice = new SimpleVoice();
+	voice = VoiceManager.getInstance().getVoice("kevin");
 	utterance = new Utterance(voice);
 	List processors = voice.getUtteranceProcessors();
 

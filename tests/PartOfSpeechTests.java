@@ -11,7 +11,6 @@ import java.util.*;
 import java.io.*;
 import java.net.URL;
 import com.sun.speech.freetts.*;
-import com.sun.speech.freetts.en.us.SimpleVoice;
 
 /**
  * JUnit Tests for the Utterance class
