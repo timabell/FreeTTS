@@ -29,14 +29,6 @@ import java.util.Locale;
  * in telling the time (with an english accent).
  */
 public class CMUClusterUnitVoice extends CMUVoice {
-    /**
-     * Creates a simple voice. By default, no Lexicon is loaded.
-     */
-    /*TODO
-    public CMUClusterUnitVoice() {
-	this(false);
-    }
-    */
 
     /**
      * Creates a simple voice
@@ -46,8 +38,10 @@ public class CMUClusterUnitVoice extends CMUVoice {
      */
     //TODO
     public CMUClusterUnitVoice(boolean createLexicon, String name,
-            Gender gender, Age age, String description, Locale locale) {
-	super(createLexicon, name, gender, age, description, locale);
+            Gender gender, Age age, String description, Locale locale,
+            String domain, String organization) {
+	super(createLexicon, name, gender, age, description, locale,
+                domain, organization);
 	setRate(150f);
 	setPitch(100F);
 	setPitchRange(12F);

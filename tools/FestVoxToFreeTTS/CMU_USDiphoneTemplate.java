@@ -22,7 +22,8 @@ public class %CLASSNAME% extends VoiceDirectory {
     public Voice[] getVoices() {
         // Change voice properties here
         Voice voice = new CMUDiphoneVoice(true, "%NAME%", Gender.%GENDER%,
-                Age.%AGE%, "%DESCRIPTION%", Locale.US);
+                Age.%AGE%, "%DESCRIPTION%", Locale.US, "%DOMAIN%",
+                "%ORGANIZATION%");
 
         voice.getFeatures().setString(Voice.DATABASE_NAME,
                 "%VOICENAME%/%VOICENAME%.bin");

@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -15,24 +15,18 @@ import javax.speech.Engine;
 import javax.speech.EngineCreate;
 import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.Voice;
 
 import com.sun.speech.engine.synthesis.BaseVoice;
-import com.sun.speech.freetts.lexicon.Lexicon;
-import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.ValidationException;
 
 /**
  * Represents a SynthesizerModeDesc for the
  * FreeTTSSynthesizer. A FreeTTSSynthesizerModeDesc adds 
- * a lexicon to the standard mode items.
+ * an audio player to the standard mode items.
  */
 public class FreeTTSSynthesizerModeDesc extends SynthesizerModeDesc 
 implements EngineCreate {
 
-    private String lexiconName = "com.sun.speech.freetts.en.us.CMULexicon";
-    private String audioPlayerName = null;
-    
     /**
      * Creates a fully-specified descriptor.
      * Any of the features may be <code>null</code>.
@@ -40,56 +34,10 @@ implements EngineCreate {
      * @param engineName  the name of the engine
      * @param modeName   the name of the mode
      * @param locale  the locale associated with this mode
-     * @param lexiconName  the name of the lexicon
-     * @param audioPlayerName  the name of the audio player class
      */
     public FreeTTSSynthesizerModeDesc( String engineName, String modeName,
-	    Locale locale, String lexiconName, String audioPlayerName) {
+	    Locale locale) {
         super(engineName, modeName, locale, Boolean.FALSE, null);
-	this.lexiconName = lexiconName;
-	this.audioPlayerName = audioPlayerName;
-    }
-
-    /**
-     * Returns the lexicon associated with this mode
-     *
-     * @return the lexicon, or null if it can't be found
-     */
-    Lexicon getLexicon() {
-	Lexicon lexicon = null;
-
-	// try to contruct the lexicon from the name.
-	// if for any reason we cannot construct it
-	// we return null
-	try { 
-	    Class clazz = Class.forName(lexiconName);
-	    lexicon = (Lexicon) clazz.newInstance();
-	} catch (ClassNotFoundException cnfe) {
-	} catch (IllegalAccessException iae) {
-	} catch (InstantiationException ie) {
-	}
-	return lexicon;
-    }
-
-    /**
-     * Returns the AudioPlayer associated with this mode
-     *
-     * @return the lexicon, or null if it can't be found
-     */
-    AudioPlayer getAudioPlayer() {
-	AudioPlayer audioPlayer = null;
-
-	// try to contruct the audioPlayer from the name.
-	// if for any reason we cannot construct it
-	// we return null
-	try { 
-	    Class clazz = Class.forName(audioPlayerName);
-	    audioPlayer = (AudioPlayer) clazz.newInstance();
-	} catch (ClassNotFoundException cnfe) {
-	} catch (IllegalAccessException iae) {
-	} catch (InstantiationException ie) {
-	}
-	return audioPlayer;
     }
 
     /**
@@ -98,9 +46,9 @@ implements EngineCreate {
      * @return an array of valid voices, if no valid voices, it will
      *    return an array of size 0
      */
-    public Voice[] getVoices() {
+    public javax.speech.synthesis.Voice[] getVoices() {
         List voiceList = new LinkedList();
-        Voice[] voices = super.getVoices();
+        javax.speech.synthesis.Voice[] voices = super.getVoices();
         int count = 0;
         for (int i = 0; i < voices.length; i++) {
             FreeTTSVoice freettsVoice = (FreeTTSVoice) voices[i];
@@ -112,7 +60,8 @@ implements EngineCreate {
                 // don't do anything here if a FreeTTSVoice is invalid
             }
         }
-        Voice[] validVoices = new Voice[count];
+        javax.speech.synthesis.Voice[] validVoices =
+            new javax.speech.synthesis.Voice[count];
         voiceList.toArray(validVoices);
         
         return validVoices;
@@ -127,7 +76,7 @@ implements EngineCreate {
      *    is invalid
      */
     public void validate() throws ValidationException {
-        Voice[] voices = super.getVoices();
+        javax.speech.synthesis.Voice[] voices = super.getVoices();
         int invalidCount = 0;
         String validationMessage = "";
 

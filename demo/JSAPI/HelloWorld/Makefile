@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -25,25 +25,22 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: all
-	$(JAVA_CMD) HelloWorld
+	${TOP}/bin/baseFreeTTS HelloWorld
 
 runMbrola1: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola1" \
 	HelloWorld
 
 runMbrola2: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola2" \
 	HelloWorld
 
 runMbrola3: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola3" \
 	HelloWorld

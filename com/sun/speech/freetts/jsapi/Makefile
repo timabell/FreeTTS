@@ -22,7 +22,7 @@ include ${TOP}/build/Makefile.config
 
 CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 
-RESOURCE_FILES =  synthesizer.properties
+RESOURCE_FILES =
 RESOURCES = ${RESOURCE_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 
 all:: ${CLASSES} ${STUBS} ${RESOURCES}

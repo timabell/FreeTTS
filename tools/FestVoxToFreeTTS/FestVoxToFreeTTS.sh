@@ -369,6 +369,8 @@ setAge() {
 }
 
 if [ "$2" = "install" ]; then
+    VP_DOMAIN=$FV_LANG
+    VP_ORGANIZATION=$FV_INST
     if [ "$FV_TYPE" = "diphone" ]; then
         if ! [ "$FV_LANG" = "us" ]; then
             echo
@@ -377,6 +379,7 @@ if [ "$2" = "install" ]; then
             echo "how to procede."
             exit -1;
         fi
+        VP_DOMAIN="general"
     elif [ "$FV_TYPE" = "ldom" ]; then
         # [[[TODO: other ldom domains? ]]]
         if ! [ "$FV_LANG" = "time" ]; then
@@ -386,7 +389,18 @@ if [ "$2" = "install" ]; then
             echo "voice, then this process will probably work.  Afterward, it is"
             echo "recommended that you check the java voice directory class"
             echo "to confirm that it is using the correct lexicon."
+            echo
+            echo "Press <Enter> to continue"
+            read
         fi
+    elif [ "$FV_TYPE" = "clunits" ]; then
+        echo "Warning: It is recommended that you double-check the output"
+        echo "of the install phase of this process.  The result for"
+        echo "clunits may not be exactly what you want. (For example,"
+        echo "the lexicon)."
+        echo
+        echo "Press <Enter> to continue"
+        read
     else
         echo
         echo "Only diphone and ldom types are supported by this operation."
@@ -496,7 +510,7 @@ if [ "$2" = "install" ]; then
     FULL_VOICEDIRECTORY_CLASS="com.sun.speech.freetts.en.us.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
 
     (
-        echo "Copyright 2001 Sun Microsystems, Inc."
+        echo "Copyright 2003 Sun Microsystems, Inc."
         echo 
         echo "See the file "license.terms" for information on usage and redistribution of"
         echo "this file, and for a DISCLAIMER OF ALL WARRANTIES."
@@ -520,7 +534,7 @@ if [ "$2" = "install" ]; then
         echo "voice.Manifest contain the correct information."
         echo "(If you created a ldom voice with a domain other than 'time',"
         echo "you may need to update the location of the lexicon in"
-        echo "both files."
+        echo "both files)."
     ) > "$EN_US_DIR/$VP_FULL_NAME/README"
 
 
@@ -528,13 +542,13 @@ if [ "$2" = "install" ]; then
     cp -f "$OUTDIR/$FV_FULLVOICENAME.txt" "$EN_US_DIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
     echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
     echo "FreeTTSVoiceDefinition: true" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
+    echo "Class-Path: cmulex.jar" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
+
     if [ "$FV_TYPE" = "diphone" ]; then
-        echo "Class-Path: cmulex.jar" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
         VD_TEMPLATE="$HELPERDIR/CMU_USDiphoneTemplate.java"
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
-    else #ldom
-        echo "Class-Path: cmutimelex.jar" >> "$EN_US_DIR/$VP_FULL_NAME/voice.Manifest"
-        VD_TEMPLATE="$HELPERDIR/CMU_USTimeTemplate.java"
+    else #clunit
+        VD_TEMPLATE="$HELPERDIR/CMU_USLdomTemplate.java"
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
     fi
 
@@ -545,12 +559,15 @@ if [ "$2" = "install" ]; then
         | sed "s/%GENDER%/$VP_GENDER/g" \
         | sed "s/%AGE%/$VP_AGE/g" \
         | sed "s/%DESCRIPTION%/$VP_DESCRIPTION/g" \
+        | sed "s/%DOMAIN%/$VP_DOMAIN/g" \
+        | sed "s/%ORGANIZATION%/$VP_ORGANIZATION/g" \
         > "$EN_US_DIR/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS.java"
 
     # create the Makefile
     cat "$HELPERDIR/VoiceMakefileTemplate.txt" \
         | sed "s/%VOICENAME%/$VP_FULL_NAME/g" \
         | sed "s/%UNIT_DATABASE_CLASS%/$UNIT_DATABASE_CLASS/g" \
+        | grep -v "DIPHONE_ONLY" \
         > "$EN_US_DIR/$VP_FULL_NAME/Makefile"
 
 

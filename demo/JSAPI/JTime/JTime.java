@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -42,8 +42,8 @@ public class JTime {
 	    // Create a new SynthesizerModeDesc that will match the FreeTTS
 	    // Synthesizer.
 	    SynthesizerModeDesc desc = new SynthesizerModeDesc
-		("Limited domain FreeTTS Speech Synthesizer from Sun Labs",
-		 null,
+		(null,
+		 "time",
 		 Locale.US,
 		 Boolean.FALSE,         // running?
 		 null);                 // voice

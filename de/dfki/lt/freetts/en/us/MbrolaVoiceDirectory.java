@@ -13,13 +13,13 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
     public Voice[] getVoices() {
         Voice mbrola1 = new MbrolaVoice(true, "us1", "us1", 150f, 180F, 22F,
                 "mbrola1", Gender.FEMALE, Age.YOUNGER_ADULT, "MBROLA Voice 1",
-                Locale.US);
+                Locale.US, "TEST/TODO", "TEST/TODO");
         Voice mbrola2 = new MbrolaVoice(true, "us2", "us2", 150f, 115F, 12F,
                 "mbrola2", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 2",
-                Locale.US);
+                Locale.US, "TEST/TODO", "TEST/TODO");
         Voice mbrola3 = new MbrolaVoice(true, "us3", "us3", 150f, 125F, 12F,
                 "mbrola3", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 3",
-                Locale.US);
+                Locale.US, "TEST/TODO", "TEST/TODO");
 
         Voice[] voices = {mbrola1, mbrola2, mbrola3};
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -8,7 +8,6 @@
 package com.sun.speech.freetts.jsapi;
 
 import com.sun.speech.engine.synthesis.BaseVoice;
-import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.ValidationException;
 
@@ -17,43 +16,23 @@ import com.sun.speech.freetts.ValidationException;
  */
 public class FreeTTSVoice extends BaseVoice {
 
-    private String freettsVoiceClassName;
-    private Voice freettsVoice;
-    private String dbName = null;
+    private com.sun.speech.freetts.Voice freettsVoice;
     private Validator validator;
 
     /**
      * Constructs a FreeTTSVoice
      *
-     * @param id the id for the voice
-     * @param gender the gender for the voice (e.g. GENDER_MALE)
-     * @param gender the gender for the voice (e.g. Voice.GENDER_MALE)
-     * @param age the age for the voice (e.g. Voice.AGE_YOUNGER_ADULT)
-     * @param style style of the voice
-     * @param pitch initial pitch of the voice in hertz
-     * @param pitchRange initial pitch rate of the voice in hertz
-     * @param speakingRate initial speaking rate of the voice in words
-     * 				per minute
-     * @param volume the initial volume of the voice
-     * @param className the classname for the freetts voice
-     * @param dbName the name of the database associated with this voice
+     * @param freettsVoice the freetts voice
+     * @param validatorName the classname of the validator to use
      */
-    public FreeTTSVoice(String id,
-                        String name,
-                        int gender,
-                        int age,
-                        String style,
-                        float pitch,
-                        float pitchRange,
-                        float speakingRate,
-                        float volume,
-                        String className,
-                        String dbName,
+    public FreeTTSVoice(com.sun.speech.freetts.Voice freettsVoice,
                         String validatorName) {
-        super(id, name, gender, age, style, pitch, pitchRange,
-		speakingRate, volume);   
-	this.freettsVoiceClassName = className;
-	this.dbName = dbName;
+        super(freettsVoice.getName()+Math.random(), freettsVoice.getName(),
+                genderToInt(freettsVoice.getGender()),
+                ageToInt(freettsVoice.getAge()), freettsVoice.getStyle(),
+                freettsVoice.getPitch(), freettsVoice.getPitchRange(),
+                freettsVoice.getRate(), freettsVoice.getVolume());
+	this.freettsVoice = freettsVoice;
         
         if (validatorName != null) {
             try {
@@ -69,6 +48,56 @@ public class FreeTTSVoice extends BaseVoice {
         } else {
             validator = null;
         }
+    }
+
+    /**
+     * Convert a freetts gender to jsapi gender
+     *
+     * @param gender the freetts gender
+     *
+     * @return the jsapi gender
+     */
+    private static int genderToInt(com.sun.speech.freetts.Gender gender) {
+        if (gender == com.sun.speech.freetts.Gender.MALE) {
+            return javax.speech.synthesis.Voice.GENDER_MALE;
+        } else if (gender == com.sun.speech.freetts.Gender.FEMALE) {
+            return javax.speech.synthesis.Voice.GENDER_FEMALE;
+        } else if (gender == com.sun.speech.freetts.Gender.NEUTRAL) {
+            return javax.speech.synthesis.Voice.GENDER_NEUTRAL;
+        } else if (gender == com.sun.speech.freetts.Gender.DONT_CARE) {
+            return javax.speech.synthesis.Voice.GENDER_DONT_CARE;
+        } else {
+            throw new Error("jaspi does not have an equivalent to gender "
+                    + gender.toString());
+        }
+    }
+
+    /**
+     * Convert a freetts age to jsapi age
+     *
+     * @param age the freetts age
+     *
+     * @return the jsapi age
+     */
+    private static int ageToInt(com.sun.speech.freetts.Age age) {
+        if (age == com.sun.speech.freetts.Age.CHILD) {
+            return javax.speech.synthesis.Voice.AGE_CHILD;
+        } else if (age == com.sun.speech.freetts.Age.TEENAGER) {
+            return javax.speech.synthesis.Voice.AGE_TEENAGER;
+        } else if (age == com.sun.speech.freetts.Age.YOUNGER_ADULT) {
+            return javax.speech.synthesis.Voice.AGE_YOUNGER_ADULT;
+        } else if (age == com.sun.speech.freetts.Age.MIDDLE_ADULT) {
+            return javax.speech.synthesis.Voice.AGE_MIDDLE_ADULT;
+        } else if (age == com.sun.speech.freetts.Age.OLDER_ADULT) {
+            return javax.speech.synthesis.Voice.AGE_OLDER_ADULT;
+        } else if (age == com.sun.speech.freetts.Age.NEUTRAL) {
+            return javax.speech.synthesis.Voice.AGE_NEUTRAL;
+        } else if (age == com.sun.speech.freetts.Age.DONT_CARE) {
+            return javax.speech.synthesis.Voice.AGE_DONT_CARE;
+        } else {
+            throw new Error("jaspi does not have an equivalent to age "
+                    + age.toString());
+        } 
     }
 
     /**
@@ -96,27 +125,8 @@ public class FreeTTSVoice extends BaseVoice {
      *
      * @return a FreeTTS voice or null, if the voice cannot be found
      */
-    synchronized Voice getFreeTTSVoice() {
-	if (freettsVoice == null) {
-	    try { 
-		Class clazz = Class.forName(freettsVoiceClassName);
-		freettsVoice = (Voice) clazz.newInstance();
-
-		freettsVoice.setPitch(defaultPitch);
-		freettsVoice.setPitchRange(defaultPitchRange);
-		freettsVoice.setRate(defaultSpeakingRate);
-		freettsVoice.setVolume(defaultVolume);
-		if (dbName != null) {
-		    freettsVoice.getFeatures().setString(
-			    Voice.DATABASE_NAME, dbName);
-		}
-
-	    } catch (ClassNotFoundException cnfe) {
-	    } catch (IllegalAccessException iae) {
-	    } catch (InstantiationException ie) {
-	    }
-	}
-	return freettsVoice;
+    synchronized com.sun.speech.freetts.Voice getFreeTTSVoice() {
+        return freettsVoice;
     }
 
     /**

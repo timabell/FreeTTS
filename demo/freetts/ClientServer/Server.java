@@ -1,17 +1,15 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
 
-import com.sun.speech.freetts.ValidationException;
 import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
-import de.dfki.lt.freetts.en.us.MbrolaVoice;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
 import com.sun.speech.freetts.util.Utilities;
 
 import java.io.BufferedReader;
@@ -36,15 +34,13 @@ public class Server extends TTSServer {
 
     // 8k Voice
     private Voice voice8k;
-    private String voice8kClassName = Utilities.getProperty
-	("voice8kClassName", "com.sun.speech.freetts.en.us.CMUDiphoneVoice");
-    private String voice8kDatabaseName = "cmu_kal/diphone_units.bin";
+    private String voice8kName = Utilities.getProperty
+	("voice8kName", "kevin");
 
     // 16k Voice
     private Voice voice16k;
-    private String voice16kClassName = Utilities.getProperty
-	("voice16kClassName", "com.sun.speech.freetts.en.us.CMUDiphoneVoice");
-    private String voice16kDatabaseName = "cmu_kal/diphone_units16.bin";
+    private String voice16kName = Utilities.getProperty
+	("voice16kName", "kevin16");
 
 
     /**
@@ -54,50 +50,16 @@ public class Server extends TTSServer {
     public Server() {
 	port = Utilities.getInteger("port", 5555).intValue();
 	try {
-	    voice8k = loadVoice(voice8kClassName, voice8kDatabaseName);
-	    voice16k = loadVoice(voice16kClassName, voice16kDatabaseName);
+            VoiceManager voiceManager = VoiceManager.getInstance();
+	    voice8k = voiceManager.getVoice(voice8kName);
+	    voice16k = voiceManager.getVoice(voice16kName);
+            voice8k.allocate();
+            voice16k.allocate();
 	} catch (Exception e) {
 	    e.printStackTrace();
 	    System.exit(1);
 	}
     }
-
-
-    /**
-     * Creates and loads the FreeTTS Voice.
-     *
-     * @param voiceClassName the name of the Voice class
-     * @param databaseName the name of the diphone database file
-     */
-    private static Voice loadVoice(String voiceClassName,
-				   String databaseName) throws Exception {
-	Class voiceClass = Class.forName(voiceClassName);
-
-	// instantiate the Voice
-	Voice voice = (Voice) voiceClass.newInstance();
-
-        if (voice instanceof MbrolaVoice) {
-            try {
-                (new MbrolaVoiceValidator((MbrolaVoice) voice)).validate();
-            } catch (ValidationException ve) {
-                System.err.println(ve.getMessage());
-                throw new IllegalStateException
-                    ("Problem starting MBROLA voice");
-            }
-        }
-
-	// sets the lexicon to CMU lexicon
-	voice.setLexicon(new CMULexicon());
-
-	// sets the diphone database to use
-	voice.getFeatures().setString(Voice.DATABASE_NAME, databaseName);
-	
-	// loads the Voice, which mainly is loading the lexicon
-	voice.allocate();
-
-	return voice;
-    }
-
 
     /**
      * Returns the 8k diphone voice.

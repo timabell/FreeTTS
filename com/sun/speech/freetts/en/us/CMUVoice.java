@@ -57,34 +57,13 @@ public abstract class CMUVoice extends Voice {
     private boolean useBinaryIO =
 	Utilities.getProperty("com.sun.speech.freetts.useBinaryIO",
 		"true").equals("true");
-    /**
-     * Creates a CMU voice
-     */
-                /* TODO
-    public CMUVoice() {
-	this(false);
-    }
-    */
-
-    /**
-     * Creates a CMUVoice voice
-     *
-     * @param createLexicon if <code>true</code> automatically load up
-     * the default CMU lexicon; otherwise, don't load it.
-     */
-    // TODO: do we want this?
-                /*
-    public CMUVoice(boolean createLexicon) {
-	if (createLexicon) {
-	    setLexicon(new CMULexicon());
-	}
-    }
-    */
 
     //TODO documentation
     public CMUVoice(boolean createLexicon, String name, Gender gender,
-            Age age, String description, Locale locale) {
-        super(name, gender, age, description, locale);
+            Age age, String description, Locale locale, String domain,
+            String organization) {
+        super(name, gender, age, description, locale, domain,
+                organization);
 	if (createLexicon) {
 	    setLexicon(new CMULexicon());
 	}

@@ -34,23 +34,16 @@ public class CMUDiphoneVoice extends CMUVoice {
         
     /**
      * Creates a simple voice
-     */
-    /* TODO
-    public CMUDiphoneVoice() {
-	this(false);
-    }
-    */
-
-    /**
-     * Creates a simple voice
      *
      * @param createLexicon if <code>true</code> automatically load up
      * the default CMU lexicon; otherwise, don't load it.
      */
     //TODO
     public CMUDiphoneVoice(boolean createLexicon, String name, Gender gender,
-            Age age, String description, Locale locale) {
-	super(createLexicon, name, gender, age, description, locale);
+            Age age, String description, Locale locale, String domain,
+            String organization) {
+	super(createLexicon, name, gender, age, description, locale,
+                domain, organization);
 	setRate(150f);
 	setPitch(100F);
 	setPitchRange(11F);

@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -8,7 +8,6 @@
 
 # Relative path to the top of the source tree
 TOP = ../../..
-
 # By default, build all of the .java files. 
 FILES = $(shell echo *.java)
 
@@ -27,36 +26,32 @@ all:: ${CLASSES} ${STUBS}
 # "synthesizerName".
 
 run: 
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Ddebug=true \
 	-Dport=2222 \
-	-DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" \
 	-DvoiceName="kevin16" \
 	EmacspeakServer
 
 runMbrola1:
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Ddebug=true \
 	-Dport=2222 \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola1" \
 	EmacspeakServer
 
 runMbrola2:
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Ddebug=true \
 	-Dport=2222 \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola2" \
 	EmacspeakServer
 
 runMbrola3:
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Ddebug=true \
 	-Dport=2222 \
-	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
 	-DvoiceName="mbrola3" \
 	EmacspeakServer

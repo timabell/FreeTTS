@@ -61,9 +61,12 @@ public abstract class VoiceDirectory {
         for (int i = 0; i < voices.length; i++) {
             s += voices[i].getName() + newline
              + "\tDescription: " + voices[i].getDescription() + newline
+             + "\tOrganization: " + voices[i].getOrganization() + newline
+             + "\tDomain: " + voices[i].getDomain() + newline
+             + "\tLocale: " + voices[i].getLocale().toString() + newline
+             + "\tStyle: " + voices[i].getStyle() + newline
              + "\tGender: " + voices[i].getGender().toString() + newline
              + "\tAge: " + voices[i].getAge().toString() + newline
-             + "\tLocale: " + voices[i].getLocale().toString() + newline
              + "\tPitch: " + voices[i].getPitch() + newline
              + "\tPitch Range: " + voices[i].getPitchRange() + newline
              + "\tPitch Shift: " + voices[i].getPitchShift() + newline

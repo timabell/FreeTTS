@@ -23,13 +23,14 @@ public class %CLASSNAME% extends VoiceDirectory {
     public Voice[] getVoices() {
         // Change voice properties here
         Voice voice = new CMUClusterUnitVoice(false, "%NAME%", Gender.%GENDER%,
-                Age.%AGE%, "%DESCRIPTION%",
-                Locale.US);
+                Age.%AGE%, "%DESCRIPTION%", Locale.US, "%DOMAIN%",
+                "%ORGANIZATION%");
         voice.getFeatures().setString(Voice.DATABASE_NAME,
                 "%VOICENAME%/%VOICENAME%.bin");
 
-        // Make sure this is the correct lexicon:
-        voice.setLexicon(new CMULexicon("cmutimelex"));
+        // default to the generic lexicon
+        // (a more specific lexicon may increase performance)
+        voice.setLexicon(new CMULexicon("cmulex"));
         Voice[] voices = {voice};
         return voices;
     }

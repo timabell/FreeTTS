@@ -13,9 +13,11 @@ public class KevinVoiceDirectory extends VoiceDirectory {
     public Voice[] getVoices() {
         //TODO different name?
         Voice kevin = new CMUDiphoneVoice(true, "kevin", Gender.MALE,
-                Age.YOUNGER_ADULT, "default 8-bit diphone voice", Locale.US);
+                Age.YOUNGER_ADULT, "default 8-bit diphone voice",
+                Locale.US, "general", "cmu");
         Voice kevin16 = new CMUDiphoneVoice(true, "kevin16", Gender.MALE,
-                Age.YOUNGER_ADULT, "default 16-bit diphone voice", Locale.US);
+                Age.YOUNGER_ADULT, "default 16-bit diphone voice",
+                Locale.US, "general", "cmu");
 
         kevin.getFeatures().setString(Voice.DATABASE_NAME,
                 "cmu_us_kal/cmu_us_kal.bin");

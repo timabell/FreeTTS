@@ -1,3 +1,11 @@
+/**
+ * Copyright 2003 Sun Microsystems, Inc.
+ *
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL
+ * WARRANTIES.
+ */
+
 import com.sun.speech.freetts.jsapi.FreeTTSEngineCentral; 
 
 import java.util.Locale;
@@ -20,13 +28,10 @@ public class JSAPIClock extends Clock {
      */
     public void createSynthesizer() {
 
-        String synthesizerName =
-            "Limited domain FreeTTS Speech Synthesizer from Sun Labs";
-
         try {
             SynthesizerModeDesc desc = 
-                new SynthesizerModeDesc(synthesizerName, 
-                                        null,
+                new SynthesizerModeDesc(null, 
+                                        "time",
                                         Locale.US, 
                                         Boolean.FALSE,
                                         null);

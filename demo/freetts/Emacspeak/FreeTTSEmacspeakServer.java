@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -9,12 +9,10 @@
 import com.sun.speech.freetts.ValidationException;
 import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
 import com.sun.speech.freetts.en.us.CMULexicon;
-
-import de.dfki.lt.freetts.en.us.MbrolaVoice;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
 
 import java.net.Socket;
 
@@ -39,44 +37,12 @@ public class FreeTTSEmacspeakServer extends TTSServer {
      * Creates and loads the Voice.
      */
     private void createVoice() {
-	String voiceClassName = System.getProperty
-	    ("voiceClass", "com.sun.speech.freetts.en.us.CMUDiphoneVoice");
-	String diphoneDatabase = System.getProperty
-	    ("diphoneDatabase", "cmu_kal/diphone_units16.bin");
+	String voiceName = System.getProperty("voiceName", "kevin16");
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        emacsVoice = voiceManager.getVoice(voiceName);
 
-	try {
-	    Class voiceClass = Class.forName(voiceClassName);
-
-	    System.out.println("Creating " + voiceClassName + "...");
-
-	    emacsVoice = (Voice) voiceClass.newInstance();
-
-            if (emacsVoice instanceof MbrolaVoice) {
-                try {
-                    (new MbrolaVoiceValidator((MbrolaVoice) emacsVoice)).
-                        validate();
-                } catch (ValidationException ve) {
-                    System.err.println(ve.getMessage());
-                    throw new IllegalStateException
-                        ("Problem starting MBROLA voice");
-                }
-            }
-
-	    System.out.println("Loading " + voiceClassName + "...");
-
-	    emacsVoice.getFeatures().setString
-		(Voice.DATABASE_NAME, diphoneDatabase);
-	    emacsVoice.setLexicon(new CMULexicon());
-	    emacsVoice.setOutputQueue(Voice.createOutputThread());
-	    emacsVoice.allocate();
-	    emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
-
-	    System.out.println("...Ready");
-
-	} catch (Exception e) {
-	    System.out.println("Error creating " + voiceClassName);
-	    System.exit(1);
-	}
+        emacsVoice.allocate();
+        emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
     }
 
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -31,7 +31,7 @@ public class EmacspeakServer extends TTSServer {
     private Synthesizer synthesizer;
     private String synthesizerName;
     private String voiceName;
-    private String modeName = null;
+    private String modeName = "general";
     private Locale locale = Locale.US;
     private Boolean running = null;
     private Voice[] voices = null;
@@ -58,7 +58,7 @@ public class EmacspeakServer extends TTSServer {
 
         synthesizerName = System.getProperty
             ("synthesizerName",
-             "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs");
+             "");
 
 	SynthesizerModeDesc modeDesc = new SynthesizerModeDesc
 	    (synthesizerName, modeName, locale, running, voices);

@@ -14,7 +14,7 @@ FestVox documentation for full information.  (http://festvox.org,
 http://festvox.org/bsv/) Section IV.19 provides a good tutorial on
 making a US Diphone voice, and Section II.5.6 provides a good tutorial
 on recording a cluster unit voice for the limited domain of telling
-the time.  Section II.5 provides a good general explaination of
+the time.  Section II.5 provides a good general explanation of
 creating a limited domain voice in general.  If you want to experiment
 with voice creation and conversion, creating a time telling voice is a
 good place to begin.
@@ -23,7 +23,7 @@ In our experience, FestVox and Festival work better under Linux x86
 platforms.
 
 
---------- Importing a FestVox Voice into FreeTTS (quick explaination) ---------
+--------- Importing a FestVox Voice into FreeTTS (quick explanation) ---------
 
 * Make sure festival, java, and javac are in your path.
 * Define the ESTDIR environment variable.
@@ -35,7 +35,7 @@ You have now imported a voice into FreeTTS.
 
 See "FestVoxToFreeTTS.sh --help" for more information.
 
---------- Importing a FestVox Voice into FreeTTS (full explaination) ---------
+--------- Importing a FestVox Voice into FreeTTS (full explanation) ---------
 
 FreeTTS follow many of the same steps that Flite
 (http://www.speech.cs.cmu.edu/flite) does for importing voices.  For a

@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -25,11 +25,11 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: 
-	$(JAVA_CMD) MixedVoices
+	${TOP}/bin/baseFreeTTS MixedVoices
 
 runVerbose: 
-	$(JAVA_CMD) MixedVoices -showPropertyChanges
+	${TOP}/bin/baseFreeTTS MixedVoices -showPropertyChanges
 
 runVeryVerbose: 
-	$(JAVA_CMD) MixedVoices -showPropertyChanges -showEvents
+	${TOP}/bin/baseFreeTTS MixedVoices -showPropertyChanges -showEvents
 

@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -27,9 +27,7 @@ import com.sun.speech.engine.synthesis.BaseSynthesizerQueueItem;
 import com.sun.speech.engine.BaseEngine;
 import com.sun.speech.engine.synthesis.BaseVoice;
 import com.sun.speech.engine.BaseEngineProperties;
-import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.OutputQueue;
-import com.sun.speech.freetts.lexicon.Lexicon;
 import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
@@ -47,16 +45,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
      */
     private FreeTTSVoice curVoice;
 
-    /**
-     * Audio is sent to this player
-     */
     private AudioPlayer audio;
-
-    /**
-     * The lexicon for this synthesizer. All voices in this
-     * synthesizer share this lexicon
-     */
-    private Lexicon lexicon;
 
     /**
      * All voice output for this synthesizer goes through
@@ -89,18 +78,15 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	FreeTTSSynthesizerModeDesc desc = (FreeTTSSynthesizerModeDesc)
 	    getEngineModeDesc();
 
-	audio = desc.getAudioPlayer();
 
-	if (audio == null) {
-	    throw new EngineException("Can't get audio player");
-	}
-	outputQueue = Voice.createOutputThread();
-	lexicon = desc.getLexicon();
+	outputQueue = com.sun.speech.freetts.Voice.createOutputThread();
 
 	if (desc.getVoices().length > 0) {
 	    FreeTTSVoice freettsVoice = (FreeTTSVoice) desc.getVoices()[0];
 	    ok = setCurrentVoice(freettsVoice);
 	}
+
+
 
 	if (ok) {
 	    synchronized (engineStateLock) {
@@ -125,7 +111,8 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
      *
      * @param voice the new voice.
      */
-    private boolean setCurrentVoice(FreeTTSVoice voice) {
+    private boolean setCurrentVoice(FreeTTSVoice voice) 
+            throws EngineException {
 
 	/*
 	System.out.print("Old Voice " +(curVoice == null ?
@@ -133,15 +120,20 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	System.out.println(" New Voice " +(voice == null ?
 		    "???" : voice.getName()));
 	*/
-	Voice freettsVoice = voice.getFreeTTSVoice();
+	com.sun.speech.freetts.Voice freettsVoice = voice.getFreeTTSVoice();
 	boolean ok = false;
 
+
 	if (!freettsVoice.isLoaded()) {
-	    if (lexicon != null) {
-		freettsVoice.setLexicon(lexicon);
-	    }
 	    freettsVoice.setOutputQueue(outputQueue);
 	    freettsVoice.allocate();
+            audio = freettsVoice.getAudioPlayer();
+            if (audio == null) {
+                audio = new com.sun.speech.freetts.audio.JavaClipAudioPlayer();
+            }
+            if (audio == null) {
+                throw new EngineException("Can't get audio player");
+            }
 	    freettsVoice.setAudioPlayer(audio);
 	}
 
@@ -351,7 +343,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 * @return the current pitch (in hertz)
 	 */
 	public float getPitch() {
-	    Voice voice = curVoice.getFreeTTSVoice();
+	    com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 	    return voice.getPitch();
 	}
 
@@ -369,14 +361,19 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 		javax.speech.synthesis.Voice voices[]  = desc.getVoices();
 		for (int i = 0; i < voices.length; i++) {
 		    if (voices[i].match(voice)) {
-			if (setCurrentVoice((FreeTTSVoice) voices[i])) {
-			    try {
-				super.setVoice(voice);
-				break;
-			    } catch (PropertyVetoException pve) {
-				continue;
-			    }
-			}
+                        try {
+                            if (setCurrentVoice((FreeTTSVoice) voices[i])) {
+                                try {
+                                    super.setVoice(voice);
+                                    break;
+                                } catch (PropertyVetoException pve) {
+                                    continue;
+                                }
+                            }
+                        } catch (EngineException ee) {
+                            System.err.println("Engine Exception: " +
+                                    ee.getMessage());
+                        }
 		    }
 		}
 	    }
@@ -392,7 +389,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 */
 	public void setPitch(float hertz) throws PropertyVetoException {
 	    if (hertz != getPitch()) {
-	    	Voice voice = curVoice.getFreeTTSVoice();
+	    	com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 		voice.setPitch(hertz);
 		super.setPitch(hertz);
 	    }
@@ -405,7 +402,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 * @return the current range of pitch in hertz
 	 */
 	public float getPitchRange() {
-	    Voice voice = curVoice.getFreeTTSVoice();
+	    com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 	    return voice.getPitchRange();
 	}
 
@@ -417,7 +414,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 */
 	public void setPitchRange(float hertz) throws PropertyVetoException {
 	    if (hertz != getPitchRange()) {
-		Voice voice = curVoice.getFreeTTSVoice();
+		com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 		voice.setPitchRange(hertz);
 		super.setPitchRange(hertz);
 	    }
@@ -429,7 +426,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 * @return the current speaking rate in words per minute
 	 */
 	public float getSpeakingRate() {
-	    Voice voice = curVoice.getFreeTTSVoice();
+	    com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 	    return voice.getRate();
 	}
 
@@ -444,7 +441,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 */
 	public void setSpeakingRate(float wpm) throws PropertyVetoException {
 	    if (wpm != getSpeakingRate()) {
-		Voice voice = curVoice.getFreeTTSVoice();
+		com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 		voice.setRate(wpm);
 		super.setSpeakingRate(wpm);
 	    }
@@ -456,7 +453,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 * @return the current volume setting (between 0 and 1.0)
 	 */
 	public float getVolume() {
-	    Voice voice = curVoice.getFreeTTSVoice();
+	    com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 	    return voice.getVolume();
 	}
 
@@ -475,7 +472,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 		volume = 0.0f;
 	
 	    if (volume != getVolume()) {
-		Voice voice = curVoice.getFreeTTSVoice();
+		com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 		voice.setVolume(volume);
 		super.setVolume(volume);
 	    }
@@ -699,7 +696,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	 * @param item the item to output
          */
         protected void outputItem(FreeTTSSynthesizerQueueItem item) {
-	    Voice voice = curVoice.getFreeTTSVoice();
+	    com.sun.speech.freetts.Voice voice = curVoice.getFreeTTSVoice();
 	    voice.speak(item);
         }
 

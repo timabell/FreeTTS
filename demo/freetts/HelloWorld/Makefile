@@ -24,19 +24,19 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: all
-	$(JAVA_CMD) FreeTTSHelloWorld 
+	${TOP}/bin/baseFreeTTS FreeTTSHelloWorld 
 
 runMbrola1: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS1
+	FreeTTSHelloWorld mbrola1
 
 runMbrola2: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS2
+	FreeTTSHelloWorld mbrola2
 
 runMbrola3: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmbrola.base=$(MBROLA_DIR) \
-	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS3
+	FreeTTSHelloWorld mbrola3

@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -24,13 +24,13 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: 
-	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player
+	${TOP}/bin/baseFreeTTS -Dmbrola.base=$(MBROLA_DIR) Player
 
 runbig: 
-	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -fontsize 20
+	${TOP}/bin/baseFreeTTS -Dmbrola.base=$(MBROLA_DIR) Player -fontsize 20
 
 runmonitor: 
-	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor
+	${TOP}/bin/baseFreeTTS -Dmbrola.base=$(MBROLA_DIR) Player -monitor
 
 
 # you can define multiple instance of plaintext, textfile, jsmltext,
@@ -43,7 +43,7 @@ runmonitor:
 #	"jsmlfile:$(PWD)/test1.jsml"\
 
 input: 
-	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(INPUT)
+	${TOP}/bin/baseFreeTTS -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(INPUT)
 
 PLAINTEXTS = \
 	"plaintext:Welcome to the jay sappy demo synthesis program. I can help you test this program. My name is kevin. First, I'll count for you"\
@@ -66,4 +66,4 @@ PLAINTEXTS = \
 	"plaintext:that all men are created equal."
 
 plaintext: 
-	$(JAVA_CMD) -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(PLAINTEXTS)
+	${TOP}/bin/baseFreeTTS -Dmbrola.base=$(MBROLA_DIR) Player -monitor -input $(PLAINTEXTS)

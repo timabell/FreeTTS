@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -76,8 +76,8 @@ public class MixedVoices {
 
 	    SynthesizerModeDesc unlimitedDesc = 
 		new SynthesizerModeDesc(
-		    "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs",
 		    null,
+		    "general",
 		    Locale.US,
 		    Boolean.FALSE,         // running?
 		    null);                 // voice
@@ -86,7 +86,7 @@ public class MixedVoices {
 			= Central.createSynthesizer(unlimitedDesc);
 	    if (synthesizer1 == null) {
 		System.err.println
-		    (noSynthesizerMessage("unlimited domain synthesizer"));
+		    (noSynthesizerMessage("general domain synthesizer"));
 		System.exit(1);
 	    }
 
@@ -95,8 +95,8 @@ public class MixedVoices {
 
 	    SynthesizerModeDesc limitedDesc = 
 		new SynthesizerModeDesc(
-		    "Limited domain FreeTTS Speech Synthesizer from Sun Labs",
 		    null,
+		    "time",
 		    Locale.US,
 		    Boolean.FALSE,         // running?
 		    null);                 // voice
@@ -106,7 +106,7 @@ public class MixedVoices {
 
 	    if (synthesizer2 == null) {
 		System.err.println
-		    (noSynthesizerMessage("limited domain synthesizer"));
+		    (noSynthesizerMessage("time domain synthesizer"));
 		System.exit(1);
 	    }
 

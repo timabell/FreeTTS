@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -28,31 +28,31 @@ cclient: client.c
 all:: ${CLASSES} ${STUBS}
 
 runserver: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Dmetrics=true Server
 
 runMbrola1Server: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
-	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS1 \
+	-Dvoice16kName="mbrola1" \
 	Server
 
 runMbrola2Server: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
-	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS2 \
+	-Dvoice16kName="mbrola2" \
 	Server
 
 runMbrola3Server: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
-	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS3 \
+	-Dvoice16kName="mbrola3" \
 	Server
 
 # the command line arguments: <server host> <port> <sample rate> <show metrics>
@@ -60,7 +60,7 @@ runcclient: cclient
 	./cclient localhost 5555 16000 0
 
 runjclient: all
-	$(JAVA_CMD) \
+	${TOP}/bin/baseFreeTTS \
 	-Ddebug=false \
 	-Dmetrics=false \
 	-Dserver=localhost \

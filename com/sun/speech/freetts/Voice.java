@@ -112,6 +112,9 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     private Gender gender = Gender.DONT_CARE;
     private String description = "default description";
     private Locale locale = Locale.getDefault();
+    private String domain = "general";
+    private String style = "standard";
+    private String organization = "unknown";
 
     /**
      * Prefix for System property names.
@@ -172,17 +175,24 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * @param description a human-readable string providing a
      * description that can be displayed for the users.
      * @param locale the locale of the voice
+     * @param domain the domain of this voice.  For example,
+     * @param organization the organization which created the voice
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
      *
      * @see #Voice()
      */
     public Voice(String name, Gender gender, Age age,
-            String description, Locale locale) {
+            String description, Locale locale, String domain,
+            String organization) {
         this();
         setName(name);
         setGender(gender);
         setAge(age);
         setDescription(description);
         setLocale(locale);
+        setDomain(domain);
+        setOrganization(organization);
     }
 
 
@@ -1243,6 +1253,68 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public Locale getLocale() {
         return locale;
+    }
+
+    /**
+     * Set the domain of this voice.
+     *
+     * @param domain the domain of this voice.  For example,
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
+     */
+    protected void setDomain(String domain) {
+        this.domain = domain;
+    }
+
+    /**
+     * Get the domain of this voice.
+     * 
+     * @return the domain of this voice.  For example,
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
+     */
+    public String getDomain() {
+        return domain;
+    }
+
+    /**
+     * Sets the voice style. This parameter is designed for human
+     * interpretation. Values might include "business", "casual",
+     * "robotic", "breathy"
+     *
+     * @param style the stile of this voice.
+     */
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
+    /**
+     * Gets the voice style. This parameter is designed for human
+     * interpretation. Values might include "business", "casual",
+     * "robotic", "breathy".
+     */
+    public String getStyle() {
+        return style;
+    }
+
+    /**
+     * Sets the organization which created this voice.  For example
+     * "cmu", "sun", ...
+     *
+     * @param organization the name of the organization
+     */
+    protected void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    /**
+     * Gets the organization which created this voice.  For example
+     * "cmu", "sun", ...
+     *
+     * @return the name of the organization
+     */
+    public String getOrganization() {
+        return organization;
     }
 
     /**

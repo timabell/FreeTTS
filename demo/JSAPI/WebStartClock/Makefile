@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -70,7 +70,7 @@ TAR_FILE=webstartclock.tar
 all:: ${CLASSES} ${STUBS}
 
 run: all
-	$(JAVA_CMD) JSAPIClock
+	${TOP}/bin/baseFreeTTS JSAPIClock
 
 ########################################
 # Builds and signs the jars
@@ -116,7 +116,7 @@ signjars:
 	# jarsigner -keystore clockKey wsc.jar freetts 
 
 runjar: all
-	java -cp "./wsc.jar$(CSEP)../../../lib/jsapi.jar" JSAPIClock
+	${TOP}/bin/baseFreeTTS -cp "./wsc.jar$(CSEP)../../../lib/jsapi.jar" JSAPIClock
 
 
 ###############################################

@@ -55,8 +55,10 @@ public class MbrolaVoice extends CMUVoice {
     public MbrolaVoice(boolean createLexicon, String databaseDirectory, 
             String database, float rate, float pitch, float pitchrate,
             String name, Gender gender, Age age,
-            String description, Locale locale) {
-	super(createLexicon, name, gender, age, description, locale);
+            String description, Locale locale, String domain,
+            String organization) {
+	super(createLexicon, name, gender, age, description, locale,
+                domain, organization);
         this.databaseDirectory = databaseDirectory;
         this.database = database;
     }
