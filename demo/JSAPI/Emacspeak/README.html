@@ -79,6 +79,17 @@
         <p>(*) You must <a href="../../../mbrola/README.html">setup
         and install MBROLA</a> before using MBROLA voices.</p>
 
+        <h3>Specifying Speaking Rate</h3> 
+
+        <p>By default, this application will use the default speaking
+        rate of a voice.  To change the speaking rate, you must
+        specify the voice as the first parameter on the command line
+        (as above) and then specify the speaking rate as the second
+        parameter.  The speaking rate is nominally the words per minute:</p>
+        <ul>
+            <code>java -jar bin/EmacspeakServer.jar kevin16 250</code>
+	</ul>
+    
         <h3>Connecting to the Server from Emacspeak</h3>
         <p>In your emacspeak (i.e., emacs with emacspeak running), type the
 	following command:

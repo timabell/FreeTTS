@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001,2003 Sun Microsystems, Inc.
+ * Copyright 2001,2003,2005 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -30,7 +30,7 @@
         JSAPI version, refer to <a
         href="../../JSAPI/Emacspeak/README.html">JSAPI Emacspeak</a>
         (If this link doesn't work, it may be because you have the
-        stripped down Emacspeak only version of FreeTTS.  To get the
+        stripped down "JSAPI Free" version of FreeTTS.  To get the
         full version, go to <a href="http://freetts.sourceforge.net/">
         http://freetts.sourceforge.net</a>).
 
@@ -44,6 +44,23 @@
         <code>bin/FreeTTSEmacspeakServer.jar</code> under the top level
 	directory.  You can run the demo
         using <code>java -jar</code> (see "Running the Server" below).
+        This version is sensitive to the existence and location of the
+        <code>lib</code> directory, but allows you to drop new voice
+        jar files into the voice directory and take advantage of them.
+
+        <p>If you want a self-contained version (i.e., one that
+        includes all it needs in one file and doesn't depend upon
+        anything else), you can build the self-contained version by
+        typing the following in a shell at the top level directory
+	in the FreeTTS hierarchy:
+        <ul>
+            <code>ant emacspeak-server</code>
+        </ul>
+        <p>Doing so will create
+        <code>emacspeak-server.jar</code> at the top level.  You can
+        run this server as described below by merely substituting
+        <code>emacspeak-server.jar</code> for 
+        <code>bin/FreeTTSEmacspeakServer.jar</code>.
 
         <h3>Running the Server</h3>
         <p>To run this demo, type the following command from a command
@@ -79,6 +96,17 @@
         <p>(*) You must <a href="../../../mbrola/README.html">setup
         and install MBROLA</a> before using MBROLA voices.</p>
 
+        <h3>Specifying Speaking Rate</h3> 
+
+        <p>By default, this application will use the default speaking
+        rate of a voice.  To change the speaking rate, you must
+        specify the voice as the first parameter on the command line
+        (as above) and then specify the speaking rate as the second
+        parameter.  The speaking rate is nominally the words per minute:</p>
+        <ul>
+            <p><code>java -jar bin/FreeTTSEmacspeakServer.jar kevin16 250</code>
+	</ul>
+    
         <h3>Connecting to the Server from Emacspeak</h3>
         <p>In your emacspeak (i.e., emacs with emacspeak running), type the
 	following command:
@@ -138,7 +166,7 @@ SPEAK:
         <p>See the <a href="../../../license.terms">license terms</a>
         and <a href="../../../acknowledgments.txt">acknowledgments</a>.
         <br>
-        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Copyright 2001,2003,2005 Sun Microsystems, Inc.  All Rights
         Reserved.  Use is subject to license terms.</p>
     </body>
 </html>

@@ -938,6 +938,19 @@ jsapi.exe from the lib directory.
     </target>
 
 
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Convenience for emacspeak-server.                      * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="emacspeak-server"
+	    depends="compile,jars"
+	    description="">
+        <ant antfile="demo.xml"
+	     target="emacspeak-server"/>
+    </target>
+
+
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->
     <!-- * Runs the unit tests.                                   * -->
@@ -1095,6 +1108,46 @@ jsapi.exe from the lib directory.
         <ant antfile="demo.xml" target="deploy_webstartclock"/>
     </target>
 
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Make a tarball containing things free of JSAPI         * -->
+    <!-- * dependencies.  Also omits the tests.                   * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="freetts_only_tarball"
+	    depends="set_patternset_to_compile"
+            description="Create a tarball of sources free of JSAPI dependencies.">
+	<delete dir="${deploy_dir}/freetts-only-${version}"/>
+	<mkdir dir="${deploy_dir}/freetts-only-${version}"/>
+	<copy todir="${deploy_dir}/freetts-only-${version}"
+	      includeEmptyDirs="false">
+             <fileset dir="." 
+                      includes="build.xml,
+                                demo.xml,
+		                overview.html,
+                                README.txt,
+		                RELEASE_NOTES,
+		                acknowledgments.txt,
+		                license.terms,
+		                lib/voices.txt,
+                                docs/**,
+                                mbrola/*.html,
+                                demo/**,
+                                tools/**"
+                      excludes="demo/JSAPI/**,
+                                docs/*.awk"/>
+             <fileset dir=".">
+                 <patternset refid="${patternset_to_compile}"/>
+             </fileset>
+	</copy>
+	<copy file="docs/emacspeak_index.html"
+              tofile="${deploy_dir}/freetts-only-${version}/index.html"/>
+        <tar destfile="${deploy_dir}/freetts-only-${version}.tar.gz"
+	     basedir="${deploy_dir}"
+	     includes="freetts-only-${version}/**"
+	     compression="gzip"/>
+    </target>
 
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->

@@ -22,6 +22,7 @@
     </path>
     <property name="src_dir"		value="."/>
     <property name="build_dir"		value="bld"/>
+    <property name="classes_dir"	value="${build_dir}/classes"/>
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
     <property name="lib_dir"            value="lib"/>
     <property name="bin_dir"            value="bin"/>
@@ -428,6 +429,54 @@ jsapi.exe from the lib directory.
         <echo message=
             "    /home/groups/f/fr/freetts/htdocs/WebStartClock"/>
         <echo message="Then ssh to freetts.sourceforge.net and untar it."/>
+    </target>
+
+
+    <!-- ********************************************************** --> 
+    <!-- *                                                        * -->
+    <!-- * Makes a standalone emacspeak server (non-JSAPI) jar    * -->
+    <!-- * that can be run using java -jar.                       * -->
+    <!-- *                                                        * -->
+    <!-- * NOTE: This requires an "ant" to have been run so that  * -->
+    <!-- * the classes directory will be fully populated.         * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** --> 
+    <target name="emacspeak-server"
+	    depends="compile_freetts_emacspeak">
+	<mkdir dir="${build_dir}/tmp/com/sun/speech/freetts"/>
+        <copy file="lib/voices.txt" 
+	      tofile="${build_dir}/tmp/com/sun/speech/freetts/internal_voices.txt"/>
+        <replace
+            file="${build_dir}/tmp/com/sun/speech/freetts/internal_voices.txt"
+	    token="com.sun.speech.freetts.en.us.cmu_time_awb.AlanVoiceDirectory"
+	    value="#com.sun.speech.freetts.en.us.cmu_time_awb.AlanVoiceDirectory"/>
+        <replace
+            file="${build_dir}/tmp/com/sun/speech/freetts/internal_voices.txt"
+	    token="#de.dfki.lt.freetts.en.us.MbrolaVoiceDirectory"
+	    value="de.dfki.lt.freetts.en.us.MbrolaVoiceDirectory"/>
+
+        <jar destfile="emacspeak-server.jar"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     excludes="com/sun/speech/engine/**,
+		               com/sun/speech/freetts/jsapi/**,
+		               com/sun/speech/freetts/en/us/CMUTime**,
+		               com/sun/speech/freetts/en/us/cmutime**,
+		               com/sun/speech/freetts/en/us/cmu_time**"/>
+            <fileset
+	        dir="${src_dir}"
+	        includes="com/sun/speech/freetts/en/us/*.txt"
+	        excludes="**/cmu*lex*.txt"/>
+            <fileset dir="${demo_classes_dir}/util"
+		     excludes="Time**"/>
+            <fileset dir="${demo_classes_dir}/freetts/Emacspeak"/>
+            <fileset dir="${build_dir}/tmp"/>
+            <manifest>
+	        <attribute name="Main-Class"
+			   value="FreeTTSEmacspeakServer"/>
+            </manifest>
+        </jar>
+	<delete dir="${build_dir}/tmp"/>
     </target>
 
 

@@ -12,6 +12,7 @@ Change history for FreeTTS.
 XXXX,XX, 2005 Release 1.2XXX
     - Added support to build w/o requiring JSAPI
     - Only build tests on demand (more freedom from JUnit)
+    - Added build targets to create standalone emacspeak app
     - Added ability for emacspeak demo to strip DECTalk commands from text
     - Added speaking rate change support to emacspeak demo
     - Allowed emacspeak text to omit '{' and '}' if text has no spaces

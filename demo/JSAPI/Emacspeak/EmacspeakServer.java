@@ -113,6 +113,20 @@ public class EmacspeakServer extends TTSServer {
 
 
     /**
+     * Sets the speaking rate of the voice.
+     *
+     * @param wpm the speaking rate (words per minute)
+     */
+    public void setRate(float wpm) {
+        try {
+            synthesizer.getSynthesizerProperties().setSpeakingRate(wpm);
+        } catch (java.beans.PropertyVetoException e) {
+            // ignore and do nothing
+        }
+    }
+    
+        
+    /**
      * Starts this TTS Server.
      */
     public static void main(String[] args) {
@@ -126,6 +140,11 @@ public class EmacspeakServer extends TTSServer {
 
 	EmacspeakServer server = new EmacspeakServer(voiceName);
 
+        if (args.length > 1) {
+            float wpm = Float.parseFloat(args[1]);
+            server.setRate(wpm);
+        }
+        
 	(new Thread(server)).start();
     }
 }
