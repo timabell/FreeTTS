@@ -255,13 +255,13 @@ public class Utilities {
 	return value;
     }
     
+    private static boolean wantDebug = getBoolean("freetts.debug");
     /**
      * A very simple debug log mechanism. If the system property
-     * <code>freetts.debug</code> is set, print the string to stderr;
-     * else, dont.
+     * <code>freetts.debug</code> is <code>true</code>, print the string to
+     * stderr; else, dont.
      *
      */
-    private static boolean wantDebug = (System.getProperty("freetts.debug") != null);
     public static void debug(String string)
     {
         if (wantDebug) System.err.println(string);
