@@ -31,7 +31,6 @@ public class FreeTTSEmacspeakHandler implements Runnable {
     private BufferedReader reader;
     private DataOutputStream writer;
 
-    private Voice emacsVoice;
     private SpeakCommandHandler speakCommandHandler;
 
     private static final String PARENS_STAR_REGEX = "[.]*\\[\\*\\][.]*";
@@ -44,6 +43,7 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 
     private static boolean debug = false;
 
+
     /**
      * Constructs a Emacspeak ProtocolHandler
      *
@@ -52,7 +52,6 @@ public class FreeTTSEmacspeakHandler implements Runnable {
      */
     public FreeTTSEmacspeakHandler(Socket socket, Voice voice) {
 	setSocket(socket);
-	this.emacsVoice = voice;
 	this.speakCommandHandler = new SpeakCommandHandler(voice);
 	this.speakCommandHandler.start();
 	debug = Boolean.getBoolean("debug");
@@ -167,14 +166,14 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 		    if (commandType == STOP_COMMAND) {
 
 			speakCommandHandler.removeAll();
-			emacsVoice.getAudioPlayer().cancel();
 			
 		    } else if (commandType != NOT_HANDLED_COMMAND) {
 
 			String content = textInCurlyBrackets(command).trim();
-			speak(content);
-			lastSpokenCommandType = commandType;
-
+			if (content.length() > 0) {
+			    speak(content);
+			    lastSpokenCommandType = commandType;
+			}
 		    } else {
 			debugPrintln("SPEAK:");
 		    }
@@ -265,6 +264,7 @@ class SpeakCommandHandler extends Thread {
      */
     public void removeAll() {
 	synchronized (commandList) {
+	    voice.getAudioPlayer().cancel();
 	    commandList.removeAllElements();
 	}
     }

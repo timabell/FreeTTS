@@ -79,6 +79,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private AudioFormat defaultFormat = // default format is 8khz
 	new AudioFormat(8000f, 16, 1, true, true);
     private boolean firstSample = true;
+    private long cancelDelay;
 
     // These system properties control how to work around the
     // drain bug
@@ -100,6 +101,9 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public JavaStreamingAudioPlayer() {
 	debug = Boolean.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
+	cancelDelay = Long.getLong
+            ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
+             0L).longValue();
 	setPaused(false);
 	openLine(defaultFormat);
     }
@@ -198,8 +202,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     public synchronized void cancel() {
 	cancelled = true;
-	line.stop();
-	line.flush();
+	try {
+	    Thread.sleep(cancelDelay);
+	} catch (InterruptedException ie) {
+	    ie.printStackTrace();
+	}
+	synchronized (line) {
+	    line.stop();
+	    line.flush();
+	}
 	notify();
     }
 
@@ -409,14 +420,18 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    }
 
 	    debugPrint("   queueing cur " + curIndex + " br " + bytesRemaining);
-	    int bytesWritten = line.write(bytes, curIndex, bytesRemaining);
-
-	    if (bytesWritten != bytesWritten) {
-		debugPrint("RETRY! bw" +bytesWritten + " br " + bytesRemaining);
+	    int bytesWritten;
+	    
+	    synchronized (line) {
+		bytesWritten = line.write(bytes, curIndex, bytesRemaining);
+		
+		if (bytesWritten != bytesWritten) {
+		    debugPrint
+			("RETRY! bw" +bytesWritten + " br " + bytesRemaining);
+		}
+		curIndex += bytesWritten;
+		bytesRemaining -= bytesWritten;
 	    }
-	    curIndex += bytesWritten;
-	    bytesRemaining -= bytesWritten;
-
 
 	    debugPrint("   wrote " + " cur " + curIndex 
 		    + " br " + bytesRemaining

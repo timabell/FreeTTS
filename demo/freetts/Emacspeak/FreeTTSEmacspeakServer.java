@@ -8,6 +8,7 @@
 
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
+import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
 import java.net.Socket;
@@ -24,7 +25,7 @@ public class FreeTTSEmacspeakServer extends TTSServer {
      */
     public FreeTTSEmacspeakServer() {
 	System.setProperty
-	    ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay", "0");
+	    ("com.sun.speech.freetts.audio.AudioPlayer.cancelDelay", "0");
 	createVoice();
     }
 
@@ -52,7 +53,7 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 	    emacsVoice.setLexicon(new CMULexicon());
 	    emacsVoice.setOutputQueue(Voice.createOutputThread());
 	    emacsVoice.load();
-	    emacsVoice.setAudioPlayer(new JavaClipAudioPlayer());
+	    emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
 
 	    System.out.println("...Ready");
 
