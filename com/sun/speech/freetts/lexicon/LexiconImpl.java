@@ -32,6 +32,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -143,6 +145,18 @@ abstract public class LexiconImpl implements Lexicon {
     private ArrayList partsOfSpeech = new ArrayList();
 
     /**
+     * A static directory of compiledURL URL objects and associated
+     * already-loaded compiled Map objects. This is used to share
+     * the immutable compiled lexicons between lexicon instances.
+     * As the addenda can be changed using <code>addAddendum()</code>
+     * and <code>removeAddendum</code>, each lexicon instance has its
+     * own addenda.
+     */
+    private static Map loadedCompiledLexicons;
+    
+
+    
+    /**
      * Loaded State of the lexicon
      */
     private boolean loaded = false;
@@ -168,7 +182,7 @@ abstract public class LexiconImpl implements Lexicon {
     private boolean useNewIO =
 	Utilities.getProperty("com.sun.speech.freetts.useNewIO",
 		"true").equals("true");
-    
+
     /**
      * Create a new LexiconImpl by reading from the given URLS.
      *
@@ -242,11 +256,21 @@ abstract public class LexiconImpl implements Lexicon {
 	    throw new IOException("Can't load lexicon addenda " );
 	}
 
-	InputStream compiledIS = Utilities.getInputStream(compiledURL);
-
-	if (compiledIS == null) {
-	    throw new IOException("Can't load lexicon from " + compiledURL);
+	if (loadedCompiledLexicons == null) {
+	    loadedCompiledLexicons = new HashMap();
 	}
+	if (!loadedCompiledLexicons.containsKey(compiledURL)) {
+		InputStream compiledIS = Utilities.getInputStream(compiledURL);
+		if (compiledIS == null) {
+		    throw new IOException("Can't load lexicon from " + compiledURL);
+		}
+		Map newCompiled = createLexicon(compiledIS, binary, 65000);
+        loadedCompiledLexicons.put(compiledURL, newCompiled);
+    	compiledIS.close();
+	}
+	assert loadedCompiledLexicons.containsKey(compiledURL);
+	compiled = Collections.unmodifiableMap((Map)loadedCompiledLexicons.get(compiledURL));
+
 	InputStream addendaIS = Utilities.getInputStream(addendaURL);
 	if (addendaIS == null) {
 	    throw new IOException("Can't load lexicon addenda from " 
@@ -256,9 +280,7 @@ abstract public class LexiconImpl implements Lexicon {
 	// [[[TODO: what is the best way to derive the estimated sizes?]]]
         //
         addenda = createLexicon(addendaIS, binary, 50);
-        compiled = createLexicon(compiledIS, binary, 65000);
 	addendaIS.close();
-	compiledIS.close();
 
         /* Load the user-defined addenda and override any existing
          * entries in the system addenda.
