@@ -55,6 +55,24 @@ public class LPCResult {
 	Integer.getInteger("com.sun.speech.freetts.LpcResult.maxSamples",
 		1024).intValue();
 
+    /**
+     * Given a residual, maps it using WaveUtils.ulawToShort() to a float.
+     */
+    private final static float[] residualToFloatMap = new float[256];
+
+    static {
+	for (int i = 0; i < 128; i++) {
+	    residualToFloatMap[i] =
+		(float) WaveUtils.ulawToShort((short) i);
+	}
+	residualToFloatMap[128] = (float) WaveUtils.ulawToShort((short) 255);
+	for (int i = 129; i < 256; i++) {
+	    residualToFloatMap[i] =
+		(float) WaveUtils.ulawToShort((short) i);
+	}
+    }
+
+    
     public LPCResult() {
 	residualFold = 1;
     }
@@ -413,7 +431,6 @@ public class LPCResult {
 	FloatList outBuffer = FloatList.createList(numberChannels + 1);
 	FloatList lpcCoefficients = FloatList.createList(numberChannels);
 	
-	short residual;
 	double multiplier = (double) getLPCRange() / 65535.0;
 	int s = 0;
 	boolean firstPlay = true;
@@ -438,15 +455,8 @@ public class LPCResult {
 	    for (int j = 0; j < pmSizeSamples; j++, r++) {
 
 		FloatList backBuffer = outBuffer.prev;
-		residual = residuals[r];
-		if (residual == 0) {
-		    residual = 255;
-		} else {
-		    residual += 128;
-		}
-		
-		float ob = (float) WaveUtils.ulawToShort(residual);
-		
+		float ob = residualToFloatMap[residuals[r] + 128];
+
 		lpcCoeffs = lpcCoefficients;
 		do {
 		    ob += lpcCoeffs.value * backBuffer.value;
@@ -455,8 +465,8 @@ public class LPCResult {
 		} while (lpcCoeffs != lpcCoefficients);
 
 		int sample = (int) (ob + (pp * POST_EMPHASIS));
-		samples[s++] = hibyte(sample);
-		samples[s++] = lobyte(sample);
+		samples[s++] = (byte) hibyte(sample);
+		samples[s++] = (byte) lobyte(sample);
 
 
 		outBuffer.value = pp = ob;
@@ -485,7 +495,6 @@ public class LPCResult {
 	FloatList outBuffer = FloatList.createList(numberChannels + 1);
 	FloatList lpcCoefficients = FloatList.createList(numberChannels);
 	
-	short residual;
 	double multiplier = (double) getLPCRange() / 65535.0;
 	int s = 0;
 	boolean firstPlay = true;
@@ -511,15 +520,8 @@ public class LPCResult {
 	    for (int j = 0; j < pmSizeSamples; j++, r++) {
 
 		FloatList backBuffer = outBuffer.prev;
-		residual = residuals[r];
-		if (residual == 0) {
-		    residual = 255;
-		} else {
-		    residual += 128;
-		}
-		
-		float ob = (float) WaveUtils.ulawToShort(residual);
-		
+		float ob = residualToFloatMap[residuals[r] + 128];
+
 		lpcCoeffs = lpcCoefficients;
 		do {
 		    ob += lpcCoeffs.value * backBuffer.value;
