@@ -20,6 +20,7 @@ import javax.speech.synthesis.Voice;
 import com.sun.speech.engine.synthesis.BaseVoice;
 import com.sun.speech.freetts.lexicon.Lexicon;
 import com.sun.speech.freetts.audio.AudioPlayer;
+import com.sun.speech.freetts.ValidationException;
 
 /**
  * Represents a SynthesizerModeDesc for the
@@ -92,7 +93,10 @@ implements EngineCreate {
     }
 
     /**
-     * Returns the list of valid voices available in this synthesizer mode.
+     * Returns the valid voices in this synthesizer mode.
+     *
+     * @return an array of valid voices, if no valid voices, it will
+     *    return an array of size 0
      */
     public Voice[] getVoices() {
         List voiceList = new LinkedList();
@@ -100,9 +104,12 @@ implements EngineCreate {
         int count = 0;
         for (int i = 0; i < voices.length; i++) {
             FreeTTSVoice freettsVoice = (FreeTTSVoice) voices[i];
-            if (freettsVoice.isValid()) {
+            try {
+                freettsVoice.validate();
                 voiceList.add(freettsVoice);
                 count++;
+            } catch (ValidationException ve) {
+                // don't do anything here if a FreeTTSVoice is invalid
             }
         }
         Voice[] validVoices = new Voice[count];
@@ -110,23 +117,32 @@ implements EngineCreate {
         
         return validVoices;
     }
-
+    
     /**
      * Returns true if this is a valid FreeTTSSynthesizerModeDesc.
      * It is valid if it contains at least one valid Voice.
      * Returns false otherwise.
      *
-     * @return true if this is a valid FreeTTSSynthesizerModeDesc,
-     *    false otherwise
+     * @throws ValidationException if this FreeTTSSynthesizerModeDesc
+     *    is invalid
      */
-    public boolean isValid() {
+    public void validate() throws ValidationException {
         Voice[] voices = super.getVoices();
+        int invalidCount = 0;
+        String validationMessage = "";
+
         for (int i = 0; i < voices.length; i++) {
-            if (((FreeTTSVoice) voices[i]).isValid()) {
-                return true;
+            try {
+                ((FreeTTSVoice) voices[i]).validate();
+            } catch (ValidationException ve) {
+                invalidCount++;
+                validationMessage += (ve.getMessage() + "\n");
             }
         }
-        return false;
+        if (invalidCount == voices.length) {
+            throw new ValidationException
+                (validationMessage + getModeName() + " has no valid voices.");
+        }
     }
 
     /**

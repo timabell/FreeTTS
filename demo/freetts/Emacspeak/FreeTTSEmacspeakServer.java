@@ -6,6 +6,7 @@
  * WARRANTIES.
  */
 
+import com.sun.speech.freetts.ValidationException;
 import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
@@ -51,8 +52,11 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 	    emacsVoice = (Voice) voiceClass.newInstance();
 
             if (emacsVoice instanceof MbrolaVoice) {
-                if (!(new MbrolaVoiceValidator((MbrolaVoice) emacsVoice)).
-                    isValid()) {
+                try {
+                    (new MbrolaVoiceValidator((MbrolaVoice) emacsVoice)).
+                        validate();
+                } catch (ValidationException ve) {
+                    System.err.println(ve.getMessage());
                     throw new IllegalStateException
                         ("Problem starting MBROLA voice");
                 }

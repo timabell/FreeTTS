@@ -10,6 +10,7 @@ package com.sun.speech.freetts.jsapi;
 import com.sun.speech.engine.synthesis.BaseVoice;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Validator;
+import com.sun.speech.freetts.ValidationException;
 
 /**
  * Extends the BaseVoice class to encapsulate FreeTTSSynthesizer specific data.
@@ -137,15 +138,13 @@ public class FreeTTSVoice extends BaseVoice {
     }
 
     /**
-     * Returns true if this is a valid FreeTTSVoice. A FreeTTSVoice
-     * is valid if its validator returns true. This method just
-     * returns true if the FreeTTSVoice has no validator. 
+     * Validates this FreeTTSVoice.
+     *
+     * @throws ValidationException if this FreeTTSVoice is invalid
      */
-    public boolean isValid() {
-        if (validator == null) {
-            return true;
-        } else {
-            return validator.isValid();
+    public void validate() throws ValidationException {
+        if (validator != null) {
+            validator.validate();
         }
     }
 }

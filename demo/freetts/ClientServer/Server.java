@@ -6,6 +6,7 @@
  * WARRANTIES.
  */
 
+import com.sun.speech.freetts.ValidationException;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
@@ -75,7 +76,10 @@ public class Server extends TTSServer {
 	Voice voice = (Voice) voiceClass.newInstance();
 
         if (voice instanceof MbrolaVoice) {
-            if (!(new MbrolaVoiceValidator((MbrolaVoice) voice)).isValid()) {
+            try {
+                (new MbrolaVoiceValidator((MbrolaVoice) voice)).validate();
+            } catch (ValidationException ve) {
+                System.err.println(ve.getMessage());
                 throw new IllegalStateException
                     ("Problem starting MBROLA voice");
             }
