@@ -155,7 +155,12 @@ emacspeak-server:
 	tar cf emacspeak.tar $(STAGING_AREA)
 	gzip emacspeak.tar
 	# rm -rf $(STAGING_AREA)
-	
+
+emacspeak-server-jar:
+	$(MAKE) all
+	rm -f emacspeak-server.jar
+	(cd classes; $(JAR) cvf emacspeak-server.jar *)
+	mv classes/emacspeak-server.jar .
 
 deploy_docs:
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
