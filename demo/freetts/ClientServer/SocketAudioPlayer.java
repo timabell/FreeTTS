@@ -44,6 +44,7 @@ public class SocketAudioPlayer implements AudioPlayer {
 	try {
 	    this.dataOutputStream = new DataOutputStream
 		(socket.getOutputStream());
+            debug = Boolean.getBoolean("debug");
 	} catch (IOException ioe) {
 	    ioe.printStackTrace();
 	}
