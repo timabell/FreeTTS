@@ -100,6 +100,20 @@ public class CMULexicon extends LexiconImpl {
                 "com/sun/speech/freetts/en/us/" + basename
                 + "_addenda." + type);
 
+        /* Just another try with possibly a different class loader
+         * if the above didn't work.
+         */
+        if (letterToSoundURL == null) {
+            Class cls = CMULexicon.class;
+            letterToSoundURL = cls.getResource(basename + "_lts." + type);
+            compiledURL = cls.getResource(basename + "_compiled." + type);
+            addendaURL = cls.getResource(basename + "_addenda." + type);
+            if (letterToSoundURL == null) {
+                System.err.println(
+                    "CMULexicon: Oh no!  Couldn't find lexicon data!");
+            }
+        }
+        
 	setLexiconParameters(compiledURL, addendaURL,
                 letterToSoundURL, useBinaryIO);
     }

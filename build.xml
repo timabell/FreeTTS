@@ -20,6 +20,7 @@
     <property name="bin_dir"            value="${build_dir}/bin"/>
     <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
     <property name="javadoc_zip"	value="javadoc.zip"/>
+    <property name="webstart_dir"	value="${build_dir}/webstart"/>
     <property name="deploy_dir"		value="deploy"/>
 
 
@@ -841,9 +842,14 @@
 	     includes="lib/jsapi.sh,lib/jsapi.exe"/>
 
     <target name="deploy"
-	    depends="deploy_srcs,deploy_binaries,deploy_tests"
+	    depends="deploy_srcs,
+	             deploy_binaries,
+	             deploy_tests,
+	             deploy_webstartclock"
 	    description="Creates *.zip files for deployment"/>
 
+
+    <!-- freetts-srcs -->
     <target name="deploy_srcs"
 	    depends="javadoc_zip">
         <mkdir dir="${deploy_dir}"/>
@@ -860,6 +866,8 @@
         </zip>
     </target>
 
+
+    <!-- freetts-bin -->
     <target name="deploy_binaries"
 	    depends="javadoc_zip">
         <mkdir dir="${deploy_dir}"/>
@@ -875,6 +883,8 @@
         </zip>
     </target>
 
+
+    <!-- freetts-tests -->
     <target name="deploy_tests">
         <mkdir dir="${deploy_dir}"/>
         <zip destfile="${deploy_dir}/freetts-tests-${version}.zip">
@@ -882,6 +892,85 @@
             <fileset refid="tests"/>
         </zip>
     </target>
+
+
+    <!-- webstartclock -->
+    <property name="keystore" value="${webstart_dir}/keystore"/>
+    <property name="keypass" value="freetts"/>
+    <target name="check_keystore.isPresent">
+        <available file="${keystore}" property="keystore.isPresent"/>
+    </target>
+    <target name="genkey" 
+	    depends="check_keystore.isPresent" 
+	    unless="keystore.isPresent">
+	<mkdir dir="${webstart_dir}"/>
+        <genkey alias="freetts"
+		storepass="${keypass}"
+		keypass="${keypass}"
+		keystore="${keystore}">
+            <dname>
+                <param name="CN" value="Sun Labs"/>
+                <param name="OU" value="Sun Microsystems"/>
+                <param name="O"  value="Sun Microsystems"/>
+                <param name="L"  value="Burlington"/>
+                <param name="ST" value="MA"/>
+                <param name="C"  value="US"/>
+            </dname>
+        </genkey>
+    </target>
+
+    <target name="deploy_webstartclock"
+	    depends="compile,compile_jsapi_webstartclock,genkey">
+        <copy file="lib/jsapi.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/jsapi.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+        <copy file="${lib_dir}/freetts.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/freetts.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+        <copy file="${lib_dir}/en_us.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/en_us.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+        <copy file="${lib_dir}/cmutimelex.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/cmutimelex.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+        <copy file="${lib_dir}/cmu_time_awb.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/cmu_time_awb.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+        <copy file="${bin_dir}/WebStartClock.jar" todir="${webstart_dir}"/>
+        <signjar jar="${webstart_dir}/WebStartClock.jar"
+		 alias="freetts"
+		 storepass="${keypass}"
+		 keypass="${keypass}"
+		 keystore="${keystore}"/>
+
+	<mkdir dir="${deploy_dir}"/>
+        <tar destfile="${deploy_dir}/WebStartClock.tar">
+	     <tarfileset dir="${webstart_dir}" includes="*.jar"/>
+             <tarfileset dir="${src_dir}/demo/JSAPI/WebStartClock"
+			 includes="clock.jnlp"/>
+        </tar>
+    </target>
+
 
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->

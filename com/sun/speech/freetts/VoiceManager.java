@@ -25,10 +25,6 @@ import java.util.jar.Attributes.Name;
 
 import java.net.URLStreamHandlerFactory;
 
-// [[[TODO: remove "TEST" marked debug statements after testing under Windows]]]
-// [[[TODO: remove conflict between voicesfile and voicespath methods]]]
-// [[[TODO: Enable and test dynamic loader]]]
-
 /**
  * Provides access to voices for all of FreeTTS.  There is only one
  * instance of the VoiceManager.  
@@ -69,7 +65,17 @@ public class VoiceManager {
 
     /**
      * Provide an array of all voices available to FreeTTS.
-     * First, the file internal_voices.txt is looked for in the
+     *
+     * First, if the "freetts.voices" property is set, it is assumed
+     * to be a comma-separated list of VoiceDirectory classnames
+     * (e.g.,
+     * "-Dfreetts.voices=com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory").
+     * If this property exists, the VoiceManager will use only
+     * this property to find voices -- no other method described below
+     * will be used.  The primary purpose for this property is testing
+     * and for use with WebStart.
+     *
+     * <p>Second, the file internal_voices.txt is looked for in the
      * same directory as VoiceManager.class.  If the file does not
      * exist, the VoiceManager moves on.  Next, it looks for
      * voices.txt in the same directory as freetts.jar.  If the file
@@ -78,10 +84,10 @@ public class VoiceManager {
      * read in.  If the property is defined and the file does not
      * exist, then an error is raised.
      *
-     * Every voices file that is read in contains a list of
+     * <P>Every voices file that is read in contains a list of
      * VoiceDirectory class names.
      *
-     * Next, the voice manager looks for freetts voice jarfiles that
+     * <p>Next, the voice manager looks for freetts voice jarfiles that
      * may exist in well-known locations.  The directory that contains
      * freetts.jar is searched for voice jarfiles, then directories
      * specified by the "freetts.voicespath" system property.
@@ -92,7 +98,7 @@ public class VoiceManager {
      * jarfiles specified by the "Class-Path" Manifest entry are also
      * loaded.
      *
-     * The VoiceManager instantiates each voice directory
+     * <p>The VoiceManager instantiates each voice directory
      * and calls getVoices() on each.
      *
      * @return the array of new instances of all available voices
@@ -132,6 +138,19 @@ public class VoiceManager {
      */
     private VoiceDirectory[] getVoiceDirectories() {
         try {
+            // If there is a freetts.voices property, it means two
+            // things:  1) it is a comma separated list of class names
+            //          2) no other attempts to find voices should be
+            //             made
+            //
+            // The main purpose for this property is to allow for
+            // voices to be found via WebStart.
+            //
+            String voiceClasses = System.getProperty("freetts.voices");
+            if (voiceClasses != null) {
+                return getVoiceDirectoryNamesFromProperty(voiceClasses);
+            }
+            
             // Get voice directory names from voices files
             UniqueVector voiceDirectoryNames =
                 getVoiceDirectoryNamesFromFiles();
@@ -192,6 +211,28 @@ public class VoiceManager {
 
     }
 
+    /**
+     * Gets VoiceDirectory instances by parsing a comma separated
+     * String of VoiceDirectory class names.
+     */
+    private VoiceDirectory[] getVoiceDirectoryNamesFromProperty(
+            String voiceClasses)
+            throws InstantiationException,
+                   IllegalAccessException,
+                   ClassNotFoundException {
+        
+        String[] classnames = voiceClasses.split(",");
+
+        VoiceDirectory[] directories = new VoiceDirectory[classnames.length];
+        
+        for (int i = 0; i < directories.length; i++) {
+            Class c = Class.forName(classnames[i]);
+            directories[i] = (VoiceDirectory) c.newInstance();
+        }
+
+        return directories;
+    }
+    
     /**
      * Recursively gets the urls of the class paths that url is
      * dependant on.

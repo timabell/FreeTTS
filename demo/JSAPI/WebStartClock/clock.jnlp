@@ -12,8 +12,14 @@
 </security>
 <resources>
   <j2se version="1.4+" />
-  <jar href="wsc.jar"/>
+  <jar href="WebStartClock.jar"/>
   <jar href="jsapi.jar"/>
+  <jar href="freetts.jar"/>
+  <jar href="en_us.jar"/>
+  <jar href="cmutimelex.jar"/>
+  <jar href="cmu_time_awb.jar"/>
+  <property name="freetts.voices"
+            value="com.sun.speech.freetts.en.us.cmu_time_awb.AlanVoiceDirectory"/>
 </resources>
 <application-desc main-class="JSAPIClock" />
 </jnlp>
