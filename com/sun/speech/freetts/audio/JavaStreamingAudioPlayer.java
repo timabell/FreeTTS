@@ -15,6 +15,8 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 
 /**
@@ -86,6 +88,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private boolean firstSample = true;
     private long cancelDelay;
 
+    private Object openLock = new Object();
+    private Object lineLock = new Object();
+
+
     private final static long DRAIN_DELAY = Utilities.getLong
       ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 150L).longValue();
 
@@ -151,14 +157,24 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     private synchronized void openLine(AudioFormat format) {
 	if (line != null) {
-	    drain();
+	    // drain();
 	    line.close();
 	    line = null;
 	}
 	DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 	try {
 	    line = (SourceDataLine) AudioSystem.getLine(info);
-            line.open(format, AUDIO_BUFFER_SIZE);
+            line.addLineListener(new JavaStreamLineListener());
+
+            synchronized (openLock) {
+                line.open(format, AUDIO_BUFFER_SIZE);
+                try {
+                    openLock.wait();
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+            }
+
             setVolume(line, volume);
             resetTime();
             if (isPaused() && line.isRunning()) {
@@ -212,13 +228,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public synchronized void cancel() {
         debugPrint("cancelling...");
 	cancelled = true;
-	try {
-	    Thread.sleep(cancelDelay);
-	} catch (InterruptedException ie) {
-	    ie.printStackTrace();
-	}
+        if (cancelDelay > 0) {
+            try {
+                Thread.sleep(cancelDelay);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+        }
         if (line != null) {
-            synchronized (line) {
+            synchronized (lineLock) {
                 line.stop();
                 line.flush();
             }
@@ -453,7 +471,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    debugPrint("   queueing cur " + curIndex + " br " + bytesRemaining);
 	    int bytesWritten;
 	    
-	    synchronized (line) {
+	    synchronized (lineLock) {
 		bytesWritten = line.write(bytes, curIndex, bytesRemaining);
 		
 		if (bytesWritten != bytesWritten) {
@@ -542,5 +560,25 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     private synchronized boolean isDone() {
 	return done;
+    }
+
+    /**
+     * Provides a LineListener for this clas.
+     */
+    private class JavaStreamLineListener implements LineListener {
+
+        /**
+         * Implements update() method of LineListener interface. Responds
+         * to the line events as appropriate.
+         *
+         * @param event the LineEvent to handle
+         */
+        public void update(LineEvent event) {
+            if (event.getType().equals(LineEvent.Type.OPEN)) {
+                synchronized (openLock) {
+                    openLock.notifyAll();
+                }
+            }
+        }
     }
 }
