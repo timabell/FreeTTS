@@ -40,7 +40,7 @@ import javax.sound.sampled.AudioSystem;
 public class FreeTTS {
 
     private final static String VERSION =
-    "freetts Version 1.2.0-beta, June 5, 2003";
+    "FreeTTS 1.2.0, December, 2003";
     private Voice voice;
     private static AudioPlayer audioPlayer = null;
     private boolean silent = false;
@@ -367,7 +367,7 @@ public class FreeTTS {
 	System.out.println("    -dumpMultiAudio file : dump audio to file ");
         System.out.println("    -dumpRelations  : dump the relations ");
         System.out.println("    -dumpUtterance  : dump the final utterance");
-	System.out.println("    -dumpWave file  : dump the final wave to file");
+	System.out.println("    -dumpASCII file : dump the final wave to file as ASCII");
 	System.out.println("    -file file      : speak text from given file");
 	System.out.println("    -lines file     : render lines from a file");
 	System.out.println("    -help           : shows usage information");
@@ -484,7 +484,7 @@ public class FreeTTS {
 		dumpAudioTypes = true;
 	    } else if (args[i].equals("-dumpRelations")) {
 		voice.setDumpRelations(true);
-	    } else if (args[i].equals("-dumpWave")) {
+	    } else if (args[i].equals("-dumpASCII")) {
 		if (++i < args.length) {
 		    voice.setWaveDumpFile(args[i]);
 		} else {

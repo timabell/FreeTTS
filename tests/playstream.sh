@@ -26,7 +26,7 @@ java -jar ../bld/lib/freetts.jar \
 	-Dcom.sun.speech.freetts.intTargetStdDev=11 \
 	-Dcom.sun.speech.freetts.durationStretch=1 \
 	-Dcom.sun.speech.freetts.joinType=modified_lpc \
-	com.sun.speech.freetts.FreeTTS -voice kevin -dumpWave wavetest.res -file wave/08-01-01.wave.text
+	com.sun.speech.freetts.FreeTTS -voice kevin -dumpASCII wavetest.res -file wave/08-01-01.wave.text
 
 diff wavetest.res first.wave.txt > wavetest.diff
 

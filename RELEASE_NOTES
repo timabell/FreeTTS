@@ -9,20 +9,20 @@
 Change history for FreeTTS.
 --------------------------
 
-September 3, 2003 Release 1.2.0-beta
+September 3, 2003 Release 1.2.0
     - Modified MBROLA output to work on Solaris and Mac
 
-August 15, 2003 Release 1.2.0-beta
+August 15, 2003 Release 1.2.0
     - Added support to import voices from FestVox into FreeTTS
     - Extended voice packaging scheme to simplify management and addition
       of new voices.
     - VoiceManager class provices API to access voices.
     - Dynamic detection of voice jarfiles is supported.
 
-Jun 5, 2003 Release 1.2.0-beta
+Jun 5, 2003 Release 1.2.0
     - Updated FreeTTS version message
 
-Jun 4, 2003 Release 1.2.0-beta
+Jun 4, 2003 Release 1.2.0
     - Imported changes from Flite 1.2:
         - Regenerated cmulex_addenda, cart_dump
         - Reads year "1200" as "twelve hundred" rather than "twelve oh

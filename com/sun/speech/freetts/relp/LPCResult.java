@@ -623,8 +623,8 @@ public class LPCResult {
     /**
      * Dumps the wave data associated with this result
      */
-    public void dumpWave() {
-	dumpWave(new OutputStreamWriter(System.out));
+    public void dumpASCII() {
+	dumpASCII(new OutputStreamWriter(System.out));
     }
 
     /**
@@ -634,7 +634,7 @@ public class LPCResult {
      *
      * @throws IOException if an IO error occurs
      */
-    public void dumpWave(String path) throws IOException {
+    public void dumpASCII(String path) throws IOException {
 	Writer writer = new FileWriter(path, true);
 	getWave().dump(writer);
     }
@@ -659,7 +659,7 @@ public class LPCResult {
      *
      * @param writer the output stream
      */
-    public void dumpWave(Writer writer)  {
+    public void dumpASCII(Writer writer)  {
 	Wave wave = getWave();
 	wave.dump(writer);
     }

@@ -52,7 +52,7 @@ public class FreeTTSTime extends FreeTTS {
     public static void usage() {
         System.out.println(VERSION);
         System.out.println("Usage:");
-	System.out.println("    -dumpWave file  : dump the final wave to file");
+	System.out.println("    -dumpASCII file : dump the final wave to file");
 	System.out.println("    -dumpAudio file : dump audio to file ");
 	System.out.println("    -help           : shows usage information");
         System.out.println("    -detailedMetrics: turn on detailed metrics");
@@ -435,7 +435,7 @@ public class FreeTTSTime extends FreeTTS {
 		} else {
 		    usage();
 		}
-	    } else if (args[i].equals("-dumpWave")) {
+	    } else if (args[i].equals("-dumpASCII")) {
 		if (++i < args.length) {
 		    dumpFile  = args[i];
 		    waveDumpFile = args[i];

@@ -36,7 +36,7 @@
 			<BR><A HREF="#packaging">Voice Packaging</A>
 			</P>
 			<P><B>Related Documentation </B><BR><A HREF="index.html">FreeTTS
-			Overview </A><BR><A HREF="api/index.html">FreeTTS API </A><BR><A HREF="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/index.html">The
+			Overview </A><BR><A HREF="../javadoc/index.html">FreeTTS API </A><BR><A HREF="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/index.html">The
 			Java Speech API (JSAPI) </A><BR><A HREF="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-guide/index.html">JSAPI
 			Programmer's Guide </A><BR><A HREF="http://www.cmuflite.org/">Flite
 			</A><BR><A HREF="http://www.speech.cs.cmu.edu/festival/index.html">Festival
@@ -146,7 +146,7 @@ into sets of sub-packages as follows:
 <P>There are a number of objects that work together to perform speech
 synthesis. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/FreeTTSSpeakable.html">FreeTTSSpeakable</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/FreeTTSSpeakable.html">FreeTTSSpeakable</A></H3>
 <P>FreeTTSSpeakable is an interface. Anything that is a source of text
 that needs to be spoken with FreeTTS is first converted into a
 FreeTTSSpeakable. One implementation of this interface is
@@ -154,7 +154,7 @@ FreeTTSSpeakableImpl. This implementation will wrap the most common
 input forms (a String, an InputStream, or a JSML XML document) as a
 FreeTTSSpeakable. A FreeTTSSpeakable is given to a Voice to be spoken. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/Voice.html">Voice</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/Voice.html">Voice</A></H3>
 <P>The Voice is the central processing point for FreeTTS. The Voice
 takes as input a FreeTTSSpeakable, translates the text associated with
 the FreeTTSSpeakable into speech and generates audio output
@@ -190,7 +190,7 @@ FreeTTSSpeakable via the Voice.speak method and process it as follows:
 	lowest sound latency possible. 
 	</P>
 </UL>
-<H3><A HREF="api/com/sun/speech/freetts/VoiceManager.html">VoiceManager</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/VoiceManager.html">VoiceManager</A></H3>
 <P>The VoiceManager is the central repository of voices available to
 FreeTTS.  To get a voice you can do:
 <pre>
@@ -210,20 +210,20 @@ voices[x].allocate();
 You can save yourself the chore of iterating through the voices if you
 already know the name of the Voice you want by using voiceManager.getVoice()
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/Utterance.html">Utterance</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/Utterance.html">Utterance</A></H3>
 <P>The Utterance is the central processing target in FreeTTS. A
 FreeTTSSpeakable is broken up into one or more Utterances, processed
 by a series of UtteranceProcessors, and finally output as audio. An
 Utterance consists of a set of Relations and a set of features called
 FeatureSets. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/FeatureSet.html">FeatureSet</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/FeatureSet.html">FeatureSet</A></H3>
 <P>A FeatureSet is simply a Name/Value pair. An Utterance can contain
 an arbitrary number of FeatureSets. FeatureSets are typically used to
 maintain global Utterance information such as volume, pitch and
 speaking rate. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/Relation.html">Relation</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/Relation.html">Relation</A></H3>
 <P>A Relation is a named list of Items. An Utterance can hold an
 arbitrary number of Relations. A typical UtteranceProcessor may
 iterate through one Relation and  create a new Relation. For
@@ -233,7 +233,7 @@ token-to-word rules.   A detailed description of the Utterance
 processing and how it affects the Relations in an Utterance is
 described below. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/Item.html">Item</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/Item.html">Item</A></H3>
 <P>A Relation is a list of Item objects. An Item contains a set of
 Features (as described previously, FeatureSets are merely name/value
 pairs). An Item can have a list of daughter Items as well. Items in a
@@ -244,7 +244,7 @@ word Relation is linked to the previous and next words in the word
 Relation. This gives an UtteranceProcessor the capability of easily
 traversing from one Item to another. 
 </P>
-<H3><A HREF="api/com/sun/speech/freetts/UtteranceProcessor.html">UtteranceProcessor</A></H3>
+<H3><A HREF="../javadoc/com/sun/speech/freetts/UtteranceProcessor.html">UtteranceProcessor</A></H3>
 <P STYLE="margin-bottom: 0cm">An UtteranceProcessor is any object
 that implements the UtteranceProcessor interface. An
 UtteranceProcessor takes as input an Utterance and performs some

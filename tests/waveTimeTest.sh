@@ -28,7 +28,7 @@ fi
 
 rm -f timeTest.wave
 java -cp ../bld/lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
-    -dumpWave timeTest.wave -silent -time $1
+    -dumpASCII timeTest.wave -silent -time $1
 
 diff -b $2 timeTest.wave | wc | awk '
 {

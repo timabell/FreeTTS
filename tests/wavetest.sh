@@ -26,7 +26,7 @@ if [ -f wavetest.diff ]; then
 	rm wavetest.diff
 fi
 
-java -jar ../bld/lib/freetts.jar -voice kevin -silent -dumpWave wavetest.res -file $1
+java -jar ../bld/lib/freetts.jar -voice kevin -silent -dumpASCII wavetest.res -file $1
 
 diff -b wavetest.res $2 > wavetest.diff
 

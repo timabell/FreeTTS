@@ -395,7 +395,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    u.dumpRelations("Utterance");
 	}
 
-	dumpWave(u);
+	dumpASCII(u);
 
     }
 
@@ -405,15 +405,15 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * 
      * @param utterance the utterance of interest
      */
-    private void dumpWave(Utterance utterance) {
+    private void dumpASCII(Utterance utterance) {
 	if (waveDumpFile != null) {
 	    LPCResult lpcResult = 
 		(LPCResult) utterance.getObject("target_lpcres");
 	    try {
 		if (waveDumpFile.equals("-")) {
-		    lpcResult.dumpWave();
+		    lpcResult.dumpASCII();
 		} else {
-		    lpcResult.dumpWave(waveDumpFile);
+		    lpcResult.dumpASCII(waveDumpFile);
 		}
 	    } catch (IOException ioe) {
 		error("Can't dump file to " + waveDumpFile + " " + ioe);

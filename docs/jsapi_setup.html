@@ -25,20 +25,21 @@
             </table>
         </center>
 
-        <p>FreeTTS provides some level support for the 
-        <a
-        href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/index.html">Java Speech API v1.0</a>
-        (JSAPI).  In particular, since FreeTTS is a speech synthesis
-        system, none of the JSAPI 1.0 Recognition interfaces are
-        supported. In addition, FreeTTS supports only a subset of the
-        JSAPI 1.0 javax.speech.synthesis specification.  The FreeTTS
-        support for JSAPI 1.0 has the following restrictions:
+        <p>FreeTTS provides some level support for the <a
+        href="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/index.html">Java
+        Speech API v1.0</a> (JSAPI).  In particular, since FreeTTS is
+        a speech synthesis system, none of the JSAPI 1.0 Recognition
+        interfaces are supported. In addition, FreeTTS supports only a
+        subset of the JSAPI 1.0 <code>javax.speech.synthesis</code>
+        specification.  The FreeTTS support for JSAPI 1.0 has the
+        following restrictions:
         <ul>
             <li>JSML Speech Markup is ignored. FreeTTS will
 	    process JSML, but currently does not apply the markup to
 	    the generated speech.
-            <li>FreeTTS does not currently generate the WORD_STARTED
-            or the MARKER_REACHED events.
+            <li>FreeTTS does not currently generate the 
+	    <code>WORD_STARTED</code>
+            or the <code>MARKER_REACHED</code> events.
             <li>Vocabulary management is not supported.
 	    <li>The <code>Synthesizer.phoneme()</code> method is not
 	    implemented.
@@ -53,7 +54,7 @@
         about the JCP and JSR-113 at <a href="http://www.jcp.org">
 	http://www.jcp.org</a>.
 
-        <h3>Setting up your JSAPI environment</h3> <p>The sources to
+        <h3>Set Up Your JSAPI Environment</h3> <p>The sources to
         the JSAPI 1.0 specification implementation (i.e., the
         <code>javax.speech.*</code> classes) are not available under a
         BSD-style license.  Instead, we make the JSAPI binary
@@ -83,6 +84,8 @@
             </ul>
         </ul>
 
+
+        <h3>Copy speech.properties</h3> 
         <p>You will also need to copy the
         <code>speech.properties</code> file to your home directory
         before running he demos that use JSAPI.  If you are not sure
