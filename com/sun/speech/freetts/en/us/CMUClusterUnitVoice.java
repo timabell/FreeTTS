@@ -31,12 +31,21 @@ import java.util.Locale;
 public class CMUClusterUnitVoice extends CMUVoice {
 
     /**
-     * Creates a simple voice
+     * Creates a simple cluster unit voice
      *
      * @param createLexicon if <code>true</code> automatically load up
      * the default CMU lexicon; otherwise, don't load it.
+     * @param name the name of the voice
+     * @param gender the gender of the voice
+     * @param age the age of the voice
+     * @param description a human-readable string providing a
+     * description that can be displayed for the users.
+     * @param locale the locale of the voice
+     * @param domain the domain of this voice.  For example,
+     * @param organization the organization which created the voice
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
      */
-    //TODO
     public CMUClusterUnitVoice(boolean createLexicon, String name,
             Gender gender, Age age, String description, Locale locale,
             String domain, String organization) {

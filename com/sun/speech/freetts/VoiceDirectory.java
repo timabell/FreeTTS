@@ -16,12 +16,11 @@ package com.sun.speech.freetts;
  * the default constructor (no arguments).
  *
  * Any jar file that has a subclass of VoiceDirectory must define
- * certain attributes in its Manifest.  "Main-class:" should refer to
- * the subclass of VoiceDirectory or some other class that provides
- * the equivalent functionality.  "Class-Path:" lists the other jar
+ * certain attributes in its Manifest.  "Main-class:" must refer to
+ * the subclass of VoiceDirectory. "Class-Path:" lists the other jar
  * files upon which this is dependant.  For example,
  * "cmu_us_kal.jar" may be dependant on "en_us.jar" for its lexicon.
- * [[[TODO: how to specify if jar is a voice]]]
+ * The Manifest must also have a "FreeTTSVoiceDefinition: true" entry.
  *
  * @see Voice
  * @see VoiceManager
@@ -50,7 +49,7 @@ public abstract class VoiceDirectory {
      *
      * @return a String containing the information
      *
-     * @see #main(String args)
+     * @see #main(String[] args)
      */
     public String toString() {
         String newline = System.getProperty("line.separator");
@@ -82,7 +81,7 @@ public abstract class VoiceDirectory {
      * out information about provided voices.  For example, they may
      * just call dumpVoices()
      *
-     * @see #dumpVoices()
+     * @see #toString()
      */
     public static void main(String[] args) {
         // subclasses must call dumpVoices()

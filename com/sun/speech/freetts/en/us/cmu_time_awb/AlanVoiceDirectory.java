@@ -9,8 +9,16 @@ import com.sun.speech.freetts.Age;
 import java.util.Locale;
 
 
-//TODO documentation
+/**
+ * This voice directory provides a default US/English Cluster Unit
+ * voice imported from CMU Flite.
+ */
 public class AlanVoiceDirectory extends VoiceDirectory {
+    /**
+     * Gets the voices provided by this voice.
+     *
+     * @return an array of new Voice instances
+     */
     public Voice[] getVoices() {
         Voice alan = new CMUClusterUnitVoice(false, "alan", Gender.MALE,
                 Age.YOUNGER_ADULT, "default time-domain cluster unit voice",
@@ -22,6 +30,9 @@ public class AlanVoiceDirectory extends VoiceDirectory {
         return voices;
     }
 
+    /**
+     * Print out information about this voice jarfile.
+     */
     public static void main(String[] args) {
         System.out.println((new AlanVoiceDirectory()).toString());
     }

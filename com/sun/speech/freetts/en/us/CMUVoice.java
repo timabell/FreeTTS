@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -58,7 +58,22 @@ public abstract class CMUVoice extends Voice {
 	Utilities.getProperty("com.sun.speech.freetts.useBinaryIO",
 		"true").equals("true");
 
-    //TODO documentation
+    /**
+     * Creates a simple voice
+     *
+     * @param createLexicon if <code>true</code> automatically load up
+     * the default CMU lexicon; otherwise, don't load it.
+     * @param name the name of the voice
+     * @param gender the gender of the voice
+     * @param age the age of the voice
+     * @param description a human-readable string providing a
+     * description that can be displayed for the users.
+     * @param locale the locale of the voice
+     * @param domain the domain of this voice.  For example,
+     * @param organization the organization which created the voice
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
+     */
     public CMUVoice(boolean createLexicon, String name, Gender gender,
             Age age, String description, Locale locale, String domain,
             String organization) {

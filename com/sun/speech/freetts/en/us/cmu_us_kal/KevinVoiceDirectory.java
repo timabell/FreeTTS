@@ -8,10 +8,18 @@ import com.sun.speech.freetts.Age;
 import java.util.Locale;
 
 
-//TODO documentation
+/**
+ * This voice directory provides default US/English Diphone voices
+ * imported from CMU Flite
+ *
+ */
 public class KevinVoiceDirectory extends VoiceDirectory {
+    /**
+     * Gets the voices provided by this voice.
+     *
+     * @return an array of new Voice instances
+     */
     public Voice[] getVoices() {
-        //TODO different name?
         Voice kevin = new CMUDiphoneVoice(true, "kevin", Gender.MALE,
                 Age.YOUNGER_ADULT, "default 8-bit diphone voice",
                 Locale.US, "general", "cmu");
@@ -28,6 +36,9 @@ public class KevinVoiceDirectory extends VoiceDirectory {
         return voices;
     }
 
+    /**
+     * Print out information about this voice jarfile.
+     */
     public static void main(String[] args) {
         System.out.println((new KevinVoiceDirectory()).toString());
     }
