@@ -53,15 +53,6 @@ public class FreeTTSHelloWorld {
             System.exit(1);
         }
         
-        /* Sets the AudioPlayer to the JavaClipAudioPlayer.
-         * For more information on the various AudioPlayer
-         * implementations available (e.g., saving to a file),
-         * see the javadoc for AudioPlayer.  For an example
-         * of streaming audio to a socket, see the
-         * SocketAudioPlayer.java in demo/freetts/ClientServer.
-         */
-        helloVoice.setAudioPlayer(new JavaClipAudioPlayer());
-        
         /* Allocates the resources for the voice.
          */
         helloVoice.allocate();

@@ -39,8 +39,7 @@ import javax.sound.sampled.AudioSystem;
  */
 public class FreeTTS {
 
-    private final static String VERSION =
-    "FreeTTS 1.2beta, December, 2003";
+    private final static String VERSION = "FreeTTS 1.2, May, 2004";
     private Voice voice;
     private static AudioPlayer audioPlayer = null;
     private boolean silent = false;
@@ -93,7 +92,11 @@ public class FreeTTS {
 		    }
 		}
 	    } else {
-		audioPlayer = new JavaClipAudioPlayer();
+                try {
+                    audioPlayer = voice.getDefaultAudioPlayer();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                }
 	    }
 	}
 

@@ -1,4 +1,4 @@
-# Copyright 2001,2003 Sun Microsystems, Inc.
+# Copyright 2001,2002,2003,2004 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -8,6 +8,16 @@
 
 Change history for FreeTTS.
 --------------------------
+
+May 10, 2004 Release 1.2
+    - Fix problem where the space character in the path would cause
+      issues with finding voice jars (bug 938225)
+    - Added backwards compatibility for Gnome Speech API
+    - Fix to kill audio output thread on deallocate from JSAPI (bug 922579)
+    - Added "@" and "?" to list of known characters for German.
+    - Fixed problem where some jar files in the FreeTTS directory
+      would cause issues with discovering voices.
+    - Added defaultAudioPlayer property to voice (RFE 922580).
 
 December 22, 2003 Release 1.2beta
     - Many documentation updates to prep for beta release.

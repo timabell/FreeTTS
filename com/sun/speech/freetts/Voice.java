@@ -89,7 +89,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     private boolean dumpRelations = false;
     private String runTitle = "unnamed run";
     private Lexicon lexicon = null;
-    private AudioPlayer audioPlayer;
+    private AudioPlayer defaultAudioPlayer = null;
+    private AudioPlayer audioPlayer = null;
     private UtteranceProcessor audioOutput;
     private OutputQueue outputQueue = null;
     private String waveDumpFile = null;
@@ -132,6 +133,20 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     public final static String FEATURE_JOIN_TYPE = "join_type";
 
     /**
+     * Feature name for the default AudioPlayer class to use.
+     */
+    public final static String DEFAULT_AUDIO_PLAYER =
+            PROP_PREFIX + "defaultAudioPlayer";    
+
+
+    /**
+     * The default class to use for the DEFAULT_AUDIO_PLAYER.
+     */
+    public final static String DEFAULT_AUDIO_PLAYER_DEFAULT =
+            "com.sun.speech.freetts.audio.JavaClipAudioPlayer";
+    
+
+    /**
      * Creates a new Voice. Utterances are sent to an
      * output queue to be rendered as audio.  Utterances are placed
      * on the queue by an output thread. This
@@ -164,6 +179,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	     // can't get properties, just use defaults
 	}
         outputQueue = null;
+        audioPlayer = null;
+        defaultAudioPlayer = null;
     }
 
     /**
@@ -250,7 +267,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
         boolean ok = true;
 	boolean posted = false;
 
-	audioPlayer.startFirstSampleTimer();
+	getAudioPlayer().startFirstSampleTimer();
 
 	for (Iterator i = tokenize(speakable); 
              !speakable.isCompleted() && i.hasNext() ; ) {
@@ -476,7 +493,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 
 	if (!speakable.isCompleted())  {
 	    if (utterance.isFirst()) {
-		audioPlayer.reset();
+		getAudioPlayer().reset();
 		speakable.started();
 		log(" --- started ---");
 	    }
@@ -488,11 +505,11 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		ok = false;
 	    }
 	    if (ok && utterance.isLast()) {
-		audioPlayer.drain();
+		getAudioPlayer().drain();
                 speakable.completed();
                 log(" --- completed ---");
 	    } else if (!ok) {
-		audioPlayer.drain();
+		getAudioPlayer().drain();
 		speakable.cancelled();
                 log(" --- cancelled ---");
 	    } else {
@@ -583,7 +600,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	if (metrics) {
 	    runTimer.show(getRunTitle() + " run");
 	    threadTimer.show(getRunTitle() + " thread");
-	    audioPlayer.showMetrics();
+	    getAudioPlayer().showMetrics();
 	    long totalMemory = Runtime.getRuntime().totalMemory();
 	    System.out.println
 		("Memory Use    : "
@@ -1143,11 +1160,56 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     }
 
     /**
-     * Gets the audio player associated with this voice.
+     * Gets the default audio player for this voice.  The return
+     * value will be non-null only if the DEFAULT_AUDIO_PLAYER
+     * system property has been set to the name of an AudioPlayer
+     * class, and that class is able to be instantiated via a
+     * no arg constructor.  getAudioPlayer will automatically set
+     * the audio player for this voice to the default audio player
+     * if the audio player has not yet been set.
      *
+     * @see #DEFAULT_AUDIO_PLAYER
+     * @see #getAudioPlayer
+     * @return the default AudioPlayer
+     */
+    public AudioPlayer getDefaultAudioPlayer() throws InstantiationException {
+        if (defaultAudioPlayer != null) {
+            return defaultAudioPlayer;
+        }
+        
+        String className = Utilities.getProperty(
+            DEFAULT_AUDIO_PLAYER, DEFAULT_AUDIO_PLAYER_DEFAULT);
+
+        try {
+            Class cls = Class.forName(className);
+            defaultAudioPlayer = (AudioPlayer) cls.newInstance();
+            return defaultAudioPlayer;
+        } catch (ClassNotFoundException e) {
+            throw new InstantiationException("Can't find class " + className);
+        } catch (IllegalAccessException e) {
+            throw new InstantiationException("Can't find class " + className);
+        } catch (ClassCastException e) {
+            throw new InstantiationException(className + " cannot be cast "
+                                             + "to AudioPlayer");
+        }
+    }
+    
+    /**
+     * Gets the audio player associated with this voice.  If the
+     * audio player has not yet been set, the value will default
+     * to the return value of getDefaultAudioPlayer.
+     *
+     * @see #getDefaultAudioPlayer
      * @return the audio player
      */
     public AudioPlayer getAudioPlayer() {
+        if (audioPlayer == null) {
+            try {
+                audioPlayer = getDefaultAudioPlayer();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
+        }
 	return audioPlayer;
     }
 

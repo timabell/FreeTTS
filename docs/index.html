@@ -950,7 +950,12 @@ Festival and FestVox.
       <li><a href="../javadoc/com/sun/speech/freetts/Voice.html">Voice</a> -
           describes how to set the 
           <a href="../javadoc/com/sun/speech/freetts/audio/AudioPlayer.html">
-          AudioPlayer</a> for a voice.</li><br>
+          AudioPlayer</a> for a voice.  You can also set the
+          default AudioPlayer via the command line by defining the
+          "com.sun.speech.freetts.voice.defaultAudioPlayer" system
+          property.  The value of this property should be the name of
+          a class that implements the AudioPlayer interface, and which
+          also has a no-arg constructor.</li><br>
       <li><a href="../javadoc/com/sun/speech/freetts/jsapi/FreeTTSVoice.html#getVoice()">
           FreeTTSVoice.getVoice</a> - allows you to get the underlying 
           FreeTTS Voice object from the JSAPI FreeTTSVoice object.  

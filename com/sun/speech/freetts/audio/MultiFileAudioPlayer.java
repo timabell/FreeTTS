@@ -37,7 +37,15 @@ public class MultiFileAudioPlayer implements AudioPlayer {
     private int curIndex = 0;
     private AudioFileFormat.Type outputType;
 
-       
+    /**
+     * Creates a default audio player for an AudioFileFormat of type
+     * WAVE.  Reads the "baseName" property for the base filename to
+     * use, and will produce files of the form &lt;baseName>1.wav.
+     */
+    public MultiFileAudioPlayer() {
+        this(Utilities.getProperty("baseName","freetts"),
+             AudioFileFormat.Type.WAVE);
+    }       
 
     /**
      * Constructs a MultiFileAudioPlayer 
@@ -52,14 +60,6 @@ public class MultiFileAudioPlayer implements AudioPlayer {
 
 	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-    }
-
-    /**
-     *  Creates a default audio player that sends
-     *  the output to freettsXX.wav
-     */
-    public MultiFileAudioPlayer() {
-	this("freetts", AudioFileFormat.Type.WAVE);
     }
 
     /**

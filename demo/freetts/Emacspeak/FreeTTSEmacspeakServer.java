@@ -43,7 +43,6 @@ public class FreeTTSEmacspeakServer extends TTSServer {
             System.exit(1);
         }
         emacsVoice.allocate();
-        emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
     }
 
 

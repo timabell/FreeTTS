@@ -7,6 +7,8 @@
  */
 package com.sun.speech.freetts.audio;
 
+import com.sun.speech.freetts.util.Utilities;
+
 import java.io.IOException;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -23,6 +25,15 @@ public class RawFileAudioPlayer implements AudioPlayer {
     private float volume;
     private BufferedOutputStream os;
 
+    
+    /**
+     * Constructs a RawFileAudioPlayer.  Reads the "rawPath" property
+     * to define where to send the raw audio.
+     */
+    public RawFileAudioPlayer() throws IOException {
+        this(Utilities.getProperty("path","freetts.raw"));
+    }
+    
     /**
      * Constructs a NullAudioPlayer
      */

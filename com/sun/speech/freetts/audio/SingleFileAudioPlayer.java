@@ -61,7 +61,8 @@ public class SingleFileAudioPlayer implements AudioPlayer {
      *  the output to freetts.wav
      */
     public SingleFileAudioPlayer() {
-	this("freetts", AudioFileFormat.Type.WAVE);
+	this(Utilities.getProperty("baseName","freetts"),
+             AudioFileFormat.Type.WAVE);
     }
 
     /**
