@@ -102,7 +102,7 @@ public class BulkTimer {
      *
      * @return the timer with that name
      */
-    private Timer getTimer(String name) {
+    public Timer getTimer(String name) {
 	if (!timers.containsKey(name)) {
 	    timers.put(name, new Timer(name));
 	}
