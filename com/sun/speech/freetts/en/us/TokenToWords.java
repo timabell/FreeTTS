@@ -11,18 +11,22 @@
 package com.sun.speech.freetts.en.us;
 
 import java.io.*;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
-import com.sun.speech.freetts.cart.CART;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.FeatureSet;
+import com.sun.speech.freetts.FeatureSetImpl;
+import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.PathExtractor;
+import com.sun.speech.freetts.PathExtractorImpl;
 import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.cart.CART;
 import com.sun.speech.freetts.util.Utilities;
 
 
@@ -31,8 +35,7 @@ import com.sun.speech.freetts.util.Utilities;
  * Utterance into a list of words. It puts the produced list back
  * into the Utterance. Usually, the tokens that gets expanded are numbers
  * like "23" (to "twenty" "three").
- * <p>
- * It translates the following code from flite:
+ * <p> * It translates the following code from flite:
  * <br>
  * <code>
  * lang/usenglish/us_text.c
@@ -42,25 +45,218 @@ public class TokenToWords implements UtteranceProcessor {
 
     /** Regular expression for something that has a vowel */
     private static final String RX_HAS_VOWEL = ".*[aeiouAEIOU].*";    
-
+    
     // a CART for classifying numbers
     private CART cart;
                         
-    private static Pattern commaIntPattern;
-    private static Pattern digitsPattern;
-    private static Pattern doublePattern;
-    private static Pattern ordinalPattern;
+    // Patterns for regular expression matching
     private static Pattern alphabetPattern;
+    private static Pattern commaIntPattern;
+    private static Pattern digits2DashPattern;
+    private static Pattern digitsPattern;
+    private static Pattern digitsSlashDigitsPattern;
+    private static Pattern dottedAbbrevPattern;
+    private static Pattern doublePattern;
+    private static Pattern drStPattern;
+    private static Pattern fourDigitsPattern;
     private static Pattern hasVowelPattern;
+    private static Pattern illionPattern;
+    private static Pattern numberTimePattern;
+    private static Pattern numessPattern;
+    private static Pattern ordinalPattern;
+    private static Pattern romanNumbersPattern;
+    private static Pattern sevenPhoneNumberPattern;
+    private static Pattern threeDigitsPattern;
+    private static Pattern usMoneyPattern;
     
     static {
-	commaIntPattern = Pattern.compile(USEnglish.RX_COMMAINT);
-	digitsPattern = Pattern.compile(USEnglish.RX_DIGITS);
-	doublePattern = Pattern.compile(USEnglish.RX_DOUBLE);
-	ordinalPattern = Pattern.compile(USEnglish.RX_ORDINAL_NUMBER);
 	alphabetPattern = Pattern.compile(USEnglish.RX_ALPHABET);
-	hasVowelPattern = Pattern.compile(RX_HAS_VOWEL);
+	commaIntPattern = Pattern.compile(USEnglish.RX_COMMAINT);
+	digits2DashPattern = Pattern.compile(USEnglish.RX_DIGITS2DASH);
+	digitsPattern = Pattern.compile(USEnglish.RX_DIGITS);
+	digitsSlashDigitsPattern = Pattern.compile(USEnglish.RX_DIGITSSLASHDIGITS);
+	dottedAbbrevPattern = Pattern.compile(USEnglish.RX_DOTTED_ABBREV);
+	doublePattern = Pattern.compile(USEnglish.RX_DOUBLE);
+	drStPattern = Pattern.compile(USEnglish.RX_DRST);
+	fourDigitsPattern = Pattern.compile(USEnglish.RX_FOUR_DIGIT);
+	hasVowelPattern = Pattern.compile(USEnglish.RX_HAS_VOWEL);
+	illionPattern = Pattern.compile(USEnglish.RX_ILLION);
+	numberTimePattern = Pattern.compile(USEnglish.RX_NUMBER_TIME);
+	numessPattern = Pattern.compile(USEnglish.RX_NUMESS);
+	ordinalPattern = Pattern.compile(USEnglish.RX_ORDINAL_NUMBER);
+	romanNumbersPattern = Pattern.compile(USEnglish.RX_ROMAN_NUMBER);
+	sevenPhoneNumberPattern = Pattern.compile(USEnglish.RX_SEVEN_DIGIT_PHONE_NUMBER);
+	threeDigitsPattern = Pattern.compile(USEnglish.RX_THREE_DIGIT);
+	usMoneyPattern = Pattern.compile(USEnglish.RX_US_MONEY);
     }
+
+    // King-like words 
+    private static final String[] kingNames = {
+	"louis", "henry", "charles", "philip", "george",
+	"edward", "pius", "william", "richard", "ptolemy",
+	"john", "paul", "peter", "nicholas", "frederick",
+	"james", "alfonso", "ivan", "napoleon", "leo",
+	"gregory", "catherine", "alexandria", "pierre", "elizabeth",
+	"mary" };
+    
+    private static final String[] kingTitles = {
+	"king", "queen", "pope", "duke", "tsar",
+	"emperor", "shah", "caesar", "duchess", "tsarina",
+	"empress", "baron", "baroness", "sultan", "count",
+	"countess" };
+
+    // Section-like words
+    private static final String[] sectionTypes = {
+	"section", "chapter", "part", "phrase", "verse",
+	"scene", "act", "book", "volume", "chap",
+	"war", "apollo", "trek", "fortran" };
+    
+    /**
+     * Here we use a hashtable for constant time matching, instead of using
+     * if (A.equals(B) || A.equals(C) || ...) to match Strings
+     */
+    private static Hashtable kingSectionLikeHash = new Hashtable();
+
+    private static final String KING_NAMES = "kingNames";
+    private static final String KING_TITLES = "kingTitles";
+    private static final String SECTION_TYPES = "sectionTypes";
+
+    // Hashtable initialization
+    static {
+	for (int i = 0; i < kingNames.length; i++) {
+	    kingSectionLikeHash.put(kingNames[i], KING_NAMES);
+	}
+	for (int i = 0; i < kingTitles.length; i++) {
+	    kingSectionLikeHash.put(kingTitles[i], KING_TITLES);
+	}
+	for (int i = 0; i < sectionTypes.length; i++) {
+	    kingSectionLikeHash.put(sectionTypes[i], SECTION_TYPES);
+	}
+    }
+
+    private static final String[] postrophes = {
+	"'s", "'ll", "'ve", "'d" };
+
+    // Finite state machines to check if a Token is pronounceable
+    private static PrefixFSM prefixFSM = null;
+    private static SuffixFSM suffixFSM = null;
+
+    // List of US states abbreviations and their full names
+    private static String[][] usStates =
+    {
+	{ "AL", "ambiguous", "alabama" , null, null },
+	{ "Al", "ambiguous", "alabama" , null, null },
+	{ "Ala", "", "alabama" , null, null },
+	{ "AK", "", "alaska" , null, null },
+	{ "Ak", "", "alaska" , null, null },
+	{ "AZ", "", "arizona" , null, null },
+	{ "Az", "", "arizona" , null, null },
+	{ "CA", "", "california" , null, null },
+	{ "Ca", "", "california" , null, null },
+	{ "Cal", "ambiguous", "california" , null, null },
+	{ "Calif", "", "california" , null, null },
+	{ "CO", "ambiguous", "colorado" , null, null },
+	{ "Co", "ambiguous", "colorado" , null, null },
+	{ "Colo", "", "colorado" , null, null },
+	{ "DC", "", "d" , "c", null },
+	{ "DE", "", "delaware" , null, null },
+	{ "De", "ambiguous", "delaware" , null, null },
+	{ "Del", "ambiguous", "delaware" , null, null },
+	{ "FL", "", "florida" , null, null },
+	{ "Fl", "ambiguous", "florida" , null, null },
+	{ "Fla", "", "florida" , null, null },
+	{ "GA", "", "georgia" , null, null },
+	{ "Ga", "", "georgia" , null, null },
+	{ "HI", "", "hawaii" , null, null },
+	{ "Hi", "ambiguous", "hawaii" , null, null },
+	{ "IA", "", "indiana" , null, null },
+	{ "Ia", "ambiguous", "indiana" , null, null },
+	{ "Ind", "ambiguous", "indiana" , null, null },
+	{ "ID", "ambiguous", "idaho" , null, null },
+	{ "IL", "ambiguous", "illinois" , null, null },
+	{ "Il", "ambiguous", "illinois" , null, null },
+	{ "ILL", "ambiguous", "illinois" , null, null },
+	{ "KS", "", "kansas" , null, null },
+	{ "Ks", "", "kansas" , null, null },
+	{ "Kans", "", "kansas" , null, null },
+	{ "KY", "ambiguous", "kentucky" , null, null },
+	{ "Ky", "ambiguous", "kentucky" , null, null },
+	{ "LA", "ambiguous", "louisiana" , null, null },
+	{ "La", "ambiguous", "louisiana" , null, null },
+	{ "Lou", "ambiguous", "louisiana" , null, null },
+	{ "Lous", "ambiguous", "louisiana" , null, null },
+	{ "MA", "ambiguous", "massachusetts" , null, null },
+	{ "Mass", "ambiguous", "massachusetts" , null, null },
+	{ "Ma", "ambiguous", "massachusetts" , null, null },
+	{ "MD", "ambiguous", "maryland" , null, null },
+	{ "Md", "ambiguous", "maryland" , null, null },
+	{ "ME", "ambiguous", "maine" , null, null },
+	{ "Me", "ambiguous", "maine" , null, null },
+	{ "MI", "", "michigan" , null, null },
+	{ "Mi", "ambiguous", "michigan" , null, null },
+	{ "Mich", "ambiguous", "michigan" , null, null },
+	{ "MN", "ambiguous", "minnestota" , null, null },
+	{ "Minn", "ambiguous", "minnestota" , null, null },
+	{ "MS", "ambiguous", "mississippi" , null, null },
+	{ "Miss", "ambiguous", "mississippi" , null, null },
+	{ "MT", "ambiguous", "montanna" , null, null },
+	{ "Mt", "ambiguous", "montanna" , null, null },
+	{ "MO", "ambiguous", "missouri" , null, null },
+	{ "Mo", "ambiguous", "missouri" , null, null },
+	{ "NC", "ambiguous", "north" , "carolina", null },
+	{ "ND", "ambiguous", "north" , "dakota", null },
+	{ "NE", "ambiguous", "nebraska" , null, null },
+	{ "Ne", "ambiguous", "nebraska" , null, null },
+	{ "Neb", "ambiguous", "nebraska" , null, null },
+	{ "NH", "ambiguous", "new" , "hampshire", null },
+	{ "NV", "", "nevada" , null, null },
+	{ "Nev", "", "nevada" , null, null },
+	{ "NY", "", "new" , "york", null },
+	{ "OH", "ambiguous", "ohio" , null, null },
+	{ "OK", "ambiguous", "oklahoma" , null, null },
+	{ "Okla", "", "oklahoma" , null, null },
+	{ "OR", "ambiguous", "oregon" , null, null },
+	{ "Or", "ambiguous", "oregon" , null, null },
+	{ "Ore", "ambiguous", "oregon" , null, null },
+	{ "PA", "ambiguous", "pennsylvania" , null, null },
+	{ "Pa", "ambiguous", "pennsylvania" , null, null },
+	{ "Penn", "ambiguous", "pennsylvania" , null, null },
+	{ "RI", "ambiguous", "rhode" , "island", null },
+	{ "SC", "ambiguous", "south" , "carlolina", null },
+	{ "SD", "ambiguous", "south" , "dakota", null },
+	{ "TN", "ambiguous", "tennesee" , null, null },
+	{ "Tn", "ambiguous", "tennesee" , null, null },
+	{ "Tenn", "ambiguous", "tennesee" , null, null },
+	{ "TX", "ambiguous", "texas" , null, null },
+	{ "Tx", "ambiguous", "texas" , null, null },
+	{ "Tex", "ambiguous", "texas" , null, null },
+	{ "UT", "ambiguous", "utah" , null, null },
+	{ "VA", "ambiguous", "virginia" , null, null },
+	{ "WA", "ambiguous", "washington" , null, null },
+	{ "Wa", "ambiguous", "washington" , null, null },
+	{ "Wash", "ambiguous", "washington" , null, null },
+	{ "WI", "ambiguous", "wisconsin" , null, null },
+	{ "Wi", "ambiguous", "wisconsin" , null, null },
+	{ "WV", "ambiguous", "west" , "virginia", null },
+	{ "WY", "ambiguous", "wyoming" , null, null },
+	{ "Wy", "ambiguous", "wyoming" , null, null },
+	{ "Wyo", "", "wyoming" , null, null },
+	{ "PR", "ambiguous", "puerto" , "rico", null }
+    };
+    /*
+      { null, null, "puerto" , "rico", null }
+      };
+    */
+
+    // Again hashtable for constant time searching
+    private static Hashtable usStatesHash = new Hashtable();
+    
+    // initialize the Hashtable for usStates
+    static {
+	for (int i = 0; i < usStates.length; i++) {
+	    usStatesHash.put(usStates[i][0], usStates[i]);
+	}
+    };
 
     private int commaIntCount = 0;
     private int digitsCount = 0;
@@ -94,6 +290,7 @@ public class TokenToWords implements UtteranceProcessor {
     public TokenToWords(CART usNumbersCART) {
 	this.cart = usNumbersCART;
     }
+
 
     /**
      *  process the utterance
@@ -137,10 +334,74 @@ public class TokenToWords implements UtteranceProcessor {
 		wordRelation.appendItem(wordItem);
 	    }
 	}
-	// printStats();
+    }
+
+
+    /**
+     * Returns true if the given token matches part of a phone number
+     *
+     * @param tokenItem the token
+     * @param tokenVal the string value of the token
+     *
+     * @return true or false
+     */
+    private boolean matchesPartPhoneNumber(Item tokenItem, String tokenVal) {
+
+	String n_name = (String) tokenItem.findFeature("n.name");
+	String n_n_name = (String) tokenItem.findFeature("n.n.name");
+	String p_name = (String) tokenItem.findFeature("p.name");
+	String p_p_name = (String) tokenItem.findFeature("p.p.name");
+
+	boolean matches3DigitsP_name = matches(threeDigitsPattern, p_name);
+
+	return ((matches(threeDigitsPattern, tokenVal) &&
+		 ((!matches(digitsPattern, p_name)
+		   && matches(threeDigitsPattern, n_name)
+		   && matches(fourDigitsPattern, n_n_name)) ||
+		  (matches(sevenPhoneNumberPattern, n_name)) ||
+		  (!matches(digitsPattern, p_p_name)
+		   && matches3DigitsP_name
+		   && matches(fourDigitsPattern, n_name)))) ||
+		(matches(fourDigitsPattern, tokenVal) &&
+		 (!matches(digitsPattern, n_name)
+		  && matches3DigitsP_name
+		  && matches(threeDigitsPattern, p_p_name))));
     }
     
 
+    /**
+     * Returns true if the given string is in the given string array.
+     *
+     * @param value the string to check
+     * @param stringArray the array to check
+     *
+     * @return true if the string is in the array, false otherwise
+     */
+    private static boolean inStringArray(String value, String[] stringArray) {
+	for (int i = 0; i < stringArray.length; i++) {
+	    if (stringArray[i].equals(value)) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
+
+    /**
+     * Adds a break as a feature to the last item in the list.
+     *
+     * @param wordList the list to add a break
+     */
+    private static void addBreak(List wordList) {
+	int listLength = wordList.size();
+	if (listLength > 0) {
+	    Item wordItem = (Item) wordList.get(listLength - 1);
+	    FeatureSet featureSet = new FeatureSetImpl();
+	    featureSet.setString("break", "1");
+	}
+    }
+
+    
     /**
      * Converts the given Token into a list of words.
      *
@@ -149,144 +410,688 @@ public class TokenToWords implements UtteranceProcessor {
      *                   same as the one in tokenItem, called "name" in flite
      * @param  wordList  words are added to this list
      *
-     * 
      * @return  a list of words
      */
     protected List tokenToWords(Item tokenItem, String tokenVal,
 				List wordList) {
-
-	String nsw = "";
 	FeatureSet tokenFeatures = tokenItem.getFeatures();
-	String aaa; // not sure what 'aaa' means
-	int index;
+	String itemName = tokenFeatures.getString("name");
 	int tokenLength = tokenVal.length();
-			
-	if (tokenFeatures.isPresent("nsw")) {
-	    nsw = tokenFeatures.getString("nsw");
+		
+	if (tokenFeatures.isPresent("phones")) {
+	    wordList.add("tokenVal");
+	    return wordList;
 	}
 
-	if (matches(alphabetPattern, tokenVal) &&
-	    matches(hasVowelPattern, tokenVal)) {
+	if ((tokenVal.equals("a") || tokenVal.equals("A")) &&
+	    !tokenVal.equals(itemName)) {
+	    /* if A is a sub part of a token, then its ey not ah */
+	    wordList.add("_a");
+
+	} else if (matches(dottedAbbrevPattern, tokenVal)) {
 	    
-	    // alphabetCount++;
+	    /* U.S.A. */
+	    // remove all dots
+	    String aaa = Utilities.deleteChar(tokenVal, '.');
+	    NumberExpander.expandLetters(aaa, wordList);
 	    
-            /* just a word */
-            wordList.add(tokenVal.toLowerCase());
-	    return wordList;
 	} else if (matches(commaIntPattern, tokenVal)) {
-
-	    // commaIntCount++;
-	    aaa = Utilities.deleteChar(tokenVal, ','); // remove all commas
-	    tokenToWords(tokenItem, aaa, wordList);
-
+	    
+	    /* 99,999,999 */
+	    String aaa = Utilities.deleteChar(tokenVal, ',');
+	    NumberExpander.expandReal(aaa, wordList);
+	    
+	} else if (matches(sevenPhoneNumberPattern, tokenVal)) {
+	    
+	    /* 234-3434  telephone numbers */
+	    int dashIndex = tokenVal.indexOf('-');
+	    String aaa = tokenVal.substring(0, dashIndex);
+	    String bbb = tokenVal.substring(dashIndex+1);
+	    
+	    NumberExpander.expandDigits(aaa, wordList);
+	    addBreak(wordList);
+	    NumberExpander.expandDigits(bbb, wordList);
+	    
+	} else if (matchesPartPhoneNumber(tokenItem, tokenVal)) {
+	    
+	    /* part of a telephone number */
+	    String punctuation = (String) tokenItem.findFeature("punc");
+	    if (punctuation.equals("")) {
+		tokenItem.getFeatures().setString("punc", ",");
+	    }
+	    NumberExpander.expandDigits(tokenVal, wordList);
+	    addBreak(wordList);
+		
+	} else if (matches(numberTimePattern, tokenVal)) {
+	    
+	    /* 12:35 */
+	    int colonIndex = tokenVal.indexOf(':');
+	    String aaa = tokenVal.substring(0, colonIndex);
+	    String bbb = tokenVal.substring(colonIndex+1);
+	    
+	    NumberExpander.expandNumber(aaa, wordList);
+	    if (!(bbb.equals("00"))) {
+		NumberExpander.expandID(bbb, wordList);
+	    }
+	    
+	} else if (matches(digits2DashPattern, tokenVal)) {
+	    
+	    /* 999-999-999 */
+	    digitsDashToWords(tokenItem, tokenVal, wordList);
+	    
 	} else if (matches(digitsPattern, tokenVal)) {
+	    
+	    digitsToWords(tokenItem, tokenVal, wordList);
+	    
+	} else if (matches(romanNumbersPattern, tokenVal)) {
+	    
+	    /* XVIII */
+	    romanToWords(tokenItem, tokenVal, wordList);
+	    
+	} else if (matches(drStPattern, tokenVal)) {
+	    
+	    /* St Andrew's St, Dr King Dr */
+	    drStToWords(tokenItem, tokenVal, wordList);
 
-	    // digitsCount++;
-	    if (nsw.equals("nide")) {
-		NumberExpander.expandID(tokenVal, wordList);
+	} else if (tokenVal.equals("Mr")) {
+	    
+	    tokenItem.getFeatures().setString("punc", "");
+	    wordList.add("mister");
+
+	} else if (tokenVal.equals("Mrs")) {
+	    
+	    tokenItem.getFeatures().setString("punc", "");
+	    wordList.add("missus");
+
+	} else if (tokenLength == 1
+		   && isUppercaseLetter(tokenVal.charAt(0))
+		   && ((String)tokenItem.findFeature("n.whitespace")).equals(" ")
+		   && isUppercaseLetter
+		   (((String) tokenItem.findFeature("n.name")).charAt(0))) {
+	    
+	    tokenFeatures.setString("punc", "");
+	    String aaa = tokenVal.toLowerCase();
+	    if (aaa.equals("a")) {
+		wordList.add("_a");
 	    } else {
-		String digitsType = (String) cart.interpret(tokenItem);
-		if (digitsType.equals("ordinal")) {
-		    NumberExpander.expandOrdinal(tokenVal, wordList);
-		} else if (digitsType.equals("digits")) {
-		    NumberExpander.expandDigits(tokenVal, wordList);
-		} else if (digitsType.equals("year")) {
-		    NumberExpander.expandID(tokenVal, wordList);
-		} else {
-		    NumberExpander.expandNumber(tokenVal, wordList);
-		}
+		wordList.add(aaa);
 	    }
 	} else if (matches(doublePattern, tokenVal)) {
 
-	    // doubleCount++;
-	    if (tokenVal != null && tokenVal.charAt(0) == '-') {
-		wordList.add("minus");
-		tokenToWords
-		    (tokenItem, tokenVal.substring(1,tokenLength), wordList);
-	    } else if ((index = tokenVal.indexOf('e')) != -1 ||
-		       (index = tokenVal.indexOf('E')) != -1) {
-		aaa = tokenVal.substring(0, index);
-		tokenToWords(tokenItem, aaa, wordList);
-		wordList.add("e");
-		tokenToWords(tokenItem, aaa, wordList);
-	    } else if ((index = tokenVal.indexOf('.')) != -1) {
-		aaa = tokenVal.substring(0, index);
-		NumberExpander.expandNumber(aaa, wordList);
-		wordList.add("point");
-		NumberExpander.expandDigits
-		    (tokenVal.substring(index+1,tokenLength), wordList);
-	    } else {
-		/* I don't think you can get here. */
-		NumberExpander.expandNumber(tokenVal, wordList);
-	    }
-	} else if (matches(ordinalPattern, tokenVal)) {
+	    NumberExpander.expandReal(tokenVal, wordList);
 
-	    // ordinalCount++;
+	} else if (matches(ordinalPattern, tokenVal)) {
 	    
 	    /* explicit ordinals */
-	    aaa = tokenVal.substring(0, tokenLength - 2);
+	    String aaa = tokenVal.substring(0, tokenLength - 2);
 	    NumberExpander.expandOrdinal(aaa, wordList);
-	} else if (((index = tokenVal.indexOf("'s")) != -1 ||
-		    (index = tokenVal.indexOf("'S")) != -1) &&
-		   (tokenLength - index) == 2) {
-	    /* apostrophe s */
-	    aaa = tokenVal.substring(0, index);
-	    tokenToWords(tokenItem, aaa, wordList);
-	    wordList.add("'s");
-	} else if ((index = tokenVal.indexOf('\'')) != -1) {
 
-	    // quoteCount++;
-	    	    
-	    /* internal single quote deleted */
-	    StringBuffer buffer = new StringBuffer(tokenVal);
-	    buffer.deleteCharAt(index);
+	} else if (matches(illionPattern, tokenVal) &&
+		   matches(usMoneyPattern, 
+			   (String) tokenItem.findFeature("p.name"))) {
+
+	    /* $ X -illion */
+	    wordList.add(tokenVal);
+	    wordList.add("dollars");	    
+
+	} else if (matches(usMoneyPattern, tokenVal)) {
+
+	    /* US money */
+	    usMoneyToWords(tokenItem, tokenVal, wordList);
+
+	} else if (tokenLength > 0
+		   && tokenVal.charAt(tokenLength - 1) == '%') {
 	    
-	    tokenToWords(tokenItem, buffer.toString(), wordList);
+	    /* Y% */
+	    tokenToWords(tokenItem, tokenVal.substring(0, tokenLength - 1),
+			 wordList);
+	    wordList.add("per");
+	    wordList.add("cent");
+
+	} else if (matches(numessPattern, tokenVal)) {
+
+	    /* 60s and 7s and 9s */
+	    tokenToWords(tokenItem, tokenVal.substring(0, tokenLength - 1),
+			 wordList);
+	    wordList.add("'s");
+	    
+	} else if (tokenVal.indexOf('\'') != -1) {
+	    
+	    postropheToWords(tokenItem, tokenVal, wordList);
+	    
+	} else if (matches(digitsSlashDigitsPattern, tokenVal) &&
+		   tokenVal.equals(itemName)) {
+
+	    digitsSlashDigitsToWords(tokenItem, tokenVal, wordList);
+
+	} else if (tokenVal.indexOf('-') != -1) {
+	    
+	    dashToWords(tokenItem, tokenVal, wordList);
 	    
 	} else if (tokenLength > 1 &&
-		   matches(alphabetPattern, tokenVal) &&
-		   !matches(hasVowelPattern, tokenVal) &&
-		   tokenVal.indexOf('y') == -1 &&
-		   tokenVal.indexOf('Y') == -1) {
+		   !matches(alphabetPattern, tokenVal)) {
+	    
+	    notJustAlphasToWords(tokenItem, tokenVal, wordList);
+
+	} else if (isStateName(tokenItem, tokenVal, wordList)) {
+	    /*
+	      The name of a US state
+	      isStateName() has already added the full name of the
+	      state, so we're all set.
+	    */
+	} else if (tokenLength > 1
+		   && matches(alphabetPattern, tokenVal)
+		   && !isPronounceable(tokenVal)) {
+	    /* Need common exception list */
 	    /* unpronouncable list of alphas */
 	    NumberExpander.expandLetters(tokenVal, wordList);
 
-	} else if ((index = tokenVal.indexOf('-')) != -1) {
-	    /* aaa-bbb */
-	    aaa = tokenVal.substring(0, index);
-	    String bbb = tokenVal.substring(index+1, tokenLength);
-	    
-	    tokenToWords(tokenItem, aaa, wordList);
-	    tokenToWords(tokenItem, bbb, wordList);
-
-	} else if (tokenLength > 1 &&
-		   !matches(alphabetPattern, tokenVal)) {
-	    /* its not just alphas */
-	    for (index = 0; index < tokenLength; index++) {
-		if (isTextSplitable(tokenVal, index)) {
-		    break;
-		}
-	    }
-
-	    aaa = tokenVal.substring(0, index+1);
-	    String bbb = tokenVal.substring(index+1, tokenLength);
-	    
-	    FeatureSet featureSet = tokenItem.getFeatures();
-	    featureSet.setString("nsw", "nide");
-	    tokenToWords(tokenItem, aaa, wordList);
-	    tokenToWords(tokenItem, bbb, wordList);
-	} else { /* buckets of other stuff missing */
-
-	    // wordCount++;
-	    	    
+	} else {
 	    /* just a word */
 	    wordList.add(tokenVal.toLowerCase());
+	}   
+	return wordList;
+    }
+
+	
+    /**
+     * Convert the given digit token with dashes (e.g. 999-999-999)
+     * into a list of words.
+     *
+     * @param tokenItem the digit token item
+     * @param tokenVal  the digit string
+     * @param wordList  the list to add the words to
+     *
+     * @return a list of words
+     */
+    private List digitsDashToWords(Item tokenItem, String tokenVal,
+				   List wordList) {
+	int tokenLength = tokenVal.length();
+	int a = 0;
+	for (int p = 0; p < tokenLength; p++) {
+	    if (tokenVal.charAt(p) == '-' || p == (tokenLength - 1)) {
+		String aaa = tokenVal.substring(a, p);
+		NumberExpander.expandDigits(aaa, wordList);
+		addBreak(wordList);
+		a = p+1;
+	    }
 	}
+	return wordList;
+    }
+
+	
+    /**
+     * Convert the given digit token into a list of words.
+     *
+     * @param tokenItem the digit token item
+     * @param tokenVal  the digit string
+     * @param wordList  the list to add the words to
+     *
+     * @return a list of words
+     */
+    private List digitsToWords(Item tokenItem, String tokenVal,
+				 List wordList) {
+	FeatureSet featureSet = tokenItem.getFeatures();
+	String nsw = "";
+	if (featureSet.isPresent("nsw")) {
+	    nsw = featureSet.getString("nsw");
+	}
+
+	if (nsw.equals("nide")) {
+	    NumberExpander.expandID(tokenVal, wordList);
+	} else {
+	    String rName = featureSet.getString("name");
+	    String digitsType = null;
+	    
+	    if (tokenVal.equals(rName)) {
+		digitsType = (String) cart.interpret(tokenItem);
+	    } else {
+		featureSet.setString("name", tokenVal);
+		digitsType = (String) cart.interpret(tokenItem);
+		featureSet.setString("name", rName);
+	    }
+	    
+	    if (digitsType.equals("ordinal")) {
+		NumberExpander.expandOrdinal(tokenVal, wordList);
+	    } else if (digitsType.equals("digits")) {
+		NumberExpander.expandDigits(tokenVal, wordList);
+	    } else if (digitsType.equals("year")) {
+		NumberExpander.expandID(tokenVal, wordList);
+	    } else {
+		NumberExpander.expandNumber(tokenVal, wordList);
+	    }
+	}
+	return wordList;
+    }
+    
+    
+    /**
+     * Converts the given Roman numeral string into a list of words.
+     *
+     * @param tokenItem the roman token item
+     * @param romanString the roman numeral string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List romanToWords(Item tokenItem, String romanString,
+				List wordList) {
+	String punctuation = (String) tokenItem.findFeature("p.punc");
+	
+	if (punctuation.equals("")) {
+	    /* no preceeding punctuation */
+	    String n = String.valueOf(NumberExpander.expandRoman(romanString));
+	
+	    if (kingLike(tokenItem)) {
+		wordList.add("the");
+		NumberExpander.expandOrdinal(n, wordList);
+	    } else if (sectionLike(tokenItem)) {
+		NumberExpander.expandNumber(n, wordList);
+	    } else {
+		NumberExpander.expandLetters(romanString, wordList);
+	    }
+	} else {
+	    NumberExpander.expandLetters(romanString, wordList);
+	}
+
+	return wordList;
+    }
+    
+
+    /**
+     * Returns true if the given key is in the kingSectionLikeHash
+     * Hashtable, and the value is the same as the given value.
+     *
+     * @param key key to look for in the hashtable
+     * @param value the value to match
+     *
+     * @return true if it matches, or false if it does not or if
+     * the key is not mapped to any value in the hashtable.
+     */
+    private static boolean inKingSectionLikeHash(String key, String value) {
+	String hashValue = (String) kingSectionLikeHash.get(key);
+	if (hashValue != null) {
+	    return (hashValue.equals(value));
+	} else {
+	    return false;
+	}
+    }
+
+
+
+    /**
+     * Returns true if the given token item contains a token that is
+     * in a king-like context, e.g., "King" or "Louis".
+     *
+     * @param tokenItem the token item to check
+     *
+     * @return true or false
+     */
+    public static boolean kingLike(Item tokenItem) {
+	String kingName = 
+	    ((String) tokenItem.findFeature("p.name")).toLowerCase();
+	if (inKingSectionLikeHash(kingName, KING_NAMES)) {
+	    return true;
+	} else {
+	    String kingTitle =
+		((String) tokenItem.findFeature("p.p.name")).toLowerCase();
+	    return inKingSectionLikeHash(kingTitle, KING_TITLES);
+	}
+    }
+
+    
+    /**
+     * Returns true if the given token item contains a token that is
+     * in a section-like context, e.g., "chapter" or "act".
+     *
+     * @param tokenItem the token item to check
+     *
+     * @return true or false
+     */
+    public static boolean sectionLike(Item tokenItem) {
+	String sectionType =
+	    ((String) tokenItem.findFeature("p.name")).toLowerCase();
+	return inKingSectionLikeHash(sectionType, SECTION_TYPES);
+    }
+
+
+    /**
+     * Converts the given string containing "St" and "Dr" to a list
+     * of words.
+     *
+     * @param tokenItem the token item
+     * @param drStString the string with "St" and "Dr"
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List drStToWords(Item tokenItem, String drStString,
+			     List wordList) {
+	String street = null;
+	String saint = null;
+	char c0 = drStString.charAt(0);
+
+	if (c0 == 's' || c0 == 'S') {
+	    street = "street";
+	    saint = "saint";
+	} else {
+	    street = "drive";
+	    saint = "doctor";
+	}
+	
+	FeatureSet featureSet = tokenItem.getFeatures();
+	String punctuation = featureSet.getString("punc");
+
+	String featPunctuation = (String) tokenItem.findFeature("punc");
+
+	if (tokenItem.getNext() == null ||
+	    punctuation.indexOf(',') != -1) {
+	    wordList.add(street);
+	} else if (featPunctuation.equals(",")) {
+	    wordList.add(saint);
+	} else {
+	    String pName = (String) tokenItem.findFeature("p.name");
+	    String nName = (String) tokenItem.findFeature("n.name");
+
+	    System.out.println(drStString + " " + pName + " " + nName);
+
+	    char p0 = pName.charAt(0);
+	    char n0 = nName.charAt(0);
+
+	    if (isUppercaseLetter(p0) && isLowercaseLetter(n0)) {
+		wordList.add(street);
+	    } else if (NumberExpander.isDigit(p0) && isLowercaseLetter(n0)) {
+		wordList.add(street);
+	    } else if (isLowercaseLetter(p0) && isUppercaseLetter(n0)) {
+		wordList.add(saint);
+	    } else {
+		String whitespace = (String) tokenItem.findFeature("n.whitespace");
+		if (whitespace.equals(" ")) {
+		    wordList.add(saint);
+		} else {
+		    wordList.add(street);
+		}
+	    }
+	}
+
+	if (punctuation != null && punctuation.equals(".")) {
+	    featureSet.setString("punc", "");
+	}
+
+	return wordList;
+    }
+		
+
+    /**
+     * Converts US money string into a list of words.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the US money string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List usMoneyToWords(Item tokenItem, String tokenVal, 
+				List wordList) {
+	
+	int dotIndex = tokenVal.indexOf('.');
+
+	if (matches(illionPattern, 
+		    (String) tokenItem.findFeature("n.name"))) {
+	    NumberExpander.expandReal(tokenVal.substring(1), wordList);
+	} else if (dotIndex == -1) {
+
+	    String aaa = tokenVal.substring(1);
+	    tokenToWords(tokenItem, aaa, wordList);
+
+	    if (aaa.equals("1")) {
+		wordList.add("dollar");
+	    } else {
+		wordList.add("dollars");
+	    }
+	} else if (dotIndex == (tokenVal.length() - 1) ||
+		   (tokenVal.length() - dotIndex) > 3) {
+	    /* simply read as mumble point mumble */
+	    NumberExpander.expandReal(tokenVal.substring(1), wordList);
+	    wordList.add("dollars");
+	} else {
+	    String aaa = tokenVal.substring(1, dotIndex);
+	    aaa = Utilities.deleteChar(aaa, ',');
+	    String bbb = tokenVal.substring(dotIndex+1);
+	    
+	    NumberExpander.expandNumber(aaa, wordList);
+
+	    if (aaa.equals("1")) {
+		wordList.add("dollar");
+	    } else {
+		wordList.add("dollars");
+	    }
+
+	    if (bbb.equals("00")) {
+		// add nothing to the word list
+	    } else {
+		NumberExpander.expandNumber(bbb, wordList);
+		if (bbb.equals("01")) {
+		    wordList.add("cent");
+		} else {
+		    wordList.add("cents");
+		}
+	    }
+	}
+
+	return wordList;
+    }	    
+
+
+    /**
+     * Convert the given apostrophed word into a list of words.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the apostrophed word string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List postropheToWords(Item tokenItem, String tokenVal,
+				  List wordList) {
+	int index = tokenVal.indexOf('\'');
+	String bbb = tokenVal.substring(index).toLowerCase();
+
+	if (inStringArray(bbb, postrophes)) {
+	    String aaa = tokenVal.substring(0, index);
+	    tokenToWords(tokenItem, aaa, wordList);
+	    wordList.add(bbb);
+
+	} else if (bbb.equals("'tve")) {
+	    String aaa = tokenVal.substring(0, index-2);
+	    tokenToWords(tokenItem, aaa, wordList);
+	    wordList.add("'ve");
+
+	} else {
+	    /* internal single quote deleted */
+	    StringBuffer buffer = new StringBuffer(tokenVal);
+	    buffer.deleteCharAt(index);
+	    tokenToWords(tokenItem, buffer.toString(), wordList);
+	}
+	return wordList;
+    }
+
+
+    /**
+     * Convert the given digits/digits string into a list of words.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the digits/digits string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List digitsSlashDigitsToWords(Item tokenItem, String tokenVal,
+					  List wordList) {
+	/* might be fraction, or not */
+	int index = tokenVal.indexOf('/');
+	String aaa = tokenVal.substring(0, index);
+	String bbb = tokenVal.substring(index+1);
+	int a, b;
+	
+	// if the previous token is a number, add an "and"
+	if (matches(digitsPattern, (String) tokenItem.findFeature("p.name"))
+	    && tokenItem.getPrevious() != null) {
+	    wordList.add("and");
+	}
+
+	if (aaa.equals("1") && bbb.equals("2")) {
+	    wordList.add("a");
+	    wordList.add("half");
+	} else if ((a = Integer.parseInt(aaa)) < (b = Integer.parseInt(bbb))) {
+	    NumberExpander.expandNumber(aaa, wordList);
+	    NumberExpander.expandOrdinal(bbb, wordList);
+	    if (a > 1) {
+		wordList.add("'s");
+	    }
+	} else {
+	    NumberExpander.expandNumber(aaa, wordList);
+	    wordList.add("slash");
+	    NumberExpander.expandNumber(bbb, wordList);
+	}
+
+	return wordList;
+    }
+
+
+    /**
+     * Convert the given dashed string (e.g. "aaa-bbb") into a list of words.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the dashed string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List dashToWords(Item tokenItem, String tokenVal,
+			     List wordList) {
+	int index = tokenVal.indexOf('-');
+	String aaa = tokenVal.substring(0, index);
+	String bbb = tokenVal.substring(index+1, tokenVal.length());
+
+	if (matches(digitsPattern, aaa) && matches(digitsPattern, bbb)) {
+	    FeatureSet featureSet = tokenItem.getFeatures();
+	    featureSet.setString("name", aaa);
+	    tokenToWords(tokenItem, aaa, wordList);
+	    wordList.add("to");
+	    featureSet.setString("name", bbb);
+	    tokenToWords(tokenItem, bbb, wordList);
+	    featureSet.setString("name", tokenVal);
+	} else {	    
+	    tokenToWords(tokenItem, aaa, wordList);
+	    tokenToWords(tokenItem, bbb, wordList);
+	}
+
+	return wordList;
+    }
+
+
+    /**
+     * Convert the given string (which does not only consist of alphabet)
+     * into a list of words.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the string
+     * @param wordList the list to add words to
+     *
+     * @return a list of words
+     */
+    private List notJustAlphasToWords(Item tokenItem, String tokenVal,
+				      List wordList) {
+	/* its not just alphas */
+	int index = 0;
+	int tokenLength = tokenVal.length();
+
+	for (; index < tokenLength; index++) {
+	    if (isTextSplitable(tokenVal, index)) {
+		break;
+	    }
+	}
+	
+	String aaa = tokenVal.substring(0, index+1);
+	String bbb = tokenVal.substring(index+1, tokenLength);
+	
+	FeatureSet featureSet = tokenItem.getFeatures();
+	featureSet.setString("nsw", "nide");
+	tokenToWords(tokenItem, aaa, wordList);
+	tokenToWords(tokenItem, bbb, wordList);
 	
 	return wordList;
     }
 
 
+    /**
+     * Returns true if the given word is pronounceable.
+     * This method is originally called us_aswd() in Flite 1.1.
+     *
+     * @param word the word to test
+     *
+     * @return true if the word is pronounceable, false otherwise
+     */
+    public boolean isPronounceable(String word) {
+	if (prefixFSM == null) {
+	    prefixFSM = new PrefixFSM();
+	}
+	if (suffixFSM == null) {
+	    suffixFSM = new SuffixFSM();
+	}
+	String lowerCaseWord = word.toLowerCase();
+	return (prefixFSM.accept(lowerCaseWord) &&
+		suffixFSM.accept(lowerCaseWord));
+    }
+
+
+    /**
+     * Returns true if the given token is the name of a US state.
+     * If it is, it will add the name of the state to the given word list.
+     *
+     * @param tokenItem the token item
+     * @param tokenVal the token string
+     * @param wordList the list to add words to
+     */
+    private boolean isStateName(Item tokenItem, String tokenVal,
+				List wordList) {
+	String[] state = (String[]) usStatesHash.get(tokenVal);
+	if (state != null) {
+	    boolean doIt = false;
+	    if (state.equals("ambiguous")) {
+		String pName = (String) tokenItem.findFeature("p.name");
+		String nName = (String) tokenItem.findFeature("n.name");
+		int nNameLength = nName.length();
+		FeatureSet featureSet = tokenItem.getFeatures();
+		if ((isUppercaseLetter(pName.charAt(0))
+		     && pName.length() > 2
+		     && matches(alphabetPattern, pName)) &&
+		    (isLowercaseLetter(nName.charAt(0))
+		     || tokenItem.getNext() == null
+		     || featureSet.getString("punc").equals(".")
+		     || ((nNameLength == 5 || nNameLength == 10) &&
+			 matches(digitsPattern, nName)))) {
+		    doIt = true;
+		} else {
+		    doIt = false;
+		}
+	    } else {
+		doIt = true;
+	    }
+	    if (doIt) {
+		for (int j = 2; j < state.length; j++) {
+		    if (state[j] != null) {
+			wordList.add(state[j]);
+		    }
+		}
+		return true;
+	    }
+	}
+	return false;
+    }
+	
+		   
     /**
      * Determines if the given input matches the given Pattern.
      *
@@ -301,6 +1106,7 @@ public class TokenToWords implements UtteranceProcessor {
 	return m.matches();
     }
     
+
     /**
      * Determines if the character at the given position of the given
      * input text is splittable. A character is splittable if:
@@ -321,15 +1127,51 @@ public class TokenToWords implements UtteranceProcessor {
 	char c0 = text.charAt(index);
 	char c1 = text.charAt(index+1);
 	
-	if ((('a' <= c0 && c0 <= 'z') || ('A' <= c0 && c0 <= 'Z')) &&
-	    (('a' <= c1 && c1 <= 'z') || ('A' <= c1 && c1 <= 'Z'))) {
+	if (isLetter(c0) && isLetter(c1)) {
 	    return false;
-	} else if (('0' <= c0 && c0 <= '9') && ('0' <= c1 && c1 <= '9')) {
+	} else if (NumberExpander.isDigit(c0) && NumberExpander.isDigit(c1)) {
 	    return false;
 	} else {
 	    return true;
 	}
     }
+
+
+    /**
+     * Returns true if the given character is a letter (a-z or A-Z).
+     *
+     * @param ch the character to test
+     *
+     * @return true or false
+     */
+    private static boolean isLetter(char ch) {
+	return (('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z'));
+    }
+
+
+    /**
+     * Returns true if the given character is an uppercase letter (A-Z).
+     *
+     * @param ch the character to test
+     *
+     * @return true or false
+     */
+    private static boolean isUppercaseLetter(char ch) {
+	return ('A' <= ch && ch <= 'Z');
+    }
+
+    
+    /**
+     * Returns true if the given character is a lowercase letter (a-z).
+     *
+     * @param ch the character to test
+     *
+     * @return true or false
+     */
+    private static boolean isLowercaseLetter(char ch) {
+	return ('a' <= ch && ch <= 'z');
+    }
+
 
     /**
      * Converts this object to its String representation
@@ -340,6 +1182,7 @@ public class TokenToWords implements UtteranceProcessor {
 	return "TokenToWords";
     }
 }
+
 
 
 
