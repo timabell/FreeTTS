@@ -54,7 +54,7 @@ public class FreeTTSHelloWorld {
 
 	    // loads the Voice, which mainly is loading the lexicon
 
-	    helloVoice.load();
+	    helloVoice.allocate();
 
 
 	    // does the text-to-speech

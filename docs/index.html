@@ -939,9 +939,9 @@ Though in the mean time, a few higher quality voices will be released
 with the next version.</i>''</p>
   </blockquote>
   <p>We highly recommend you read the <a href="http://festvox.org/">FestVox</a>
-documentation for creating new voices.  We plan on creating FestVox
-tools that will generate FreeTTS voice data.  We are a small team,
-however, and could use your help.</p>
+documentation for creating new voices. There are tools
+to import voices created by FestVox.  Look in the tool/FestVoxToFreeTTS
+directory.</p>
 </ul>
 <ul>
   <li><a name="output_to_file"><b>How do I output synthesized speech to
@@ -1040,10 +1040,10 @@ from Festival or Flite?</b></a></li>
   <p>There are a set of tools that will allow the easy importation of
 voice and lexicon data from Flite to FreeTTS.  These tools are not
 included in this release of FreeTTS. Future releases may include these
-tools. We're also planning on working to create tools for <a
- href="http://festvox.org/">FestVox</a>&nbsp;to allow people to
-generate FreeTTS voice data directly from FestVox.  We are a small
-team, however, and could use your help in this area. &nbsp;There is a <a
+tools. We do provide tools that will import voices from
+<a href="http://festvox.org/">FestVox</a>&nbsp;to allow people to
+generate FreeTTS voice data directly from FestVox.  Look in the
+tools/FestVoxToFreeTTS directory.  &nbsp;There is a <a
  href="https://sourceforge.net/forum/forum.php?forum_id=142733">New
 Voices FreeTTS forum</a> devoted to the creation of new voices. This
 forum provides the most up to date information on generating new voices
@@ -1077,13 +1077,12 @@ voice? How do I create a limited domain voice?</b></li>
 generated from Festival voices. The document &nbsp;<a
  href="http://festvox.org/festvox/festvox_toc.html">http://festvox.org/festvox/festvox_toc.html</a>
 describes the process for generating a Festival voice. &nbsp;The steps
-involved in converting a Festival voice to a Flite voice are currently
-not well documented. &nbsp;There is a fairly straightforward
-post-processing step that converts Flite voices to FreeTTS voices. We
-know of people in the FreeTTS community that have been working on
-making this conversion from FestVox to FreeTTS easier, however, and
-we're working with them to contribute their code/process to the open
-source community.</blockquote>
+involved in converting a Festival voice to a Flite voice are documented
+in the documentation for Flite. &nbsp;There is a fairly straightforward
+post-processing step that converts Flite voices to FreeTTS voices.
+FreeTTS also can directly import a voice from FestVox/Festival.  Look
+in the tools/FestVoxToFreeTTS directory.
+</blockquote>
 <ul>
   <li><b><a name="What_does_the_message_Cant_find"></a>What does the
 message "Can't find diphone xx-yy" mean?</b></li>

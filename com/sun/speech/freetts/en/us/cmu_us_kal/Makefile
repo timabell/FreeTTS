@@ -8,7 +8,7 @@
 
 # Relative path to the top of the source tree
 TOP = ../../../../../../..
-PACKAGE_PATH = com/sun/speech/freetts/en/us/cmu_kal
+PACKAGE_PATH = com/sun/speech/freetts/en/us/cmu_us_kal
 DOC_DEST = /lab/speech/web/freetts
 
 # By default, build all of the .java files. 
@@ -23,8 +23,8 @@ include ${TOP}/build/Makefile.config
 
 CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 
-DATA_FILES =  diphone_units.txt  diphone_units16.txt
-BINARY_FILES = diphone_units.bin diphone_units.idx diphone_units16.bin diphone_units16.idx
+DATA_FILES =  cmu_us_kal.txt  cmu_us_kal16.txt voice.Manifest
+BINARY_FILES = cmu_us_kal.bin cmu_us_kal.idx cmu_us_kal16.bin cmu_us_kal16.idx
 
 DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 INSTALLED_BINARY_FILES = ${BINARY_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
@@ -34,31 +34,37 @@ ${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
 	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
 	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.Manifest: %.Manifest
+	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
+	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
-all:: ${DATA} $(INSTALLED_BINARY_FILES)
+
+
+all:: ${CLASSES} ${DATA} $(INSTALLED_BINARY_FILES)
 
 binaries: all $(INSTALLED_BINARY_FILES)
 
 verify_binaries: all
 	$(JAVA_CMD) com.sun.speech.freetts.diphone.DiphoneUnitDatabase -compare -showtimes
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/diphone_units.bin:	diphone_units.txt
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_us_kal.bin:	cmu_us_kal.txt
 	$(JAVA_CMD) com.sun.speech.freetts.diphone.DiphoneUnitDatabase -generate_binary $<
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/diphone_units16.bin: diphone_units16.txt
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_us_kal16.bin: cmu_us_kal16.txt
 	$(JAVA_CMD) com.sun.speech.freetts.diphone.DiphoneUnitDatabase -generate_binary $<
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/diphone_units.idx: diphone_units.txt
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_us_kal.idx: cmu_us_kal.txt
 	$(JAVA_CMD) com.sun.speech.freetts.diphone.DiphoneUnitDatabase -generate_binary $<
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/diphone_units16.idx: diphone_units16.txt
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_us_kal16.idx: cmu_us_kal16.txt
 	$(JAVA_CMD) com.sun.speech.freetts.diphone.DiphoneUnitDatabase -generate_binary $<
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}

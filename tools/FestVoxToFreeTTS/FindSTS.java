@@ -35,7 +35,7 @@ import javax.sound.sampled.AudioInputStream;
  * Intel floating-point math.
  * </p>
  */
-public class FindSTS {
+public strictfp class FindSTS {
     /**
      * Generate an sts file
      *
@@ -583,7 +583,7 @@ class Wave {
                     *(double)((float)this.samples[i] - (float)wave2.samples[i]);
             }
             r /= this.numSamples;
-            System.out.println("a/b diff " + Double.toString(Math.sqrt(r)));
+            System.out.println("a/b diff " + Double.toString(StrictMath.sqrt(r)));
         }
     }
 

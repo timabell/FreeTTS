@@ -42,7 +42,7 @@ public class SegmenterTests extends TestCase {
      */
     public Utterance  getSyllables(String text) {
 	voice = new SimpleVoice(true);
-	voice.load();
+	voice.allocate();
 	utterance = new Utterance(voice);
 	Relation words = utterance.createRelation("Word");
 	StringTokenizer tok = new StringTokenizer(text);

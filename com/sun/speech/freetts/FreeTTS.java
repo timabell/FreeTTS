@@ -20,12 +20,6 @@ import com.sun.speech.freetts.audio.RawFileAudioPlayer;
 
 import com.sun.speech.freetts.en.us.CMUDiphoneVoice;
 
-import de.dfki.lt.freetts.en.us.MbrolaVoice;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceUS1;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceUS2;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceUS3;
-import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileInputStream;
@@ -59,9 +53,13 @@ public class FreeTTS {
      * Constructs a default FreeTTS with the kevin16 voice.
      */
     public FreeTTS() {
+        VoiceManager voiceManager = VoiceManager.getInstance();
+        voiceManager.getVoice("kevin16");
+        /* TODO
 	this(new CMUDiphoneVoice(true));
         this.voice.getFeatures().setString
             (Voice.DATABASE_NAME, "cmu_kal/diphone_units16.bin");
+            */
     }
 
     /**
@@ -78,7 +76,7 @@ public class FreeTTS {
      * a new AudioPlayer.
      */
     public void startup() {
-	voice.load();
+	voice.allocate();
 	if (!getSilentMode()) {
 	    if (streamingAudio) {
 		audioPlayer = new JavaStreamingAudioPlayer();
@@ -172,7 +170,7 @@ public class FreeTTS {
      */
     public void shutdown() {
 	audioPlayer.close();
-	voice.close();
+	voice.deallocate();
     }
 
     
@@ -441,7 +439,7 @@ public class FreeTTS {
         boolean dumpAudioTypes = false;
         Voice voice = null;
 
-        VoiceManager voiceManager = new VoiceManager();
+        VoiceManager voiceManager = VoiceManager.getInstance();
         String voices = voiceManager.toString();
         
         // find out what Voice to use first
@@ -466,7 +464,11 @@ public class FreeTTS {
         }
 
         if (voice == null) { // default Voice is kevin16
-            voice = voiceManager.getVoice("kevin");
+            voice = voiceManager.getVoice("kevin16");
+        }
+
+        if (voice == null) {
+            throw new Error ("The specified voice is not defined");
         }
         FreeTTS freetts = new FreeTTS(voice);
 
@@ -584,112 +586,3 @@ public class FreeTTS {
 	System.exit(0);
     }
 }
-
-
-/**
- * A convenience class for organizing the list of Voice names
- * available, and for obtaining the Voice object. When new voices
- * become available, they should be added to this class.
- */
-class VoiceManager {
-
-    private String[] voices =
-    {"kevin", "kevin16", "mbrola1", "mbrola2", "mbrola3"};
-
-    /**
-     * Constructs a VoiceManager with the given voice names.
-     *
-     * @param voices the names of Voices
-     */
-    public VoiceManager() {}
-
-    /**
-     * Returns true if the given voice name is in this VoiceManager.
-     *
-     * @param voiceName the voice name to check
-     *
-     * @return true if the given voice is in this VoiceManager, false otherwise
-     */
-    public boolean contains(String voiceName) {
-        for (int i = 0; i < voices.length; i++) {
-            if (voices[i].equals(voiceName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns a String of all the names of the Voices, with the
-     * last two items separated by "or", e.g.,
-     * "kevin, kevin16 or mbrola1".
-     *
-     * @return all the names of the Voices, or an empty string
-     *    if no Voices are available
-     */
-    public String toString() {
-        String voiceString = "";
-        for (int i = 0; i < voices.length; i++) {
-            if (voices.length > 1) {
-                if (i != 0) {
-                    voiceString += ", ";
-                }
-                if ((i+1) == voices.length) {
-                    voiceString += "or ";
-                }
-            }
-            voiceString += voices[i];
-        }
-        return voiceString;
-    }
-    
-    /**
-     * Returns a Voice specified by the given name. If the given
-     * Voice is not available, returns the default Voice.
-     *
-     * @param voiceName name of the Voice to return
-     *
-     * @return a Voice specified by the given name, or null if no
-     *    such Voice exists
-     *
-     * @throws IllegalStateException if the "mbrola.base" system
-     *    property is undefined in the event that an MBROLA
-     *    Voice is requested 
-     */
-    public Voice getVoice(String voiceName) throws IllegalStateException {
-
-        Voice voice = null;
-        boolean createLexicon = true;
-
-        if (voiceName.equals("kevin")) {
-            voice = new CMUDiphoneVoice(createLexicon);
-            voice.getFeatures().setString
-                (Voice.DATABASE_NAME, "cmu_kal/diphone_units.bin");
-        } else if (voiceName.equals("kevin16")) {
-            voice = new CMUDiphoneVoice(createLexicon);
-            voice.getFeatures().setString
-                (Voice.DATABASE_NAME, "cmu_kal/diphone_units16.bin");
-        } else if (voiceName.startsWith("mbrola")) {
-            if (voiceName.equals("mbrola1")) {
-                voice = new MbrolaVoiceUS1(createLexicon);
-            } else if (voiceName.equals("mbrola2")) {
-                voice = new MbrolaVoiceUS2(createLexicon);
-            } else if (voiceName.equals("mbrola3")) {
-                voice = new MbrolaVoiceUS3(createLexicon);
-            }
-            if (voice != null) {
-                Validator validator = new
-                    MbrolaVoiceValidator((MbrolaVoice) voice);
-                try {
-                    validator.validate();
-                } catch (ValidationException ve) {
-                    System.err.println(ve.getMessage());
-                    throw new IllegalStateException
-                        ("Problem starting MBROLA voice");
-                }
-            }
-        }
-        return voice;
-    }
-}
-

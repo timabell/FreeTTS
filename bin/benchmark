@@ -1,3 +1,4 @@
+#!/bin/sh
 mkdir -p benchmarks
 date=`date +%b_%d_%H_%M_%S`
 metricsfile=benchmarks/metrics_$date

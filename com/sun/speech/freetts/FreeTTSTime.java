@@ -19,19 +19,30 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Standalone utility that directly interacts with a
- * CMUTimeAWBVoice.
+ * Standalone utility that tells the time.
+ *
+ * Defaults to "alan" voice.
+ * 
  */
 public class FreeTTSTime extends FreeTTS {
 
     private final static String VERSION = 
-	    "FreeTTSTime Version 1.0, September  21, 2001";
+	    "FreeTTSTime Version 1.1, August  1, 2003";
 
     /**
      * Class constructor.
      */
     public FreeTTSTime() {
-	super(new com.sun.speech.freetts.en.us.CMUTimeAWBVoice());
+        super(VoiceManager.getInstance().getVoice("alan"));
+    }
+
+    /**
+     * Class constructor.
+     *
+     * @param voice Voice to say time with
+     */
+    public FreeTTSTime(Voice voice) {
+        super(voice);
     }
 
 
@@ -58,6 +69,8 @@ public class FreeTTSTime extends FreeTTS {
         System.out.println("    -time now       : speak the current time");
         System.out.println("    -period secs    : period of iter");
         System.out.println("    -clockMode      : tells time every 5 mins");
+        System.out.println("    -voice VOICE    : " +
+                VoiceManager.getInstance().toString());
 	System.exit(0);
     }
 
@@ -359,20 +372,31 @@ public class FreeTTSTime extends FreeTTS {
 	String dumpFile = null;
 	String protocol = null;
 	
-	FreeTTSTime freetts = new FreeTTSTime();
-	Voice voice = freetts.getVoice();
-	FeatureSet voiceFeatures = voice.getFeatures();
 	boolean timeTest = false;
 	int iterations = 1;
 	int delay = 0;
 
+        boolean setMetrics = false;
+        boolean setDetailedMetrics = false;
+        boolean setVerbose = false;
+        boolean setDumpUtterance = false;
+        boolean setDumpRelations = false;
+        String waveDumpFile = null;
+        String runTitle = null;
+
+        boolean setSilentMode = false;
+        String audioFile = null;
+        boolean setInputMode = false;
+
+        String voiceName = null;
+
 	for (int i = 0; i < args.length; i++) {
 	    if (args[i].equals("-metrics")) {
-		voice.setMetrics(true);
+		setMetrics = true;
 	    } else if (args[i].equals("-detailedMetrics")) {
-		voice.setDetailedMetrics(true);
+		setDetailedMetrics = true;
 	    } else if (args[i].equals("-silent")) {
-	 	freetts.setSilentMode(true);
+	 	setSilentMode = true;
 	    } else if (args[i].equals("-period")) {
 		if (++i < args.length) {
 		    try {
@@ -383,11 +407,11 @@ public class FreeTTSTime extends FreeTTS {
 		    }
 		}
 	    } else if (args[i].equals("-verbose")) {
-		voice.setVerbose(true);
+		setVerbose = true;
 	    } else if (args[i].equals("-dumpUtterance")) {
-		voice.setDumpUtterance(true);
+		setDumpUtterance = true;
 	    } else if (args[i].equals("-dumpRelations")) {
-		voice.setDumpRelations(true);
+		setDumpRelations = true;
 	    } else if (args[i].equals("-clockMode")) {
 		iterations = Integer.MAX_VALUE;
 		delay = 300;
@@ -396,7 +420,7 @@ public class FreeTTSTime extends FreeTTS {
 		iterations = 100;
 	    } else if (args[i].equals("-dumpAudio")) {
 		if (++i < args.length) {
-		    freetts.setAudioFile(args[i]);
+		    audioFile = args[i];
 		} else {
 		    usage();
 		}
@@ -414,7 +438,7 @@ public class FreeTTSTime extends FreeTTS {
 	    } else if (args[i].equals("-dumpWave")) {
 		if (++i < args.length) {
 		    dumpFile  = args[i];
-		    voice.setWaveDumpFile(args[i]);
+		    waveDumpFile = args[i];
 		} else {
 		    usage();
 		}
@@ -423,7 +447,7 @@ public class FreeTTSTime extends FreeTTS {
 	    } else if (args[i].equals("-help")) {
 		usage();
 	    } else if (args[i].equals("-time")) {
-		freetts.setInputMode(InputMode.TEXT);
+		setInputMode = true;
 		if (++i < args.length) {
 		    time = args[i];
 		} else {
@@ -431,14 +455,69 @@ public class FreeTTSTime extends FreeTTS {
 		}
 	    } else if (args[i].equals("-run")) {
 		if (++i < args.length) {
-		    voice.setRunTitle(args[i]);
+		    runTitle = args[i];
 		} else {
 		    usage();
 		}
+            } else if (args[i].equals("-voice")) {
+                if (++i < args.length) {
+                    voiceName = args[i];
+                } else {
+                    usage();
+                }
 	    } else {
 		System.out.println("Unknown option:" + args[i]);
 	    }
 	}
+
+        if (voiceName == null) {
+            voiceName = "alan";
+        }
+
+	FreeTTSTime freetts = new
+            FreeTTSTime(VoiceManager.getInstance().getVoice(voiceName));
+	Voice voice = freetts.getVoice();
+
+        if (setMetrics) {
+            voice.setMetrics(true);
+        }
+
+        if (setDetailedMetrics) {
+            voice.setDetailedMetrics(true);
+        }
+
+        if (setVerbose) {
+            voice.setVerbose(true);
+        }
+
+        if (setDumpUtterance) {
+            voice.setDumpUtterance(true);
+        }
+
+        if (setDumpRelations) {
+            voice.setDumpRelations(true);
+        }
+
+        if (waveDumpFile != null) {
+            voice.setWaveDumpFile(waveDumpFile);
+        }
+
+        if (runTitle != null) {
+            voice.setRunTitle(runTitle);
+        }
+
+        if (setSilentMode) {
+            freetts.setSilentMode(true);
+        }
+
+        if (audioFile != null) {
+            freetts.setAudioFile(audioFile);
+        }
+
+        if (setInputMode) {
+            freetts.setInputMode(InputMode.TEXT);
+        }
+    
 
 	freetts.startup();
 

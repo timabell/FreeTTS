@@ -25,4 +25,8 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 
 all:: ${CLASSES} ${STUBS}
 
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
+	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
+	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 

@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -779,7 +779,10 @@ public class DiphoneUnitDatabase {
 		    if (args[i].equals("-generate_binary")) {
 			 String name = "diphone_units.txt";
 			 if (i + 1 < args.length) {
-			     name = args[++i];
+                             String nameArg = args[++i];
+                             if (!nameArg.startsWith("-")) {
+                                 name = nameArg;
+                             }
 			 } 
 
 			 int suffixPos = name.lastIndexOf(".txt");

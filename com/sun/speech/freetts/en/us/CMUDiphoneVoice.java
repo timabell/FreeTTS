@@ -20,7 +20,12 @@ import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.Voice;
 
+import com.sun.speech.freetts.Gender;
+import com.sun.speech.freetts.Age;
+import java.util.Locale;
+
 import java.io.IOException;
+
 
 /**
  * Defines an unlimited-domain diphone synthesis based voice 
@@ -30,9 +35,11 @@ public class CMUDiphoneVoice extends CMUVoice {
     /**
      * Creates a simple voice
      */
+    /* TODO
     public CMUDiphoneVoice() {
 	this(false);
     }
+    */
 
     /**
      * Creates a simple voice
@@ -40,8 +47,10 @@ public class CMUDiphoneVoice extends CMUVoice {
      * @param createLexicon if <code>true</code> automatically load up
      * the default CMU lexicon; otherwise, don't load it.
      */
-    public CMUDiphoneVoice(boolean createLexicon) {
-	super(createLexicon);
+    //TODO
+    public CMUDiphoneVoice(boolean createLexicon, String name, Gender gender,
+            Age age, String description, Locale locale) {
+	super(createLexicon, name, gender, age, description, locale);
 	setRate(150f);
 	setPitch(100F);
 	setPitchRange(11F);
@@ -104,9 +113,7 @@ public class CMUDiphoneVoice extends CMUVoice {
      * Derived voices typically override this to customize behaviors.
      * This voice uses the DiphoneUnitSelector to select units. The
      * unit selector requires the name of a diphone database. If no
-     * diphone database has been specified (by setting the
-     * DATABASE_NAME feature of this voice) then by default
-     * cmu_kal/diphone_units.bin is used.
+     * diphone database has been specified then an Error is thrown.
      * 
      * @return the post lexical processor
      * 
@@ -117,7 +124,7 @@ public class CMUDiphoneVoice extends CMUVoice {
 	String unitDatabaseName = getFeatures().getString(DATABASE_NAME);
 
 	if (unitDatabaseName == null) {
-	    unitDatabaseName = "cmu_kal/diphone_units.bin";
+            throw new Error("CMUDiphoneVoice is not defined with a data file.");
 	}
 
 	return new DiphoneUnitSelector(

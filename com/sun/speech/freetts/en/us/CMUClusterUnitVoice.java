@@ -20,6 +20,10 @@ import com.sun.speech.freetts.clunits.ClusterUnitPitchmarkGenerator;
 import com.sun.speech.freetts.relp.UnitConcatenator;
 import java.io.IOException;
 
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.Gender;
+import java.util.Locale;
+
 /**
  * Defines limited domain synthesis voice that specializes
  * in telling the time (with an english accent).
@@ -28,9 +32,11 @@ public class CMUClusterUnitVoice extends CMUVoice {
     /**
      * Creates a simple voice. By default, no Lexicon is loaded.
      */
+    /*TODO
     public CMUClusterUnitVoice() {
 	this(false);
     }
+    */
 
     /**
      * Creates a simple voice
@@ -38,8 +44,10 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @param createLexicon if <code>true</code> automatically load up
      * the default CMU lexicon; otherwise, don't load it.
      */
-    public CMUClusterUnitVoice(boolean createLexicon) {
-	super(createLexicon);
+    //TODO
+    public CMUClusterUnitVoice(boolean createLexicon, String name,
+            Gender gender, Age age, String description, Locale locale) {
+	super(createLexicon, name, gender, age, description, locale);
 	setRate(150f);
 	setPitch(100F);
 	setPitchRange(12F);
@@ -69,7 +77,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
 	String unitDatabaseName = getFeatures().getString(DATABASE_NAME);
 
 	if (unitDatabaseName == null) {
-	    unitDatabaseName = "cmu_awb/cmu_time_awb.bin";
+            throw new Error("CMUClusterUnitVoice not defined with data file");
 	}
 
 	return new ClusterUnitSelector(

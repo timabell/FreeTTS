@@ -28,6 +28,10 @@ import de.dfki.lt.freetts.mbrola.MbrolaAudioOutput;
 
 import java.io.IOException;
 
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.Gender;
+import java.util.Locale;
+
 /**
  * Defines an unlimited-domain diphone synthesis based voice using
  * the MBROLA synthesis.
@@ -47,9 +51,12 @@ public class MbrolaVoice extends CMUVoice {
      *    where the voice database of this voice is located
      * @param database the name of the voice database of this voice
      */
+    //TODO
     public MbrolaVoice(boolean createLexicon, String databaseDirectory, 
-                       String database) {
-	super(createLexicon);
+            String database, float rate, float pitch, float pitchrate,
+            String name, Gender gender, Age age,
+            String description, Locale locale) {
+	super(createLexicon, name, gender, age, description, locale);
         this.databaseDirectory = databaseDirectory;
         this.database = database;
     }
@@ -132,17 +139,37 @@ public class MbrolaVoice extends CMUVoice {
             databaseDirectory + File.separator + database;
     }
 
+//    /**
+//     * Returns the unit concatenator to be used by this voice.
+//     * Derived voices typically override this to customize behaviors.
+//     * 
+//     * @return the unit conatenator
+//     * 
+//     * @throws IOException if an IO error occurs while getting
+//     *     processor
+//     */
+//    protected UtteranceProcessor getUnitConcatenator() throws IOException {
+//        return null;
+//    }
+
+    //[[Providing the Mbrola classes via getUnitSelector() and
+    // getUnitConcatenator() is just a hack allowing us to use
+    // the current CMUVoice.java framework. It only means that
+    // after the Durator and the ContourGenerator, the classes
+    // process the utterance (Selector before Concatenator).]]
     /**
      * Returns the unit concatenator to be used by this voice.
-     * Derived voices typically override this to customize behaviors.
-     * 
+     * This method constructs the command line with which the
+     * MBROLA binary will be called, and initialises the
+     * MbrolaCaller accordingly.
+     *
      * @return the unit conatenator
-     * 
+     *
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
     protected UtteranceProcessor getUnitConcatenator() throws IOException {
-        return null;
+        return new MbrolaCaller(getMbrolaCommand());
     }
 
     /**

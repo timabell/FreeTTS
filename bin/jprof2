@@ -1,7 +1,5 @@
-BASE=../
-FREETTS_CLASSES=$BASE/classes
-# This assumes your path is set to point to the 1.4 JDK
-java -Xrunhprof:heap=dump,file=log.txt -ea -cp $FREETTS_CLASSES com.sun.speech.freetts.FreeTTS $@
+#!/bin/sh
+`dirname $0`/baseFreeTTS2 -Xrunhprof:heap=dump,file=log.txt com.sun.speech.freetts.FreeTTS $@
 egrep 'OBJ|ARR' log.txt  | sed 's/(//g' | sed 's/,//g' | sed ' s/=/ /g' | awk '
 { size += $4; totalObjects++ }
 $1 == "OBJ" { objs++ }

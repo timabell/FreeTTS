@@ -28,8 +28,16 @@ PUSH_DEST_DOC_TEST = /home/groups/f/fr/freetts/htdocs/test
 #JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
 #	lib/cmuawb.jar lib/jsapi.jar 
 
-JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
-	lib/cmuawb.jar lib/cmutimelex.jar lib/demo.jar
+# en/us voices are immediate subdirectories of en/us
+EN_US_DIR = com/sun/speech/freetts/en/us
+EN_US_VOICES:=$(shell find ${EN_US_DIR}/* -type d -maxdepth 0 -exec basename \{\} \; | grep -v CVS)
+EN_US_VOICES_JAR_FILES:=$(shell for i in ${EN_US_VOICES}; do echo $$i.jar; done)
+
+JAR_FILES = freetts.jar cmulex.jar \
+	cmutimelex.jar demo.jar en_us.jar $(EN_US_VOICES_JAR_FILES)
+
+JARS = freetts.jar cmulex.jar \
+	cmutimelex.jar demo.jar en_us.jar $(EN_US_VOICES)
 
 WEBSTART_CLOCK_DIR = demo/JSAPI/WebStartClock
 
@@ -51,16 +59,16 @@ CMUTIME_FILES= com/sun/speech/freetts/en/us/cmutimelex_compiled.bin \
 		com/sun/speech/freetts/en/us/cmutimelex_addenda.bin  \
 		com/sun/speech/freetts/en/us/cmutimelex_lts.bin  \
    
-CMUKAL8_FILES = com/sun/speech/freetts/en/us/cmu_kal/diphone_units.bin \
-		com/sun/speech/freetts/en/us/cmu_kal/diphone_units.idx 
+#CMUKAL_FILES = com/sun/speech/freetts/en/us/cmu_kal/diphone_units.bin \
+#		com/sun/speech/freetts/en/us/cmu_kal/diphone_units.idx \
+#		com/sun/speech/freetts/en/us/cmu_kal/diphone_units16.bin \
+#		com/sun/speech/freetts/en/us/cmu_kal/diphone_units16.idx \
+#		com/sun/speech/freetts/en/us/cmu_kal/KevinVoiceDirectory.class
 
-CMUKAL16_FILES = com/sun/speech/freetts/en/us/cmu_kal/diphone_units16.bin \
-		 com/sun/speech/freetts/en/us/cmu_kal/diphone_units16.idx 
-
-CMUAWB_FILES = com/sun/speech/freetts/en/us/cmu_awb/cmu_time_awb.bin 
+#CMUAWB_FILES = com/sun/speech/freetts/en/us/cmu_awb/cmu_time_awb.bin 
 
 
-JSAPI_FILES = javax
+#JSAPI_FILES = javax
 
 DEPLOY_FILES =  \
 	    build \
@@ -133,7 +141,8 @@ include ${TOP}/build/Makefile.config
 ####################################################
 clean::
 	rm -rf $(CLASS_DEST_DIR)
-	rm -rf $(JARS) $(TARS) $(ZIPS)
+	(cd lib; rm -f $(JAR_FILES))
+	rm -rf $(TARS) $(ZIPS)
 	rm -rf $(API_DIR)
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
@@ -220,7 +229,8 @@ all::
 # remove the old ones and make the new ones
 
 jars:  
-	rm -rf $(JARS)
+	echo $(JARS)
+	(cd lib; rm -f $(JAR_FILES))
 	$(MAKE) $(JARS)
 
 tars:  $(TARS)
@@ -239,40 +249,55 @@ javadocs:
 
 emacsdocs:
 
-lib/cmulex.jar: 
-	(cd classes; $(JAR) cf ../$@ $(CMULEX_FILES))
+cmulex.jar: 
+	(cd classes; $(JAR) cfm ../lib/$@ $(EN_US_DIR)/cmulex.Manifest \
+		$(CMULEX_FILES))
 
-lib/cmutimelex.jar: 
-	(cd classes; $(JAR) cf ../$@ $(CMUTIME_FILES))
+cmutimelex.jar: 
+	(cd classes; $(JAR) cfm ../lib/$@ $(EN_US_DIR)/cmutimelex.Manifest \
+		$(CMUTIME_FILES))
 
-lib/cmukal8.jar: 
-	(cd classes; $(JAR) cf ../$@ $(CMUKAL8_FILES))
+#lib/cmukal.jar: 
+#	(cd classes; $(JAR) cf ../$@ $(CMUKAL_FILES))
 
-lib/cmukal16.jar:
-	(cd classes; $(JAR) cf ../$@ $(CMUKAL16_FILES))
+#lib/cmuawb.jar:
+#	(cd classes; $(JAR) cf ../$@ $(CMUAWB_FILES))
 
-lib/cmuawb.jar:
-	(cd classes; $(JAR) cf ../$@ $(CMUAWB_FILES))
+#jsapi.jar:
+#	(cd classes; $(JAR) cf ../lib/$@ $(JSAPI_FILES))
 
-lib/jsapi.jar:
-	(cd classes; $(JAR) cf ../$@ $(JSAPI_FILES))
+demo.jar: 
+	( cd classes; $(JAR) cf ../lib/$@ `ls *.class`)
 
-lib/demo.jar: 
-	( cd classes; $(JAR) cf ../$@ `ls *.class`)
+${EN_US_VOICES}:
+	(cd classes; \
+	$(JAR) cfm ../lib/$@.jar $(EN_US_DIR)/$@/voice.Manifest \
+		`ls ${EN_US_DIR}/$@/*.class` \
+		`ls ${EN_US_DIR}/$@/*.idx` \
+		`ls ${EN_US_DIR}/$@/*.bin` \
+	)
+	
+en_us.jar:
+	(cd classes; \
+	$(JAR) cfm ../lib/$@ $(EN_US_DIR)/en_us.Manifest \
+		`ls com/sun/speech/freetts/en/*.class \
+		com/sun/speech/freetts/en/us/*.class \
+		com/sun/speech/freetts/en/us/*.txt \
+		| egrep -v '.*\cmulex.*\.txt' \
+		| egrep -v '.*\cmu.*\.txt'` \
+	)
+
+freetts.jar:
+	(cd classes; \
+	$(JAR) cfm ../lib/$@ $(EN_US_DIR)/en_us.Manifest \
+		`find com -type f -print | \
+		egrep -v -f ../build/freetts_exclude_list`\
+                `find de -type f -print | \
+		egrep -v -f ../build/freetts_exclude_list` \
+	)
 
 javadoc.zip: javadocs
 	$(ZIP) -r $@ $(API_DIR)
-
-
-lib/freetts.jar:
-	(cd classes; \
-	$(JAR) cf ../$@ `find com -type f -print | \
-		egrep -v -f ../build/freetts_exclude_list`\
-                `find de -type f -print | \
-		egrep -v -f ../build/freetts_exclude_list`\
-	)
-
-
 
 #########################################
 # Builds the webstartclock product files, leaves them

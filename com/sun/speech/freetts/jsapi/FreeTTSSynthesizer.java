@@ -141,7 +141,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 		freettsVoice.setLexicon(lexicon);
 	    }
 	    freettsVoice.setOutputQueue(outputQueue);
-	    freettsVoice.load();
+	    freettsVoice.allocate();
 	    freettsVoice.setAudioPlayer(audio);
 	}
 

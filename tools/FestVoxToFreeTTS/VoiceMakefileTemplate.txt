@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -8,7 +8,7 @@
 
 # Relative path to the top of the source tree
 TOP = ../../../../../../..
-PACKAGE_PATH = com/sun/speech/freetts/en/us/cmu_awb
+PACKAGE_PATH = com/sun/speech/freetts/en/us/%VOICENAME%
 DOC_DEST = /lab/speech/web/freetts
 
 # By default, build all of the .java files. 
@@ -23,8 +23,8 @@ include ${TOP}/build/Makefile.config
 
 CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 
-DATA_FILES =  cmu_time_awb.txt
-BINARY_FILES = cmu_time_awb.bin
+DATA_FILES =  %VOICENAME%.txt voice.Manifest
+BINARY_FILES = %VOICENAME%.bin %VOICENAME%.idx
 
 DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 INSTALLED_BINARY_FILES = ${BINARY_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
@@ -34,16 +34,28 @@ ${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
 	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
 	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.Manifest: %.Manifest
+	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
+	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
-all:: ${DATA} $(INSTALLED_BINARY_FILES)
+
+
+all:: ${CLASSES} ${DATA} $(INSTALLED_BINARY_FILES)
 
 binaries: all $(INSTALLED_BINARY_FILES)
 
 verify_binaries: all
-	$(JAVA_CMD) com.sun.speech.freetts.clunits.ClusterUnitDatabase -compare -showtimes
+	$(JAVA_CMD) %UNIT_DATABASE_CLASS% -compare -showtimes
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_time_awb.bin:	cmu_time_awb.txt
-	$(JAVA_CMD) com.sun.speech.freetts.clunits.ClusterUnitDatabase -generate_binary
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%VOICENAME%.bin:	%VOICENAME%.txt
+	$(JAVA_CMD) %UNIT_DATABASE_CLASS% -generate_binary $<
+	$(RM) $@
+	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%VOICENAME%.idx: %VOICENAME%.txt
+	$(JAVA_CMD) %UNIT_DATABASE_CLASS% -generate_binary $<
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 

@@ -1,1 +1,2 @@
-jtime -dumpWave time.wave -dumpRelations -time 06:51 > time.rel
+#!/bin/sh
+`dirname $0`/jtime -dumpWave time.wave -dumpRelations -time 06:51 > time.rel

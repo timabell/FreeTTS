@@ -33,6 +33,7 @@
 			Organization </A><BR><A HREF="#objects">Major FreeTTS Objects
 			</A><BR><A HREF="#processing">Processing Walkthrough</A> <BR><A HREF="#data">FreeTTS
 			Data</A> <BR><A HREF="#code">Code Walkthrough </A>
+			<BR><A HREF="#packaging">Voice Packaging</A>
 			</P>
 			<P><B>Related Documentation </B><BR><A HREF="index.html">FreeTTS
 			Overview </A><BR><A HREF="api/index.html">FreeTTS API </A><BR><A HREF="http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/index.html">The
@@ -189,6 +190,26 @@ FreeTTSSpeakable via the Voice.speak method and process it as follows:
 	lowest sound latency possible. 
 	</P>
 </UL>
+<H3><A HREF="api/com/sun/speech/freetts/VoiceManager.html">VoiceManager</A></H3>
+<P>The VoiceManager is the central repository of voices available to
+FreeTTS.  To get a voice you can do:
+<pre>
+VoiceManager voiceManager = VoiceManager.getInstance();
+
+// create a list of new Voice instances
+Voice[] voices = voiceManager.getVoices();
+
+// iterate through the list until you find a Voice with the properties
+// you want
+...
+
+// allocate the resources for the voice
+voices[x].allocate();
+
+</pre>
+You can save yourself the chore of iterating through the voices if you
+already know the name of the Voice you want by using voiceManager.getVoice()
+</P>
 <H3><A HREF="api/com/sun/speech/freetts/Utterance.html">Utterance</A></H3>
 <P>The Utterance is the central processing target in FreeTTS. A
 FreeTTSSpeakable is broken up into one or more Utterances, processed
@@ -1227,10 +1248,114 @@ processing. </FONT>
         return &quot;PostLexicalAnalyzer&quot;;
     }
 }</PRE>
+<TABLE WIDTH=100% CELLPADDING=2 CELLSPACING=2>
+	<TR>
+		<TD BGCOLOR="#eeeeff">
+			<H2><A NAME="packaging"></A>Voice Packaging
+			</H2>
+		</TD>
+	</TR>
+</TABLE>
+<P> FreeTTS has been designed to allow flexible and dynamic addition of voices.
+</P>
+<H3>Voice Packages</H3>
+<P>
+Voices are defined by their corresponding VoiceDirectories.  These directories
+are what actually create the instances of the voices, and can create several
+different voices.  This is useful if a single voice can sound dramatically
+different if it is created through different parameters.  Then the directory
+can return more than one instance of the same voice class though they may
+sound different.  It may also be useful for the same voice package to contain
+more than one voice, allowing a single interface to those voices.
+The voice directory MUST also provide a main() function that will print
+out information about the voice if invoked.  Typically this is done by
+simply calling the VoiceDirectory's toString() method.
+</P>
+<P> A voice package is a jar file that contains exactly one subclass of
+VoiceDirectory.  The package probably contains data files as well as other
+java classes that implement the voices provided.  The jarfile Manifest
+must also include three entries:</P>
+<OL>
+    <LI><P>&quot;Main-Class&quot; which will be the VoiceDirectory class,
+        and prints out information about the voices provided</P>
+    <LI><P>&quot;FreeTTSVoiceDefinition: true&quot;, which informs
+        FreeTTS that this jarfile is a voice package</P>
+    <LI><P>&quot;Class-Path:&quot; which lists all the jars upon which
+        this voice package is dependent.  For example, the voice may
+        be dependent upon its lexicon jarfile.  This allows a user
+        to simply execute the main() function without having to specify
+        all of the dependencies (which the user may not know).</P>
+</OL>
+<H3>Installing Voice Packages</H3>
+<P>Voice Packages can be added to FreeTTS without any compilation.  There
+are two ways to alert FreeTTS to the presence of a new voice:</P>
+<OL>
+    <LI><P>Listing of the VoiceDirectory classes that are loaded.</P>
+    <LI><P>Putting the packages in the correct directory and allowing
+            FreeTTS to automatically detect them.
+            [[[TODO: This is not yet implemented.  For now use the listing method.]]]
+            </P>
+</OL>
+<P>Listing of the VoiceDirectory classes requires all of the required classes
+to be appropriately in the java classpath.  The names of the voice directory
+classes are listed in voices files.  When VoiceManager.getVoices() is
+called, reads several files.</P>
+<OL>
+    <LI><P>First, it looks for internal_voices.txt, stored
+    in the same directory as VoiceManager.class (If the VoiceManager is in a
+    jarfile, which it probably is, then this file is also inside the jar file).
+    If the file does not exist, FreeTTS moves on.  internal_voices.txt only
+    exists to allow one to package FreeTTS into a single stand-alone jarfile,
+    as may be needed for applets.  Avoid using internal_voices.txt if
+    at all possible.  The file then requires you to ship all listed voices
+    along with FreeTTS and provides minimal flexibility.</P>
+
+    <LI><P>Next, FreeTTS looks for voices.txt in the same directory as
+    freetts.jar (assuming FreeTTS is being executed from a jar, which
+    it probably is).  If the file does not exist, FreeTTS moves on.</P>
+
+    <LI><P>Last, if the system property &quot;freetts.voicesfile&quot;
+    is defined, then FreeTTS will use the voice directory classes
+    listed in that file.</P>
+</OL>
+
+<P>Voice packages can also be recognized simply by putting them in
+the correct filesystem directory.
+[[[TODO: At least, that is the plan.  This is not yet actually implemented.]]]
+If a jarfile is in the correct directory
+and has the &quot;FreeTTSVoiceDefinition: true&quot; definition
+in its Manifest, then it is assumed to be a voice package.  The file
+is then loaded along with all dependencies listed in the
+&quot;Class-Path:&quot; definition.  Whatever class is listed as the
+&quot;Main-Class:&quot; is assumed to be the voice directory.  There
+are two ways to specify which filesystem directory to look in:</P>
+<OL>
+    <LI><P>By default, FreeTTS will look in the same directory as
+        freetts.jar.  (Assuming FreeTTS was loaded from a jarfile, which
+        it probably was).</P>
+    <LI><P>The directories specified by the system property
+        &quot;freetts.voicespath&quot;.</P>
+</OL>
+
+<H3>Compiling Voice Packages</H3>
+<P>To create a voice package you simply need to meet the qualifications
+above.  However that can be a bit of work.  If you want to import a voice
+from FestVox, there are tools in tools/FestVoxToFreeTTS/.  View the
+README file there for more information.  The scripts can automatically
+import a US/English voice, but is not designed to handle others.  For the
+simple case of US/English voices, simply put them in a subdirectory of
+com/sun/speech/freetts/en/us/.  Files ending with &quot;.txt&quot; will
+be assumed to be data files for the voice and compiled into their
+&quot;.bin&quot; and &quot;.idx&quot; equivalents.  The file
+&quot;voice.Manifest&quot; will automatically be added to the Manifest
+of the voice package's jarfile.  The compilation system will automatically
+detect new directories inside en/us, assume they are voice packages,
+and create new jarfiles for them.</P>
+
 <HR>
 <P STYLE="margin-bottom: 0cm">See the <A HREF="../license.terms">license
 terms</A> and <A HREF="../acknowledgments.txt">acknowledgments</A>.<BR>Copyright
-2001 Sun Microsystems, Inc. All Rights Reserved. Use is subject to
+2003 Sun Microsystems, Inc. All Rights Reserved. Use is subject to
 license terms. 
 </P>
 </BODY>

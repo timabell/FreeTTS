@@ -32,6 +32,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
+import java.util.Locale;
+
 import javax.sound.sampled.AudioFormat;
 
 
@@ -59,11 +61,14 @@ import javax.sound.sampled.AudioFormat;
  * voice.setAudioPlayer(new JavaClipAudioPlayer());
  *
  * // loads the Voice
- * voice.load();
+ * voice.allocate();
  *
  * // start talking
  * voice.speak("I can talk forever without getting tired!");
  * </pre>
+ *
+ * @see VoiceManager
+ * @see VoiceDirectory
  *
  */
 public abstract class Voice implements UtteranceProcessor, Dumpable {
@@ -102,6 +107,11 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 
     private boolean loaded = false;
 
+    private String name = "default_name";
+    private Age age = Age.DONT_CARE;
+    private Gender gender = Gender.DONT_CARE;
+    private String description = "default description";
+    private Locale locale = Locale.getDefault();
 
     /**
      * Prefix for System property names.
@@ -151,6 +161,28 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	     // can't get properties, just use defaults
 	}
         outputQueue = null;
+    }
+
+    /**
+     * Creates a new Voice like above, except that it also
+     * stores the properties of the voice.
+     * @param name the name of the voice
+     * @param gender the gender of the voice
+     * @param age the age of the voice
+     * @param description a human-readable string providing a
+     * description that can be displayed for the users.
+     * @param locale the locale of the voice
+     *
+     * @see #Voice()
+     */
+    public Voice(String name, Gender gender, Age age,
+            String description, Locale locale) {
+        this();
+        setName(name);
+        setGender(gender);
+        setAge(age);
+        setDescription(description);
+        setLocale(locale);
     }
 
 
@@ -233,13 +265,13 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 
 
     /**
-     * Loads this Voice. It loads the lexicon and the
+     * Allocate this Voice. It loads the lexicon and the
      * audio output handler, and creates an audio output thread by
      * invoking <code>createOutputThread()</code>, if
      * one is not already created. It then calls the <code>loader()</code>
      * method to load Voice-specific data, which include utterance processors.
      */
-    public void load() {
+    public void allocate() {
 	if (isLoaded()) {
 	    return;
 	}
@@ -924,7 +956,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Shuts down the voice processing.
      */
-    public void close() {
+    public void deallocate() {
+        //TODO: does this really deallocate anything?
 	setLoaded(false);
 	if (!externalOutputQueue) {
 	    outputQueue.post(null);
@@ -934,7 +967,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Sets the baseline pitch.
      *
-     * @param the baseline pitch in hertz
+     * @param hertz the baseline pitch in hertz
      */
     public void setPitch(float hertz) {
 	this.pitch = hertz;
@@ -1112,12 +1145,104 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     }
 
     /**
+     * Set the name of this voice.
+     * [[[TODO: any standard format to the name?]]]
+     *
+     * @param name the name to assign this voice
+     */
+    protected void setName(String name) {
+        this.name = name;
+    }
+
+
+    /**
+     * Get the name of this voice.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Returns the name of this Voice.
      *
      * @return the name of this Voice
      */
     public String toString() {
-        return "Voice";
+        return getName();
+    }
+
+    /**
+     * Set the gender of this voice.
+     *
+     * @param gender the gender to assign
+     */
+    protected void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    /**
+     * Get the gender of this voice.
+     *
+     * @return the gender of this voice
+     */
+    public Gender getGender() {
+        return gender;
+    }
+
+    /**
+     * Set the age of this voice.
+     *
+     * @param age the age to assign
+     */
+    protected void setAge(Age age) {
+        this.age = age;
+    }
+
+    /**
+     * Get the age of this voice.
+     *
+     * @return the age of this voice
+     */
+    public Age getAge() {
+        return age;
+    }
+
+    /**
+     * Set the description of this voice.
+     *
+     * @param description the human readable description to assign
+     */
+    protected void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Get the description of this voice.
+     *
+     * @return the human readable description of this voice
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Set the locale of this voice.
+     *
+     * @param locale the locale of this voice.
+     */
+    protected void setLocale(Locale locale) {
+        this.locale = locale;
+    }
+
+    /**
+     * Get the locale of this voice.
+     *
+     * @return the locale of this voice.
+     */
+    public Locale getLocale() {
+        return locale;
     }
 
     /**

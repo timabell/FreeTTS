@@ -93,7 +93,7 @@ public class Server extends TTSServer {
 	voice.getFeatures().setString(Voice.DATABASE_NAME, databaseName);
 	
 	// loads the Voice, which mainly is loading the lexicon
-	voice.load();
+	voice.allocate();
 
 	return voice;
     }

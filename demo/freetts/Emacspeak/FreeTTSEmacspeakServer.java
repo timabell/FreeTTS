@@ -68,7 +68,7 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 		(Voice.DATABASE_NAME, diphoneDatabase);
 	    emacsVoice.setLexicon(new CMULexicon());
 	    emacsVoice.setOutputQueue(Voice.createOutputThread());
-	    emacsVoice.load();
+	    emacsVoice.allocate();
 	    emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
 
 	    System.out.println("...Ready");

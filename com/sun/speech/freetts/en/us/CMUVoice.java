@@ -42,6 +42,10 @@ import com.sun.speech.freetts.en.ContourGenerator;
 
 import com.sun.speech.freetts.relp.AudioOutput;
 
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.Gender;
+import java.util.Locale;
+
 import java.util.List;
 import java.io.IOException;
 
@@ -56,9 +60,11 @@ public abstract class CMUVoice extends Voice {
     /**
      * Creates a CMU voice
      */
+                /* TODO
     public CMUVoice() {
 	this(false);
     }
+    */
 
     /**
      * Creates a CMUVoice voice
@@ -66,7 +72,19 @@ public abstract class CMUVoice extends Voice {
      * @param createLexicon if <code>true</code> automatically load up
      * the default CMU lexicon; otherwise, don't load it.
      */
+    // TODO: do we want this?
+                /*
     public CMUVoice(boolean createLexicon) {
+	if (createLexicon) {
+	    setLexicon(new CMULexicon());
+	}
+    }
+    */
+
+    //TODO documentation
+    public CMUVoice(boolean createLexicon, String name, Gender gender,
+            Age age, String description, Locale locale) {
+        super(name, gender, age, description, locale);
 	if (createLexicon) {
 	    setLexicon(new CMULexicon());
 	}

@@ -16,7 +16,7 @@ DOC_DEST = /lab/speech/web/freetts
 FILES = $(shell echo *.java)
 
 # List any sub directories that need to be built
-SUBDIRS = cmu_kal cmu_awb
+SUBDIRS:=$(shell find ./ -type d -maxdepth 1 -exec basename {} \; | grep -v CVS | grep -v '\.')
 
 ##########################################################################
 
@@ -29,7 +29,8 @@ DATA_FILES = phrasing_cart.txt durz_cart.txt dur_stat.txt \
 	     part_of_speech.txt phoneset.txt f0_lr_terms.txt \
 	     cmulex_compiled.txt cmulex_addenda.txt cmulex_lts.txt \
 	     cmutimelex_compiled.txt cmutimelex_addenda.txt cmutimelex_lts.txt \
-	      nums_cart.txt prefix_fsm.txt suffix_fsm.txt
+	     nums_cart.txt prefix_fsm.txt suffix_fsm.txt \
+	     en_us.Manifest cmutimelex.Manifest cmulex.Manifest
 
 DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 
@@ -40,6 +41,11 @@ BINARY_FILES = cmulex_compiled.bin cmulex_addenda.bin  cmulex_lts.bin \
 BINARY = ${BINARY_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
+	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
+	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.Manifest: %.Manifest
 	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
 	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}

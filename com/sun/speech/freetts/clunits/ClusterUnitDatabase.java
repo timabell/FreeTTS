@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -728,9 +728,9 @@ public class ClusterUnitDatabase {
      * <b> Options </b>
      * <p>
      *    <ul>
-     *		<li> <code> -generate_binary</code> reads in the text
-     *		version of the database and generates the binary
-     *		version of the database.
+     *		<li> <code> -generate_binary [filename]</code> reads
+     *		in the text version of the database and generates
+     *		the binary version of the database.
      *		<li> <code> -compare </code>  Loads the text and
      *		binary versions of the database and compares them to
      *		see if they are equivalent.
@@ -750,13 +750,28 @@ public class ClusterUnitDatabase {
 		    if (args[i].equals("-generate_binary")) {
 
 			 timer.start("load_text");
+                         String name = "clunits.txt";
+                         if (i + 1 < args.length) {
+                             String nameArg = args[++i];
+                             if (!nameArg.startsWith("-")) {
+                                 name = nameArg;
+                             }
+			 }
+
+                         int suffixPos = name.lastIndexOf(".txt");
+
+                         String binaryName = "clunits.bin";
+                         if (suffixPos != -1) {
+                             binaryName = name.substring(0, suffixPos) + ".bin";
+                         }
+
 			 ClusterUnitDatabase udb = new
 			     ClusterUnitDatabase(
-				new URL("file:./cmu_time_awb.txt"), false);
+				new URL("file:./" + name), false);
 			 timer.stop("load_text");
 
 			 timer.start("dump_binary");
-	    		 udb.dumpBinary("cmu_time_awb.bin");
+	    		 udb.dumpBinary(binaryName);
 			 timer.stop("dump_binary");
 
 		    } else if (args[i].equals("-compare")) {
