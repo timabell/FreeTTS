@@ -31,8 +31,8 @@ import com.sun.speech.engine.SpeechEventDispatcher;
  */
 public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     implements SpeechEventDispatcher {
-    private boolean done = false;
-    private boolean cancelled = false;
+    private volatile boolean done = false;
+    private volatile boolean cancelled = false;
 
     /**
      * The object containing the DOM of the parsed JSML.
