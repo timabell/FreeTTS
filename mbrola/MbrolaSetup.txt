@@ -14,8 +14,8 @@ translation table from the phonetic alphabet which Festival (and
 therefore FreeTTS) uses is provided with voice us1 (it is called "us1mrpa").
 
 
-How to set up the MBROLA files
-------------------------------
+Set up the MBROLA files
+-----------------------
 
 Decide for a base directory where to put both mbrola binary and mbrola 
 voice databases. Let's assume this is /home/jim/mbr. The mbrola binary 
@@ -37,6 +37,13 @@ not with us2 or us3. Therefore, only downloading us2 will produce an
 error.
 
 
+Copy mbrola.jar to lib
+----------------------
+
+Copy the mbrola.jar file in this directory to the lib directory
+(i.e., the same directory that contains freetts.jar).
+
+
 *IMPORTANT*:
 -----------
 
@@ -49,8 +56,3 @@ java -Dmbrola.base=/home/jim/mbr
 For all the FreeTTS demos, you should set the environment variable
 MBROLA_DIR (e.g., "setenv MBROLA_DIR /home/jim/mbr" in csh).
 This will automatically set the Java system property "mbrola.base".
-
-
-
-                         --- END OF DOCUMENT ---
-

@@ -31,10 +31,9 @@ if [ -f $1.diff ]; then
 	rm $1.diff
 fi
 
-sh ../bin/freetts -voice kevin -dumpRelations -silent -file $1 > $NEW
+java -jar ../bld/lib/freetts.jar -voice kevin -dumpRelations -silent -file $1 > $NEW
 
 rm -f $REF_TMP
-# cp ../data/alice2.flite.v1.1-beta.rel $REF_TMP
 cp $2 $REF_TMP
 sh testUtt 
 

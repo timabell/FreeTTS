@@ -1,0 +1,25 @@
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.12000s  0.12000s  0.12000s  0.12000s  0.12000s  100.00%
+Tokenizer       4     0.00000s  0.00000s  0.02600s  0.00725s  0.02900s  24.17%
+DelayProcessor: 4     0.01900s  0.01600s  0.01900s  0.01825s  0.07300s  60.83%
+Memory Use    : 2955k  of 3520k
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.14500s  0.14500s  0.14500s  0.14500s  0.14500s  100.00%
+Tokenizer       5     0.00000s  0.00000s  0.02400s  0.00760s  0.03800s  26.21%
+DelayProcessor: 5     0.02000s  0.01500s  0.02000s  0.01660s  0.08300s  57.24%
+Memory Use    : 2912k  of 3520k
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.39600s  0.39600s  0.39600s  0.39600s  0.39600s  100.00%
+Tokenizer       11    0.00000s  0.00000s  0.03400s  0.01336s  0.14700s  37.12%
+DelayProcessor: 11    0.01900s  0.01500s  0.02400s  0.01782s  0.19600s  49.49%
+Memory Use    : 2431k  of 3520k
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     6.56900s  6.56900s  6.56900s  6.56900s  6.56900s  100.00%
+Tokenizer       226   0.01500s  0.00000s  0.13000s  0.01022s  2.31000s  35.17%
+DelayProcessor: 226   0.01900s  0.01300s  0.04500s  0.01770s  4.00000s  60.89%
+Memory Use    : 2302k  of 4608k
+Metrics collected on sunlabs

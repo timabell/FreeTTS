@@ -13,9 +13,10 @@
     </path>
     <property name="src_dir"		value="."/>
     <property name="build_dir"		value="bld"/>
-    <property name="classes_dir"	value="classes"/>
+    <property name="classes_dir"	value="${build_dir}/classes"/>
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
     <property name="lib_dir"            value="${build_dir}/lib"/>
+    <property name="mbrola_dir"         value="${build_dir}/mbrola"/>
     <property name="bin_dir"            value="${build_dir}/bin"/>
     <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
     <property name="javadoc_zip"	value="javadoc.zip"/>
@@ -343,12 +344,12 @@
 
 
     <!-- mbrola.jar -->
-    <property name="mbrola_jar" value="${lib_dir}/mbrola.jar"/>
+    <property name="mbrola_jar" value="${mbrola_dir}/mbrola.jar"/>
 
     <target name="mbrola_jar" 
 	    depends="compile_src"
-	    description="Create ${lib_dir}/mbrola.jar">
-        <mkdir dir="${lib_dir}"/>
+	    description="Create ${mbrola_dir}/mbrola.jar">
+        <mkdir dir="${mbrola_dir}"/>
         <jar destfile="${mbrola_jar}" 
 	     manifest="${src_dir}/de/dfki/lt/freetts/en/us/Manifest"
 	     compress="true">
@@ -811,7 +812,7 @@
 
     <fileset id="docs"
 	     dir="."
-	     includes="README.txt,RELEASE_NOTES,docs/**"
+	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/**"
              excludes="docs/*.awk"/>
 
     <fileset id="demos"
@@ -820,12 +821,12 @@
 
     <fileset id="tests"
 	     dir="."
-	     includes="tests/**,wave/**,data/**"/>
+	     includes="tests/**"/>
 
     <fileset id="binaries"
 	     dir="${build_dir}"
-	     includes="lib/**,bin/**"
-             excludes="lib/jsapi.jar,lib/mbrola.jar"/>
+	     includes="lib/**,bin/**,mbrola/**"
+             excludes="lib/jsapi.jar"/>
 
     <fileset id="jsapi_sh"
 	     dir="."
@@ -844,6 +845,7 @@
             <fileset refid="srcs"/>
             <fileset refid="demos"/>
             <fileset dir="." includes="speech.properties"/>
+            <fileset dir="." includes="tools/**"/>
             <fileset refid="jsapi_sh"/>
             <fileset refid="docs"/>
             <fileset refid="javadoc_zip"/>
@@ -853,13 +855,13 @@
     <target name="deploy_binaries"
 	    depends="javadoc_zip">
         <mkdir dir="${deploy_dir}"/>
-        <copy file="${mbrola_jar}" tofile="${mbrola_jar}.disabled"/>
         <chmod dir="lib" perm="ugo+x" includes="jsapi.sh"/>
         <zip destfile="${deploy_dir}/freetts-bin-${version}.zip">
             <fileset refid="legal"/>
             <fileset refid="binaries"/>
             <fileset refid="jsapi_sh"/>
             <fileset dir="." includes="speech.properties"/>
+            <fileset dir="." includes="tools/**"/>
             <fileset refid="docs"/>
             <fileset refid="javadoc_zip"/>
         </zip>

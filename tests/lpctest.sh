@@ -14,11 +14,11 @@ if [ -f lpctest.diff ]; then
 	rm lpctest.diff
 fi
 
-`dirname $0`/../bin/baseFreeTTS -Dcom.sun.speech.freetts.outputLPC=true \
-    com.sun.speech.freetts.FreeTTS -voice kevin \
-    -silent -file ../wave/08-01-01.wave.text | grep -v "^#" > lpctest.res
+java -Dcom.sun.speech.freetts.outputLPC=true -jar ../bld/lib/freetts.jar \
+    -voice kevin -silent -file wave/08-01-01.wave.text | grep -v "^#" > \
+    lpctest.res
 
-diff lpctest.res ../wave/flite1.1.lpcres.txt > lpctest.diff
+diff lpctest.res wave/flite1.1.lpcres.txt > lpctest.diff
 
 wc lpctest.diff | awk '
 {

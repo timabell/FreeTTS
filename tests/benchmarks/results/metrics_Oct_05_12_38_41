@@ -1,0 +1,122 @@
+# ----------------------------- loading SimpleVoice---------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     9.481s    9.481s    9.481s    9.481s    9.481s    100.00%
+UnitDatabase    1     3.250s    3.250s    3.250s    3.250s    3.250s    34.28%
+CartLoading     1     1.418s    1.418s    1.418s    1.418s    1.418s    14.96%
+UtteranceProces 1     0.905s    0.905s    0.905s    0.905s    0.905s    9.55%
+FeatureProcessi 1     0.218s    0.218s    0.218s    0.218s    0.218s    2.30%
+LTS             1     1.321s    1.321s    1.321s    1.321s    1.321s    13.93%
+lexicon         1     2.328s    2.328s    2.328s    2.328s    2.328s    24.55%
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     1.472s    1.472s    1.472s    1.472s    1.472s    100.00%
+processing      4     0.147s    0.079s    0.638s    0.360s    1.442s    97.96%
+..WordSylSeg    4     0.002s    0.002s    0.018s    0.008s    0.033s    2.24%
+..CARTIntonator 4     0.003s    0.003s    0.063s    0.029s    0.117s    7.95%
+..PostLex       4     0.001s    0.001s    0.002s    0.002s    0.006s    0.41%
+..CARTDurator   4     0.119s    0.020s    0.119s    0.054s    0.217s    14.74%
+..IntTarget     4     0.006s    0.006s    0.098s    0.049s    0.197s    13.38%
+..SegmentToUnit 4     0.002s    0.002s    0.035s    0.014s    0.057s    3.87%
+..WaveSynthesiz 4     0.009s    0.009s    0.345s    0.177s    0.707s    48.03%
+Memory Use    : 18113k  of 64896k
+# ----------------------------- loading SimpleVoice---------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     8.858s    8.858s    8.858s    8.858s    8.858s    100.00%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.01%
+UnitDatabase    1     3.318s    3.318s    3.318s    3.318s    3.318s    37.46%
+CartLoading     1     1.310s    1.310s    1.310s    1.310s    1.310s    14.79%
+UtteranceProces 1     0.329s    0.329s    0.329s    0.329s    0.329s    3.71%
+FeatureProcessi 1     0.291s    0.291s    0.291s    0.291s    0.291s    3.29%
+LTS             1     1.027s    1.027s    1.027s    1.027s    1.027s    11.59%
+lexicon         1     2.548s    2.548s    2.548s    2.548s    2.548s    28.76%
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     2.772s    2.772s    2.772s    2.772s    2.772s    100.00%
+processing      4     0.492s    0.492s    1.012s    0.683s    2.733s    98.59%
+..Tokenization  4     0.004s    0.004s    0.025s    0.010s    0.040s    1.44%
+..TokenToWords  4     0.007s    0.006s    0.027s    0.013s    0.052s    1.88%
+..CARTPhraser   4     0.004s    0.004s    0.044s    0.015s    0.060s    2.16%
+..WordSylSeg    4     0.023s    0.014s    0.031s    0.022s    0.087s    3.14%
+..CARTIntonator 4     0.141s    0.031s    0.220s    0.113s    0.452s    16.31%
+..PostLex       4     0.001s    0.001s    0.005s    0.003s    0.012s    0.43%
+..CARTDurator   4     0.050s    0.050s    0.260s    0.114s    0.455s    16.41%
+..IntTarget     4     0.047s    0.047s    0.267s    0.127s    0.508s    18.33%
+..SegmentToUnit 4     0.179s    0.014s    0.179s    0.069s    0.277s    9.99%
+..WaveSynthesiz 4     0.033s    0.033s    0.387s    0.194s    0.777s    28.03%
+Memory Use    : 19033k  of 64896k
+# ----------------------------- loading SimpleVoice---------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     9.532s    9.532s    9.532s    9.532s    9.532s    100.00%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.01%
+UnitDatabase    1     3.836s    3.836s    3.836s    3.836s    3.836s    40.24%
+CartLoading     1     1.311s    1.311s    1.311s    1.311s    1.311s    13.75%
+UtteranceProces 1     0.609s    0.609s    0.609s    0.609s    0.609s    6.39%
+FeatureProcessi 1     0.301s    0.301s    0.301s    0.301s    0.301s    3.16%
+LTS             1     0.995s    0.995s    0.995s    0.995s    0.995s    10.44%
+lexicon         1     2.443s    2.443s    2.443s    2.443s    2.443s    25.63%
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     7.779s    7.779s    7.779s    7.779s    7.779s    100.00%
+processing      10    1.088s    0.125s    2.426s    0.752s    7.519s    96.66%
+..Tokenization  10    0.019s    0.003s    0.034s    0.010s    0.104s    1.34%
+..TokenToWords  10    0.040s    0.005s    0.058s    0.019s    0.188s    2.42%
+..CARTPhraser   10    0.008s    0.002s    0.074s    0.013s    0.130s    1.67%
+..WordSylSeg    10    0.105s    0.009s    0.124s    0.048s    0.475s    6.11%
+..Pauses        10    0.002s    0.000s    0.004s    0.001s    0.011s    0.14%
+..CARTIntonator 10    0.154s    0.012s    0.237s    0.069s    0.694s    8.92%
+..PostLex       10    0.004s    0.001s    0.009s    0.002s    0.022s    0.28%
+..CARTDurator   10    0.152s    0.025s    0.903s    0.205s    2.049s    26.34%
+..IntTarget     10    0.228s    0.020s    0.328s    0.099s    0.990s    12.73%
+..SegmentToUnit 10    0.042s    0.010s    0.177s    0.068s    0.680s    8.74%
+..WaveSynthesiz 10    0.334s    0.028s    1.176s    0.217s    2.167s    27.86%
+Memory Use    : 16427k  of 64896k
+# ----------------------------- loading SimpleVoice---------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     8.844s    8.844s    8.844s    8.844s    8.844s    100.00%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.01%
+UnitDatabase    1     2.981s    2.981s    2.981s    2.981s    2.981s    33.71%
+CartLoading     1     1.493s    1.493s    1.493s    1.493s    1.493s    16.88%
+UtteranceProces 1     0.288s    0.288s    0.288s    0.288s    0.288s    3.26%
+FeatureProcessi 1     0.277s    0.277s    0.277s    0.277s    0.277s    3.13%
+LTS             1     1.140s    1.140s    1.140s    1.140s    1.140s    12.89%
+lexicon         1     2.629s    2.629s    2.629s    2.629s    2.629s    29.73%
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     33.329s   33.329s   33.329s   33.329s   33.329s   100.00%
+processing      251   0.040s    0.006s    1.423s    0.126s    31.676s   95.04%
+..Tokenization  251   0.001s    0.000s    0.130s    0.003s    0.662s    1.99%
+..TokenToWords  251   0.001s    0.000s    0.239s    0.007s    1.751s    5.25%
+..CARTPhraser   251   0.001s    0.000s    0.162s    0.002s    0.455s    1.37%
+..WordSylSeg    251   0.004s    0.000s    0.266s    0.012s    3.044s    9.13%
+..CARTIntonator 251   0.002s    0.000s    0.225s    0.010s    2.532s    7.60%
+..CARTDurator   251   0.004s    0.000s    0.251s    0.014s    3.406s    10.22%
+..IntTarget     251   0.004s    0.000s    0.282s    0.017s    4.241s    12.72%
+..SegmentToUnit 251   0.004s    0.000s    0.186s    0.011s    2.832s    8.50%
+..WaveSynthesiz 251   0.019s    0.004s    0.437s    0.046s    11.591s   34.78%
+Memory Use    : 18641k  of 64896k
+# ----------------------------- loading CMUTimeAWB----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     10.146s   10.146s   10.146s   10.146s   10.146s   100.00%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.01%
+UnitDatabase    1     4.341s    4.341s    4.341s    4.341s    4.341s    42.79%
+CartLoading     1     1.262s    1.262s    1.262s    1.262s    1.262s    12.44%
+UtteranceProces 1     0.506s    0.506s    0.506s    0.506s    0.506s    4.99%
+FeatureProcessi 1     0.500s    0.500s    0.500s    0.500s    0.500s    4.93%
+LTS             1     1.038s    1.038s    1.038s    1.038s    1.038s    10.23%
+lexicon         1     2.438s    2.438s    2.438s    2.438s    2.438s    24.03%
+# ----------------------------- ClunitsTest-----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     58.571s   58.571s   58.571s   58.571s   58.571s   100.00%
+processing      100   0.461s    0.440s    3.689s    0.579s    57.889s   98.84%
+..Tokenization  100   0.002s    0.001s    0.228s    0.007s    0.703s    1.20%
+..TokenToWords  100   0.002s    0.002s    0.070s    0.006s    0.598s    1.02%
+..CARTPhraser   100   0.001s    0.000s    0.026s    0.001s    0.146s    0.25%
+..WordSylSeg    100   0.006s    0.005s    0.511s    0.021s    2.145s    3.66%
+..CARTIntonator 100   0.002s    0.002s    0.140s    0.009s    0.866s    1.48%
+..PostLex       100   0.001s    0.000s    0.171s    0.003s    0.282s    0.48%
+..CARTDurator   100   0.004s    0.004s    0.160s    0.015s    1.479s    2.53%
+..IntTarget     100   0.007s    0.006s    0.481s    0.024s    2.414s    4.12%
+..SegmentToUnit 100   0.380s    0.359s    2.911s    0.423s    42.344s   72.30%
+..WaveSynthesiz 100   0.056s    0.056s    0.430s    0.068s    6.756s    11.53%
+Memory Use    : 14957k  of 64896k
+Metrics collected on mute

@@ -1,0 +1,53 @@
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.112s    0.112s    0.112s    0.112s    0.112s    100.00%
+Tokenization    4     0.000s    0.000s    0.033s    0.008s    0.034s    30.36%
+PartOfSpeechTag 4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Phrasing        4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+WordSylSeg      4     0.000s    0.000s    0.001s    0.000s    0.002s    1.79%
+Intonation      4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+PostLex         4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Duration        4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+IntTarget       4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+WaveSynthesizer 4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Memory Use    : 2873k  of 3520k
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.085s    0.085s    0.085s    0.085s    0.085s    100.00%
+Tokenization    5     0.000s    0.000s    0.022s    0.007s    0.036s    42.35%
+PartOfSpeechTag 5     0.000s    0.000s    0.001s    0.000s    0.001s    1.18%
+Phrasing        5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+WordSylSeg      5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Intonation      5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+PostLex         5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Duration        5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+IntTarget       5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+WaveSynthesizer 5     0.001s    0.000s    0.001s    0.000s    0.001s    1.18%
+Memory Use    : 2821k  of 3520k
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.203s    0.203s    0.203s    0.203s    0.203s    100.00%
+Tokenization    11    0.000s    0.000s    0.031s    0.009s    0.102s    50.25%
+PartOfSpeechTag 11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Phrasing        11    0.000s    0.000s    0.001s    0.000s    0.001s    0.49%
+WordSylSeg      11    0.000s    0.000s    0.001s    0.000s    0.002s    0.99%
+Intonation      11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+PostLex         11    0.000s    0.000s    0.001s    0.000s    0.001s    0.49%
+Duration        11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+IntTarget       11    0.000s    0.000s    0.004s    0.000s    0.004s    1.97%
+WaveSynthesizer 11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Memory Use    : 2489k  of 3520k
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.991s    0.991s    0.991s    0.991s    0.991s    100.00%
+Tokenization    176   0.000s    0.000s    0.052s    0.003s    0.479s    48.34%
+PartOfSpeechTag 176   0.000s    0.000s    0.001s    0.000s    0.003s    0.30%
+Phrasing        176   0.000s    0.000s    0.001s    0.000s    0.001s    0.10%
+WordSylSeg      176   0.000s    0.000s    0.001s    0.000s    0.010s    1.01%
+Intonation      176   0.000s    0.000s    0.001s    0.000s    0.004s    0.40%
+PostLex         176   0.000s    0.000s    0.001s    0.000s    0.004s    0.40%
+Duration        176   0.000s    0.000s    0.001s    0.000s    0.001s    0.10%
+IntTarget       176   0.000s    0.000s    0.004s    0.000s    0.008s    0.81%
+WaveSynthesizer 176   0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Memory Use    : 2110k  of 3520k
+Metrics collected on mute

@@ -21,7 +21,7 @@ import com.sun.speech.freetts.diphone.DiphoneUnitDatabase;
 public class UnitDatabaseTests extends TestCase {
     DiphoneUnitDatabase udb;
     private final static String BINARY_DB =
-    "file:../classes/com/sun/speech/freetts/en/us/cmu_us_kal/cmu_us_kal.bin";
+    "file:../bld/classes/com/sun/speech/freetts/en/us/cmu_us_kal/cmu_us_kal.bin";
     private final static String TEXT_DB =
     "file:../com/sun/speech/freetts/en/us/cmu_us_kal/cmu_us_kal.txt";
 

@@ -1,0 +1,25 @@
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.12700s  0.12700s  0.12700s  0.12700s  0.12700s  100.00%
+Tokenizer       4     0.00000s  0.00000s  0.02600s  0.00700s  0.02800s  22.05%
+DelayProcessor: 4     0.02000s  0.01800s  0.02200s  0.01975s  0.07900s  62.20%
+Memory Use    : 2957k  of 3520k
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.16200s  0.16200s  0.16200s  0.16200s  0.16200s  100.00%
+Tokenizer       5     0.00000s  0.00000s  0.02900s  0.00900s  0.04500s  27.78%
+DelayProcessor: 5     0.01900s  0.01500s  0.02300s  0.01880s  0.09400s  58.02%
+Memory Use    : 2914k  of 3520k
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.39200s  0.39200s  0.39200s  0.39200s  0.39200s  100.00%
+Tokenizer       11    0.00000s  0.00000s  0.03700s  0.01336s  0.14700s  37.50%
+DelayProcessor: 11    0.02000s  0.01500s  0.02300s  0.01818s  0.20000s  51.02%
+Memory Use    : 2432k  of 3520k
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     6.00500s  6.00500s  6.00500s  6.00500s  6.00500s  100.00%
+Tokenizer       226   0.00500s  0.00000s  0.11900s  0.00815s  1.84300s  30.69%
+DelayProcessor: 226   0.01500s  0.01400s  0.02300s  0.01788s  4.04100s  67.29%
+Memory Use    : 2303k  of 4608k
+Metrics collected on mute
