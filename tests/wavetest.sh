@@ -1,4 +1,10 @@
 #!/bin/sh
+# Copyright (c) 2001-2003 Sun Microsystems, Inc.
+# All Rights Reserved.
+#
+# See the file "license.terms" for information on usage and
+# redistribution of this file, and for a DISCLAIMER OF ALL 
+# WARRANTIES.
 #
 # This test script first runs the FreeTTS with our first utterance file,
 # dumps the wave in text form, and compares (diff) it with our standard 
@@ -9,6 +15,9 @@
 # coming to you from inside the java virtual machine. I'm happy to have
 # a voice because I've been meaning to tell you how much I care.")
 #
+
+# Input: input_file flite_wave_file
+
 if [ -f wavetest.res ]; then
 	rm wavetest.res
 fi
@@ -23,16 +32,16 @@ if [ -z "${JAVA_HOME}" ] ; then
 fi
 
 ${JAVA_HOME}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
-	com.sun.speech.freetts.FreeTTS -silent -dumpWave wavetest.res -file ../wave/08-01-01.wave.text
+	com.sun.speech.freetts.FreeTTS -silent -dumpWave wavetest.res -file $1
 
-diff -b wavetest.res ../data/flite1.1_float.first.wave.txt > wavetest.diff
+diff -b wavetest.res $2 > wavetest.diff
 
 wc wavetest.diff | awk '
 {
 	if ($1 == 0) {
-	    printf("%s differences in waveTest.res.  Test PASSED\n", $1);
+	    printf("%s differences in wavetest.res.  Test PASSED\n", $1);
 	} else {
-	    printf("%s differences in waveTest.res.  Test FAILED\n", $1);
+	    printf("%s differences in wavetest.res.  Test FAILED\n", $1);
 	}
 }
 '

@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001-2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -158,6 +158,8 @@ public class TimeUtils {
             return "in the evening";
         } else if (hh > 11) {
             return "in the afternoon";
+        } else if ((hh == 0) && (min < 33)) {
+            return "";
         } else {
             return "in the morning";
         }

@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2001-2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -251,6 +251,7 @@ public class Item implements Dumpable {
      * <li> p - previous item
      * <li> parent - the parent
      * <li> daughter - the daughter
+     * <li> daughter1 - same as daughter
      * <li> daughtern - the last daughter
      * <li> R:relname - the item as found in the given relation 'relname'
      * </ul>
@@ -320,6 +321,7 @@ public class Item implements Dumpable {
      * <li> p - previous item
      * <li> parent - the parent
      * <li> daughter - the daughter
+     * <li> daughter1 - same as daughter
      * <li> daughtern - the last daughter
      * <li> R:relname - the item as found in the given relation 'relname'
      * </ul>
@@ -358,7 +360,7 @@ public class Item implements Dumpable {
 		}
 	    } else if (token.equals("parent")) {
 		pitem = pitem.getParent();
-	    } else if (token.equals("daughter")) {
+	    } else if (token.equals("daughter") || token.equals("daughter1")) {
 		pitem = pitem.getDaughter();
 	    } else if (token.equals("daughtern")) {
 		pitem = pitem.getLastDaughter();

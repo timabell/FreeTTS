@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2001-2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -384,7 +384,16 @@ public class NumberExpander {
 	
 	int numberDigits = numberString.length();
 	
-	if ((numberDigits == 2) && (numberString.charAt(0) == '0')) {
+        if ((numberDigits == 4) &&
+                    (numberString.charAt(2) == '0') &&
+                    (numberString.charAt(3) == '0')) {
+            if (numberString.charAt(1) == '0') {          // e.g. 2000, 3000
+                expandNumber(numberString, wordRelation);
+            } else {
+                expandNumber(numberString.substring(0,2), wordRelation);
+                wordRelation.addWord("hundred");
+            }
+	} else if ((numberDigits == 2) && (numberString.charAt(0) == '0')) {
 	    wordRelation.addWord("oh");
 	    expandDigits(numberString.substring(1,2), wordRelation);
 	} else if ((numberDigits == 4 &&

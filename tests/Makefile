@@ -1,4 +1,4 @@
-# Copyright 2001 Sun Microsystems, Inc.
+# Copyright 2001-2003 Sun Microsystems, Inc.
 # All Rights Reserved.  Use is subject to license terms.
 # 
 # See the file "license.terms" for information on usage and
@@ -10,6 +10,14 @@
 # Relative path to the top of the source tree
 TOP = ..
 PACKAGE_PATH = tests
+
+# Change to compare against output from other versions of flite
+#FLITE_VERSION=v1.0-beta
+#FLITE_VERSION=v1.1-beta
+#FLITE_VERSION=v1.1
+FLITE_VERSION=v1.2-release
+
+TIME_INPUT=06:51
 
 # By default, build all of the .java files. 
 FILES = $(shell echo *.java)
@@ -32,8 +40,8 @@ all:: ${CLASSES} ${STUBS}
 
 wavetest: all
 	@chmod +x wavetest.sh waveTimeTest.sh
-	sh ./waveTimeTest.sh
-	sh ./wavetest.sh
+	sh ./waveTimeTest.sh ${TIME_INPUT} ../data/flite.${FLITE_VERSION}.wave.time.float.txt
+	sh ./wavetest.sh ../wave/08-01-01.wave.text ../data/flite.${FLITE_VERSION}.wave.first.float.txt
 
 lpctest: all
 	@chmod +x lpctest.sh
@@ -41,9 +49,9 @@ lpctest: all
 
 utttest: all
 	@chmod +x utteranceTest.sh compareNumericUtt compareUtt testUtt utteranceTimeTest.sh testTimeUtt compareNumericUtt
-	sh ./utteranceTest.sh ../data/alice2 ../data/alice2.flite.v1.1-beta.rel
-	sh ./utteranceTimeTest.sh  06:51 ../data/flite_time.v1.1.rel 
-	sh ./utteranceTest.sh ../data/TokenGame.txt ../data/TokenGame.flite.v1.1.rel
+	sh ./utteranceTest.sh ../data/alice2 ../data/flite.${FLITE_VERSION}.alice2.rel
+	sh ./utteranceTimeTest.sh  ${TIME_INPUT} ../data/flite.${FLITE_VERSION}.time.rel 
+	sh ./utteranceTest.sh ../data/TokenGame.txt ../data/flite.${FLITE_VERSION}.TokenGame.rel
 
 
 

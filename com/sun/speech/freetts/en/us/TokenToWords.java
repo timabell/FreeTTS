@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2001-2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -388,7 +388,9 @@ public class TokenToWords implements UtteranceProcessor {
 	    wordRelation.addWord(tokenVal);
 
 	} else if ((tokenVal.equals("a") || tokenVal.equals("A")) &&
-	    !tokenVal.equals(itemName)) {
+                ((tokenItem.getNext() == null) ||
+                 !(tokenVal.equals(itemName)) ||
+                 !(((String) tokenItem.findFeature("punc")).equals("")))) {
 	    /* if A is a sub part of a token, then its ey not ah */
 	    wordRelation.addWord("_a");
 

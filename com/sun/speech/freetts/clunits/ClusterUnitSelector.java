@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2001-2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -686,13 +686,15 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    int a, b;
 
 	    if (clunitDB.getPrevUnit(u1) == u0) {
-		return 0; // consecutive units win - FATALITY
+		return 0; // consecutive units win
 	    }
 
-	    // Still not correct as this might go past end of unit
-
-	    a = clunitDB.getEnd(u0);
-	    b = clunitDB.getStart(u1);
+            if (clunitDB.getNextUnit(u0) != ClusterUnitDatabase.CLUNIT_NONE) {
+                a = clunitDB.getEnd(u0);
+	    } else {  // don't want to do this but it's all that is left to do
+                a = clunitDB.getEnd(u0) - 1; // if num frames < 1 this is bad
+            }
+            b = clunitDB.getStart(u1);
 
 	    return getFrameDistance(a, b, 
 		    clunitDB.getJoinWeights(),

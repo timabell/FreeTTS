@@ -1,5 +1,5 @@
-*** Cart dump created by cart_dump
-*** Flite version: flite-1.1-release December 2001
+*** Cart dump created by ./cart_dump
+*** Flite version: flite-1.2-release Feb 2003
 *** 
 *** Portions Copyright 2001,2002 Sun Microsystems, Inc.
 *** Portions Copyright 1999-2001 Language Technologies Institute, 
@@ -9,17 +9,19 @@
 *** See the file "license.terms" for information on usage and
 *** redistribution of this file, and for a DISCLAIMER OF ALL 
 *** WARRANTIES.
-TOTAL 13
-NODE R:Token.n.name = String(0) 8
-NODE R:Token.parent.punc = String() 7
-NODE R:Token.parent.break = String(1) 4
+TOTAL 15
+NODE R:Token.parent.n.name = String(--) 2
 LEAF String(BB)
-NODE break = String(1) 6
+NODE R:Token.n.name = String(0) 10
+NODE R:Token.parent.punc = String() 9
+NODE R:Token.parent.break = String(1) 6
+LEAF String(BB)
+NODE break = String(1) 8
 LEAF String(BB)
 LEAF String(NB)
 LEAF String(BB)
-NODE n.name = String(0) 10
+NODE n.name = String(0) 12
 LEAF String(BB)
-NODE break = String(1) 12
+NODE break = String(1) 14
 LEAF String(BB)
 LEAF String(NB)

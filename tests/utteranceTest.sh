@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 2001 Sun Microsystems, Inc.
+# Copyright (c) 2001-2003 Sun Microsystems, Inc.
 # All Rights Reserved.
 # 
 # See the file "license.terms" for information on usage and
@@ -16,6 +16,8 @@
 # coming to you from inside the java virtual machine. I'm happy to have
 # a voice because I've been meaning to tell you how much I care.")
 #
+
+# Input: input_file flite_time_wave_file
 
 REF_TMP=utterance.ref.res
 NEW=utterance.res
