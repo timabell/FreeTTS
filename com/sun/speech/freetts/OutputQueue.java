@@ -61,7 +61,7 @@ public class OutputQueue {
 	}
 
 	list.add(utterance);
-	notify();
+	notifyAll();
     }
 
 
@@ -71,7 +71,7 @@ public class OutputQueue {
     public synchronized void close() {
 	closed = true;
 	list.add(null);
-	notify();
+	notifyAll();
     }
 
 
@@ -100,7 +100,9 @@ public class OutputQueue {
 	    }
 	}
 	utterance = (Utterance) list.removeFirst();
-	notify();
+	notifyAll();
 	return utterance;
     }
 }
+
+
