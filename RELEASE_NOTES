@@ -10,6 +10,7 @@ Change history for FreeTTS.
 --------------------------
 
 XXXX,XX, 2005 Release 1.2XXX
+    - Added pronunciations for Linux terms (see bug 1006630)
     - Added JUnit to prerequisites list (see bug 975557)
     - Fixed -dump{Multi}Audio problem in freetts app (see bug 986503).
     - Added importing tools specifically for CMU ARCTIC Voices.
