@@ -21,7 +21,15 @@ creating a time telling voice is a good place to begin.
 In our experience, FestVox and Festival work better under Linux x86 platforms.
 
 
---------- Importing a FestVox Voice into FreeTTS ---------
+--------- Importing a FestVox Voice into FreeTTS (quick explaination) ---------
+
+* Make sure festival, java, and javac are in your path.
+* Define the ESTDIR environment variable.
+* Execute <FreeTTSdir>/tools/FestVoxToFreeTTS/FestVoxToFreeTTS.sh <voicedir>
+* You have now imported a voice into FreeTTS.
+
+
+--------- Importing a FestVox Voice into FreeTTS (full explaination) ---------
 
 FreeTTS follow many of the same steps that Flite
 (http://www.speech.cs.cmu.edu/flite) does for importing voices.  For a more
@@ -34,6 +42,7 @@ To import a voice into FreeTTS, you first need to do the following things:
     of setting this up on your system.
 2. You must have Java and a Java Compiler installed on your system.
     See http://java.sun.com if you do not already have this.
+    Java version 1.4.2 is known to work.
 3. "festival", "java", and "javac" must be in your path.  For example, I used
     the following command under bash (modify appropriately):
     "export PATH=$PATH:/usr/java/j2sdk1.4.2/bin:\
@@ -43,15 +52,35 @@ To import a voice into FreeTTS, you first need to do the following things:
 
 To convert a voice, run:
 FestVoxToFreeTTS.sh <voicedir>
-where <voicedir> is the directory the FestVox voice resides in.  FreeTTS will
-create a new directory <voicdir>/FreeTTS/   In that directory is the text
-which contains all the data for the voice (along with a few other unnecessary
-files).  The voice file will have a name like sun_time_dtv.txt
+where <voicedir> is the directory the FestVox voice resides in.  The contents
+of <voicedir> will looks something like:
+bin/  etc/       FreeTTS/  lpc/     prompt-cep/  recording/  wav/
+cep/  f0/        group/    mcep/    prompt-lab/  scratch/    wavn/
+dic/  festival/  lab/      pm/      prompt-utt/  sts/        wrd/
+emu/  festvox/   lar/      pm_lab/  prompt-wav/  versions/
+
+The script will automatically detect whether it is a cluster unit voice or a
+diphone voice by looking at the <voicedir>/etc/voice.defs file.  If no such
+file exists, you will need to create it.  An example for a time-telling voice
+would be something like:
+FV_INST=sun
+FV_LANG=time
+FV_NAME=dtv
+FV_TYPE=ldom
+FV_VOICENAME=$FV_INST"_"$FV_LANG"_"$FV_NAME
+FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
+
+If possible, you can let festival automatically generate this for you.  Try
+<festvoxdir>/src/general/guess_voice_defs
+
+FreeTTS will create a new directory <voicdir>/FreeTTS/   In that directory is
+the text which contains all the data for the voice (along with a few other
+intermediate files).  The voice file will have a name like sun_time_dtv.txt
 
 The various stages of the conversion process can be called directly by passing
 a second argument to FestVoxToFreeTTS.sh such as "sts" or "mcep".  These should
-be used carefully.  More information on these stages can be found in the
-Flite documentation.
+be used carefully.  More information on these stages can be found in the Flite
+documentation.
 
 See "FestVoxToFreeTTS.sh --help" for more information.
 
