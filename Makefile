@@ -143,9 +143,14 @@ deploy_xp_docs:
 	rm -rf $(XP_DOC_STAGING_AREA)
 
 all::
-	$(MAKE) jars
 
-jars:  $(JARS)
+# we don't have the dependencies for jar files done up so we just
+# remove the old ones and make the new ones
+
+jars:  
+	rm -rf $(JARS)
+	$(MAKE) $(JARS)
+
 tars:  $(TARS)
 zips:  $(ZIPS)
 
