@@ -1,7 +1,7 @@
 ; David Vos
 ; Modeled on flite/tools/make_clunits.scm
-; Portions Copyright 2001 Sun Microsystems, Inc.
-; Portions Copyright 1999-2001 Language Technologies Institute,
+; Portions Copyright 2003 Sun Microsystems, Inc.
+; Portions Copyright 1999-2003 Language Technologies Institute,
 ; Carnegie Mellon University.
 ; All Rights Reserved.  Use is subject to license terms.
 ;
