@@ -143,7 +143,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * The default class to use for the DEFAULT_AUDIO_PLAYER.
      */
     public final static String DEFAULT_AUDIO_PLAYER_DEFAULT =
-            "com.sun.speech.freetts.audio.JavaClipAudioPlayer";
+            "com.sun.speech.freetts.audio.JavaStreamingAudioPlayer";
     
 
     /**
