@@ -43,8 +43,9 @@ January 24, 2002  Release 1.1
 
     - Improved rules for generating binary forms of the databases
     - Specifies 'Locale.US' (instead of null) when constructing a 
-      SynthesizerModeDesc in the demo codeA
+      SynthesizerModeDesc in the demo code
     - Output of regression tests are more consistent
+    - Workaround for the Linux sound bug reduces JVM crashes.
 
 
 

@@ -49,6 +49,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private int curIndex = 0;
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
+    private long closeDelay;
 
     /**
      * Constructs a default JavaClipAudioPlayer 
@@ -56,6 +57,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public JavaClipAudioPlayer() {
 	debug = Boolean.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
+	closeDelay = Long.getLong
+	    ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
+	     150L).longValue();
 	setPaused(false);
     }
 
@@ -409,6 +413,26 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 		// it alone
 		synchronized(JavaClipAudioPlayer.this) {
 		    if (!cancelled && !isPaused()) {
+
+	// BUG:
+	// There is a javax.sound bug that causes a crash on linux
+	// it is described here:
+	// http://developer.java.sun.com/developer/bugParade/bugs/4498848.html
+	// The bug seems to be related to synchronization of the close
+	// call on the clip.  If we delay before the close by 
+	// a small amount, the crash is averted.  This is a WORKAROUND
+	// only and should be removed once the javax.sound bug is
+	// fixed.  We get the delay from the property:
+	//
+	// com.sun.speech.freetts.audio.AudioPlayer.closeDelay
+	// 
+	// The default close delay is zero (which reverts to 
+			try {
+			    if (closeDelay > 0L) {
+				Thread.sleep(closeDelay);
+			    }
+		    	} catch (InterruptedException ie) {
+			}
 			currentClip.close();
 		    }
 		}
