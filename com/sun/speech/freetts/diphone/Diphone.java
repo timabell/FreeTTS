@@ -14,6 +14,7 @@ import com.sun.speech.freetts.relp.Sample;
 import java.nio.ByteBuffer;
 import java.io.IOException;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 
 /**
@@ -177,6 +178,28 @@ public class Diphone {
 
 	for (int i = 0; i < samples.length; i++) {
 	    samples[i].dumpBinary(bb);
+	}
+    }
+
+    /**
+     * Dumps the diphone to the given channel.
+     *
+     * @param os the DataOutputStream to write to
+     *
+     * @throws IOException if IO error occurs
+     */
+    public void dumpBinary(DataOutputStream os) throws IOException {
+	char[] nameArray = (name + "        ").toCharArray();
+
+	os.writeInt(MAGIC);
+	for (int i = 0; i < NAME_LENGTH; i++) {
+	    os.writeChar(nameArray[i]);
+	}
+	os.writeInt(midPoint);
+	os.writeInt(samples.length);
+
+	for (int i = 0; i < samples.length; i++) {
+	    samples[i].dumpBinary(os);
 	}
     }
 

@@ -1,4 +1,3 @@
-; David Vos
 ; Modeled on flite/tools/make_clunits.scm
 ; Portions Copyright 2003 Sun Microsystems, Inc.
 ; Portions Copyright 1999-2003 Language Technologies Institute,

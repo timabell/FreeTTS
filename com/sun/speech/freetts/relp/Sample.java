@@ -196,7 +196,7 @@ public class Sample {
     /**
      * Dumps the samples to the given stream
      *
-     * @param os the ByteBuffer to write the data to.
+     * @param os the DataOutputStream to write the data to.
      *
      * @throws IOException if IO error occurs
      */

@@ -441,30 +441,23 @@ public class DiphoneUnitDatabase {
     public void dumpBinary(String path) {
 	try {
 	    FileOutputStream fos = new FileOutputStream(path);
-	    FileChannel fc = fos.getChannel();
-	    ByteBuffer bb = ByteBuffer.allocate(10000);
+            DataOutputStream os = new DataOutputStream(fos);
 	    int written;
 
-	    bb.putInt(MAGIC);
-	    bb.putInt(VERSION);
-	    bb.putInt(sampleRate);
-	    bb.putInt(numChannels);
-	    bb.putFloat(lpcMin);
-	    bb.putFloat(lpcRange);
-	    bb.putInt(diphoneMap.size());
-	    bb.flip();
-
-	    fc.write(bb);
-	    bb.clear();
+	    os.writeInt(MAGIC);
+	    os.writeInt(VERSION);
+	    os.writeInt(sampleRate);
+	    os.writeInt(numChannels);
+	    os.writeFloat(lpcMin);
+	    os.writeFloat(lpcRange);
+	    os.writeInt(diphoneMap.size());
 
 	    for (Iterator i = diphoneMap.values().iterator(); i.hasNext();) {
 		Diphone diphone = (Diphone) i.next();
-		diphone.dumpBinary(bb);
-		bb.flip();
-		fc.write(bb);
-		bb.clear();
+		diphone.dumpBinary(os);
 	    }
-	    fc.close();
+            os.flush();
+            fos.close();
 
 	} catch (FileNotFoundException fe) {
 	    throw new Error("Can't dump binary database " +
