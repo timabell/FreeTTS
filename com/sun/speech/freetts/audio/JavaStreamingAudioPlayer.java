@@ -199,6 +199,13 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 
     /**
      * Cancels currently playing audio
+     *
+     * [[[ WORKAROUND TODO
+     * The "Thread.sleep(cancelDelay)" is added to fix a problem in the
+     * FreeTTSEmacspeak demo. The problem was that the engine would 
+     * stutter after using it for a while. Adding this sleep() fixed the
+     * problem. If we later find out that this problem no longer exists,
+     * we should remove the thread.sleep(). ]]]
      */
     public synchronized void cancel() {
 	cancelled = true;
