@@ -22,6 +22,7 @@ import java.util.Locale;
 import javax.speech.AudioException;
 import javax.speech.Central;
 import javax.speech.Engine;
+import javax.speech.EngineException;
 import javax.speech.EngineList;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
@@ -296,6 +297,17 @@ public class PlayerModelImpl implements PlayerModel {
      */
     public void cancel() {
 	synthesizer.cancel();
+    }
+
+    /**
+     * Close this playable
+     */
+    public void close() {
+	try {
+	    synthesizer.deallocate();
+	} catch (EngineException ee) {
+	    System.out.println("Trouble closing the synthesizer: " + ee);
+	}
     }
 
 
@@ -787,6 +799,7 @@ class MySynthesizerModeDesc extends SynthesizerModeDesc {
 	    return synthesizer;
 	}
     }
+
     
 
     /**

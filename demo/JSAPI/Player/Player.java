@@ -47,6 +47,7 @@ public class Player extends JFrame {
 	setDefaultLookAndFeelDecorated(true);
 	addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) {
+		    playerModel.close();
 		    System.exit(0);
 		}
 	    });
@@ -329,6 +330,7 @@ class PlayerMenuBar extends JMenuBar {
     private void addFileMenuListeners() {
 	fileExitMenuItem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
+		    playerModel.close();
 		    System.exit(0);
 		}
 	    });

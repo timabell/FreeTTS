@@ -260,4 +260,10 @@ public interface PlayerModel {
      * @param index the index of the Playable to remove
      */
     public void removePlayableAt(int index);
+
+
+    /**
+     * Closes the PlayerModel
+     */
+    public void close();
 }
