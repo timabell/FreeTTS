@@ -320,8 +320,12 @@ Solaris<sup><font size="-1">TM</font></sup> Operating Environment,
 Linux and Win32 operating systems.</p>
 
 <li> <b> JSAPI 1.0 specification implementation </b> - FreeTTS requires an
-implementation of the JSAPI 1.0 specification.  The implementation comes as a file called
-<code> jsapi.jar </code> <br>
+implementation of the JSAPI 1.0 specification.  
+The JSAPI 1.0 specification implementation (i.e., the javax.speech.*
+classes) is not available under a BSD-style license.  Instead, we are
+making the binaries available under a separate binary code license.
+This distribution includes a self-extracting shell archive containing
+the <code>jsapi.jar</code>. <br>
 
 <br> <b>Unix Systems </b> - This distribution includes a 
 self-extracting shell archive containing the jsapi.jar file.  If you are running under
@@ -334,7 +338,8 @@ other system that supports <code>sh</code>) follow these instructions:
     jsapi.jar file will be unpacked and deposited into the lib directory.
 </ol>
 
-<br><b> Non-Unix systems</b> - If you are on a system that is not able to unpack self-extracing shell archives (Win32,
+<br><b> Non-Unix systems</b> - If you are on a system that is not able to unpack
+self-extracting shell archives (Win32,
 Mac) Follow these steps to get an implementation of the JSAPI 1.0 specification:
 <ol>
  	<li> Go to <a href="http://research.sun.com/speech/software">
