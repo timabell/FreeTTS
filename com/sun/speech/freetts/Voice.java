@@ -1165,7 +1165,9 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		    utterance.setFirst(first);
 		    first = false;
                     boolean isLast = 
-                        (!tok.hasMoreTokens() && savedToken == null);
+                        (!tok.hasMoreTokens() && 
+                         (savedToken == null || 
+                          savedToken.getWord().length() == 0));
 		    utterance.setLast(isLast);
 		    return utterance;
 		}
