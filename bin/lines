@@ -1,0 +1,11 @@
+# This script collects the time to first sample data
+./jl ../data/1.txt
+./jl ../data/2.txt
+./jl ../data/5.txt
+./jl ../data/10.txt
+./jl ../data/100.txt
+./jlc ../data/1.txt
+./jlc ../data/2.txt
+./jlc ../data/5.txt
+./jlc ../data/10.txt
+./jlc ../data/100.txt
