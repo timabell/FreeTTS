@@ -299,7 +299,7 @@ cat $HELPERDIR/voice.Manifest.template | \
 
 
 echo Compiling $FV_VOICENAME
-ant -Darctic_voice=$FV_VOICENAME
+(cd $FREETTSDIR; ant -Darctic_voice=$FV_VOICENAME)
 
 
 
