@@ -1,0 +1,68 @@
+package com.sun.speech.freetts.en.us.%FV_VOICENAME%;
+
+import java.util.Locale;
+
+import java.net.URL;
+
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.Gender;
+import com.sun.speech.freetts.en.us.CMUArcticVoice;
+import com.sun.speech.freetts.en.us.CMULexicon;
+
+
+/**
+ * Class merely to allow us to find *.txt files for this voice.
+ */
+public class ArcticVoice extends CMUArcticVoice {
+    /**
+     * Creates a simple cluster unit voice for the ARCTIC voices
+     *
+     * @param name the name of the voice
+     * @param gender the gender of the voice
+     * @param age the age of the voice
+     * @param description a human-readable string providing a
+     * description that can be displayed for the users.
+     * @param locale the locale of the voice
+     * @param domain the domain of this voice.  For example,
+     * @param organization the organization which created the voice
+     * &quot;general&quot;, &quot;time&quot;, or
+     * &quot;weather&quot;.
+     * @param lexicon the lexicon to load
+     * @param database the url to the database containing unit data
+     * for this voice.
+     */
+    public ArcticVoice(String name, Gender gender, Age age,
+                 String description, Locale locale, String domain,
+                 String organization, CMULexicon lexicon, URL database) {
+	super(name, gender, age, description, locale,
+              domain, organization, lexicon, database);
+
+        /* [[[WDW FIXME: should set these params from the voice.]]]
+         */
+        if (false) {
+            setRate(150f);
+            setPitch(100F);
+            setPitchRange(12F);
+        }
+    }
+
+    /**
+     * Get a resource for this voice.
+     * By default, the voice is searched for in the package
+     * to which the voice class belongs. Subclasses are free to
+     * override this behaviour.
+     */
+    protected URL getResource(String resource) {
+        URL url = this.getClass().getResource(resource);
+        return url;
+    }
+
+    /**
+     * Converts this object to a string
+     * 
+     * @return a string representation of this object
+     */
+    public String toString() {
+	return "%FV_VOICENAME%";
+    }
+}

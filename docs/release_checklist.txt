@@ -122,17 +122,28 @@ Here are the steps to release a new version of FreeTTS:
         ftp> cd incoming
         ftp> put freetts-VERSION.tar.gz
 
+    
 11. Edit the packages page
 
     Edit or add a release on this page:
 
         https://sourceforge.net/project/admin/editpackages.php?group_id=42080
 
-12. Update the WebStartClock
+12. Update the FreeTTS.SourceForge.net web page
 
-        [TBS]
+    Go to the ./docs directory:
+    
+        ./create_php.sh
 
+    scp content to the project web space:
 
-13. Update the FreeTTS.SourceForge.net web page
+        scp foo.tar \
+            wwalker@shell.sourceforge.net:/home/groups/f/fr/freetts/htdocs
 
-        [TBS]
+    ssh to sourceforge and unpack things:
+
+        ssh shell.sourceforge.net
+        cd /home/groups/f/fr/freetts/htdocs
+
+13. Check to make sure freetts.sourceforge.net still works.
+    Also check to make sure the WebStartClock still works.
