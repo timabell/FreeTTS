@@ -27,12 +27,15 @@
 
         <p>This page provides details on importing <a
         href="http://festvox.org/cmu_arctic/">CMU ARCTIC</a> voices to
-        FreeTTS.  Note that this is very preliminary documentation
-        meant to help those who are chomping at the bit to get CMU
-        ARCTIC voices into FreeTTS.  There is still some work to do
-        (e.g., the resulting voices do not sound exactly like they do
-        in Festival), but the work is ready for people to give it a
-        shot.</p>
+        FreeTTS.  It has been tested on the awb, bdl, jmk, and slt
+        ARCTIC 0.95 voices.</p>
+
+         <p>Note that this is very preliminary
+        documentation meant to help those who are chomping at the bit
+        to get CMU ARCTIC voices into FreeTTS.  There is still some
+        work to do (e.g., the resulting voices do not sound exactly
+        like they do in Festival), but the work is ready for people to
+        give it a shot.</p>
 
 
         <h3>Obtaining the CMU ARCTIC Voices</h3>
@@ -46,7 +49,7 @@
         and awb voices (note: the awb voice requires you do a 
         little extra work - see the note at the end of this page).</p>
 
-        <p>As of the writing of this document (August 2004), we
+        <p>As of the writing of this document (January 2005), we
         have not attempted to create a CMU ARCTIC voice ourselves,
         but expect the tools provided by FreeTTS will support
         new CMU ARCTIC voices that you create.</p>
@@ -191,16 +194,72 @@ Enter text: Hello.
         such, the AWB CMU ARCTIC voice needs a little extra work to
         import it to FreeTTS.</p>
 
-        <p>The extra work involves modifying the ArcticVoice.java 
-        that was created in
-        com/sun/speech/freetts/en/us/cmu_us_awb_arctic/
-        when you imported the voice.  The modification tells the
-        voice to use a different unit selector, and requires that
-        you override the "getUnitSelector" method.  First, you'll
-        need to add an extra import to the file:
+        <p>For one thing, the ArcticToFreeTTS tools expect the Scheme
+        for the ARCTIC voices to follow a particular pattern.  In
+        particular, the etc/voice.defs file defines a FV_FULLVOICENAME
+        variable that is built up from the various attributes of the
+        voice. The ArcticToFreeTTS tools expect there to be a file in
+        the festvox subdirectory whose name is the value of
+        FV_FULLVOICENAME with a ".scm" extension.  In this file, it is
+        expected that there will be a definition of the form
+        "voice_$FV_FULLVOICENAME" where $FV_FULLVOICENAME expands to
+        the value of FV_FULLVOICENAME.  
+
+        <p>All the ARCTIC voices except the AWB voice follow this
+        pattern.  The AWB voice, however, uses "f0clunits" as an
+        attribute for some of the types in etc/voice.defs.  <b>Before
+        importing</b>, you'll need to change all the occurrences of
+        "f0clunits" in the cmu_us_awb_arctic etc/voice.defs file to
+        "clunits" in order to match the pattern expected by the
+        ArcticToFreeTTS tools:
+
+        <ul>
+        <pre>
+FV_INST=cmu
+FV_LANG=us
+FV_NAME=awb_arctic
+FV_TYPE=clunits
+FV_VOICENAME=$FV_INST"_"$FV_LANG"_"$FV_NAME
+FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
+FV_F0TYPE=clunits
+FV_VOICENAME=$FV_INST"_"$FV_LANG"_"$FV_NAME
+FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_F0TYPE
+FV_F0TYPE=clunits
+FV_F0TYPE=clunits
+        </pre>
+        </ul>
+
+        <p>If you do not make this change, you'll see the following
+        error when you run the ArcticToFreeTTS tools.  The error will
+        occur very early in the ArcticToFreeTTS output, so if you are
+        not watching, you'll miss it.  You'll know you didn't make
+        this change, though, because you'll have empty dur_stat.txt
+        and durz_cart.txt files in the
+        com/sun/speech/freetts/en/us/cmu_us_awb_arctic/ directory that
+        was created when you ran the ArcticToFreeTTS tools:
+
+        <ul>
+        <pre>
+SIOD ERROR: unbound variable : voice_cmu_us_awb_arctic_f0clunits
+        </pre>
+        </ul>
+
+        <p>Once you've made this change, you can run the
+        ArcticToFreeTTS tools to get the AWB data in FreeTTS form.
+
+        <p>Once you've imported the AWB data, you now need to modify
+        the ArcticVoice.java file that was created in
+        com/sun/speech/freetts/en/us/cmu_us_awb_arctic/ when you
+        imported the voice.  The modification tells the voice to use a
+        different unit selector, and requires that you override the
+        "getUnitSelector" method.  First, you'll need to add some
+        extra imports to the file:
 
         <ul>
            <pre>
+import java.io.IOException;
+import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.clunits.ClusterUnitSelector;
            </pre>
         </ul>
@@ -209,7 +268,7 @@ import com.sun.speech.freetts.clunits.ClusterUnitSelector;
 
         <ul>
            <pre>
-    protected UtteranceProcessor getUnitSelector() throws IOException {
+    public UtteranceProcessor getUnitSelector() throws IOException {
         return new AwbUnitSelector(getDatabase());
     }
            </pre>
