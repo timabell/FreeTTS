@@ -24,11 +24,26 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 
 all:: ${CLASSES} ${STUBS}
 
-run: 
+run: all
 	$(JAVA_CMD) HelloWorld
 
-runMbrola:
+runMbrola1: all
 	$(JAVA_CMD) \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola1" \
+	HelloWorld
+
+runMbrola2: all
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola2" \
+	HelloWorld
+
+runMbrola3: all
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola3" \
 	HelloWorld

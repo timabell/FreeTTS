@@ -13,6 +13,8 @@ import javax.speech.Engine;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
+import javax.speech.synthesis.Voice;
+
 
 /**
  * Simple program showing how to use FreeTTS in JSAPI.
@@ -49,10 +51,16 @@ public class HelloWorld {
 		System.err.println(message);
 		System.exit(1);
 	    }
-	    
+
+            // create the voice
+            String voiceName = System.getProperty("voiceName", "kevin16");
+	    Voice voice = new Voice
+                (voiceName, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
+
 	    // get it ready to speak
 	    synthesizer.allocate();
 	    synthesizer.resume();
+            synthesizer.getSynthesizerProperties().setVoice(voice);
 	    
 	    // speak the "Hello world" string
 	    synthesizer.speakPlainText("Hello, world!", null);
