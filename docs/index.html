@@ -210,7 +210,7 @@
         <li>a 16khz limited domain, male US English voice</li>
       </ul>
       <li>Support for <a href="../tools/FestVoxToFreeTTS/README.html">
-          importing voices from FestVox</a></li>
+          importing voices from FestVox (US English only)</a></li>
       <li><a href="../mbrola/README.html">Support for MBROLA voices</a> 
           (downloaded separately):</li>
       <ul>
@@ -219,7 +219,7 @@
         </li>
       </ul>
       <li>Partial <a href="jsapi_setup.html">support for JSAPI 1.0</a></li>
-      <li>Extensive API documentation (you must unzip the javadoc)
+      <li>Extensive <a href="javadoc/index.html">API documentation</a></li> 
       <li>Several <a href="#run_demo">demo applications</a></li>
     </ul>
   </li><br>
@@ -338,14 +338,14 @@
    download</a>:
 <ul>
   <li><b>bin</b>: provides the jar files, documentation, and demos</li>
-  <li><b>srcs</b>: provides the sources, documentation, and demos</li>
-  <li><b>tests</b>: provides the JUnit and regression tests; requires the srcs
+  <li><b>src</b>: provides the sources, documentation, and demos</li>
+  <li><b>tst</b>: provides the JUnit and regression tests; requires the src
       package</li>
 </ul>
 
 <p>If you plan on just creating applications with FreeTTS, the <b>bin</b>
 package will be sufficient.  If you plan on making modifications to FreeTTS
-itself, however, you should use the <b>srcs</b> package.  The <b>tests</b>
+itself, however, you should use the <b>src</b> package.  The <b>tst</b>
 package will be useful if you wish to make sure any changes you made to
 FreeTTS did not introduce any bugs or regressions.
 
@@ -361,7 +361,7 @@ following directory structure:</p>
     demo                Sources for the demos
     demo.xml            Ant file for building the demos
     docs                System documentation
-    javadoc.zip         Javadoc for FreeTTS (unzip this to view the javadoc)
+    javadoc             Javadoc for FreeTTS
     lib                 Jars for FreeTTS
     mbrola              Support for MBROLA
     tests               Sources and scripts for JUnit and regression tests
@@ -662,9 +662,9 @@ work properly.
 <h3>Tools</h3>
 
 <h4><a name="festvox">Importing Voice Data from FestVox</a></h4>
-<p>FreeTTS now has the ability to import voice data from FestVox.
-With this, you can record your own voice using the FestVox tools,
-and then turn the resulting data into a FreeTTS voice. 
+<p>FreeTTS now has the ability to import voice data from FestVox (US
+English only).  With this, you can record your own voice using the
+FestVox tools, and then turn the resulting data into a FreeTTS voice.
 
 <p>Visit our <a href="../tools/FestVoxToFreeTTS/README.html">
 FestVoxToFreeTTS</a> page to learn how to create your own
@@ -677,9 +677,7 @@ Festival and FestVox.
 <ul class="noindent">
   <li><a name="freetts_api"><b>API documentation</b></a>:
       The <a href="../javadoc/index.html">FreeTTS API</a> contains the
-      engine documentation. Note that if this link is broken, you
-      probably have not unpacked the javadoc.zip file. Unpack it with
-      "<code>jar xf javadoc.zip</code>".
+      engine documentation.
   </li><br>
 
   <li><a name="writing_software"><b>Writing software with FreeTTS</b></a>:

@@ -17,7 +17,7 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="version"		value="1_2_beta"/>
+    <property name="version"		value="1.2"/>
     <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
@@ -609,13 +609,6 @@ environment to use JSAPI.
         </javadoc>
     </target>
 
-    <target name="javadoc_zip"
-	    depends="javadoc">
-        <zip destfile="javadoc.zip">
-            <fileset dir="." includes="javadoc/**"/>
-        </zip>
-    </target>
-
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
@@ -685,18 +678,19 @@ environment to use JSAPI.
 	     includes="acknowledgments.txt,
 	               license.terms"/>
 
-    <fileset id="javadoc_zip"
-	     dir="."
-	     includes="javadoc.zip"/>
-
     <fileset id="docs"
 	     dir="."
-	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/*.html"
+	     includes="README.txt,RELEASE_NOTES,docs/**,mbrola/*.html,
+                       javadoc/**"
              excludes="docs/*.awk"/>
 
     <fileset id="demos"
 	     dir="${src_dir}"
 	     includes="demo/**"/>
+
+    <fileset id="tools"
+	     dir="${src_dir}"
+	     includes="tools/**"/>
 
     <fileset id="tests"
 	     dir="."
@@ -712,58 +706,67 @@ environment to use JSAPI.
 	     includes="lib/jsapi.sh,lib/jsapi.exe"/>
 
     <target name="deploy"
-	    depends="deploy_srcs,
-	             deploy_binaries,
-	             deploy_tests,
+	    depends="deploy_init,
+	             deploy_src,
+	             deploy_bin,
+	             deploy_tst,
 	             deploy_webstartclock"
 	    description="Creates *.zip files for deployment"/>
 
+    <target name="deploy_init"
+            description="Copies files to the deploy staging directory."
+	    depends="all,javadoc">
+	<mkdir dir="${deploy_dir}/freetts-${version}"/>
+	<copy todir="${deploy_dir}/freetts-${version}"
+	      includeEmptyDirs="false">
+             <fileset dir="." includes="build.xml,demo.xml,speech.properties"/>
+	     <fileset refid="srcs"/>
+	     <fileset refid="legal"/>
+	     <fileset refid="docs"/>
+	     <fileset refid="demos"/>
+	     <fileset refid="tools"/>
+	     <fileset refid="tests"/>
+	     <fileset refid="binaries"/>
+	     <fileset refid="jsapi_sh"/>
+	</copy>
+    </target>
 
     <!-- freetts-srcs -->
-    <target name="deploy_srcs"
-	    depends="javadoc_zip">
-        <mkdir dir="${deploy_dir}"/>
-        <zip destfile="${deploy_dir}/freetts-srcs-${version}.zip">
-            <fileset refid="legal"/>
-            <fileset dir="." includes="build.xml"/>
-            <fileset dir="." includes="demo.xml"/>
-            <fileset refid="srcs"/>
-            <fileset refid="demos"/>
-            <fileset dir="." includes="speech.properties"/>
-            <fileset dir="." includes="tools/**"/>
-            <fileset refid="jsapi_sh"/>
-            <fileset refid="docs"/>
-            <fileset refid="javadoc_zip"/>
-        </zip>
+    <target name="deploy_src"
+	    depends="deploy_init">
+        <jar destfile="${deploy_dir}/freetts-${version}-src.zip"
+             basedir="${deploy_dir}"
+             filesonly="true"
+             compress="true"
+             includes="freetts-${version}/**"
+             excludes="**/*.jar,**/tests/**"/>
     </target>
 
 
     <!-- freetts-bin -->
-    <target name="deploy_binaries"
-	    depends="javadoc_zip,all">
-        <mkdir dir="${deploy_dir}"/>
-        <chmod dir="lib" perm="ugo+x" includes="jsapi.sh"/>
-        <zip destfile="${deploy_dir}/freetts-bin-${version}.zip">
-            <fileset refid="legal"/>
-            <fileset dir="." includes="demo.xml"/>
-            <fileset refid="binaries"/>
-            <fileset refid="jsapi_sh"/>
-            <fileset refid="demos"/>
-            <fileset dir="." includes="speech.properties"/>
-            <fileset dir="." includes="tools/**"/>
-            <fileset refid="docs"/>
-            <fileset refid="javadoc_zip"/>
-        </zip>
+    <target name="deploy_bin"
+	    depends="deploy_init">
+        <jar destfile="${deploy_dir}/freetts-${version}-bin.zip"
+             basedir="${deploy_dir}"
+             filesonly="true"
+             compress="true"
+             includes="freetts-${version}/**"
+             excludes="freetts-${version}/build.xml,
+                       **/tests/**,
+                       freetts-${version}/de/**,
+                       freetts-${version}/com/**"/>
     </target>
 
 
     <!-- freetts-tests -->
-    <target name="deploy_tests">
-        <mkdir dir="${deploy_dir}"/>
-        <zip destfile="${deploy_dir}/freetts-tests-${version}.zip">
-            <fileset refid="legal"/>
-            <fileset refid="tests"/>
-        </zip>
+    <target name="deploy_tst">
+        <jar destfile="${deploy_dir}/freetts-${version}-tst.zip"
+             basedir="${deploy_dir}"
+             filesonly="true"
+             compress="true"
+             includes="freetts-${version}/acknowledgments.txt,
+                       freetts-${version}/license.terms,
+                       freetts-${version}/tests/**"/>
     </target>
 
 
