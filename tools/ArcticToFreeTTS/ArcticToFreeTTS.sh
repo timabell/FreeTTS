@@ -48,10 +48,7 @@ mkdir -p $VOICEDIR
 
 
 
-echo Compiling $FV_VOICENAME
-ant -Darctic_voice=$FV_VOICENAME
 
-exit
 # Import F0_MEAN (for setPitch) and F0_RANGE (for setPitchRange)
 #
 # [[[WDW FIXME: Currently unused.]]]
@@ -301,21 +298,10 @@ cat $HELPERDIR/voice.Manifest.template | \
 
 
 
-exit
+echo Compiling $FV_VOICENAME
+ant -Darctic_voice=$FV_VOICENAME
+
+
+
 
 echo Done.
-
-
-
-
-exit
-
-# Stuff that helped me...
-#
-javac -classpath /Users/wwalker/work/SourceForge/FreeTTS/FreeTTS/lib/en_us.jar:/Users/wwalker/work/SourceForge/FreeTTS/FreeTTS/lib/freetts.jar *.java
-
-jar -cvfm BdlVoiceDirectory.jar voice.Manifest *.class cmu_us_bdl_arctic.txt dur_stat.txt durz_cart.txt f0_lr_terms.txt int_accent_cart.txt int_tone_cart.txt nums_cart.txt part_of_speech.txt phoneset.txt prefix_fsm.txt suffix_fsm.txt 
-
-java $JAVAHEAP -cp /Users/wwalker/work/SourceForge/FreeTTS/FreeTTS/lib/en_us.jar:/Users/wwalker/work/SourceForge/FreeTTS/FreeTTS/lib/freetts.jar com.sun.speech.freetts.clunits.ClusterUnitDatabase -src . -dest . -generate_binary cmu_us_bdl_arctic.txt 
-
-festival make_lts_wfst.scm ~/work/festival/festival/lib/dicts/cmu/cmu_lts_rules.scm '(lts_to_rg_to_wfst cmu_lts_rules "/tmp")'
