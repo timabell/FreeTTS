@@ -1,4 +1,8 @@
-*** Portions Copyright 2001 Sun Microsystems, Inc.
+*** Lexicon dump created by lex_dump
+*** Lexicon name: cmu
+*** Flite version: flite-1.1-release December 2001
+*** 
+*** Portions Copyright 2001,2002 Sun Microsystems, Inc.
 *** Portions Copyright 1999-2001 Language Technologies Institute, 
 *** Carnegie Mellon University.
 *** All Rights Reserved.  Use is subject to license terms.
@@ -6,9 +10,7 @@
 *** See the file "license.terms" for information on usage and
 *** redistribution of this file, and for a DISCLAIMER OF ALL 
 *** WARRANTIES.
-*** Lexicon dump created by ./lex_dump
-*** Lexicon name: cmu
-*** Flite version: flite-1.0-beta August 2001
+*** Dumped on Jan 14 2002
 ***ADDENDA:
 ,p	
 .p	
@@ -48,3 +50,4 @@ youllv	y uw1 l
 /n	s l ae1 sh 
 inn	ih n 
 ton	t ax 
+_an	ey 
