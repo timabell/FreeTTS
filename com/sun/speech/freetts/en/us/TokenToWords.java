@@ -164,7 +164,7 @@ public class TokenToWords implements UtteranceProcessor {
 	{ "Fla", "", "florida"  },
 	{ "GA", "", "georgia"  },
 	{ "Ga", "", "georgia"  },
-	{ "HI", "", "hawaii"  },
+	{ "HI", "ambiguous", "hawaii"  },
 	{ "Hi", "ambiguous", "hawaii"  },
 	{ "IA", "", "indiana"  },
 	{ "Ia", "ambiguous", "indiana"  },
@@ -509,7 +509,8 @@ public class TokenToWords implements UtteranceProcessor {
 	    
 	} else if (tokenLength == 1
 		   && isUppercaseLetter(tokenVal.charAt(0))
-		   && ((String)tokenItem.findFeature("n.whitespace")).equals(" ")
+		   && ((String)tokenItem.findFeature("n.whitespace")).equals
+                   (" ")
 		   && isUppercaseLetter
 		   (((String) tokenItem.findFeature("n.name")).charAt(0))) {
 	    
@@ -973,15 +974,22 @@ public class TokenToWords implements UtteranceProcessor {
      * @param tokenVal the token string
      */
     private boolean isStateName(String tokenVal) {
-
-	String[] state = (String[]) usStatesHash.get(tokenVal);
+        String[] state = (String[]) usStatesHash.get(tokenVal);
 	if (state != null) {
 	    boolean doIt = false;
-	    if (state.equals("ambiguous")) {
+
+            // check to see if the state initials are ambiguous
+            // in the English language
+	    if (state[1].equals("ambiguous")) {
 		String pName = (String) tokenItem.findFeature("p.name");
 		String nName = (String) tokenItem.findFeature("n.name");
+                System.out.println("pName = " + pName);
+                System.out.println("nName = " + nName);
 		int nNameLength = nName.length();
 		FeatureSet featureSet = tokenItem.getFeatures();
+
+                // check if the previous word starts with a capital letter,
+                // is at least 3 letters long, and is an alphabet sequence
 		if ((isUppercaseLetter(pName.charAt(0))
 		     && pName.length() > 2
 		     && matches(alphabetPattern, pName)) &&
