@@ -130,11 +130,13 @@ public class Client {
      */
     private void sendLine(String line) {
 	if (debug) {
-	    System.out.println("\"" + line + "\"");
+	    System.out.println(line);
 	}
 	line = line.trim();
 	if (line.length() > 0) {
-	    writer.println(line);
+	    writer.print(line);
+	    writer.print('\n');
+	    writer.flush();
 	}
     }
 

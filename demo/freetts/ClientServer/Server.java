@@ -193,11 +193,23 @@ class SocketTTSHandler implements Runnable {
 
 
     /**
+     * Sends the given line of text over the Socket.
+     *
+     * @param line the line of text to send
+     */
+    private void sendLine(String line) {
+	writer.print(line);
+	writer.print('\n');
+	writer.flush();
+    }
+
+
+    /**
      * Implements the run() method of Runnable
      */
     public void run() {
         try {
-            writer.println("READY");
+            sendLine("READY");
 
             String command = null;
 	    int status;
@@ -247,7 +259,7 @@ class SocketTTSHandler implements Runnable {
 		voice = server.get16kVoice();
 	    } else {
 		// invalid sample rate
-		writer.println("-2");
+		sendLine("-2");
 		return INVALID_SAMPLE_RATE;
 	    }
 
@@ -257,7 +269,7 @@ class SocketTTSHandler implements Runnable {
 	    voice.speak(text);
 
 	    // tell the client that there is no more data for this request
-	    writer.println("-1");
+	    sendLine("-1");
 	    
 	} catch (IOException ioe) {
 	    ioe.printStackTrace();
