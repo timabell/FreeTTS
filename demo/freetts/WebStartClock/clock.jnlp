@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp spec="1.0+" codebase="URL of directory where webstartclock.jar is">
+<jnlp spec="1.0+" codebase="file:/home/pkwok/cvs/FreeTTS/demo/freetts/WebStartClock/">
 <information>
   <title>FreeTTS Clock</title>
   <vendor>Sun Microsystems Laboratories</vendor>

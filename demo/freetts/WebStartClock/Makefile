@@ -30,6 +30,8 @@ WEBSTARTCLOCK_CLASSES = \
 WEBSTARTCLOCK_EXCLUDES = \
 	$(WSC_STAGING_AREA)/com/sun/speech/engine \
 	$(WSC_STAGING_AREA)/com/sun/speech/freetts/jsapi \
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/diphone \
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/FreeTTSTime.class \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmu_kal/ \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.bin \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.txt \
