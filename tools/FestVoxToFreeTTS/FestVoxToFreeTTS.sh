@@ -243,31 +243,35 @@ fi
 idx_non_diphone() {
 echo Creating unit index
 (cd $VOICEDIR
-    echo Creating FreeTTS/misc.txt
+    echo Creating $OUTDIR/misc.txt
     festival -b \
     festvox/$FV_FULLVOICENAME.scm \
 	$ARCTICDIR/scheme/dump_misc.scm \
 	"(begin (voice_${FV_FULLVOICENAME}) (dump_misc))" > \
-	FreeTTS/misc.txt
+	$OUTDIR/misc.txt
 
 # UnitDatabase outputs its own info...
     java -cp $ARCTICDIR/classes UnitDatabase \
 	festival/clunits/${FV_VOICENAME}.catalogue \
 	`find wav -type f | cut -f2 -d/ | cut -f1 -d.`
 
-echo Creating FreeTTS/trees.txt
+echo Creating $OUTDIR/trees.txt
 festival -b \
     festvox/$FV_FULLVOICENAME.scm \
     $ARCTICDIR/scheme/dump_trees.scm \
     "(begin (voice_${FV_FULLVOICENAME}) (dump_trees))" > \
-    FreeTTS/trees.txt
+    $OUTDIR/trees.txt
 
-echo Creating FreeTTS/weights.txt
+echo Creating $OUTDIR/weights.txt
 festival -b \
     festvox/$FV_FULLVOICENAME.scm \
     $ARCTICDIR/scheme/dump_join_weights.scm \
     "(begin (voice_${FV_FULLVOICENAME}) (dump_join_weights))" > \
-    FreeTTS/weights.txt
+    $OUTDIR/weights.txt
+
+echo Combining these files into $OUTDIR/$FV_VOICENAME.txt
+(cd $OUTDIR; cat misc.txt unit_catalog.txt trees.txt unit_index.txt sts.txt mcep.txt weights.txt > $FV_VOICENAME.txt)
+
 )
 }
 
@@ -575,12 +579,8 @@ if [ "$2" = "install" ]; then
     
     # java class names should begin with a capital letter
     VOICEDIRECTORY_CLASS=`echo $VP_NAME | awk '{ print(toupper(substr($0,1,1)) substr($0,2)) }'`"VoiceDirectory"
-    if [ "$VP_LOCALE" = "en_US" ]; then
-	FULL_VOICEDIRECTORY_CLASS="com.sun.speech.freetts.en.us.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
-    else
-	FULL_VOICEDIRECTORY_CLASS="de.dfki.lt.freetts.de.$VP_FULL_NAME.$VOICEDIRECTORY_CLASS"
-    fi
-    (
+	FULL_VOICEDIRECTORY_CLASS=`echo $VOICETARGETBASE/$LOCALEPATH/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS | tr / .`
+	(
         echo "Copyright 2003 Sun Microsystems, Inc."
         echo 
         echo "See the file "license.terms" for information on usage and redistribution of"
@@ -609,7 +609,7 @@ if [ "$2" = "install" ]; then
 
 
 
-    cp -f "$OUTDIR/$FV_FULLVOICENAME.txt" "$VOICETARGETDIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
+    cp -f "$OUTDIR/$FV_VOICENAME.txt" "$VOICETARGETDIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
     echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     echo "FreeTTSVoiceDefinition: true" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     if [ "$VP_LOCALE" = "en_US" ]; then
