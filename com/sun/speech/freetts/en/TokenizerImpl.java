@@ -182,8 +182,6 @@ public class TokenizerImpl implements Tokenizer {
 	lastToken = token;
 	token = new Token();
 	
-	token.setLineNumber(lineNumber);
-	
 	// Skip whitespace
 	token.setWhitespace(getTokenSubpart(whitespaceSymbols));
 	
@@ -201,6 +199,7 @@ public class TokenizerImpl implements Tokenizer {
 	}
 
 	token.setPosition(currentPosition);
+	token.setLineNumber(lineNumber);
 	
 	// This'll have token *plus* postpunctuation
 	// Get postpunctuation
@@ -389,25 +388,40 @@ public class TokenizerImpl implements Tokenizer {
      * @return <code>true</code> if a new sentence should be started
      */
     public boolean isBreak() {
+
+	String tokenWhiteSpace = token.getWhitespace();
+	String lastTokenPostpunctuation = null;
+	if (lastToken != null) {
+	    lastTokenPostpunctuation = lastToken.getPostpunctuation();
+	}
+	
 	if (lastToken == null || token == null) {
 	    return false;
-	} else if (token.getWhitespace().indexOf('\n') !=
-	    token.getWhitespace().lastIndexOf('\n')) {
+	} else if (tokenWhiteSpace.indexOf('\n') !=
+		   tokenWhiteSpace.lastIndexOf('\n')) {
 	    return true;
-	} else  if (lastToken.getPostpunctuation().indexOf(':') != -1 ||
-	            lastToken.getPostpunctuation().indexOf('?') != -1 ||
-	            lastToken.getPostpunctuation().indexOf('!') != -1) {
+	} else if (lastTokenPostpunctuation.indexOf(':') != -1 ||
+		   lastTokenPostpunctuation.indexOf('?') != -1 ||
+		   lastTokenPostpunctuation.indexOf('!') != -1) {
 	    return true;
-    	} else if (lastToken.getPostpunctuation().indexOf('.') != -1 &&
-	           token.getWhitespace().length() > 1 &&
+    	} else if (lastTokenPostpunctuation.indexOf('.') != -1 &&
+		   tokenWhiteSpace.length() > 1 &&
 		   Character.isUpperCase(token.getWord().charAt(0))) {
 	    return true;
-    	} else if (lastToken.getPostpunctuation().indexOf('.') != -1 &&
-		   Character.isUpperCase(token.getWord().charAt(0)) &&
-		       !Character.isUpperCase(
-			    lastToken.getWord().charAt(
-			    lastToken.getWord().length() - 1))) {
-	    return true;
+    	} else {
+	    String lastWord = lastToken.getWord();
+	    int lastWordLength = lastWord.length();
+
+	    if (lastTokenPostpunctuation.indexOf('.') != -1 &&
+		/* next word starts with a capital */
+		Character.isUpperCase(token.getWord().charAt(0)) &&
+		/* last word isn't an abbreviation */
+		!(Character.isUpperCase
+		  (lastWord.charAt(lastWordLength - 1)) ||
+		  (lastWordLength < 4 &&
+		   Character.isUpperCase(lastWord.charAt(0))))) {
+		return true;
+	    }
 	}
 	return false;
     }
