@@ -468,9 +468,8 @@ public class PlayerModelImpl implements PlayerModel {
 	    }
 	} catch (Exception e) {
 	    e.printStackTrace();
-	} finally {
-	    return volume;
-	}
+	} 
+	return volume;
     }
     
 
@@ -805,9 +804,8 @@ class MySynthesizerModeDesc extends SynthesizerModeDesc {
 	    }
 	} catch (Exception e) {
 	    e.printStackTrace();
-	} finally {
-	    return synthesizer;
-	}
+	} 
+	return synthesizer;
     }
 
     
@@ -828,9 +826,8 @@ class MySynthesizerModeDesc extends SynthesizerModeDesc {
 	    }
 	} catch (Exception e) {
 	    e.printStackTrace();
-	} finally {
-	    return synthesizer;
 	}
+	return synthesizer;
     }
 
 
