@@ -41,8 +41,10 @@ lpctest: all
 
 utttest: all
 	@chmod +x utteranceTest.sh compareNumericUtt compareUtt testUtt utteranceTimeTest.sh testTimeUtt compareNumericUtt
-	sh ./utteranceTest.sh
-	sh ./utteranceTimeTest.sh
+	sh ./utteranceTest.sh ../data/alice2 ../data/alice2.flite.v1.1-beta.rel
+	sh ./utteranceTimeTest.sh  06:51 ../data/flite_time.v1.1.rel 
+	sh ./utteranceTest.sh ../data/TokenGame.txt ../data/TokenGame.flite.v1.1.rel
+
 
 
 alltests: all

@@ -10,7 +10,10 @@
 # a voice because I've been meaning to tell you how much I care.")
 #
 REF=reference.res
-
+REF_TMP=utterance.ref.res
+NEW=utterance.res
+TIME=$1
+# 06:51
 if [ -f utteranceTest.res ]; then
 	rm utteranceTest.res
 fi
@@ -19,8 +22,8 @@ if [ -f utteranceTest.diff ]; then
 	rm utteranceTest.diff
 fi
 
-sh ../bin/jtime -dumpRelations -silent -time 06:51 > utteranceTest.res 
+sh ../bin/jtime -dumpRelations -silent -time $TIME  > $NEW
 
 rm -f $REF
-cp ../data/flite_time.v1.1.rel $REF
+cp $2 $REF_TMP
 sh testTimeUtt

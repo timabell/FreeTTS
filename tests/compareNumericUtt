@@ -18,8 +18,8 @@
 
 
 # REF=../../../../../data/alice2.flite.v1.0-beta.rel
-REF=reference.res
-NEW=utteranceTest.res
+REF=utterance.ref.res
+NEW=utterance.res
 
 grep $1 $REF | grep -v Relation > t.$1.1
 grep $1 $NEW | grep -v Relation > t.$1.2
@@ -30,7 +30,7 @@ pr -mt t.$1.1 t.$1.2 | sed 's/=/ /g' | awk ' {
         diff = -diff;
     }
     if (diff > 1e-05) {
-	print $2, $4, diff
+	# print $2, $4, diff
         count++;
     }
     tot++;

@@ -17,22 +17,22 @@
 # a voice because I've been meaning to tell you how much I care.")
 #
 
-REF=reference.res
+REF_TMP=utterance.ref.res
+NEW=utterance.res
 
-if [ -f utteranceTest.res ]; then
-	rm utteranceTest.res
+
+if [ -f $NEW ]; then
+	rm $NEW
 fi
 
-if [ -f utteranceTest.diff ]; then
-	rm utteranceTest.diff
+if [ -f $1.diff ]; then
+	rm $1.diff
 fi
 
-sh ../bin/freetts -dumpRelations -silent -file ../data/alice2 > utteranceTest.res 
+sh ../bin/freetts -dumpRelations -silent -file $1 > $NEW
 
-rm -f $REF
-cp ../data/alice2.flite.v1.1-beta.rel $REF
-sh testUtt
-
-
-
+rm -f $REF_TMP
+# cp ../data/alice2.flite.v1.1-beta.rel $REF_TMP
+cp $2 $REF_TMP
+sh testUtt 
 
