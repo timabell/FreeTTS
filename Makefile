@@ -9,7 +9,7 @@
 # Relative path to the "base" of the source tree
 TOP = .
 
-TAR = tar
+GTAR = /pkg/gnu/bin/tar
 ZIP = zip
 
 # List any sub directories that need to be built
@@ -21,11 +21,22 @@ SRCDIRS = com de
 TESTSDIRS = wave data bin tests
 
 
+PUSH_DEST_DOC = /home/groups/f/fr/freetts/
+PUSH_DEST_DOC_TEST = /home/groups/f/fr/freetts/htdocs/test
+
+
 #JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
 #	lib/cmuawb.jar lib/jsapi.jar 
 
 JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
 	lib/cmuawb.jar lib/cmutimelex.jar lib/demo.jar
+
+WSC_STAGING_AREA = ./WebStartClock
+
+WEB_START_CLOCK_FILES = $(WSC_STAGING_AREA)/wsc.jar \
+			$(WSC_STAGING_AREA)/jsapi.jar\
+			$(WSC_STAGING_AREA)/wsc.key \
+			$(WSC_STAGING_AREA)/clock.jnlp
 
 ZIPS = javadoc.zip src.zip tests.zip
 
@@ -79,7 +90,7 @@ DEPLOY_EXCLUDED_DIRECTORIES = \
 	$(STAGING_AREA)/lib/jsapi.jar
 
 
-DEPLOY_DOCS_TARGET = freettsdocs.tar
+DEPLOY_DOCS_TARGET = freettsdocs.tar.gz
 DOC_STAGING_AREA = ./htdocs
 DEPLOY_DOCS = demo docs license.terms RELEASE_NOTES overview.html README.txt acknowledgments.txt index.html license.terms
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
@@ -125,7 +136,7 @@ clean::
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
 	rm -rf $(DOC_STAGING_AREA)
-	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
+	rm -f $(DEPLOY_DOCS_TARGET) 
 
 
 deploy: all jars zips
@@ -139,8 +150,7 @@ deploy: all jars zips
 	rm -rf $(DEPLOY_EXCLUDED_DIRECTORIES)
 	-find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
 	rm -rf  $(STAGING_AREA)/$(API_DIR)
-	tar cf freetts.tar $(STAGING_AREA)
-	gzip freetts.tar
+	$(GTAR) czf freetts.tar.gz $(STAGING_AREA)
 	rm -rf $(ZIPS)
 	rm -rf $(STAGING_AREA)
 
@@ -152,28 +162,38 @@ emacspeak-server:
 	rm -rf $(EMACS_SERVER_EXCLUDES) 
 	-find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
 	mv $(STAGING_AREA)/emacspeak_index.html $(STAGING_AREA)/index.html
-	tar cf emacspeak.tar $(STAGING_AREA)
+	$(GTAR) cf emacspeak.tar $(STAGING_AREA)
 	gzip emacspeak.tar
 	# rm -rf $(STAGING_AREA)
 
 emacspeak-server-jar:
 	$(MAKE) all
 	rm -f emacspeak-server.jar
-	(cd classes; $(JAR) cvf emacspeak-server.jar *)
+	(cd classes; $(JAR) cf emacspeak-server.jar *)
 	mv classes/emacspeak-server.jar .
 
 deploy_docs:
-	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
+	rm -f $(DEPLOY_DOCS_TARGET) 
 	rm -rf $(DOC_STAGING_AREA)
 	$(MAKE) emacsdocs
 	(cd docs; $(MAKE) deploy)
 	mkdir $(DOC_STAGING_AREA)
+	$(MAKE) webstartclock
+	mkdir $(DOC_STAGING_AREA)/WebStartClock
+	cp $(WEB_START_CLOCK_FILES) $(DOC_STAGING_AREA)/WebStartClock
 	cp -r $(DEPLOY_DOCS) $(DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_EXCLUDED_FILES) 
 	-find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
-	tar cvf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
-	gzip $(DEPLOY_DOCS_TARGET)
+	$(GTAR) czf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
 	rm -rf $(DOC_STAGING_AREA)
+
+push_docs_test:
+	sscp $(DEPLOY_DOCS_TARGET)
+	sshh tar xzfC $(DEPLOY_DOCS_TARGET) $(PUSH_DEST_TEST_DOC)
+
+push_docs:
+	sscp $(DEPLOY_DOCS_TARGET)
+	sshh tar xzfC $(DEPLOY_DOCS_TARGET) $(PUSH_DEST_DOC)
 
 all::
 
@@ -232,3 +252,80 @@ lib/freetts.jar:
                 `find de -type f -print | \
 		egrep -v -f ../build/freetts_exclude_list`\
 	)
+
+
+
+########### WebStartClock deploy macros ########################
+
+EN_US_DIR = com/sun/speech/freetts/en/us
+AUDIO_DIR = com/sun/speech/freetts/audio
+KEY=wsc.key
+
+WEBSTARTCLOCK_CLASSES = \
+	classes/Clock*.class \
+	classes/JSAPIClock*.class \
+	classes/TimeUtils.class \
+	classes/com
+
+WEBSTARTCLOCK_EXCLUDES = \
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/diphone \
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/FreeTTSTime.class \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmu_kal/ \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.bin \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_addenda.bin \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_addenda.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_lts.bin \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_lts.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmutimelex_compiled.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmutimelex_addenda.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmutimelex_lts.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmu_awb/cmu_time_awb.txt \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/CMUDiphoneVoice.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/AudioPlayerStdOut.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/JavaStreamingAudioPlayer.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/MultiFile8BitAudioPlayer.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/MultiFileAudioPlayer.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/NullAudioPlayer.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/RawFileAudioPlayer.class \
+	$(WSC_STAGING_AREA)/$(AUDIO_DIR)/SingleFileAudioPlayer.class
+
+
+##########################################################################
+########################################
+# Builds and signs the jars
+########################################
+WEBSTART_CLOCK_FILES  = wsc.jar jsapi.jar wsc.key clock.jnlp
+KEY=$(WSC_STAGING_AREA)/wsc.key
+
+webstartclock:
+	$(MAKE) all; 
+	mkdir -p $(WSC_STAGING_AREA); 
+	rm -rf $(WSC_STAGING_AREA)/*;
+	cp -r $(WEBSTARTCLOCK_CLASSES) $(WSC_STAGING_AREA); 
+	rm -rf $(WEBSTARTCLOCK_EXCLUDES); 
+	(cd $(WSC_STAGING_AREA); $(JAR) cf ../wsc.jar  *; )
+	rm -rf $(WSC_STAGING_AREA)/*
+	mv wsc.jar $(WSC_STAGING_AREA)
+	chmod a+x $(WSC_STAGING_AREA)/wsc.jar; 
+	cp demo/JSAPI/WebStartClock/clock.jnlp $(WSC_STAGING_AREA)
+	$(MAKE) key
+	$(MAKE) signjars
+
+
+########################################
+# Builds the key file
+########################################
+key:
+	rm -f $(KEY)
+	$(JAVA_HOME)/bin/keytool -keypass freetts -storepass freetts -genkey  -keystore $(KEY) -alias freetts -dname "CN=Sun Labs, OU=Sun Microsystems, O=Sun Microsystems, L=Burlington, ST=MA, C=US"
+
+########################################
+# Signs the jar files
+########################################
+signjars:
+	cp $(TOP)/lib/jsapi.jar $(WSC_STAGING_AREA)
+	$(JAVA_HOME)/bin/jarsigner -storepass freetts -keypass freetts -keystore $(KEY) $(WSC_STAGING_AREA)/wsc.jar freetts 
+	$(JAVA_HOME)/bin/jarsigner -storepass freetts -keypass freetts -keystore $(KEY) $(WSC_STAGING_AREA)/jsapi.jar freetts 
+
+
