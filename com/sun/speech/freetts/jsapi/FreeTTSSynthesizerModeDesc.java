@@ -7,6 +7,8 @@
  */
 
 package com.sun.speech.freetts.jsapi;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 
 import javax.speech.Engine;
@@ -25,7 +27,7 @@ import com.sun.speech.freetts.audio.AudioPlayer;
  * a lexicon to the standard mode items.
  */
 public class FreeTTSSynthesizerModeDesc extends SynthesizerModeDesc 
-    implements EngineCreate {
+implements EngineCreate {
 
     private String lexiconName = "com.sun.speech.freetts.en.us.CMULexicon";
     private String audioPlayerName = null;
@@ -87,6 +89,44 @@ public class FreeTTSSynthesizerModeDesc extends SynthesizerModeDesc
 	} catch (InstantiationException ie) {
 	}
 	return audioPlayer;
+    }
+
+    /**
+     * Returns the list of valid voices available in this synthesizer mode.
+     */
+    public Voice[] getVoices() {
+        List voiceList = new LinkedList();
+        Voice[] voices = super.getVoices();
+        int count = 0;
+        for (int i = 0; i < voices.length; i++) {
+            FreeTTSVoice freettsVoice = (FreeTTSVoice) voices[i];
+            if (freettsVoice.isValid()) {
+                voiceList.add(freettsVoice);
+                count++;
+            }
+        }
+        Voice[] validVoices = new Voice[count];
+        voiceList.toArray(validVoices);
+        
+        return validVoices;
+    }
+
+    /**
+     * Returns true if this is a valid FreeTTSSynthesizerModeDesc.
+     * It is valid if it contains at least one valid Voice.
+     * Returns false otherwise.
+     *
+     * @return true if this is a valid FreeTTSSynthesizerModeDesc,
+     *    false otherwise
+     */
+    public boolean isValid() {
+        Voice[] voices = super.getVoices();
+        for (int i = 0; i < voices.length; i++) {
+            if (((FreeTTSVoice) voices[i]).isValid()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
