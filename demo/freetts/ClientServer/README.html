@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,95 +13,129 @@
 -->
 
 <html>
+    <head><title>FreeTTS Client/Server Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>FreeTTS Client/Server Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>FreeTTS Client/Server Demo</title>
-  </head>
+        <p>This demo provides an example of how to run a FreeTTS
+        synthesizer as a server on the network: a simple client sends
+        the server some text, and the the server streams back audio.
+        Note that since we use a very simple socket-based protocol for
+        the server, the client can be written in any language (i.e.,
+        <i>the client does not have to be written in the Java<sup>TM</sup>
+        programming language</i>).
 
+        <p>People have used this demo as the basis for generating
+        speech output on a wireless PDA.
 
-  <body bgcolor="#FFFFFF">
+        <h3>Building</h3>
+        <p>To build this demo, merely type the following in a shell:
+        <ul>
+            <code>ant -find build.xml</code>
+        </ul>
+        <p>Doing so will create
+        <code>bld/bin/Server.jar</code> and
+        <code>bld/bin/Client.jar</code>.  You can run
+        both using <code>java -jar</code> (see "Running" below).
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-	      <h1>FreeTTS Client/Server Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <p>We've also provided a simple C client,
+        <code>client.c</code>, which you can compile using the 
+        following command:
+        <ul>
+	    <code>gcc -Wall -lxnet -o cclient client.c</code>
+        </ul>
 
-    <pre>
+        <h3>Running the Server</h3>
+        <p>To use this demo, you need to run two things: the Server 
+        and the Client.
 
-To run this ClientServer demo, you need to run two things: the Server 
-and the Client.
+        <p>To run the Server, on the machine you want to run the
+        server, type:
+        <ul>
+	    <code>java -jar bin/Server.jar</code>
+        </ul>
 
+        <p>This runs the TTS Server at port 5555. To change the port,
+        modify the <code>port</code> system property:
+        <ul>
+            <p><code>java -Dport=5555 -jar bin/Server.jar</code></p>
+        </ul>
 
-To run the Server, on the machine you want to run the server, type:
+        <p>The Server will start and will configure itself to support
+        requests for both 8kHz and 16kHz voices.  You should see the
+        following output:
+        <ul>
+	    <code>Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=5555]</code>
+        </ul>
 
-java -jar bin/Server.jar
+        <p>To specify the 8kHz and 16kHz voices, you need to set the
+        <code>voice8kName</code> and <code>voice16kName</code> system
+        properties (default values shown):
+        <ul>
+            <p><code>java -Dvoice8kName=kevin -Dvoice16kName=kevin16 -jar bin/Server.jar</code>
+            <br><code>java -Dvoice16kName=mbrola_us1 -Dmbrola.base=/usr/local/mbrola -jar bin/Server.jar</code> (*)</p>
 
-If you want to use MBROLA voices, please refer to the 
-<a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions.
-Remember that you must set the <code>MBROLA_DIR</code> environment 
-variable to your MBROLA directory. To use MBROLA voices, type one of:
+            <p>(*) The MBROLA voices are 16kHz voices.  You must <a
+            href="../../../mbrola/README.html">setup and install
+            MBROLA</a> before using MBROLA voices.</p>
+	</ul>
+    
+        <p>To see how quickly the server handles TTS request, you can
+        set the <code>metrics</code> system property to
+        <code>true</code>.  This will cause the "time to first byte
+        sent" to client to be printed out for each TTS request:
+        <ul>
+	    <code>java -Dmetrics=true -jar bin/Server.jar</code>
+        </ul>
 
-gmake runMbrola1Server
-gmake runMbrola2Server
-gmake runMbrola3Server
+        <h3>Running the Client</h3>
+        <p>To run the client, you need to tell it where the Server is
+        running by setting the <code>server</code>,
+        <code>port</code>, <code>sampleRate</code> and 
+        <code>metrics</code> properties (default values shown):
+        <ul>
+            <p><code>java -Dserver=localhost -Dport=5555
+            -DsampleRate=16000 -metrics=false -jar bin/Client.jar</code></p>
+        </ul>
 
+        <p>To run the C client, you can run it with the following
+        optional arguments:
+        <ul>
+            <code>cclient [server [port [sample_rate [show_metrics]]]]</code>
+        </ul>
+        <p>where:
+<pre>
+     server:       the host name of speech server
+     port:         port where the speech server is listening
+     sample_rate:  8000 or 16000
+     show_metrics: 0 or 1
+</pre>
 
-You should see the following output:
-<b>
-Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=5555]
-</b>
+        <p>After running either of the clients, the following prompt
+        should appear:
+<pre>
+     Receiving : 32886 samples
+     Say       : 
+</pre>
 
-To see how quickly the server handles TTS request, you can set the "metrics"
-system property to true in the Makefile. This will cause the "time to
-first byte sent" to client to be printed out for each TTS request.
+        <p>and you should hear a voice saying "type in what you want
+        me to say."  At this point, you should hear what you type in
+        (and press Enter).
 
+        <hr>
 
-To run the Java(TM) Client
-
-1. You need to tell it where the Server is by modifying the Makefile.
-   In the "runjclient" section, replace "localhost" with the name of
-   the host the server is running.
-
-2. Type: gmake runjclient
-
-
-To run the C Client:
-
-1. You need to tell it where the Server is by modifying the Makefile.
-   In the "runcclient" section, replace "localhost" with the name of
-   the host the server is running.
-
-2. Type: gmake runcclient
-
-After running either of the clients, the following prompt should appear:
-
-<b>
-Receiving : 32886 samples
-Say       : 
-</b>
-
-and you should hear a voice saying "type in what you want me to say".
-At this point, you should hear what you type in (and press Enter).
-
-<b>
-Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=5555]
-... new socket connection
-</b>
-
-
-For each client, there are respective "metrics" switches that you can
-turn on in the Makefile to show the response times of the TTS server.
-
-    </pre>
-
-    <hr>
-
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-  </body>
-
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
+</html>
