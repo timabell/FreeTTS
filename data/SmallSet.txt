@@ -1,0 +1,5 @@
+The tokenizer takes 2.2 seconds to run.
+The flay rod has gone out of skewl on the treadle.
+The JavaTTS project goal is to investigate the performance
+characteristics for a Java-based TTS engine. We will
+instrument Flite and JavaTTS to provide the following metrics: 

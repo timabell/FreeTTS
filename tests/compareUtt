@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# This test script first runs the FreeTTS with our first utterance file,
+# dumps the wave in text form, and compares (diff) it with our standard 
+# wave form file for our first utterance (first.wave.txt). This test will
+# tell you how many lines differ from the standard wave form file.
+#
+# (Reminder: our 'first utterance file' is "Hello world.  This is Duke 
+# coming to you from inside the java virtual machine. I'm happy to have
+# a voice because I've been meaning to tell you how much I care.")
+#
+
+
+#REF=../../../../../data/alice2.flite.v1.0-beta.rel
+REF=reference.res
+NEW=utteranceTest.res
+
+egrep "[ ].$1[:=]." $REF | grep -v Relation > t.$1.1
+egrep "[ ].$1[:=]." $NEW | grep -v Relation > t.$1.2
+echo $1  	 `diff t.$1.1 t.$1.2 | wc -l `  differences of `wc -l <t.$1.1` | awk '
+$2 == 0 { printf("%40.40s. %s\n", $0, "Test Passed."); }
+$2 != 0 { printf("%40.40s. %s\n", $0, "Test FAILED."); }
+'

@@ -1,0 +1,231 @@
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.291s    3.291s    3.291s    3.291s    3.291s    100.00%
+Lexicon         1     1.440s    1.440s    1.440s    1.440s    1.440s    43.76%
+LTS             1     0.156s    0.156s    0.156s    0.156s    0.156s    4.74%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     0.366s    0.366s    0.366s    0.366s    0.366s    11.12%
+UtteranceProces 1     1.146s    1.146s    1.146s    1.146s    1.146s    34.82%
+DiphoneUnitData 1     0.499s    0.499s    0.499s    0.499s    0.499s    15.16%
+FeatureProcessi 1     0.160s    0.160s    0.160s    0.160s    0.160s    4.86%
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     0.624s    0.624s    0.624s    0.624s    0.624s    100.00%
+processing      4     0.048s    0.047s    0.298s    0.149s    0.596s    95.51%
+..Tokenization  4     0.001s    0.001s    0.021s    0.006s    0.026s    4.17%
+..TokenToWords  4     0.006s    0.004s    0.007s    0.005s    0.021s    3.37%
+..PartOfSpeechT 4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+..CARTPhraser   4     0.001s    0.001s    0.009s    0.004s    0.015s    2.40%
+..WordSylSeg    4     0.001s    0.001s    0.016s    0.006s    0.024s    3.85%
+..Pauses        4     0.000s    0.000s    0.002s    0.000s    0.002s    0.32%
+..CARTIntonator 4     0.000s    0.000s    0.058s    0.026s    0.104s    16.67%
+..PostLex       4     0.001s    0.000s    0.001s    0.001s    0.003s    0.48%
+..CARTDurator   4     0.004s    0.004s    0.038s    0.017s    0.067s    10.74%
+..IntTarget     4     0.001s    0.001s    0.043s    0.020s    0.081s    12.98%
+..DiphoneUnitSe 4     0.002s    0.002s    0.011s    0.005s    0.021s    3.37%
+..DiphonePitchm 4     0.020s    0.002s    0.021s    0.012s    0.046s    7.37%
+..UnitConcatena 4     0.002s    0.002s    0.012s    0.006s    0.025s    4.01%
+..AudioOutput   4     0.008s    0.008s    0.086s    0.039s    0.155s    24.84%
+Memory Use    : 14003k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.269s    3.269s    3.269s    3.269s    3.269s    100.00%
+Lexicon         1     1.422s    1.422s    1.422s    1.422s    1.422s    43.50%
+LTS             1     0.157s    0.157s    0.157s    0.157s    0.157s    4.80%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.03%
+CartLoading     1     0.368s    0.368s    0.368s    0.368s    0.368s    11.26%
+UtteranceProces 1     1.148s    1.148s    1.148s    1.148s    1.148s    35.12%
+DiphoneUnitData 1     0.496s    0.496s    0.496s    0.496s    0.496s    15.17%
+FeatureProcessi 1     0.152s    0.152s    0.152s    0.152s    0.152s    4.65%
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     1.058s    1.058s    1.058s    1.058s    1.058s    100.00%
+processing      4     0.150s    0.143s    0.404s    0.257s    1.028s    97.16%
+..Tokenization  4     0.002s    0.002s    0.022s    0.008s    0.030s    2.84%
+..TokenToWords  4     0.008s    0.007s    0.025s    0.013s    0.051s    4.82%
+..PartOfSpeechT 4     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+..CARTPhraser   4     0.001s    0.001s    0.013s    0.005s    0.020s    1.89%
+..WordSylSeg    4     0.010s    0.008s    0.040s    0.018s    0.072s    6.81%
+..Pauses        4     0.001s    0.000s    0.002s    0.001s    0.003s    0.28%
+..CARTIntonator 4     0.013s    0.013s    0.085s    0.040s    0.158s    14.93%
+..PostLex       4     0.001s    0.000s    0.003s    0.001s    0.005s    0.47%
+..CARTDurator   4     0.015s    0.015s    0.058s    0.032s    0.130s    12.29%
+..IntTarget     4     0.016s    0.016s    0.042s    0.030s    0.119s    11.25%
+..DiphoneUnitSe 4     0.005s    0.005s    0.014s    0.010s    0.038s    3.59%
+..DiphonePitchm 4     0.000s    0.000s    0.023s    0.012s    0.048s    4.54%
+..UnitConcatena 4     0.034s    0.006s    0.034s    0.019s    0.076s    7.18%
+..AudioOutput   4     0.043s    0.043s    0.102s    0.068s    0.273s    25.80%
+Memory Use    : 14928k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.322s    3.322s    3.322s    3.322s    3.322s    100.00%
+Lexicon         1     1.413s    1.413s    1.413s    1.413s    1.413s    42.53%
+LTS             1     0.154s    0.154s    0.154s    0.154s    0.154s    4.64%
+FeatureSet      1     0.001s    0.001s    0.001s    0.001s    0.001s    0.03%
+CartLoading     1     0.369s    0.369s    0.369s    0.369s    0.369s    11.11%
+UtteranceProces 1     1.167s    1.167s    1.167s    1.167s    1.167s    35.13%
+DiphoneUnitData 1     0.517s    0.517s    0.517s    0.517s    0.517s    15.56%
+FeatureProcessi 1     0.197s    0.197s    0.197s    0.197s    0.197s    5.93%
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     2.622s    2.622s    2.622s    2.622s    2.622s    100.00%
+processing      10    0.453s    0.068s    0.716s    0.256s    2.558s    97.56%
+..Tokenization  10    0.008s    0.001s    0.027s    0.006s    0.056s    2.14%
+..TokenToWords  10    0.019s    0.003s    0.025s    0.010s    0.099s    3.78%
+..PartOfSpeechT 10    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+..CARTPhraser   10    0.004s    0.000s    0.027s    0.004s    0.042s    1.60%
+..WordSylSeg    10    0.029s    0.003s    0.038s    0.017s    0.170s    6.48%
+..Pauses        10    0.001s    0.000s    0.004s    0.001s    0.007s    0.27%
+..CARTIntonator 10    0.032s    0.004s    0.152s    0.026s    0.259s    9.88%
+..PostLex       10    0.002s    0.000s    0.003s    0.001s    0.012s    0.46%
+..CARTDurator   10    0.044s    0.006s    0.089s    0.025s    0.250s    9.53%
+..IntTarget     10    0.041s    0.008s    0.244s    0.047s    0.474s    18.08%
+..DiphoneUnitSe 10    0.013s    0.003s    0.034s    0.011s    0.107s    4.08%
+..DiphonePitchm 10    0.002s    0.000s    0.028s    0.006s    0.056s    2.14%
+..UnitConcatena 10    0.009s    0.002s    0.041s    0.010s    0.104s    3.97%
+..AudioOutput   10    0.249s    0.032s    0.249s    0.092s    0.915s    34.90%
+Memory Use    : 17175k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     3.259s    3.259s    3.259s    3.259s    3.259s    100.00%
+Lexicon         1     1.416s    1.416s    1.416s    1.416s    1.416s    43.45%
+LTS             1     0.157s    0.157s    0.157s    0.157s    0.157s    4.82%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     0.369s    0.369s    0.369s    0.369s    0.369s    11.32%
+UtteranceProces 1     1.148s    1.148s    1.148s    1.148s    1.148s    35.23%
+DiphoneUnitData 1     0.496s    0.496s    0.496s    0.496s    0.496s    15.22%
+FeatureProcessi 1     0.147s    0.147s    0.147s    0.147s    0.147s    4.51%
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     23.340s   23.340s   23.340s   23.340s   23.340s   100.00%
+processing      251   0.052s    0.008s    0.607s    0.092s    23.002s   98.55%
+..Tokenization  251   0.000s    0.000s    0.022s    0.001s    0.210s    0.90%
+..TokenToWords  251   0.000s    0.000s    0.051s    0.002s    0.508s    2.18%
+..PartOfSpeechT 251   0.000s    0.000s    0.002s    0.000s    0.002s    0.01%
+..CARTPhraser   251   0.001s    0.000s    0.011s    0.001s    0.182s    0.78%
+..WordSylSeg    251   0.001s    0.000s    0.051s    0.003s    0.739s    3.17%
+..Pauses        251   0.000s    0.000s    0.013s    0.000s    0.059s    0.25%
+..CARTIntonator 251   0.003s    0.000s    0.084s    0.006s    1.521s    6.52%
+..PostLex       251   0.001s    0.000s    0.015s    0.000s    0.121s    0.52%
+..CARTDurator   251   0.003s    0.000s    0.054s    0.008s    1.885s    8.08%
+..IntTarget     251   0.004s    0.000s    0.279s    0.009s    2.178s    9.33%
+..DiphoneUnitSe 251   0.002s    0.000s    0.025s    0.002s    0.567s    2.43%
+..DiphonePitchm 251   0.000s    0.000s    0.024s    0.001s    0.192s    0.82%
+..UnitConcatena 251   0.002s    0.000s    0.036s    0.003s    0.697s    2.99%
+..AudioOutput   251   0.035s    0.006s    0.319s    0.056s    14.032s   60.12%
+Memory Use    : 21547k  of 65344k
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     9.016s    9.016s    9.016s    9.016s    9.016s    100.00%
+Lexicon         1     4.658s    4.658s    4.658s    4.658s    4.658s    51.66%
+LTS             1     0.570s    0.570s    0.570s    0.570s    0.570s    6.32%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     1.516s    1.516s    1.516s    1.516s    1.516s    16.81%
+UtteranceProces 1     1.882s    1.882s    1.882s    1.882s    1.882s    20.87%
+DiphoneUnitData 1     1.417s    1.417s    1.417s    1.417s    1.417s    15.72%
+FeatureProcessi 1     0.363s    0.363s    0.363s    0.363s    0.363s    4.03%
+# ----------------------------- aliceServer-----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     38.132s   38.132s   38.132s   38.132s   38.132s   100.00%
+processing      251   0.042s    0.006s    1.787s    0.147s    36.881s   96.72%
+..Tokenization  251   0.001s    0.000s    0.124s    0.004s    0.948s    2.49%
+..TokenToWords  251   0.001s    0.000s    0.181s    0.009s    2.244s    5.88%
+..PartOfSpeechT 251   0.000s    0.000s    0.001s    0.000s    0.001s    0.00%
+..CARTPhraser   251   0.001s    0.000s    0.015s    0.001s    0.299s    0.78%
+..WordSylSeg    251   0.004s    0.000s    0.343s    0.016s    4.046s    10.61%
+..Pauses        251   0.000s    0.000s    0.002s    0.000s    0.087s    0.23%
+..CARTIntonator 251   0.002s    0.000s    0.185s    0.013s    3.196s    8.38%
+..PostLex       251   0.000s    0.000s    0.005s    0.000s    0.116s    0.30%
+..CARTDurator   251   0.004s    0.000s    0.287s    0.019s    4.687s    12.29%
+..IntTarget     251   0.004s    0.000s    1.044s    0.020s    4.988s    13.08%
+..DiphoneUnitSe 251   0.003s    0.000s    0.165s    0.010s    2.387s    6.26%
+..DiphonePitchm 251   0.001s    0.000s    0.025s    0.001s    0.153s    0.40%
+..UnitConcatena 251   0.001s    0.000s    0.211s    0.006s    1.421s    3.73%
+..AudioOutput   251   0.019s    0.003s    0.380s    0.047s    11.714s   30.72%
+Memory Use    : 20022k  of 64896k
+# ----------------------------- loading CMUClusterUnitVoice-------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     6.683s    6.683s    6.683s    6.683s    6.683s    100.00%
+Lexicon         1     2.440s    2.440s    2.440s    2.440s    2.440s    36.51%
+LTS             1     0.154s    0.154s    0.154s    0.154s    0.154s    2.30%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     0.368s    0.368s    0.368s    0.368s    0.368s    5.51%
+UtteranceProces 1     3.531s    3.531s    3.531s    3.531s    3.531s    52.84%
+ClusterUnitData 1     2.870s    2.870s    2.870s    2.870s    2.870s    42.94%
+FeatureProcessi 1     0.168s    0.168s    0.168s    0.168s    0.168s    2.51%
+# ----------------------------- ClunitsTest-----------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     30.282s   30.282s   30.282s   30.282s   30.282s   100.00%
+processing      100   0.298s    0.256s    1.118s    0.296s    29.559s   97.61%
+..Tokenization  100   0.020s    0.001s    0.029s    0.002s    0.204s    0.67%
+..TokenToWords  100   0.001s    0.001s    0.028s    0.003s    0.268s    0.89%
+..PartOfSpeechT 100   0.000s    0.000s    0.001s    0.000s    0.002s    0.01%
+..CARTPhraser   100   0.001s    0.000s    0.012s    0.001s    0.085s    0.28%
+..WordSylSeg    100   0.001s    0.001s    0.047s    0.005s    0.478s    1.58%
+..Pauses        100   0.000s    0.000s    0.014s    0.000s    0.033s    0.11%
+..CARTIntonator 100   0.003s    0.003s    0.082s    0.005s    0.466s    1.54%
+..PostLex       100   0.000s    0.000s    0.016s    0.000s    0.044s    0.15%
+..CARTDurator   100   0.005s    0.005s    0.060s    0.007s    0.689s    2.28%
+..IntTarget     100   0.006s    0.005s    0.041s    0.008s    0.766s    2.53%
+..SegmentToUnit 100   0.147s    0.145s    0.667s    0.167s    16.707s   55.17%
+..com.sun.speec 100   0.002s    0.001s    0.015s    0.002s    0.181s    0.60%
+..UnitConcatena 100   0.024s    0.003s    0.034s    0.005s    0.508s    1.68%
+..AudioOutput   100   0.087s    0.086s    0.160s    0.091s    9.084s    30.00%
+Memory Use    : 34444k  of 65344k
+# ----------------------------- loading CMUClusterUnitVoice-------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     8.590s    8.590s    8.590s    8.590s    8.590s    100.00%
+Lexicon         1     4.116s    4.116s    4.116s    4.116s    4.116s    47.92%
+LTS             1     0.706s    0.706s    0.706s    0.706s    0.706s    8.22%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     1.231s    1.231s    1.231s    1.231s    1.231s    14.33%
+UtteranceProces 1     1.945s    1.945s    1.945s    1.945s    1.945s    22.64%
+ClusterUnitData 1     1.683s    1.683s    1.683s    1.683s    1.683s    19.59%
+FeatureProcessi 1     0.565s    0.565s    0.565s    0.565s    0.565s    6.58%
+# ----------------------------- ClunitsTestServer-----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     63.376s   63.376s   63.376s   63.376s   63.376s   100.00%
+processing      100   0.477s    0.466s    4.575s    0.625s    62.456s   98.55%
+..Tokenization  100   0.002s    0.001s    0.134s    0.005s    0.473s    0.75%
+..TokenToWords  100   0.003s    0.003s    0.229s    0.007s    0.730s    1.15%
+..PartOfSpeechT 100   0.000s    0.000s    0.001s    0.000s    0.002s    0.00%
+..CARTPhraser   100   0.001s    0.000s    0.014s    0.001s    0.132s    0.21%
+..WordSylSeg    100   0.006s    0.006s    0.329s    0.016s    1.577s    2.49%
+..Pauses        100   0.000s    0.000s    0.308s    0.004s    0.353s    0.56%
+..CARTIntonator 100   0.002s    0.002s    0.209s    0.011s    1.083s    1.71%
+..PostLex       100   0.001s    0.000s    0.084s    0.001s    0.113s    0.18%
+..CARTDurator   100   0.005s    0.005s    0.203s    0.019s    1.942s    3.06%
+..IntTarget     100   0.007s    0.007s    0.278s    0.023s    2.314s    3.65%
+..SegmentToUnit 100   0.394s    0.380s    3.352s    0.466s    46.596s   73.52%
+..com.sun.speec 100   0.001s    0.000s    0.105s    0.003s    0.254s    0.40%
+..UnitConcatena 100   0.002s    0.001s    0.087s    0.005s    0.499s    0.79%
+..AudioOutput   100   0.053s    0.053s    0.484s    0.063s    6.296s    9.93%
+Memory Use    : 16040k  of 64896k
+# ----------------------------- loading CMUDiphoneVoice-----------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     7.944s    7.944s    7.944s    7.944s    7.944s    100.00%
+Lexicon         1     2.163s    2.163s    2.163s    2.163s    2.163s    27.23%
+LTS             1     2.845s    2.845s    2.845s    2.845s    2.845s    35.81%
+FeatureSet      1     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CartLoading     1     0.389s    0.389s    0.389s    0.389s    0.389s    4.90%
+UtteranceProces 1     2.393s    2.393s    2.393s    2.393s    2.393s    30.12%
+DiphoneUnitData 1     2.086s    2.086s    2.086s    2.086s    2.086s    26.26%
+FeatureProcessi 1     0.133s    0.133s    0.133s    0.133s    0.133s    1.67%
+# ----------------------------- alice_from_jar--------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     22.827s   22.827s   22.827s   22.827s   22.827s   100.00%
+processing      251   0.054s    0.008s    0.741s    0.090s    22.518s   98.65%
+..Tokenization  251   0.000s    0.000s    0.030s    0.001s    0.264s    1.16%
+..TokenToWords  251   0.001s    0.000s    0.051s    0.002s    0.456s    2.00%
+..PartOfSpeechT 251   0.000s    0.000s    0.001s    0.000s    0.003s    0.01%
+..CARTPhraser   251   0.000s    0.000s    0.016s    0.001s    0.201s    0.88%
+..WordSylSeg    251   0.001s    0.000s    0.053s    0.003s    0.740s    3.24%
+..Pauses        251   0.001s    0.000s    0.014s    0.000s    0.055s    0.24%
+..CARTIntonator 251   0.003s    0.000s    0.077s    0.006s    1.525s    6.68%
+..PostLex       251   0.000s    0.000s    0.022s    0.000s    0.122s    0.53%
+..CARTDurator   251   0.004s    0.000s    0.183s    0.008s    2.086s    9.14%
+..IntTarget     251   0.004s    0.000s    0.067s    0.008s    1.971s    8.63%
+..DiphoneUnitSe 251   0.001s    0.000s    0.025s    0.002s    0.567s    2.48%
+..WaveSynthesiz 251   0.039s    0.006s    0.358s    0.057s    14.419s   63.17%
+Memory Use    : 20986k  of 65344k
+Metrics collected on mute

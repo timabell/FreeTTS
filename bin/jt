@@ -1,0 +1,1 @@
+jtime -dumpWave time.wave -dumpRelations -time 06:51 > time.rel

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE jsml>
+
+<!--
+
+/**
+ * Copyright 2001 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+
+-->
+
+<jsml>
+
+<!-- Lots of plain text -->
+
+<div type="paragraph">
+The Java Speech API defines a software interface that allows
+developers to take advantage of speech technology for
+personal and enterprise computing.  By leveraging the inherent 
+strengths of the Java platform, the Java Speech API brings
+unparalleled portability to developers of speech-enabled applications.
+</div>
+
+<div type="paragraph">
+<prosody rate="+100%">
+The Java Speech API supports both speech recognition and 
+speech synthesis.  Speech recognition software enables computers
+to "listen" to incoming speech from a user and determine what
+is said.  Speech synthesis, also known as "text to speech",
+provides the reverse process of generating speech from text.
+</prosody>
+</div>
+
+<div type="paragraph">
+<prosody rate="+200%">
+Developers who use speech technology through the Java Speech API
+can enhance existing user interfaces and can create new means
+of human/computer interaction.  Application areas include
+telephony systems, dictation and proof-reading, hands-free
+environments such as surgery or airline/vehicle maintenance,
+accessibility for people with disabilities, and enhanced 
+internet browsing.
+</prosody>
+</div>
+
+</jsml>

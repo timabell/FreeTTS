@@ -1,0 +1,7 @@
+
+BASE=../
+FREETTS_CLASSES=$BASE/classes
+if [ -z "${JDK_DIR}" ] ; then
+    JDK_DIR=/lab/speech/java/j2sdk1.4.0
+fi
+${JDK_DIR}/bin/java -Xms64m $@ -ea -cp $FREETTS_CLASSES com.sun.speech.freetts.FreeTTS  -silent -run alice -metrics -file ../data/alice.txt

@@ -1,0 +1,8 @@
+freetts -silent -run TinySet -metrics -file ../data/TinySet.txt
+freetts -silent -run SmallSet -metrics -file ../data/SmallSet.txt
+freetts -silent -run gettysburg_address -metrics -file ../data/gettysburg_address.txt
+freetts -silent -run alice -metrics -file ../data/alice.txt
+freettsServer -silent -run aliceServer -metrics -file ../data/alice.txt
+jtime -metrics -silent -run ClunitsTest -timeTest -time 06:42
+jtimeServer -metrics -silent -run ClunitsTestServer -timeTest -time 06:42
+jarfreetts -silent -run "alice_from_jar" -metrics -file ../data/alice.txt

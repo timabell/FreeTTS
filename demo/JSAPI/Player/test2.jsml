@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE jsml>
+
+<!--
+
+/**
+ * Copyright 2001 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+
+-->
+
+<jsml>
+
+<!-- Things to test
+  - Element set:
+  -     jsml: lang, mark
+  -     div: type, mark
+  -     voice: gender, age, variant, name, mark
+  -     sayas: class, mode, mark
+  -     phoneme: original, mark
+  -     emphasis: level, mark
+  -     break: size, msec, mark
+  -     prosody: rate, volume, pitch, range, mark
+  -     marker: mark
+  -     engine: name, data, mark
+  -     + undefined elements
+  -
+  - Comments, entities, CDATA
+  -->
+
+<engine name="GUI Synthesizer" data="substitute">contained text</engine>
+
+Another <emphasis level="strong">test paragraph</emphasis> with emphasis.
+
+<voice gender="female" variant="1">
+This was tested on <sayas class="date" mode="mdy">7/21/99</sayas>
+by <phoneme>beits</phoneme>.
+
+<div type="para" mark="HERE!">
+<![CDATA[ a CDATA section ]]>
+<![CDATA[ email to <bob@home> ]]>
+<marker mark="TEST!"><div type="sent"><prosody rate="90%">This is sentence one.</prosody></div>
+</marker>
+
+<div type="sent">This is sentence two <break size="large" msec="200"/> and a half.</div>
+</div>
+</voice>
+
+</jsml>
+

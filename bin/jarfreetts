@@ -1,0 +1,9 @@
+BASE=../
+FREETTS_CLASSES=$BASE/classes
+if [ -z "${JDK_DIR}" ] ; then
+    JDK_DIR=/lab/speech/java/j2sdk1.4.0
+fi
+JARPATH=$BASE/lib
+JARS=$JARPATH/freetts.jar:$JARPATH/cmulex.jar:$JARPATH/cmukal8.jar:$JARPATH/cmukal16.jar:$JARPATH/cmuawb.jar:$JARPATH/jsapi.jar
+
+${JDK_DIR}/bin/java -Xms64m -ea -classpath $JARS com.sun.speech.freetts.FreeTTS $@

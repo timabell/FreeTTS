@@ -1,0 +1,30 @@
+#!/bin/sh
+# Copyright (c) 2001 Sun Microsystems, Inc.
+# All Rights Reserved.
+# 
+# See the file "license.terms" for information on usage and
+# redistribution of this file, and for a DISCLAIMER OF ALL 
+# WARRANTIES.
+#
+./compareUtt Unit
+./compareUtt target_end
+./compareNumericUtt f0
+./compareUtt accent
+./compareUtt stress
+./compareUtt Segment
+./compareUtt SylStructure
+./compareUtt Word
+./compareUtt Phrase
+./compareUtt Token
+./compareUtt pos
+./compareUtt endtone
+
+# The file_pos test has been removed. A refactoring
+# of the tokenization process now causes freetts to
+# give file_pos values that are relative to the FreeTTSSpeakable
+# not just to the utterance. This is much preferred as compared to
+# the previous file_pos within an utterance. So even thought the
+# output of freetts does not match flite with regard to the file_pos
+# we like our answer better.
+#
+# compareUtt file_pos

@@ -1,0 +1,30 @@
+<!--
+
+/**
+ * Copyright 2001 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+
+-->
+
+<!-- 
+  -- This headerless JSML should work if passed to Synthesizer.speak()
+  -- as a String or Speakable, but not as a URL.  The full XML header
+  -- and DOCTYPE declaration is required for URL input.
+  -->
+
+
+<!-- email header --> 
+
+<div type="para">Message from 
+<emphasis>Alan Schwarz</emphasis> about new synthesis technology.
+Arrived at <sayas class="time">2pm</sayas> today.</div> 
+
+<!-- email body --> 
+
+<div type="para">I've attached a diagram showing the new way we do speech synthesis.</div> 
+
+<div type="para">Regards, Alan.</div> 

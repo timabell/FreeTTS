@@ -1,0 +1,26 @@
+FreeTTS is based upon both the Festival Speech Synthesis System from
+the University of Edinburgh and the Flite Speech Synthesizer from
+Carnegie Mellon University.
+
+Festival (http://www.cstr.ed.ac.uk/projects/festival/) was primarily
+written by Alan W. Black, Paul Taylor and Richard Caley. Festival sits
+on top of the Edinburgh Speech Tools Library, and uses much of its
+functionality.  The duration cart tree and intonation (accent and F0)
+models were derived from the models in the Festival distribution,
+which in turn were trained from the Boston University FM Radio Data
+Corpus.
+
+The initial development of Flite was primarily done by Alan W. Black,
+and Kevin A. Lenzo was involved in the conversion techniques and
+representions for the voice distributed with Flite (as well as being
+the actual voice itself).
+
+The included lexicon is derived from Carnegie Mellon University's
+CMULEX (http://www.speech.cs.cmu.edu/cgi-bin/cmudict) and the letter 
+to sound rules are constructed using the Lenzo and Black techniques 
+for building LTS decision graphs.
+
+The speech team at Sun graciously thanks all involved, especially Alan
+W. Black and Kevin A. Lenzo for their expertise and for making both
+Festival and Flite available via open source.
+

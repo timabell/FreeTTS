@@ -1,0 +1,61 @@
+# ----------------------------- TinySet---------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     4.724s    4.724s    4.724s    4.724s    4.724s    100.00%
+Tokenization    5     0.000s    0.000s    0.024s    0.005s    0.027s    0.57%
+TokenToWords    5     0.000s    0.000s    0.009s    0.004s    0.021s    0.44%
+PartOfSpeechTag 5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CARTPhraser     5     0.000s    0.000s    0.004s    0.001s    0.007s    0.15%
+WordSylSeg      5     0.000s    0.000s    4.280s    0.860s    4.300s    91.02%
+Pauses          5     0.000s    0.000s    0.001s    0.001s    0.003s    0.06%
+CARTIntonator   5     0.000s    0.000s    0.081s    0.026s    0.132s    2.79%
+PostLex         5     0.000s    0.000s    0.004s    0.002s    0.008s    0.17%
+CARTDurator     5     0.000s    0.000s    0.039s    0.018s    0.089s    1.88%
+IntTarget       5     0.000s    0.000s    0.047s    0.021s    0.103s    2.18%
+WaveSynthesizer 5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Memory Use    : 11446k  of 12712k
+# ----------------------------- SmallSet--------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     5.174s    5.174s    5.174s    5.174s    5.174s    100.00%
+Tokenization    5     0.000s    0.000s    0.025s    0.007s    0.034s    0.66%
+TokenToWords    5     0.000s    0.000s    0.023s    0.013s    0.063s    1.22%
+PartOfSpeechTag 5     0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CARTPhraser     5     0.000s    0.000s    0.009s    0.003s    0.017s    0.33%
+WordSylSeg      5     0.000s    0.000s    4.240s    0.869s    4.343s    83.94%
+Pauses          5     0.000s    0.000s    0.002s    0.001s    0.004s    0.08%
+CARTIntonator   5     0.000s    0.000s    0.118s    0.052s    0.260s    5.03%
+PostLex         5     0.000s    0.000s    0.004s    0.003s    0.013s    0.25%
+CARTDurator     5     0.000s    0.000s    0.068s    0.037s    0.183s    3.54%
+IntTarget       5     0.000s    0.000s    0.078s    0.044s    0.221s    4.27%
+WaveSynthesizer 5     0.001s    0.000s    0.001s    0.000s    0.001s    0.02%
+Memory Use    : 10755k  of 12704k
+# ----------------------------- gettysburg_address----------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     7.671s    7.671s    7.671s    7.671s    7.671s    100.00%
+Tokenization    11    0.000s    0.000s    0.029s    0.006s    0.071s    0.93%
+TokenToWords    11    0.000s    0.000s    0.034s    0.015s    0.162s    2.11%
+PartOfSpeechTag 11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+CARTPhraser     11    0.000s    0.000s    0.015s    0.003s    0.034s    0.44%
+WordSylSeg      11    0.026s    0.006s    4.605s    0.440s    4.836s    63.04%
+Pauses          11    0.000s    0.000s    0.004s    0.001s    0.008s    0.10%
+CARTIntonator   11    0.000s    0.000s    0.291s    0.081s    0.894s    11.65%
+PostLex         11    0.000s    0.000s    0.012s    0.004s    0.045s    0.59%
+CARTDurator     11    0.000s    0.000s    0.167s    0.053s    0.584s    7.61%
+IntTarget       11    0.000s    0.000s    0.350s    0.088s    0.969s    12.63%
+WaveSynthesizer 11    0.000s    0.000s    0.000s    0.000s    0.000s    0.00%
+Memory Use    : 11143k  of 18000k
+# ----------------------------- alice-----------------------------------------
+# Name          Count CurTime   MinTime   MaxTime   AvgTime   TotTime   % Total 
+OverallTime     1     39.000s   39.000s   39.000s   39.000s   39.000s   100.00%
+Tokenization    176   0.000s    0.000s    0.025s    0.002s    0.392s    1.01%
+TokenToWords    176   0.000s    0.000s    0.055s    0.004s    0.736s    1.89%
+PartOfSpeechTag 176   0.000s    0.000s    0.001s    0.000s    0.002s    0.01%
+CARTPhraser     176   0.000s    0.000s    0.010s    0.002s    0.312s    0.80%
+WordSylSeg      176   0.000s    0.000s    4.237s    0.036s    6.367s    16.33%
+Pauses          176   0.000s    0.000s    0.010s    0.001s    0.095s    0.24%
+CARTIntonator   176   0.000s    0.000s    0.568s    0.063s    11.018s   28.25%
+PostLex         176   0.000s    0.000s    0.021s    0.003s    0.608s    1.56%
+CARTDurator     176   0.000s    0.000s    0.359s    0.041s    7.263s    18.62%
+IntTarget       176   0.000s    0.000s    0.664s    0.067s    11.857s   30.40%
+WaveSynthesizer 176   0.000s    0.000s    0.001s    0.000s    0.003s    0.01%
+Memory Use    : 17249k  of 20832k
+Metrics collected on mute

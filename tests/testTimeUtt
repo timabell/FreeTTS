@@ -1,0 +1,14 @@
+./compareUtt Unit
+./compareUtt target_end
+# ./compareUtt end
+./compareNumericUtt f0
+./compareUtt accent
+./compareUtt stress
+./compareUtt Segment
+./compareUtt SylStructure
+./compareUtt Word
+./compareUtt Phrase
+./compareUtt Token
+./compareUtt pos
+./compareUtt endtone
+./compareUtt file_pos

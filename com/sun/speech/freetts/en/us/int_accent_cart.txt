@@ -1,0 +1,160 @@
+*** Portions Copyright 2001 Sun Microsystems, Inc.
+*** Portions Copyright 1999-2001 Language Technologies Institute, 
+*** Carnegie Mellon University.
+*** All Rights Reserved.  Use is subject to license terms.
+*** 
+*** See the file "license.terms" for information on usage and
+*** redistribution of this file, and for a DISCLAIMER OF ALL 
+*** WARRANTIES.
+*** Cart dump created by cart_dump
+*** Flite version: flite-1.0-beta August 2001
+TOTAL 149
+NODE R:SylStructure.parent.R:Token.parent.EMPH = String(1) 2
+LEAF String(H*)
+NODE n.R:SylStructure.parent.R:Token.parent.EMPH = String(1) 4
+LEAF String(NONE)
+NODE p.R:SylStructure.parent.R:Token.parent.EMPH = String(1) 6
+LEAF String(NONE)
+NODE ssyl_in = String(10) 8
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(to) 10
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(cc) 12
+LEAF String(NONE)
+NODE ssyl_out = String(10) 14
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(in) 16
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(wp) 18
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(aux) 20
+LEAF String(NONE)
+NODE R:SylStructure.parent.gpos = String(det) 22
+LEAF String(NONE)
+NODE stress = String(0) 24
+LEAF String(NONE)
+NODE R:SylStructure.parent.R:Word.p.gpos = String(0) 26
+LEAF String(H*)
+NODE R:SylStructure.parent.gpos = String(md) 28
+LEAF String(NONE)
+NODE p.syl_break = String(3) 32
+NODE syl_break = String(1) 31
+LEAF String(NONE)
+LEAF String(H*)
+NODE p.p.syl_break = String(4) 46
+NODE R:SylStructure.parent.R:Word.p.p.gpos = String(in) 35
+LEAF String(H*)
+NODE syl_out = String(0) 37
+LEAF String(H*)
+NODE R:SylStructure.parent.R:Word.n.gpos = String(in) 39
+LEAF String(H*)
+NODE syl_break = String(0) 41
+LEAF String(H*)
+NODE n.stress = String(0) 43
+LEAF String(H*)
+NODE p.syl_break = String(0) 45
+LEAF String(NONE)
+LEAF String(H*)
+NODE ssyl_in = String(0) 48
+LEAF String(H*)
+NODE ssyl_out = String(4) 50
+LEAF String(NONE)
+NODE p.p.syl_break = String(3) 54
+NODE R:SylStructure.parent.R:Word.p.gpos = String(content) 53
+LEAF String(NONE)
+LEAF String(H*)
+NODE syl_in = String(2) 68
+NODE n.stress = String(0) 65
+NODE R:SylStructure.parent.R:Word.p.gpos = String(in) 58
+LEAF String(H*)
+NODE syl_out = String(2) 60
+LEAF String(H*)
+NODE R:SylStructure.parent.R:Word.p.gpos = String(content) 64
+NODE syl_out = String(4) 63
+LEAF String(NONE)
+LEAF String(H*)
+LEAF String(H*)
+NODE n.syl_break = String(0) 67
+LEAF String(NONE)
+LEAF String(H*)
+NODE R:SylStructure.parent.R:Word.n.gpos = String(0) 72
+NODE syl_break = String(0) 71
+LEAF String(L+H*)
+LEAF String(NONE)
+NODE syl_break = String(1) 82
+NODE ssyl_in = String(3) 75
+LEAF String(NONE)
+NODE p.syl_break = String(0) 77
+LEAF String(NONE)
+NODE n.stress = String(0) 81
+NODE p.p.syl_break = String(0) 80
+LEAF String(NONE)
+LEAF String(H*)
+LEAF String(NONE)
+NODE syl_out = String(4) 88
+NODE n.n.syl_break = String(0) 87
+NODE p.p.syl_break = String(0) 86
+LEAF String(NONE)
+LEAF String(L+H*)
+LEAF String(H*)
+NODE syl_out = String(5) 92
+NODE R:SylStructure.parent.R:Word.p.gpos = String(content) 91
+LEAF String(NONE)
+LEAF String(H*)
+NODE R:SylStructure.parent.R:Word.p.p.gpos = String(in) 102
+NODE syl_in = String(4) 95
+LEAF String(H*)
+NODE syl_in = String(3) 97
+LEAF String(H*)
+NODE p.p.syl_break = String(0) 99
+LEAF String(NONE)
+NODE R:SylStructure.parent.R:Word.p.gpos = String(content) 101
+LEAF String(H*)
+LEAF String(!H*)
+NODE ssyl_out = String(2) 108
+NODE p.syl_break = String(0) 105
+LEAF String(NONE)
+NODE p.p.syl_break = String(0) 107
+LEAF String(NONE)
+LEAF String(L+H*)
+NODE R:SylStructure.parent.R:Word.p.p.gpos = String(to) 110
+LEAF String(H*)
+NODE syl_break = String(3) 114
+NODE p.p.syl_break = String(0) 113
+LEAF String(NONE)
+LEAF String(H*)
+NODE syl_in = String(7) 120
+NODE n.stress = String(0) 119
+NODE R:SylStructure.parent.R:Word.n.gpos = String(content) 118
+LEAF String(!H*)
+LEAF String(NONE)
+LEAF String(NONE)
+NODE R:SylStructure.parent.R:Word.n.gpos = String(cc) 122
+LEAF String(NONE)
+NODE n.n.syl_break = String(3) 124
+LEAF String(H*)
+NODE ssyl_in = String(4) 126
+LEAF String(NONE)
+NODE p.syl_break = String(0) 136
+NODE n.syl_break = String(1) 129
+LEAF String(NONE)
+NODE ssyl_in = String(3) 131
+LEAF String(NONE)
+NODE p.p.syl_break = String(0) 133
+LEAF String(NONE)
+NODE ssyl_in = String(1) 135
+LEAF String(H*)
+LEAF String(NONE)
+NODE R:SylStructure.parent.R:Word.p.gpos = String(in) 138
+LEAF String(L+H*)
+NODE syl_in = String(6) 140
+LEAF String(!H*)
+NODE syl_out = String(2) 142
+LEAF String(H*)
+NODE syl_in = String(4) 144
+LEAF String(!H*)
+NODE n.stress = String(0) 148
+NODE syl_in = String(3) 147
+LEAF String(H*)
+LEAF String(NONE)
+LEAF String(NONE)
