@@ -109,11 +109,6 @@ public class CARTImpl implements CART {
 
 
     /**
-     * Set this to true to turn on debugging output
-     */
-    private final static boolean DEBUG = false;
-
-    /**
      * The CART. Entries can be DecisionNode or LeafNode.  An
      * ArrayList could be used here -- I chose not to because I
      * thought it might be quicker to avoid dealing with the dynamic
@@ -344,13 +339,9 @@ public class CARTImpl implements CART {
             decision = (DecisionNode) cart[nodeIndex];
 	    nodeIndex = decision.getNextNode(item);
 
-	    if (DEBUG) {
-		// System.out.println(decision.toString());
-	    }
+	    // Utilities.debug(decision.toString());
         }
-	if (DEBUG) {
-	     System.out.println("LEAF " + cart[nodeIndex].getValue());
-	}
+        Utilities.debug("LEAF " + cart[nodeIndex].getValue());
         return ((LeafNode) cart[nodeIndex]).getValue();
     }
 
@@ -576,21 +567,19 @@ public class CARTImpl implements CART {
 		ret = qfalse;
 	    }
 
-	    if (DEBUG) {
-		trace(val, yes, ret);
-	    }
+	    Utilities.debug(trace(val, yes, ret));
 
 	    return ret;
         }
 
-	private void trace(Object value, boolean match, int next) {
-	    System.out.println(
+	private String trace(Object value, boolean match, int next) {
+	    return
                 "NODE " + getFeature() + " ["
 		+ value + "] " 
 		+ comparisonType + " [" 
                 + getValue() + "] "
 		+ (match ? "Yes" : "No") + " next " +
-		    next);
+		    next;
 	}
 
         /**
