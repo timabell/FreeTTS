@@ -22,9 +22,6 @@ endif
 
 # ------------- Shouldn't have to change anything below here ----------------
 
-# Where we want the classes to show up
-CLASS_DEST_DIR = ${TOP}/classes
-
 # Where we want javadocs to show UP
 DOCS_DIR = ${TOP}/docs/api
 

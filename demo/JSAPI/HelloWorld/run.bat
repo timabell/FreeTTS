@@ -3,7 +3,7 @@
 IF "%JAVA_HOME%"=="" GOTO java_home_missing
 
 %JAVA_HOME%\bin\java -version
-%JAVA_HOME%\bin\java -cp ..\..\..\lib\demo.jar;..\..\..\lib\cmuawb.jar;..\..\..\lib\cmukal16.jar;..\..\..\lib\cmukal8.jar;..\..\..\lib\cmulex.jar;..\..\..\lib\cmutimelex.jar;..\..\..\lib\freetts.jar;..\..\..\lib\jsapi.jar HelloWorld
+%JAVA_HOME%\bin\java -cp ..\..\classes;..\..\..\lib\cmu_time_awb.jar;..\..\..\lib\cmu_us_kal.jar;..\..\..\lib\cmulex.jar;..\..\..\lib\cmutimelex.jar;..\..\..\lib\en_us.jar;..\..\..\lib\freetts.jar;..\..\..\lib\jsapi.jar HelloWorld
 GOTO end
 
 :java_home_missing

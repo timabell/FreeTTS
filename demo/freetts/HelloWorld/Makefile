@@ -15,6 +15,9 @@ FILES = $(shell echo *.java)
 # List any sub directories that need to be built
 SUBDIRS = 
 
+# Use a separate classes directory
+CLASS_DEST_DIR = ${TOP}/demo/classes
+
 ##########################################################################
 
 include ${TOP}/build/Makefile.config

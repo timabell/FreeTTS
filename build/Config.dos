@@ -22,9 +22,6 @@ ifeq ($(JUNIT_HOME),)
 JUNIT_HOME=s:/ThirdPartySoftware/junit3.7
 endif
 
-# Where we want the classes to show up
-CLASS_DEST_DIR = ${TOP}/classes
-
 # Where we want javadocs to show UP
 DOCS_DIR = ${TOP}/docs/api
 

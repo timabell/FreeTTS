@@ -19,7 +19,8 @@ GTAR=/pkg/gnu/bin/tar
 
 PUSH_DEST = /home/groups/f/fr/freetts/htdocs/WebStartClock
 
-
+# Use a separate classes directory
+CLASS_DEST_DIR = ${TOP}/demo/classes
 
 ########### WebStartClock deploy macros ########################
 

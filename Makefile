@@ -34,10 +34,10 @@ EN_US_VOICES:=$(shell (cd ${EN_US_DIR}; ls -l ) | egrep "^d" | awk '{ print $$9 
 EN_US_VOICES_JAR_FILES:=$(shell for i in ${EN_US_VOICES}; do echo $$i.jar; done)
 
 JAR_FILES = freetts.jar cmulex.jar \
-	cmutimelex.jar demo.jar en_us.jar $(EN_US_VOICES_JAR_FILES)
+	cmutimelex.jar en_us.jar $(EN_US_VOICES_JAR_FILES)
 
 JARS = freetts.jar cmulex.jar \
-	cmutimelex.jar demo.jar en_us.jar $(EN_US_VOICES)
+	cmutimelex.jar en_us.jar $(EN_US_VOICES)
 
 WEBSTART_CLOCK_DIR = demo/JSAPI/WebStartClock
 
@@ -140,6 +140,7 @@ include ${TOP}/build/Makefile.config
 # Returns the tree to a pristene state
 ####################################################
 clean::
+	rm -rf demo/classes
 	rm -rf $(CLASS_DEST_DIR)
 	(cd lib; rm -f $(JAR_FILES))
 	rm -rf $(TARS) $(ZIPS)
@@ -266,9 +267,6 @@ cmutimelex.jar:
 
 #jsapi.jar:
 #	(cd classes; $(JAR) cf ../lib/$@ $(JSAPI_FILES))
-
-demo.jar: 
-	( cd classes; $(JAR) cf ../lib/$@ `ls *.class`)
 
 ${EN_US_VOICES}:
 	(cd classes; \

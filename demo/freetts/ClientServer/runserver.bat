@@ -3,7 +3,7 @@
 IF "%JAVA_HOME%"=="" GOTO java_home_missing
 
 %JAVA_HOME%\bin\java -version
-%JAVA_HOME%\bin\java -cp ..\..\..\lib\demo.jar;..\..\..\classes;..\..\..\lib\cmuawb.jar;..\..\..\lib\cmukal16.jar;..\..\..\lib\cmukal8.jar;..\..\..\lib\cmulex.jar;..\..\..\lib\cmutimelex.jar;..\..\..\lib\freetts.jar;..\..\..\lib\jsapi.jar -Dmetrics=false -Dserver=localhost -Dport=5555 Server
+%JAVA_HOME%\bin\java -cp ..\..\classes;..\..\..\lib\cmu_time_awb.jar;..\..\..\lib\cmu_us_kal.jar;..\..\..\lib\cmulex.jar;..\..\..\lib\cmutimelex.jar;..\..\..\lib\en_us.jar;..\..\..\lib\freetts.jar;..\..\..\lib\jsapi.jar -Dmetrics=false -Dserver=localhost -Dport=5555 Server
 GOTO end
 
 :java_home_missing
