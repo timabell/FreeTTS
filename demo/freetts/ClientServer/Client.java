@@ -239,6 +239,8 @@ public class Client {
 
 	bytesRemaining = numberSamples;
 
+        audioPlayer.begin(0);
+
 	while (bytesRemaining > 0) {
 	    
 	    // how many more bytes do we have to read?
@@ -272,10 +274,7 @@ public class Client {
 			firstSoundTime = System.currentTimeMillis();
 			firstByteReceived = true;
 		    }
-
-		    audioPlayer.begin(nRead);
 		    audioPlayer.write(socketBuffer, 0, nRead);
-		    audioPlayer.end();
 		}
 	    } catch (IOException ioe) {
 		ioe.printStackTrace();
@@ -285,6 +284,8 @@ public class Client {
 		System.out.println("BytesRemaining: " + bytesRemaining);
 	    }
 	}
+
+        audioPlayer.end();
 
 	if (debug) {
 	    System.out.println("finished");
