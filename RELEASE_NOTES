@@ -10,7 +10,6 @@ Change history for FreeTTS.
 --------------------------
 
 Release 1.1.1
-    - Added WebStart clock
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.
     - Added RELEASE_NOTES to the deploy_doc Make target.
@@ -38,6 +37,22 @@ Release 1.1.1
     - Added contributors agreement: ContributorsAgreement.pdf
     - Added handout: FreeTTS_handout.pdf FreeTTS_handout.sxw
     - Added 'How to contribute' section to the web page
+    - Refactored identical demo code in the JSAPI and freetts branches
+      so that they share the same code (put in demo/util directory).
+    - Added "exit" command to Emacspeak. This will close the socket 
+      connection.
+    - Added JSAPI/Web Start clock demo to show how to use FreeTTS/JSAPI
+      with Java Web Start.
+    - Added support for MBROLA Voices, as well as JSAPI support for
+      MBROLA Voices. Specifically, the latter refers to check for
+      the MBROLA binaries and databse for an MBROLA voice. If they
+      are found, such a voice is consider 'valid'.
+    - Fixed the following bug: A word followed by a breaking
+      punctuation (:?!), followed by space and a single word,
+      e.g., "RE: Frank", causes the word following the breaking
+      punctuation (i.e., "Frank") not to be synthesized.
+    - Fixed the following bug: "From:" or "From" causes the system to
+      hang.
 
 
 
