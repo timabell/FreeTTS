@@ -50,24 +50,24 @@ public class TokenToWords implements UtteranceProcessor {
     private CART cart;
                         
     // Patterns for regular expression matching
-    private static Pattern alphabetPattern;
-    private static Pattern commaIntPattern;
-    private static Pattern digits2DashPattern;
-    private static Pattern digitsPattern;
-    private static Pattern digitsSlashDigitsPattern;
-    private static Pattern dottedAbbrevPattern;
-    private static Pattern doublePattern;
-    private static Pattern drStPattern;
-    private static Pattern fourDigitsPattern;
-    private static Pattern hasVowelPattern;
-    private static Pattern illionPattern;
-    private static Pattern numberTimePattern;
-    private static Pattern numessPattern;
-    private static Pattern ordinalPattern;
-    private static Pattern romanNumbersPattern;
-    private static Pattern sevenPhoneNumberPattern;
-    private static Pattern threeDigitsPattern;
-    private static Pattern usMoneyPattern;
+    private static final Pattern alphabetPattern;
+    private static final Pattern commaIntPattern;
+    private static final Pattern digits2DashPattern;
+    private static final Pattern digitsPattern;
+    private static final Pattern digitsSlashDigitsPattern;
+    private static final Pattern dottedAbbrevPattern;
+    private static final Pattern doublePattern;
+    private static final Pattern drStPattern;
+    private static final Pattern fourDigitsPattern;
+    private static final Pattern hasVowelPattern;
+    private static final Pattern illionPattern;
+    private static final Pattern numberTimePattern;
+    private static final Pattern numessPattern;
+    private static final Pattern ordinalPattern;
+    private static final Pattern romanNumbersPattern;
+    private static final Pattern sevenPhoneNumberPattern;
+    private static final Pattern threeDigitsPattern;
+    private static final Pattern usMoneyPattern;
     
     static {
 	alphabetPattern = Pattern.compile(USEnglish.RX_ALPHABET);
@@ -142,7 +142,7 @@ public class TokenToWords implements UtteranceProcessor {
     private PronounceableFSM suffixFSM = null;
 
     // List of US states abbreviations and their full names
-    private static String[][] usStates =
+    private static final String[][] usStates =
     {
 	{ "AL", "ambiguous", "alabama"  },
 	{ "Al", "ambiguous", "alabama"  },
@@ -334,6 +334,16 @@ public class TokenToWords implements UtteranceProcessor {
 		wordRelation.appendItem(wordItem);
 	    }
 	}
+    }
+
+
+    private static boolean matchesAlphabetPattern(String tokenVal) {
+	for (int i = 0; i < tokenVal.length(); i++) {
+	    if (!isLetter(tokenVal.charAt(i))) {
+		return false;
+	    }
+	}
+	return true;
     }
 
 
