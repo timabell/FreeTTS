@@ -45,7 +45,6 @@ public class MbrolaVoiceValidator implements Validator {
     public void validate() throws ValidationException {
         String mbrolaBase = Utilities.getProperty("mbrola.base", null);
         File mbrolaBinary = new File(mbrolaVoice.getMbrolaBinary());
-        File mbrolaRenameTable = new File(mbrolaVoice.getRenameTable());
         File mbrolaVoiceDB = new File(mbrolaVoice.getDatabase());
 
         if (mbrolaBase == null || mbrolaBase.length() == 0) {
@@ -56,10 +55,6 @@ public class MbrolaVoiceValidator implements Validator {
         if (!mbrolaBinary.exists()) {
             throw new ValidationException
                 ("No MBROLA binary at: " + mbrolaVoice.getMbrolaBinary());
-        }
-        if (!mbrolaRenameTable.exists()) {
-            throw new ValidationException
-                ("No MBROLA rename table at: " + mbrolaVoice.getRenameTable());
         }
         if (!mbrolaVoiceDB.exists()) {
             throw new ValidationException
