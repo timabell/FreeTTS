@@ -11,15 +11,17 @@
 package com.sun.speech.freetts;
 
 /**
- * Implementors of this interface can be validated via the validate()
- * method.
+ * Thrown by a Validator if any errors
+ * are encountered while validating.
  */
-public interface Validator {
+public class ValidationException extends Exception {
 
     /**
-     * Validates a certain condition.
+     * Class constructor.
      *
-     * @throws a ValidationException if the condition is invalid.
+     * @param s the reason why the exception was thrown
      */
-    public void validate() throws ValidationException;
+    public ValidationException(String s) {
+        super(s);
+    }
 }

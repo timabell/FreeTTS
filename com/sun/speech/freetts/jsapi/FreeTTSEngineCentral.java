@@ -22,6 +22,9 @@ import java.util.Locale;
 import java.io.InputStream;
 import java.io.IOException;
 
+import com.sun.speech.freetts.ValidationException;
+
+
 /**
  * Supports the EngineCentral JSAPI 1.0 interface for the
  * FreeTTSSynthesizer.  To use a FreeTTSSynthesizer, you should place 
@@ -327,9 +330,9 @@ public class FreeTTSEngineCentral implements EngineCentral {
 
 	// if a mode has no voices, we ignore it
 
-	if (desc.getVoices().length > 0) {
-	    descriptors.add(desc);
-	}
+	// if (desc.getVoices().length > 0) {
+        descriptors.add(desc);
+	// }
     }
 
 
@@ -461,11 +464,16 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	for (Iterator i = descriptors.iterator(); i.hasNext();) {
 	    FreeTTSSynthesizerModeDesc desc =
 		(FreeTTSSynthesizerModeDesc) i.next();
-	    if (require == null || (desc.match(require) && desc.isValid())) {
-                if (el == null) {
-                    el = new EngineList();
+	    if (require == null || desc.match(require)) {
+                try {
+                    desc.validate();
+                    if (el == null) {
+                        el = new EngineList();
+                    }
+                    el.addElement(desc);
+                } catch (ValidationException ve) {
+                    System.err.println(ve.getMessage());
                 }
-                el.addElement(desc);
             }
 	}
         return el;

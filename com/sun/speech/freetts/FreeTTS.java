@@ -680,7 +680,10 @@ class VoiceManager {
             if (voice != null) {
                 Validator validator = new
                     MbrolaVoiceValidator((MbrolaVoice) voice);
-                if (!validator.isValid()) {
+                try {
+                    validator.validate();
+                } catch (ValidationException ve) {
+                    System.err.println(ve.getMessage());
                     throw new IllegalStateException
                         ("Problem starting MBROLA voice");
                 }

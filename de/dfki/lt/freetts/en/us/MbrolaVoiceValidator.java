@@ -11,6 +11,7 @@
 package de.dfki.lt.freetts.en.us;
 
 import com.sun.speech.freetts.Validator;
+import com.sun.speech.freetts.ValidationException;
 
 import java.io.File;
 
@@ -38,33 +39,30 @@ public class MbrolaVoiceValidator implements Validator {
     /**
      * Returns true if the MbrolaVoice tested is valid.
      */
-    public boolean isValid() {
+    public void validate() throws ValidationException {
         String mbrolaBase = System.getProperty("mbrola.base");
         File mbrolaBinary = new File(mbrolaVoice.getMbrolaBinary());
         File mbrolaRenameTable = new File(mbrolaVoice.getRenameTable());
         File mbrolaVoiceDB = new File(mbrolaVoice.getDatabase());
 
         if (mbrolaBase == null || mbrolaBase.length() == 0) {
-            System.err.println
+            throw new ValidationException
                 (toString() +
                  ": System property \"mbrola.base\" is undefined. " +
                  "You might need to set the MBROLA_DIR environment variable.");
-            return false;
         }
         if (!mbrolaBinary.exists()) {
-            System.err.println(toString() + ": MBROLA binary does not exist");
-            return false;
+            throw new ValidationException
+                (toString() + ": MBROLA binary does not exist");
         }
         if (!mbrolaRenameTable.exists()) {
-            System.err.println(toString() +
-                               ": MBROLA rename table does not exist");
-            return false;
+            throw new ValidationException
+                (toString() + ": MBROLA rename table does not exist");
         }
         if (!mbrolaVoiceDB.exists()) {
-            System.err.println(toString() + ": voice database does not exist");
-            return false;
+            throw new ValidationException
+                (toString() + ": voice database does not exist");
         }
-        return true;
     }
 
     /**
