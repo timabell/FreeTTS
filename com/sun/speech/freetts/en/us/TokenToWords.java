@@ -385,10 +385,9 @@ public class TokenToWords implements UtteranceProcessor {
 	int tokenLength = tokenVal.length();
 		
 	if (tokenFeatures.isPresent("phones")) {
-	    wordRelation.addWord("tokenVal");
-	}
+	    wordRelation.addWord(tokenVal);
 
-	if ((tokenVal.equals("a") || tokenVal.equals("A")) &&
+	} else if ((tokenVal.equals("a") || tokenVal.equals("A")) &&
 	    !tokenVal.equals(itemName)) {
 	    /* if A is a sub part of a token, then its ey not ah */
 	    wordRelation.addWord("_a");
