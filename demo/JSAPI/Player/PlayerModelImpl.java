@@ -424,6 +424,7 @@ public class PlayerModelImpl implements PlayerModel {
 	    }
 
 	    loadedSynthesizers.add(synthesizer);
+            synthesizerList.setSelectedItem(myModeDesc);
 	}
     }
     
@@ -443,6 +444,7 @@ public class PlayerModelImpl implements PlayerModel {
 		synthesizer.getSynthesizerProperties().setVoice(voice);
 		setVolume(oldVolume);
 		setSpeakingRate(oldSpeakingRate);
+                voiceList.setSelectedItem(voice);
 	    }
 	} catch (PropertyVetoException pve) {
 	    pve.printStackTrace();

@@ -16,12 +16,16 @@ import java.awt.event.WindowEvent;
 
 import java.io.File;
 
+import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.speech.synthesis.Voice;
+
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 import javax.swing.LookAndFeel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -165,17 +169,43 @@ public class Player extends JFrame {
 	}
     }
 
+    /**
+     * Sets the voice for the Player.  The main purpose of this
+     * method is to set the Player to a nice voice on startup.
+     */
+    public void setVoice(String voiceName) {
+        PlayerModel model = getModel();
+        ListModel descList = model.getSynthesizerList();
+        for (int i = 0; i < descList.getSize(); i++) {
+            SynthesizerModeDesc desc = (SynthesizerModeDesc)
+                descList.getElementAt(i);
+            Voice[] voices = desc.getVoices();
+            for (int j = 0; j < voices.length; j++) {
+                if (voices[j].getName().equals(voiceName)) {
+                    model.setSynthesizer(i);
+                    model.setVoice(j);
+                    break;
+                }
+            }
+        }
+    }
+    
 
     /**
      * The main() method of the Player.
      */
     public static void main(String[] args) throws Exception {
 	boolean showMonitor = false;
-
+        String firstVoice = "kevin16";
+        
 	Player player = new Player("FreeTTS Player");
 
 	for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-fontsize")) {
+            if (args[i].equals("-voice")) {
+                if (++i < args.length) {
+		    firstVoice = args[i];
+                }
+            } else if (args[i].equals("-fontsize")) {
 		if (++i < args.length) {
 		    player.setGlobalFontSize(Integer.parseInt(args[i]));
 		}
@@ -212,7 +242,8 @@ public class Player extends JFrame {
 
 	player.setMenuBar(new PlayerMenuBar(player));
 	player.getModel().createSynthesizers();
-	
+	player.setVoice(firstVoice);
+        
 	player.show();
 
 	if (showMonitor) {

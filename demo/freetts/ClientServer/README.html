@@ -37,14 +37,15 @@
         speech output on a wireless PDA.
 
         <h3>Building</h3>
-        <p>To build this demo, merely type the following in a shell:
+        <p>To build this demo, merely type the following in a shell from
+	any directory in the FreeTTS hierarchy:
         <ul>
             <code>ant -find demo.xml</code>
         </ul>
         <p>Doing so will create
         <code>bin/Server.jar</code> and
-        <code>bin/Client.jar</code>.  You can run
-        both using <code>java -jar</code> (see "Running" below).
+        <code>bin/Client.jar</code> under the top level directory.  
+        You can run both using <code>java -jar</code> (see "Running" below).
 
         <p>We've also provided a simple C client,
         <code>client.c</code>, which you can compile using the 
@@ -58,7 +59,8 @@
         and the Client.
 
         <p>To run the Server, on the machine you want to run the
-        server, type:
+        server, type the following from a command window at the
+	top level FreeTTS directory:
         <ul>
 	    <code>java -jar bin/Server.jar</code>
         </ul>
