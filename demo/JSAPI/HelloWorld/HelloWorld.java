@@ -5,6 +5,7 @@
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
+import java.io.File;
 import java.util.Locale;
 
 import javax.speech.Central;
@@ -37,8 +38,8 @@ public class HelloWorld {
 		    "at either of these locations: \n";
 		message += "user.home: " + 
 		    System.getProperty("user.home") + "\n";
-		message += "java.home: " +
-		    System.getProperty("java.home") + "\n";
+		message += "java.home: " + 
+		    System.getProperty("java.home") + File.separator + "lib" + "\n";
 
 		System.err.println(message);
 		System.exit(1);
