@@ -35,5 +35,5 @@ cd $TOP_DIR/bin
 
 cd $CUR_PWD
 rm -f $REF
-cp $TOP_DIR/data/alice2.flite.v1.0-beta.rel $REF
+cp $TOP_DIR/data/alice2.flite.v1.1-beta.rel $REF
 ./testUtt
