@@ -428,6 +428,57 @@ public class TokenToWords implements UtteranceProcessor {
 	    /* if A is a sub part of a token, then its ey not ah */
 	    wordList.add("_a");
 
+	} else if (matches(alphabetPattern, tokenVal)) {
+
+	    if (matches(romanNumbersPattern, tokenVal)) {
+		
+		/* XVIII */
+		romanToWords(tokenItem, tokenVal, wordList);
+		
+	    } else if (matches(drStPattern, tokenVal)) {
+		
+		/* St Andrew's St, Dr King Dr */
+		drStToWords(tokenItem, tokenVal, wordList);
+		
+	    } else if (tokenVal.equals("Mr")) {
+		
+		tokenItem.getFeatures().setString("punc", "");
+		wordList.add("mister");
+		
+	    } else if (tokenVal.equals("Mrs")) {
+		
+		tokenItem.getFeatures().setString("punc", "");
+		wordList.add("missus");
+		
+	    } else if (tokenLength == 1
+		       && isUppercaseLetter(tokenVal.charAt(0))
+		       && ((String)tokenItem.findFeature("n.whitespace")).equals(" ")
+		       && isUppercaseLetter
+		       (((String) tokenItem.findFeature("n.name")).charAt(0))) {
+		
+		tokenFeatures.setString("punc", "");
+		String aaa = tokenVal.toLowerCase();
+		if (aaa.equals("a")) {
+		    wordList.add("_a");
+		} else {
+		    wordList.add(aaa);
+		}
+	    } else if (isStateName(tokenItem, tokenVal, wordList)) {
+		/*
+		  The name of a US state
+		  isStateName() has already added the full name of the
+		  state, so we're all set.
+		*/
+	    } else if (tokenLength > 1 && !isPronounceable(tokenVal)) {
+		/* Need common exception list */
+		/* unpronouncable list of alphas */
+		NumberExpander.expandLetters(tokenVal, wordList);
+		
+	    } else {
+		/* just a word */
+		wordList.add(tokenVal.toLowerCase());
+	    }
+	    
 	} else if (matches(dottedAbbrevPattern, tokenVal)) {
 	    
 	    /* U.S.A. */
@@ -483,26 +534,6 @@ public class TokenToWords implements UtteranceProcessor {
 	    
 	    digitsToWords(tokenItem, tokenVal, wordList);
 	    
-	} else if (matches(romanNumbersPattern, tokenVal)) {
-	    
-	    /* XVIII */
-	    romanToWords(tokenItem, tokenVal, wordList);
-	    
-	} else if (matches(drStPattern, tokenVal)) {
-	    
-	    /* St Andrew's St, Dr King Dr */
-	    drStToWords(tokenItem, tokenVal, wordList);
-
-	} else if (tokenVal.equals("Mr")) {
-	    
-	    tokenItem.getFeatures().setString("punc", "");
-	    wordList.add("mister");
-
-	} else if (tokenVal.equals("Mrs")) {
-	    
-	    tokenItem.getFeatures().setString("punc", "");
-	    wordList.add("missus");
-
 	} else if (tokenLength == 1
 		   && isUppercaseLetter(tokenVal.charAt(0))
 		   && ((String)tokenItem.findFeature("n.whitespace")).equals(" ")
@@ -572,19 +603,6 @@ public class TokenToWords implements UtteranceProcessor {
 		   !matches(alphabetPattern, tokenVal)) {
 	    
 	    notJustAlphasToWords(tokenItem, tokenVal, wordList);
-
-	} else if (isStateName(tokenItem, tokenVal, wordList)) {
-	    /*
-	      The name of a US state
-	      isStateName() has already added the full name of the
-	      state, so we're all set.
-	    */
-	} else if (tokenLength > 1
-		   && matches(alphabetPattern, tokenVal)
-		   && !isPronounceable(tokenVal)) {
-	    /* Need common exception list */
-	    /* unpronouncable list of alphas */
-	    NumberExpander.expandLetters(tokenVal, wordList);
 
 	} else {
 	    /* just a word */
