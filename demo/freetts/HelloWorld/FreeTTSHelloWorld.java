@@ -45,6 +45,13 @@ public class FreeTTSHelloWorld {
          */
         VoiceManager voiceManager = VoiceManager.getInstance();
         Voice helloVoice = voiceManager.getVoice(voiceName);
+
+        if (helloVoice == null) {
+            System.err.println(
+                "Cannot find a voice named "
+                + voiceName + ".  Please specify a different voice.");
+            System.exit(1);
+        }
         
         /* Sets the AudioPlayer to the JavaClipAudioPlayer.
          * For more information on the various AudioPlayer
