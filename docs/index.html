@@ -315,12 +315,27 @@ compressed tarball </a> or directly from the FreeTTS
 <a href="http://sourceforge.net/cvs/?group_id=42080"> CVS
 Repository</a>. The compressed tarball includes ready to run pre-built JAR files
 for FreeTTS. </li>
-<p> <li><b>Java<sup><font size="-1">TM</font></sup> 2 SDK, Standard Edition, v1.4 Beta 3 </b>, available at <a href="http://java.sun.com">http://java.sun.com</a> - FreeTTS requires the Java 2 SDK, Standard Edition, v 1.4 Beta 3 platform, which was the latest JDK<sup><font size="-1">TM</font></sup> at the time of release of this version of FreeTTS. FreeTTS has been tested on the Solaris<sup><font size="-1">TM</font></sup> Operating Environment, Linux and Win32 operating systems.</p>
+<p> <li><b>Java<sup><font size="-1">TM</font></sup> 2 SDK, Standard Edition, v1.4 Beta 3 </b>, available at <a href="http://java.sun.com">http://java.sun.com</a> - FreeTTS requires the Java 2 SDK, Standard Edition, v 1.4 Beta 3 platform, which was the latest JDK<sup><font size="-1">TM</font></sup> at the time of release of this version of FreeTTS. FreeTTS has been tested on the 
+Solaris<sup><font size="-1">TM</font></sup> Operating Environment, 
+Linux and Win32 operating systems.</p>
 
-<li> <b> JSAPI 1.0 specification implementation </b> - available at 
-<b> research.sun.com</b> - FreeTTS requires an
-implementation of the JSAPI 1.0 specification.  Follow these steps to get an
-implementation of the JSAPI 1.0 specification:
+<li> <b> JSAPI 1.0 specification implementation </b> - FreeTTS requires an
+implementation of the JSAPI 1.0 specification.  The implementation comes as a file called
+<code> jsapi.jar </code> <br>
+
+<br> <b>Unix Systems </b> - This distribution includes a 
+self-extracting shell archive containing the jsapi.jar file.  If you are running under
+Linux or the Solaris<sup><font size="-1">TM</font></sup> Operating Environment, (or any
+other system that supports <code>sh</code>) follow these instructions:
+<ol>
+    <li> Go to the FreeTTS/lib directory
+    <li> Type "sh jsapi.sh" 
+    <li> If the binary license agreement is acceptable, accept it by typing "y". The
+    jsapi.jar file will be unpacked and deposited into the lib directory.
+</ol>
+
+<br><b> Non-Unix systems</b> - If you are on a system that is not able to unpack self-extracing shell archives (Win32,
+Mac) Follow these steps to get an implementation of the JSAPI 1.0 specification:
 <ol>
  	<li> Go to <a href="http://research.sun.com/speech/software">
 http://research.sun.com/speech/software</a> 
@@ -334,7 +349,7 @@ http://research.sun.com/speech/software</a>
 	<code> jsutils10.tar.Z or jsutils10.zip</code>) </li>
 	<li> Uncompress/untar the downloaded file </li>
 	<li> Copy the file <code> jsutils/lib/jsapi.jar
-	</code> to <code> freetts/lib/jsapi.jar</code> </li>
+	</code> to <code> FreeTTS/lib/jsapi.jar</code> </li>
 </ol>
 <p>Note that although this JSUtils package contains a large number of
 files, the only thing that FreeTTS actually uses from JSUtils is 
@@ -354,11 +369,11 @@ For the zip file:
     % unzip jsutils10.zip  jsutils-1.0/jsapi/lib/jsapi.jar
 </pre>
 
-Once you have extracted jsapi.jar copy it to the freetts lib
+Once you have extracted jsapi.jar copy it to the <code>FreeTTS/lib</code>
 directory:
 
 <pre>
-    cp jsutils-1.0/jsapi/lib/jsapi.jar freetts/lib/jsapi.jar
+    cp jsutils-1.0/jsapi/lib/jsapi.jar FreeTTS/lib/jsapi.jar
 </pre>
 
 
