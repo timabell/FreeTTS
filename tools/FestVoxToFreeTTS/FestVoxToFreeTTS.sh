@@ -425,6 +425,21 @@ if [ "$2" = "install" ]; then
         exit -1;
     fi
 
+    echo
+    echo "Do you want to import the festival phoneset into FreeTTS (y/n)?"
+    read
+
+    if [ "$REPLY" = "Y" ] || [ "$REPLY" = "y" ] ; then
+	(cd $VOICEDIR
+	echo Creating $OUTDIR/phoneset.txt
+	festival -b \
+	    festvox/$FV_FULLVOICENAME.scm \
+	    $ARCTICDIR/scheme/dump_phoneset.scm \
+	    "(begin (voice_${FV_FULLVOICENAME}) (dump_phoneset))" > \
+	    $OUTDIR/phoneset.txt
+	)
+    fi
+
 
     while true; do
         echo
@@ -608,7 +623,7 @@ if [ "$2" = "install" ]; then
     ) > "$VOICETARGETDIR/$VP_FULL_NAME/README"
 
 
-
+    cp -f "$OUTDIR/phoneset.txt" "$VOICETARGETDIR/$VP_FULL_NAME/phoneset.txt"
     cp -f "$OUTDIR/$FV_VOICENAME.txt" "$VOICETARGETDIR/$VP_FULL_NAME/$VP_FULL_NAME.txt"
     echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     echo "FreeTTSVoiceDefinition: true" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
@@ -622,17 +637,20 @@ if [ "$2" = "install" ]; then
     else #clunit
 	if [ "$VP_LOCALE" = "en_US" ]; then
 	    VD_TEMPLATE="$HELPERDIR/CMU_USClunitTemplate.java.template"
+	elif [ "$FV_TYPE" = "ldom" ]; then
+	    VD_TEMPLATE="$HELPERDIR/BaseLdomTemplate.java.template"
 	else
-	    VD_TEMPLATE="$HELPERDIR/GeneralClunitTemplate.java.template"
+	    VD_TEMPLATE="$HELPERDIR/BaseClunitTemplate.java.template"
 	fi
         UNIT_DATABASE_CLASS="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
         MAKEFILE_EXCLUDE="DIPHONE_ONLY"
     fi
 
     JAVALOCALE=`echo $VP_LOCALE | sed "s/_/\", \"/g"`
-
+    PACKAGEPATH=`echo $VOICETARGETBASE/$LOCALEPATH | tr / .`
     # create the voice directory class
     cat $VD_TEMPLATE | sed "s/%CLASSNAME%/$VOICEDIRECTORY_CLASS/g" \
+	| sed "s/%PATH%/$PACKAGEPATH/g" \
         | sed "s/%VOICENAME%/$VP_FULL_NAME/g" \
         | sed "s/%NAME%/$VP_NAME/g" \
         | sed "s/%GENDER%/$VP_GENDER/g" \

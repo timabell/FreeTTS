@@ -1,4 +1,4 @@
-package de.dfki.lt.freetts.de.%VOICENAME%;
+package %PATH%.%VOICENAME%;
 
 import de.dfki.lt.freetts.ClusterUnitVoice;
 import com.sun.speech.freetts.VoiceDirectory;
@@ -6,11 +6,14 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Gender;
 import com.sun.speech.freetts.Age;
 import java.util.Locale;
+import java.net.URL;
 
 
 /**
- * This voice directory provides a Cluster Unit voice imported
- * from FestVox.  
+ * This voice directory provides a Limited Domain Cluster Unit voice imported
+ * from FestVox.
+ * This is designed to be a base-class handeling non-Us-English voices,
+ * the voice provided here is not a full TTS-voice.
  */
 public class %CLASSNAME% extends VoiceDirectory {
     /**
@@ -20,12 +23,15 @@ public class %CLASSNAME% extends VoiceDirectory {
      */
     public Voice[] getVoices() {
 
+	// if there is no phoneset.txt, this is null
+	URL phoneset = this.getClass().getResource("phoneset.txt");
+
         // Change voice properties here
         Voice voice = new ClusterUnitVoice("%NAME%",
                 Gender.%GENDER%, Age.%AGE%, "%DESCRIPTION%",
                 new Locale("%LOCALE%"), "%DOMAIN%", "%ORGANIZATION%",
-                null,
-                this.getClass().getResource("%VOICENAME%.bin"));
+                null, this.getClass().getResource("%VOICENAME%.bin"),
+		null, phoneset, null);
 
         Voice[] voices = {voice};
         return voices;
