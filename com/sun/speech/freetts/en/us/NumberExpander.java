@@ -10,6 +10,8 @@
  */
 package com.sun.speech.freetts.en.us;
 
+import com.sun.speech.freetts.FeatureSet;
+import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.util.Utilities;
 import java.util.List;
 import java.util.LinkedList;
@@ -108,32 +110,29 @@ public class NumberExpander {
      * For example, "1234" expands to "one two three four"
      *
      * @param  numberString  the digit string to expand.
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */ 
-    public static List expandNumber(String numberString, List numberList) {
+    public static void expandNumber(String numberString,
+				    WordRelation wordRelation) {
 	int numDigits = numberString.length();
 	
 	if (numDigits == 0) {
-	    // numberList = null;
+	    // wordRelation = null;
 	} else if (numDigits == 1) {
-	    expandDigits(numberString, numberList);
+	    expandDigits(numberString, wordRelation);
 	} else if (numDigits == 2) {
-	    expand2DigitNumber(numberString, numberList);
+	    expand2DigitNumber(numberString, wordRelation);
 	} else if (numDigits == 3) {
-	    expand3DigitNumber(numberString, numberList);
+	    expand3DigitNumber(numberString, wordRelation);
 	} else if (numDigits < 7) {
-	    expandBelow7DigitNumber(numberString, numberList);
+	    expandBelow7DigitNumber(numberString, wordRelation);
 	} else if (numDigits < 10) {
-	    expandBelow10DigitNumber(numberString, numberList);
+	    expandBelow10DigitNumber(numberString, wordRelation);
 	} else if (numDigits < 13) {
-	    expandBelow13DigitNumber(numberString, numberList);
+	    expandBelow13DigitNumber(numberString, wordRelation);
 	} else {
-	    expandDigits(numberString, numberList);
+	    expandDigits(numberString, wordRelation);
 	}
-	
-	return numberList;
     }
 
 
@@ -141,39 +140,34 @@ public class NumberExpander {
      * Expands a two-digit string into a list of English words.
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expand2DigitNumber(String numberString,
-					   List numberList) {
+    private static void expand2DigitNumber(String numberString,
+					   WordRelation wordRelation) {
 	if (numberString.charAt(0) == '0') {
 	    // numberString is "0X"
 	    if (numberString.charAt(1) == '0') {
-		// numberString is "00"
-		return null;
+		// numberString is "00", do nothing
 	    } else {
 		// numberString is "01", "02" ...
 		String number = digit2num[numberString.charAt(1)-'0'];
-		numberList.add(number);
+		wordRelation.addWord(number);
 	    }
 	} else if (numberString.charAt(1) == '0') {
 	    // numberString is "10", "20", ...
 	    String number = digit2enty[numberString.charAt(0)-'0'];
-	    numberList.add(number);
+	    wordRelation.addWord(number);
 	} else if (numberString.charAt(0) == '1') {
 	    // numberString is "11", "12", ..., "19"
 	    String number = digit2teen[numberString.charAt(1)-'0'];
-	    numberList.add(number);
+	    wordRelation.addWord(number);
 	} else {
 	    // numberString is "2X", "3X", ...
 	    String enty = digit2enty[numberString.charAt(0)-'0'];
-	    numberList.add(enty);
+	    wordRelation.addWord(enty);
 	    expandDigits(numberString.substring(1,numberString.length()),
-			 numberList);
+			 wordRelation);
 	}
-
-	return numberList;
     }
 
     
@@ -181,22 +175,18 @@ public class NumberExpander {
      * Expands a three-digit string into a list of English words.
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expand3DigitNumber(String numberString,
-					   List numberList) {
+    private static void expand3DigitNumber(String numberString,
+					   WordRelation wordRelation) {
 	if (numberString.charAt(0) == '0') {
-	    expandNumberAt(numberString, 1, numberList);
+	    expandNumberAt(numberString, 1, wordRelation);
 	} else {
 	    String hundredDigit = digit2num[numberString.charAt(0)-'0'];
-	    numberList.add(hundredDigit);
-	    numberList.add("hundred");
-	    expandNumberAt(numberString, 1, numberList);
+	    wordRelation.addWord(hundredDigit);
+	    wordRelation.addWord("hundred");
+	    expandNumberAt(numberString, 1, wordRelation);
 	}
-
-	return numberList;
     }
 
 
@@ -206,13 +196,11 @@ public class NumberExpander {
      * and thirty-three thousand".
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expandBelow7DigitNumber(String numberString,
-						List numberList) {
-	return expandLargeNumber(numberString, "thousand", 3, numberList);
+    private static void expandBelow7DigitNumber(String numberString,
+						WordRelation wordRelation) {
+	expandLargeNumber(numberString, "thousand", 3, wordRelation);
     }
     
 
@@ -221,13 +209,11 @@ public class NumberExpander {
      * of English words. For example, "19000000" into nineteen million.
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expandBelow10DigitNumber(String numberString,
-						 List numberList) {
-	return expandLargeNumber(numberString, "million", 6, numberList);
+    private static void expandBelow10DigitNumber(String numberString,
+						 WordRelation wordRelation) {
+	expandLargeNumber(numberString, "million", 6, wordRelation);
     }
 
 
@@ -237,13 +223,11 @@ public class NumberExpander {
      * billion.
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expandBelow13DigitNumber(String numberString,
-						 List numberList) {
-	return expandLargeNumber(numberString, "billion", 9, numberList);
+    private static void expandBelow13DigitNumber(String numberString,
+						 WordRelation wordRelation) {
+	expandLargeNumber(numberString, "billion", 9, wordRelation);
     }
 
 
@@ -255,33 +239,29 @@ public class NumberExpander {
      * @param order either "thousand", "million", or "billion"
      * @param numberZeroes the number of zeroes, depending on the order, so
      *        its either 3, 6, or 9
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expandLargeNumber(String numberString,
+    private static void expandLargeNumber(String numberString,
 					  String order,
 					  int numberZeroes,
-					  List numberList) {
+					  WordRelation wordRelation) {
 	int numberDigits = numberString.length();
-		
+	
 	// parse out the prefix, e.g., "113" in "113,000"
 	int i = numberDigits - numberZeroes;
 	String part = numberString.substring(0, i);
 		
 	// get how many thousands/millions/billions
-	int oldLength = numberList.size();
+	Item oldTail = wordRelation.getTail();
 	
-	expandNumber(part, numberList);
+	expandNumber(part, wordRelation);
 
-	if (numberList.size() == oldLength) {
-	    expandNumberAt(numberString, i, numberList);
+	if (wordRelation.getTail() == oldTail) {
+	    expandNumberAt(numberString, i, wordRelation);
 	} else {
-	    numberList.add(order);
-	    expandNumberAt(numberString, i, numberList);
+	    wordRelation.addWord(order);
+	    expandNumberAt(numberString, i, wordRelation);
 	}
-
-	return numberList;
     }
 
 
@@ -291,16 +271,13 @@ public class NumberExpander {
      *
      * @param numberString the string which is the number to expand
      * @param startIndex the starting position
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    private static List expandNumberAt(String numberString,
+    private static void expandNumberAt(String numberString,
 				       int startIndex,
-				       List numberList) {
-	return expandNumber(numberString.substring(startIndex,
-						   numberString.length()),
-			    numberList);
+				       WordRelation wordRelation) {
+	expandNumber(numberString.substring(startIndex,numberString.length()),
+		     wordRelation);
     }
     
 
@@ -308,21 +285,19 @@ public class NumberExpander {
      * Expands given token to list of words pronouncing it as digits
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    public static List expandDigits(String numberString, List numberList) {
+    public static void expandDigits(String numberString,
+				    WordRelation wordRelation) {
 	int numberDigits = numberString.length();
 	for (int i = 0; i < numberDigits; i++) {
 	    char digit = numberString.charAt(i);
 	    if (isDigit(digit)) {
-		numberList.add(digit2num[numberString.charAt(i)-'0']);
+		wordRelation.addWord(digit2num[numberString.charAt(i)-'0']);
 	    } else {
-		numberList.add("umpty");
+		wordRelation.addWord("umpty");
 	    }
 	}
-	return numberList;
     }
     
 
@@ -330,26 +305,24 @@ public class NumberExpander {
      * Returns the digit string of an ordinal number.
      *
      * @param rawNumberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    public static List expandOrdinal(String rawNumberString, List numberList) {
-	String ordinal = null;
-	String lastNumber;
-	int i;
-			
+    public static void expandOrdinal(String rawNumberString,
+				     WordRelation wordRelation) {
 	// remove all ','s from the raw number string
 	String numberString = Utilities.deleteChar(rawNumberString, ',');
 	
-	expandNumber(numberString, numberList);
+	expandNumber(numberString, wordRelation);
 
 	// get the last in the list of number strings
-	int listSize = numberList.size();
-	if (listSize > 0) {
-	    lastNumber = (String) numberList.get(listSize - 1);
-	    
-	    ordinal = findMatchInArray(lastNumber, digit2num, ord2num);
+	Item lastItem = wordRelation.getTail();
+
+	if (lastItem != null) {
+
+	    FeatureSet featureSet = lastItem.getFeatures();
+	    String lastNumber = featureSet.getString("name");
+	    String ordinal = findMatchInArray(lastNumber, digit2num, ord2num);
+
 	    if (ordinal == null) {
 		ordinal = findMatchInArray(lastNumber, digit2teen, ord2teen);
 	    }
@@ -368,11 +341,9 @@ public class NumberExpander {
 	    // if there was an ordinal, set the last element of the list
 	    // to that ordinal; otherwise, don't do anything
 	    if (ordinal != null) {
-		numberList.set(listSize - 1, ordinal);
+		wordRelation.setLastWord(ordinal);
 	    }
 	}
-	
-	return numberList;
     }
 
 
@@ -407,30 +378,27 @@ public class NumberExpander {
      * Expands the given number string as pairs as in years or IDs
      *
      * @param numberString the string which is the number to expand
-     * @param  numberList  words are added to this list
-     *
-     * @return a list of English words
+     * @param  wordRelation  words are added to this list
      */
-    public static List expandID(String numberString, List numberList) {
+    public static void expandID(String numberString, WordRelation wordRelation) {
 	
 	int numberDigits = numberString.length();
 	
 	if ((numberDigits == 2) && (numberString.charAt(0) == '0')) {
-	    numberList.add("oh");
-	    expandDigits(numberString.substring(1,2), numberList);
+	    wordRelation.addWord("oh");
+	    expandDigits(numberString.substring(1,2), wordRelation);
 	} else if ((numberDigits == 4 &&
 		    numberString.charAt(1) == '0') ||
 		   numberDigits < 3) {
-	    expandNumber(numberString, numberList);
+	    expandNumber(numberString, wordRelation);
 	} else if (numberDigits % 2 == 1) {
 	    String firstDigit = digit2num[numberString.charAt(0)-'0'];
-	    numberList.add(firstDigit);
-	    expandID(numberString.substring(1,numberDigits), numberList);
+	    wordRelation.addWord(firstDigit);
+	    expandID(numberString.substring(1,numberDigits), wordRelation);
 	} else {
-	    expandNumber(numberString.substring(0,2), numberList);
-	    expandID(numberString.substring(2,numberDigits), numberList);
+	    expandNumber(numberString.substring(0,2), wordRelation);
+	    expandID(numberString.substring(2,numberDigits), wordRelation);
 	}
-	return numberList;
     }
 
 
@@ -438,40 +406,42 @@ public class NumberExpander {
      * Expands the given number string as a real number.
      *
      * @param numberString the string which is the real number to expand
-     * @param numberList words are added to this list
-     *
-     * @return a list of English words
+     * @param wordRelation words are added to this list
      */
-    public static List expandReal(String numberString, List numberList) {
+    public static void expandReal(String numberString, WordRelation wordRelation) {
 
 	int stringLength = numberString.length();
 	int position;
 
 	if (numberString.charAt(0) == '-') {
 	    // negative real numbers
-	    numberList.add("minus");
-	    expandReal(numberString.substring(1, stringLength), numberList);
+	    wordRelation.addWord("minus");
+	    expandReal(numberString.substring(1, stringLength), wordRelation);
 	} else if (numberString.charAt(0) == '+') {
 	    // prefixed with a '+'
-	    numberList.add("plus");
-	    expandReal(numberString.substring(1, stringLength), numberList);
+	    wordRelation.addWord("plus");
+	    expandReal(numberString.substring(1, stringLength), wordRelation);
 	} else if ((position = numberString.indexOf('e')) != -1 ||
 		   (position = numberString.indexOf('E')) != -1) {
 	    // numbers with 'E' or 'e'
-	    expandReal(numberString.substring(0, position), numberList);
-	    numberList.add("e");
-	    expandReal(numberString.substring(position + 1), numberList);
+	    expandReal(numberString.substring(0, position), wordRelation);
+	    wordRelation.addWord("e");
+	    expandReal(numberString.substring(position + 1), wordRelation);
 	} else if ((position = numberString.indexOf('.')) != -1) {
 	    // numbers with '.'
-	    expandReal(numberString.substring(0, position), numberList);
-	    numberList.add("point");
-	    expandReal(numberString.substring(position + 1), numberList);
+	    String beforeDot = numberString.substring(0, position);
+	    if (beforeDot.length() > 0) {
+		expandReal(beforeDot, wordRelation);
+	    }
+	    wordRelation.addWord("point");
+	    String afterDot = numberString.substring(position + 1);
+	    if (afterDot.length() > 0) {
+		expandReal(afterDot, wordRelation);
+	    }
 	} else {
 	    // everything else
-	    expandNumber(numberString, numberList);
+	    expandNumber(numberString, wordRelation);
 	}
-
-	return numberList;
     }
     
 
@@ -480,10 +450,9 @@ public class NumberExpander {
      *
      * @param letters the string of letters to expand
      * @param letterList words are added to this list
-     *
-     * @return a list of single char symbols
      */
-    public static List expandLetters(String letters, List letterList) {
+    public static void expandLetters(String letters, 
+				     WordRelation wordRelation) {
 	letters = letters.toLowerCase();
 	char c;
 			
@@ -492,15 +461,13 @@ public class NumberExpander {
 	    c = letters.charAt(i);
 
 	    if (isDigit(c)) {
-		letterList.add(digit2num[c-'0']);
+		wordRelation.addWord(digit2num[c-'0']);
 	    } else if (letters.equals("a")) {
-		letterList.add("_a");
+		wordRelation.addWord("_a");
 	    } else {
-		letterList.add(String.valueOf(c));
+		wordRelation.addWord(String.valueOf(c));
 	    }
 	}
-
-	return letterList;
     }
     
     
