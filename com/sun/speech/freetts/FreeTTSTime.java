@@ -78,8 +78,10 @@ public class FreeTTSTime extends FreeTTS {
 		System.out.print("Enter time: ");
 		System.out.flush();
 		time = reader.readLine();
-		if ((time == null) || (time.length() == 0)) {
+		if ((time == null) || (time.length() == 0)
+			|| time.equals("quit") ) {
 		    freetts.shutdown();
+		    System.exit(0);
 		} else {
 		    freetts.getVoice().startBatch();
 		    freetts.safeTimeToSpeech(time);

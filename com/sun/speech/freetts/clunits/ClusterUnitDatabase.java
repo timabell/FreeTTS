@@ -58,6 +58,7 @@ public class ClusterUnitDatabase {
     final  static int CLUNIT_NONE = 65535;
 
     private DatabaseClusterUnit[] units;
+    private UnitType[] unitTypes;
     private SampleSet sts;
     private SampleSet mcep;
 
@@ -73,6 +74,7 @@ public class ClusterUnitDatabase {
 
     private transient List unitList;
     private transient int lineCount;
+    private transient List unitTypesList;
 
     private final static int MAGIC = 0xf0cacc1a;
     private final static int VERSION = 0x1000;
@@ -124,6 +126,17 @@ public class ClusterUnitDatabase {
     }
 
     /**
+     * Retrieves the phone for the given entry
+     *
+     * @param unitEntry the entry of interest
+     *
+     * @return the phone for the entry
+     */
+    int getPhone(int unitEntry) {
+	return units[unitEntry].phone;
+    }
+
+    /**
      * Returns the cart of the given unit type.
      *
      * @param unitType the type of cart
@@ -142,34 +155,22 @@ public class ClusterUnitDatabase {
     }
 
     /**
-     * Retrieves the unit index given a unit type and val.
-     *
-     * @param unitType the type of the unit
-     * @param val the value associated with the unit
-     *
-     * @return the index.
-     */
-    int getUnitIndex(String unitType, int val) {
-	return getUnitIndexName(unitType + "_" + val);
-    }
-
-    /**
-     * Retrieves the index for the name given a name. 
+     * Retrieves the type index for the name given a name. 
      *
      * @param name the name
      *
      * @return the index for the name
      */
 // [[[TODO: perhaps replace this with  java.util.Arrays.binarySearch]]]
-    int getUnitIndexName(String name) {
+    int getUnitTypeIndex(String name) {
 	int start, end, mid, c;
 
 	start = 0;
-	end = units.length;
+	end = unitTypes.length;
 
 	while (start < end) {
 	    mid = (start + end) / 2;
-	    c = units[mid].name.compareTo(name);
+	    c = unitTypes[mid].getName().compareTo(name);
 	    if (c == 0) {
 		return mid;
 	    } else if (c > 0) {
@@ -178,7 +179,48 @@ public class ClusterUnitDatabase {
 		start = mid + 1;
 	    }
 	}
-	return 0;
+	return -1;
+    }
+
+    /**
+     * Retrieves the unit index given a unit type and val.
+     *
+     * @param unitType the type of the unit
+     * @param instance the value associated with the unit
+     *
+     * @return the index.
+     */
+    int getUnitIndex(String unitType, int instance) {
+	int i = getUnitTypeIndex(unitType);
+	if (i == -1) {
+	    error("getUnitIndex: can't find unit type " + unitType);
+	    i = 0;
+	}
+	if (instance >= unitTypes[i].getCount()) {
+	    error("getUnitIndex: can't find instance " 
+		    + instance + " of " + unitType);
+	    instance = 0;
+	}
+	return unitTypes[i].getStart() + instance;
+    }
+
+
+    /**
+     * Retrieves the index for the name given a name. 
+     *
+     * @param name the name
+     *
+     * @return the index for the name
+     */
+    int getUnitIndexName(String name) {
+	int lastIndex = name.lastIndexOf('_');
+	if (lastIndex == -1) {
+	    error("getUnitIndexName: bad unit name " + name);
+	    return -1;
+	}
+	int index = Integer.parseInt(name.substring(lastIndex + 1));
+	String type = name.substring(0, lastIndex);
+	return getUnitIndex(type, index);
     }
 
     /**
@@ -221,10 +263,11 @@ public class ClusterUnitDatabase {
      *     equal; otherwise return <code>false</code> 
      */
     boolean isUnitTypeEqual(int unitA, int unitB)  {
-	String nameA = units[unitA].name;
-	String nameB = units[unitB].name;
-	int lastUnderscore = nameA.lastIndexOf('_');
-	return nameA.regionMatches(0, nameB, 0, lastUnderscore + 1);
+	return units[unitA].type == units[unitB].type;
+	// String nameA = units[unitA].getName();
+	// String nameB = units[unitB].getName();
+	// int lastUnderscore = nameA.lastIndexOf('_');
+	// return nameA.regionMatches(0, nameB, 0, lastUnderscore + 1);
     }
 
     /**
@@ -362,6 +405,8 @@ public class ClusterUnitDatabase {
 
 
 	unitList = new ArrayList();
+	unitTypesList = new ArrayList();
+
 	if (is == null) {
 	    throw new Error("Can't load cluster db file.");
 	}
@@ -381,6 +426,10 @@ public class ClusterUnitDatabase {
 	    units = new DatabaseClusterUnit[unitList.size()];
 	    units = (DatabaseClusterUnit[]) unitList.toArray(units);
 	    unitList = null;
+
+	    unitTypes = new UnitType[unitTypesList.size()];
+	    unitTypes = (UnitType[]) unitTypesList.toArray(unitTypes);
+	    unitTypesList = null;
 
         } catch (IOException e) {
             throw new Error(e.getMessage() + " at line " + lineCount);
@@ -426,13 +475,15 @@ public class ClusterUnitDatabase {
 		    mcep = new SampleSet(tokenizer, reader);
 		}
 	    } else if (tag.equals("UNITS")) {
-		String name = tokenizer.nextToken();
+		int type = Integer.parseInt(tokenizer.nextToken());
+		int phone = Integer.parseInt(tokenizer.nextToken());
 		int start = Integer.parseInt(tokenizer.nextToken());
 		int end = Integer.parseInt(tokenizer.nextToken());
 		int prev = Integer.parseInt(tokenizer.nextToken());
 		int next = Integer.parseInt(tokenizer.nextToken());
 		DatabaseClusterUnit unit 
-		      = new DatabaseClusterUnit(name, start, end, prev, next);
+		      = new DatabaseClusterUnit(type, phone, start, 
+			      end, prev, next);
 		unitList.add(unit);
 	    } else if (tag.equals("CART")) {
 		String name = tokenizer.nextToken();
@@ -443,8 +494,13 @@ public class ClusterUnitDatabase {
 		if (defaultCart == null) {
 		    defaultCart = cart;
 		}
-
-	    }else {
+	    } else if (tag.equals("UNIT_TYPE")) {
+		String name = tokenizer.nextToken();
+		int start = Integer.parseInt(tokenizer.nextToken());
+		int count = Integer.parseInt(tokenizer.nextToken());
+		UnitType unitType = new UnitType(name, start, count);
+		unitTypesList.add(unitType);
+	    } else {
 		throw new Error("Unsupported tag " + tag);
 	    }
 	} catch (NoSuchElementException nse) {
@@ -513,6 +569,12 @@ public class ClusterUnitDatabase {
 	for (int i = 0; i < units.length; i++) {
 	    units[i] = new DatabaseClusterUnit(bb);
 	}
+
+	int unitTypesLength = bb.getInt();
+	unitTypes = new UnitType[unitTypesLength];
+	for (int i = 0; i < unitTypes.length; i++) {
+	    unitTypes[i] = new UnitType(bb);
+	}
 	sts = new SampleSet(bb);
 	mcep = new SampleSet(bb);
 
@@ -562,6 +624,12 @@ public class ClusterUnitDatabase {
 	for (int i = 0; i < units.length; i++) {
 	    units[i] = new DatabaseClusterUnit(is);
 	}
+
+	int unitTypesLength = is.readInt();
+	unitTypes = new UnitType[unitTypesLength];
+	for (int i = 0; i < unitTypes.length; i++) {
+	    unitTypes[i] = new UnitType(is);
+	}
 	sts = new SampleSet(is);
 	mcep = new SampleSet(is);
 
@@ -604,6 +672,11 @@ public class ClusterUnitDatabase {
 	    os.writeInt(units.length);
 	    for (int i = 0; i < units.length; i++) {
 		units[i].dumpBinary(os);
+	    }
+
+	    os.writeInt(unitTypes.length);
+	    for (int i = 0; i < unitTypes.length; i++) {
+		unitTypes[i].dumpBinary(os);
 	    }
 	    sts.dumpBinary(os);
 	    mcep.dumpBinary(os);
@@ -727,74 +800,181 @@ public class ClusterUnitDatabase {
 	    System.err.println(ioe);
 	}
     }
+
+
+    /**
+     * Represents a unit  for the cluster database.
+     */
+    class DatabaseClusterUnit {
+
+	int type;
+	int phone;
+	int start;
+	int end;
+	int prev;
+	int next;
+
+	/**
+	 * Constructs a unit.
+	 *
+	 * @param type the name of the unit
+	 * @param phone the name of the unit
+	 * @param start the starting frame
+	 * @param end the ending frame
+	 * @param prev the previous index
+	 * @param next the next index
+	 */
+	DatabaseClusterUnit(int type, int phone, int start, 
+		int end, int prev, int next) {
+	    this.type = type;
+	    this.phone = phone;
+	    this.start = start;
+	    this.end = end;
+	    this.prev = prev;
+	    this.next = next;
+	}
+
+	/**
+	 * Creates a unit by reading it from the given byte buffer.
+	 *
+	 * @param bb source of the DatabaseClusterUnit data
+	 *
+	 * @throws IOException if an IO error occurs
+	 */
+	DatabaseClusterUnit(ByteBuffer bb) throws IOException {
+	    this.type = bb.getInt();
+	    this.phone = bb.getInt();
+	    this.start = bb.getInt();
+	    this.end = bb.getInt();
+	    this.prev = bb.getInt();
+	    this.next = bb.getInt();
+	}
+
+	/**
+	 * Creates a unit by reading it from the given input stream.
+	 *
+	 * @param is source of the DatabaseClusterUnit data
+	 *
+	 * @throws IOException if an IO error occurs
+	 */
+	DatabaseClusterUnit(DataInputStream is) throws IOException {
+	    this.type = is.readInt();
+	    this.phone = is.readInt();
+	    this.start = is.readInt();
+	    this.start = is.readInt();
+	    this.end = is.readInt();
+	    this.prev = is.readInt();
+	    this.next = is.readInt();
+	}
+
+	/**
+	 * Returns the name of the unit.
+	 *
+	 * @return the name
+	 */
+	String getName() {
+	    return unitTypes[type].getName();
+	}
+
+	/**
+	 * Dumps this unit to the given output stream.
+	 *
+	 * @param os the output stream
+	 *
+	 * @throws IOException if an error occurs.
+	 */
+	void dumpBinary(DataOutputStream os) throws IOException {
+	    os.writeInt(type);
+	    os.writeInt(phone);
+	    os.writeInt(start);
+	    os.writeInt(end);
+	    os.writeInt(prev);
+	    os.writeInt(next);
+	}
+    }
+
+    /**
+     * Displays an error message
+     *
+     * @param s the error message
+     */
+    private void error(String s) {
+	System.out.println("ClusterUnitDatabase Error: " + s);
+    }
 }
 
-
 /**
- * Represents a unit  for the cluster database.
+ * Represents a unit type in the system
  */
-class DatabaseClusterUnit {
-
-    String name;
-    int start;
-    int end;
-    int prev;
-    int next;
+class UnitType {
+    private String name;
+    private int start;
+    private int count;
 
     /**
-     * Constructs a unit.
+     * Constructs a UnitType from the given parameters
      *
-     * @param name the name of the unit
-     * @param start the starting frame
-     * @param end the ending frame
-     * @param prev the previous index
-     * @param next the next index
+     * @param name the name of the type
+     * @param start the starting index for this type
+     * @param count the number of elements for this type
      */
-    DatabaseClusterUnit(String name, int start, int end, int prev, int next) {
+    UnitType(String name, int start, int count) {
 	this.name = name;
 	this.start = start;
-	this.end = end;
-	this.prev = prev;
-	this.next = next;
+	this.count = count;
     }
 
     /**
-     * Creates a unit by reading it from the given byte buffer.
+     * Creates a unit type by reading it from the given input stream.
      *
-     * @param bb source of the DatabaseClusterUnit data
-     *
-     * @throws IOException if an IO error occurs
-     */
-    DatabaseClusterUnit(ByteBuffer bb) throws IOException {
-	this.name = Utilities.getString(bb);
-	this.start = bb.getInt();
-	this.end = bb.getInt();
-	this.prev = bb.getInt();
-	this.next = bb.getInt();
-    }
-
-    /**
-     * Creates a unit by reading it from the given input stream.
-     *
-     * @param is source of the DatabaseClusterUnit data
+     * @param is source of the UnitType data
      *
      * @throws IOException if an IO error occurs
      */
-    DatabaseClusterUnit(DataInputStream is) throws IOException {
+    UnitType(DataInputStream is) throws IOException {
 	this.name = Utilities.getString(is);
 	this.start = is.readInt();
-	this.end = is.readInt();
-	this.prev = is.readInt();
-	this.next = is.readInt();
+	this.count = is.readInt();
     }
 
     /**
-     * Returns the name of the unit.
+     * Creates a unit type by reading it from the given byte buffer.
      *
-     * @return the name
+     * @param bb source of the UnitType  data
+     *
+     * @throws IOException if an IO error occurs
+     */
+    UnitType(ByteBuffer bb) throws IOException {
+	this.name = Utilities.getString(bb);
+	this.start = bb.getInt();
+	this.count = bb.getInt();
+    }
+
+    /**
+     * Gets the name for this unit type
+     * 
+     * @return the name for the type
      */
     String getName() {
 	return name;
+    }
+
+    /**
+     * Gets the start index for this type
+     *
+     * @return the start index
+     */
+    int getStart() {
+	return start;
+    }
+
+    /**
+     * Gets the count for this type
+     *
+     * @return the  count for this type
+     */
+    int getCount() {
+	return count;
     }
 
     /**
@@ -807,8 +987,6 @@ class DatabaseClusterUnit {
     void dumpBinary(DataOutputStream os) throws IOException {
 	Utilities.outString(os, name);
 	os.writeInt(start);
-	os.writeInt(end);
-	os.writeInt(prev);
-	os.writeInt(next);
+	os.writeInt(count);
     }
 }

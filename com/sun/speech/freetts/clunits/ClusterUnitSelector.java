@@ -27,6 +27,8 @@ import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.FeatureSetImpl;
+import com.sun.speech.freetts.PathExtractor;
+import com.sun.speech.freetts.PathExtractorImpl;
 
 
 /**
@@ -36,7 +38,11 @@ import com.sun.speech.freetts.FeatureSetImpl;
  */
 public class ClusterUnitSelector implements UtteranceProcessor {
 
-    private final static boolean DEBUG = false;
+    final static boolean DEBUG = false;
+    final static FrameDistance FRAME_DISTANCE_A = new FrameDistanceA();
+    final static FrameDistance FRAME_DISTANCE_B = new FrameDistanceB();
+    private final static PathExtractor DNAME = new PathExtractorImpl(
+	    "R:SylStructure.parent.parent.name", true);
     private ClusterUnitDatabase clunitDB;
     
     /**
@@ -168,8 +174,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    cname = "pau_" + seg.findFeature("p.name");
 	} else {
 	    // remove single quotes from name
-	    String dname = ((String) seg.findFeature(
-		    "R:SylStructure.parent.parent.name")).toLowerCase();
+	    String dname = ((String) DNAME.findFeature(seg)).toLowerCase();
 	    cname = segName + "_" + stripQuotes(dname);
 	}
 	seg.getFeatures().setString("clunit_name", cname);
@@ -516,6 +521,13 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	    newPath.candidate = candidate;
 	    newPath.from = path;
+	//
+	// Flite 1.1 has some logic here to test to see
+	// if  the unit database is fully populated or not and if not
+	// load fixed residuals and calculate distance with a
+	// different distance algorithm that is designed for fixed
+	// point. FreeTTS doesn't really need to do that.
+	//
 
 	    if (path == null || path.candidate == null) {
 		cost = 0;
@@ -524,10 +536,14 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		int u1 = candidate.ival;
 		if (clunitDB.getOptimalCoupling() == 1) {
 		    Cost oCost = getOptimalCouple(u0, u1);
-		    newPath.setFeature("unit_prev_move", new
-			    Integer(oCost.u0Move));
-		    newPath.setFeature("unit_this_move", new
-			    Integer(oCost.u1Move));
+		    if (oCost.u0Move != -1) {
+			newPath.setFeature("unit_prev_move", new
+				Integer(oCost.u0Move));
+		    }
+		    if (oCost.u1Move != -1) { 
+			newPath.setFeature("unit_this_move", new
+				Integer(oCost.u1Move));
+		    }
 		    cost = oCost.cost;
 		} else if (clunitDB.getOptimalCoupling() == 2) {
 		    cost = getOptimalCoupleFrame(u0, u1);
@@ -536,7 +552,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		}
 	    }
 
-	    cost *= clunitDB.getContinuityWeight();
+	    // cost *= clunitDB.getContinuityWeight();
+	    cost *= 5;	// magic number ("continuity weight") from flite
 	    newPath.state = candidate.pos;
 	    if (path == null) {
 		newPath.score = cost + candidate.score;
@@ -597,62 +614,51 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    int u1_p;
 	    int i, fcount;
 	    int u0_st, u1_p_st, u0_end, u1_p_end;
-	    int u0_size, u1_p_size;
 	    int best_u0, best_u1_p;
-	    int dist, best_val, differentPrevFactor;
+	    int dist, best_val; 
 	    Cost cost = new Cost();
 
 	    u1_p = clunitDB.getPrevUnit(u1);
 
-	    /* u0_move is the new end for u0
-	       u1_move is the new start for u1
-
-	       This works based on the assumption that the STS frames for
-	       consecutive units in the recordings will also be consecutive.
-	       The voice compiler MUST preserve this assumption! */
-	    cost.u0Move = clunitDB.getEnd(u0);
-	    cost.u1Move = clunitDB.getStart(u1);
-
 	    if (u1_p == u0) {
-		cost.cost = 0;
-		return cost;
-	    }
-	    if (u1_p == ClusterUnitDatabase.CLUNIT_NONE) {
-		cost.cost =  getOptimalCoupleFrame(u0, u1); /* laziness */
 		return cost;
 	    }
 
-	    u0_size = clunitDB.getEnd(u0) - clunitDB.getStart(u0);
-	    u1_p_size = clunitDB.getEnd(u1_p) - clunitDB.getStart(u1_p);
 
-	    u0_end = u0_size;
-	    u1_p_end = u1_p_size;
+	    if (u1_p == ClusterUnitDatabase.CLUNIT_NONE ||
+		    clunitDB.getPhone(u0) !=
+		    clunitDB.getPhone(u1_p)) {
+		cost.cost = 10 * getOptimalCoupleFrame(u0, u1);
+		return cost;
+	    }
 
-	    if (clunitDB.isUnitTypeEqual(u0, u1_p)) {
-		u0_st = u0_size / 3;
-		u1_p_st = u1_p_size / 3;
-		differentPrevFactor = 1;
+
+	    u0_end = clunitDB.getEnd(u0) - clunitDB.getStart(u0);
+	    u1_p_end = clunitDB.getEnd(u1_p) - clunitDB.getStart(u1_p);
+	    u0_st = u0_end / 3;
+	    u1_p_st = u1_p_end / 3;
+
+	    if ((u0_end - u0_st) < (u1_p_end - u1_p_st)) {
+		fcount = u0_end - u1_p_st;
 	    } else {
-	    /* Different phone, don't slide and just look at the last frame */
-		u0_st = u0_end - 1;
-		u1_p_st = u1_p_end - 1;
-		/* FIXME: is this really needed? */
-		differentPrevFactor = 1000; 
+		fcount = u1_p_end - u1_p_st;
 	    }
+
 
 	    best_u0 = u0_end;
 	    best_u1_p = u1_p_end;
 	    best_val = Integer.MAX_VALUE;
 
-	    fcount = ((u0_end - u0_st) < (u1_p_end - u1_p_st)
-		      ? (u0_end - u0_st)  : (u1_p_end - u1_p_st));
 	    for (i = 0; i < fcount; ++i) {
-		a = clunitDB.getStart(u1_p) + u1_p_st + i;
-		b = clunitDB.getStart(u0)+ u0_st + i;
+		a = clunitDB.getStart(u0)+ u0_st + i;
+		b = clunitDB.getStart(u1_p) + u1_p_st + i;
 		dist = getFrameDistance(a, b,
-				  clunitDB.getJoinWeights(),
-				  clunitDB.getJoinWeightShift(),
-		      clunitDB.getMcep().getSampleInfo().getNumberOfChannels());
+		     clunitDB.getJoinWeights(),
+		     clunitDB.getMcep().getSampleInfo().getNumberOfChannels())
+		      + Math.abs( clunitDB.getSts().getFrameSize(a) - 
+			    clunitDB.getSts().getFrameSize(b)) * 
+			    clunitDB.getContinuityWeight();
+
 		if (dist < best_val) {
 		    best_val = dist;
 		    best_u0 = u0_st + i;
@@ -660,9 +666,9 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		}
 	    }
 
-	    cost.u0Move = clunitDB.getStart(u0) + best_u0 + 1;
+	    cost.u0Move = clunitDB.getStart(u0) + best_u0;
 	    cost.u1Move = clunitDB.getStart(u1_p) + best_u1_p + 1;
-	    cost .cost = 50000 + best_val * differentPrevFactor;
+	    cost.cost = 30000 + best_val;
 	    return cost;
 	}
 
@@ -677,25 +683,22 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	 */
 	int getOptimalCoupleFrame(int u0, int u1) {
 	    int a, b;
-	    int u1_p;
 
-	    u1_p = clunitDB.getPrevUnit(u1);
-	    if (u1_p == u0) {
+	    if (clunitDB.getPrevUnit(u1) == u0) {
 		return 0; // consecutive units win - FATALITY
 	    }
 
-	    if (u1_p == ClusterUnitDatabase.CLUNIT_NONE) {
-		// no previous, se we can't score overlapping frames
-		a = clunitDB.getStart(u1);
-	    } else {
-		a = clunitDB.getEnd(u1_p) - 1;
-	    }
+	    // Still not correct as this might go past end of unit
 
-	    b= clunitDB.getEnd(u0) - 1;
+	    a = clunitDB.getEnd(u0);
+	    b = clunitDB.getStart(u1);
 
-	    return getFrameDistance(a, b, clunitDB.getJoinWeights(),
-		    clunitDB.getJoinWeightShift(),
-		    clunitDB.getMcep().getSampleInfo().getNumberOfChannels());
+	    return getFrameDistance(a, b, 
+		    clunitDB.getJoinWeights(),
+		    clunitDB.getMcep().getSampleInfo().getNumberOfChannels())
+		+ Math.abs( clunitDB.getSts().getFrameSize(a) - 
+			    clunitDB.getSts().getFrameSize(b)) * 
+			    clunitDB.getContinuityWeight();
 	}
 
 	/**
@@ -704,14 +707,11 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	 * @param a first frame
 	 * @param b second frame
 	 * @param joinWeights the weights used in comparison
-	 * @param shift if non-zero, use this value to right-shift the final
-	 * 	 results instead of applying the join weights.
 	 * @param order number of compares
 	 *
 	 * @return the distance between the frames
 	 */
-	int getFrameDistance(int a, int b, 
-		int[] joinWeights, int shift, int order) {
+	public int getFrameDistance(int a, int b, int[] joinWeights,int order) {
 
 	    if (DEBUG) {
 		debug(" gfd  a " + a   + " b " + b + " or " + order);
@@ -720,33 +720,15 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    short[] bv = clunitDB.getMcep().getSample(b).getFrameData();
 	    short[] av = clunitDB.getMcep().getSample(a).getFrameData();
 
-	    /*  This is the sum of the deltas in each dimension,
-	     *  which is of course not actually the distance, but works
-	     *  well enough for our purposes. 
-	     */
-
-	    if (shift == 0) {
-		for (r = 0, i = 0; i < order; i++) {
-		    int diff = av[i] - bv[i];
-		    if (diff < 0) {
-			diff = -diff;
-		    }
-		    r += diff * joinWeights[i] / 65536;
-		}
-	    } else {
-		for (r = 0, i = 0; i < order; i++) {
-		    int diff = av[i] - bv[i];
-		    if (diff < 0) {
-			r -= diff;
-		    } else {
-			r += diff;
-		    }
-		}
-		r = r >> shift;
+	    for (r = 0, i = 0; i < order; i++) {
+		int diff = av[i] - bv[i];
+		r += Math.abs(diff) * joinWeights[i] / 65536;
 	    }
 	    return r;
 	}
+
     }
+
 
     /**
      * Represents a point in the Viterbi path.
@@ -915,7 +897,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
      * 
      * @param s the debug message
      */
-    static private void debug(String s) {
+    static void debug(String s) {
 	if (DEBUG) {
 	    System.out.println("cludebug: " + s);
 	}
@@ -927,9 +909,9 @@ public class ClusterUnitSelector implements UtteranceProcessor {
  * Information returned from getOptimalCoupling.
  */
 class Cost {
-    int cost;
-    int u0Move;
-    int u1Move;
+    int cost = 0;
+    int u0Move = -1;
+    int u1Move = -1;
 }
 
 
@@ -1049,3 +1031,4 @@ class ClusterUnit implements com.sun.speech.freetts.Unit {
 	}
     }
 }
+
