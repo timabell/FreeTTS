@@ -73,7 +73,8 @@ public class MbrolaCaller implements UtteranceProcessor {
             // expressed in percent of segment duration; the second value in
             // each pair is f0, in Hz.
             String targets = segment.getFeatures().getString("mbr_targets");
-            toMbrola.println(name + " " + dur + targets);
+            System.out.println(name + " " + dur + " " + targets);
+            toMbrola.println(name + " " + dur + " " + targets);
             segment = segment.getNext();
         }
 

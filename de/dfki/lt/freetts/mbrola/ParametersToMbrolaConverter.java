@@ -58,11 +58,10 @@ public class ParametersToMbrolaConverter implements UtteranceProcessor {
                 int percentage = ((int) ((pos - prevEnd) * 1000)) * 100 / dur;
                 // f0 as an integer:
                 int f0 = (int) target.getFeatures().getFloat("f0");
-                targetStringBuffer.append(" (");
+                targetStringBuffer.append(" ");
                 targetStringBuffer.append(percentage);
-                targetStringBuffer.append(",");
+                targetStringBuffer.append(" ");
                 targetStringBuffer.append(f0);
-                targetStringBuffer.append(")");
                 target = target.getNext();
             }
             // System.err.println(name + " " + dur + targetStringBuffer);
