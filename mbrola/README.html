@@ -76,6 +76,13 @@
         drwxr-xr-x  7 jim staff    238 Aug 19 16:11 us3
         </pre>
 
+        <p>Note that FreeTTS expects the MBROLA binary to be named "mbrola."
+        As a result, you may need to rename the mbrola binary or create a
+        symbolic link to it.  For example, on Mac OS X, the mbrola binary
+        is named "mbrola-darwin-ppc."  Creating a symbolic link named "mbrola"
+        that points to "mbrola-darwin-ppc" (as shown above) will allow FreeTTS 
+        to find the mbrola binary.
+
         <h3>Enable FreeTTS Support for MBROLA</h3> 
         <p>To enable FreeTTS support for MBROLA, merely copy
         mbrola/mbrola.jar to lib/mbrola.jar.  Then, whenever you run
