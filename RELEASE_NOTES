@@ -9,6 +9,11 @@
 Change history for FreeTTS.
 --------------------------
 
+November 22, 2003 Release 1.2.0
+    - Abandon GNUMake in favor of Ant.
+    - Many documentation updates.
+    - Add capability to set the AudioPlayer on a JSAPI Voice. 
+
 September 3, 2003 Release 1.2.0
     - Modified MBROLA output to work on Solaris and Mac
 
