@@ -1,2 +1,0 @@
-#!/bin/sh
-`dirname $0`/baseFreeTTS2 $@ com.sun.speech.freetts.FreeTTS  -silent -run alice -metrics -file ../data/alice.txt

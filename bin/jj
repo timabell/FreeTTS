@@ -1,2 +1,0 @@
-#!/bin/sh
-`dirname $0`/baseFreeTTS $@ com.sun.speech.freetts.FreeTTS  -silent -run journey -metrics -file ../data/journey.txt

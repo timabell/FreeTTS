@@ -1,6 +1,0 @@
-.*\.bin$
-.*\.idx$
-.*\cmulex.*.txt
-.*\cmu.*.txt
-tests
-com/sun/speech/freetts/en

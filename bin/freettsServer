@@ -1,2 +1,0 @@
-#!/bin/sh
-`dirname $0`/baseFreeTTS -server com.sun.speech.freetts.FreeTTS $@

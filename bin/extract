@@ -1,1 +1,0 @@
-pr -mt $1 $2 |  grep $3 |  sed  's/=/ /g' | awk '{print $2, $4, $2 - $4}'

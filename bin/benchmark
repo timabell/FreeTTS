@@ -1,7 +1,0 @@
-#!/bin/sh
-mkdir -p benchmarks
-date=`date +%b_%d_%H_%M_%S`
-metricsfile=benchmarks/metrics_$date
-./collectMetrics > $metricsfile
-echo "Metrics collected on `hostname`" >> $metricsfile
-# echo $freezefile $metricsfile

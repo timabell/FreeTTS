@@ -1,4 +1,0 @@
-# This is a listing of voices that will be shipped with FreeTTS
-# running 'make clean-voices' will clean out all others
-cmu_us_kal
-cmu_time_awb
