@@ -9,7 +9,7 @@
 Change history for FreeTTS.
 --------------------------
 
-Release 1.1.1
+September 6, 2002 Release 1.1.1
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.
     - Added RELEASE_NOTES to the deploy_doc Make target.
