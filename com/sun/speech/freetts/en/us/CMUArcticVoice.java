@@ -15,6 +15,8 @@ import com.sun.speech.freetts.PathExtractorImpl;
 
 import com.sun.speech.freetts.clunits.ClusterUnitSelector;
 
+import de.dfki.lt.freetts.ClusterUnitNamer;
+
 /**
  * Experimental class that selects units for the
  * <a href="http://festvox.org/cmu_arctic/">CMU ARCTIC voices</a>.
@@ -56,55 +58,32 @@ public class CMUArcticVoice extends CMUClusterUnitVoice {
      *     processor
      */
     public UtteranceProcessor getUnitSelector() throws IOException {
-	return new CMUArcticUnitSelector(getDatabase());
+        ClusterUnitNamer unitNamer = new ClusterUnitNamer() {
+            public void setUnitName(Item seg) {
+                String VOWELS = "aeiou";
+                String cname = null;
+                
+                String segName = seg.getFeatures().getString("name");
+                
+                /*
+                 * If we have a vowel, then the unit name is the segment name
+                 * plus a 0 or 1, depending upon the stress of the parent.
+                 * Otherwise, the unit name is the segment name plus "coda" or
+                 * "onset" based upon the seg_onsetcoda feature processor.
+                 */
+                if (segName.equals("pau")) {
+                    cname = segName;
+                } else if (VOWELS.indexOf(segName.charAt(0)) >= 0) {
+                    cname = segName + seg.findFeature("R:SylStructure.parent.stress");
+                } else {
+                    cname = segName + seg.findFeature("seg_onsetcoda");
+                }
+                
+                seg.getFeatures().setString("clunit_name", cname);
+            }
+            
+        };
+        return new ClusterUnitSelector(getDatabase(), unitNamer);
     }
 }
 
-/**
- * Selects a unit based on the algorithm used by the FestVox ARCTIC
- * voices.
- */
-class CMUArcticUnitSelector extends ClusterUnitSelector {
-    private static final String VOWELS = "aeiou";
-    
-    /**
-     * Constructs an ArcticUnitSelector.
-     *
-     * @param url the URL for the unit database. If the URL path ends
-     *     with a '.bin' it is assumed that the DB is a binary database,
-     *     otherwise, its assumed that its a text database1
-     *
-     * @throws IOException if an error occurs while loading the
-     *     database
-     *
-     */
-    public CMUArcticUnitSelector(URL url) throws IOException {
-        super(url);
-    }
-
-    /**
-     * Sets the cluster unit name given the segment.
-     *
-     * @param seg the segment item that gets the name
-     */
-    protected void setUnitName(Item seg) {
-	String cname = null;
-
-	String segName = seg.getFeatures().getString("name");
-
-        /* If we have a vowel, then the unit name is the segment name
-         * plus a 0 or 1, depending upon the stress of the parent.
-         * Otherwise, the unit name is the segment name plus "coda"
-         * or "onset" based upon the seg_onsetcoda feature processor.
-         */
-        if (segName.equals("pau")) {
-            cname = segName;
-        } else if (VOWELS.indexOf(segName.charAt(0)) >= 0) {
-            cname = segName + seg.findFeature("R:SylStructure.parent.stress");
-        } else {
-            cname = segName + seg.findFeature("seg_onsetcoda");
-        }
-
-	seg.getFeatures().setString("clunit_name", cname);
-    }
-}
