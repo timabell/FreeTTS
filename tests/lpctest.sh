@@ -26,6 +26,6 @@ ${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 	-Dcom.sun.speech.freetts.outputLPC=true \
 	com.sun.speech.freetts.FreeTTS -silent -file $TOP_DIR/wave/08-01-01.wave.text | grep -v "^#" > lpctest.res
 
-diff lpctest.res $TOP_DIR/wave/08-01-01.wave.lpc > lpctest.diff
+diff lpctest.res $TOP_DIR/wave/flite1.1.lpcres.txt > lpctest.diff
 
 wc lpctest.diff | awk '{print $1 " lines in lpctest.diff file. See lpctest.res for the LPC residual file."}'
