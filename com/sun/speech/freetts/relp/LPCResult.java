@@ -61,7 +61,7 @@ public class LPCResult {
     private final static float[] residualToFloatMap = new float[256];
 
     static {
-	for (short i = 0; i < 256; i++) {
+	for (short i = 0; i < residualToFloatMap.length; i++) {
 	    residualToFloatMap[i] = (float) WaveUtils.ulawToShort(i);
 	}
 	residualToFloatMap[128] = (float) WaveUtils.ulawToShort((short) 255);
