@@ -379,6 +379,7 @@ public class TokenToWords implements UtteranceProcessor {
      *
      */
     private void tokenToWords(String tokenVal) {
+
 	FeatureSet tokenFeatures = tokenItem.getFeatures();
 	String itemName = tokenFeatures.getString("name");
 	int tokenLength = tokenVal.length();
@@ -398,6 +399,13 @@ public class TokenToWords implements UtteranceProcessor {
 		
 		/* XVIII */
 		romanToWords(tokenVal);
+		
+	    } else if (matches(illionPattern, tokenVal) &&
+		       matches(usMoneyPattern, 
+			       (String) tokenItem.findFeature("p.name"))) {
+		/* $ X -illion */
+		wordRelation.addWord(tokenVal);
+		wordRelation.addWord("dollars");	    
 		
 	    } else if (matches(drStPattern, tokenVal)) {
 		
@@ -448,7 +456,7 @@ public class TokenToWords implements UtteranceProcessor {
 	    
 	    /* U.S.A. */
 	    // remove all dots
-	    String aaa = Utilities.deleteChar(tokenVal, '.');
+	    String aaa = Utilities.deleteChar(tokenVal, '.'); 
 	    NumberExpander.expandLetters(aaa, wordRelation);
 	    
 	} else if (matches(commaIntPattern, tokenVal)) {
@@ -521,14 +529,6 @@ public class TokenToWords implements UtteranceProcessor {
 	    /* explicit ordinals */
 	    String aaa = tokenVal.substring(0, tokenLength - 2);
 	    NumberExpander.expandOrdinal(aaa, wordRelation);
-
-	} else if (matches(illionPattern, tokenVal) &&
-		   matches(usMoneyPattern, 
-			   (String) tokenItem.findFeature("p.name"))) {
-
-	    /* $ X -illion */
-	    wordRelation.addWord(tokenVal);
-	    wordRelation.addWord("dollars");	    
 
 	} else if (matches(usMoneyPattern, tokenVal)) {
 

@@ -50,7 +50,7 @@ public class USEnglish {
     /** default digits regular expression pattern */
     public static final String RX_DEFAULT_US_EN_DIGITS = "[0-9][0-9]*";
     /** default dotted abbreviation  regular expression pattern */
-    public static final String RX_DEFAULT_US_EN_DOTTED_ABBREV = "([A-Za-z]\\.)+";
+    public static final String RX_DEFAULT_US_EN_DOTTED_ABBREV = "([A-Za-z]\\.)*[A-Za-z]";
     /** default ordinal number regular expression pattern */
     public static final String RX_DEFAULT_US_EN_ORDINAL_NUMBER =
 	"[0-9][0-9,]*(th|TH|st|ST|nd|ND|rd|RD)";

@@ -436,7 +436,7 @@ public class NumberExpander {
 	    wordRelation.addWord("point");
 	    String afterDot = numberString.substring(position + 1);
 	    if (afterDot.length() > 0) {
-		expandReal(afterDot, wordRelation);
+		expandDigits(afterDot, wordRelation);
 	    }
 	} else {
 	    // everything else
