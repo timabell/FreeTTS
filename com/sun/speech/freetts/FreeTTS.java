@@ -54,12 +54,7 @@ public class FreeTTS {
      */
     public FreeTTS() {
         VoiceManager voiceManager = VoiceManager.getInstance();
-        /* TODO
-        voiceManager.getVoice("kevin");
-	this(new CMUDiphoneVoice(true));
-        this.voice.getFeatures().setString
-            (Voice.DATABASE_NAME, "cmu_kal/diphone_units16.bin");
-            */
+        voiceManager.getVoice("kevin16");
     }
 
     /**
@@ -462,8 +457,8 @@ public class FreeTTS {
             }
         }
 
-        if (voice == null) { // default Voice is kevin
-            voice = voiceManager.getVoice("kevin");
+        if (voice == null) { // default Voice is kevin16
+            voice = voiceManager.getVoice("kevin16");
         }
 
         if (voice == null) {

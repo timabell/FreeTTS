@@ -967,7 +967,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * Shuts down the voice processing.
      */
     public void deallocate() {
-        //TODO: does this really deallocate anything?
+        //[[[TODO: does this really deallocate anything?]]]
 	setLoaded(false);
 	if (!externalOutputQueue) {
 	    outputQueue.post(null);

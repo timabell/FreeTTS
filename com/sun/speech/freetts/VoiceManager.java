@@ -1,5 +1,5 @@
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -41,7 +41,7 @@ public class VoiceManager {
             new VoiceManager();
 
     private VoiceManager() {
-        /* TODO: TEST code for experimenting with the dynamic
+        /* [[[TODO: TEST code for experimenting with the dynamic]]]
          * class-loader
         try {
             //TEST: load all jars.
@@ -86,17 +86,37 @@ public class VoiceManager {
         
     }
 
+    /**
+     * Gets the instance of the VoiceManager
+     *
+     * @return a VoiceManager
+     */
     public static VoiceManager getInstance() {
         return INSTANCE;
     }
 
     /**
      * Provide an array of all voices available to FreeTTS.
-     * [[[TODO: voice loading order]]]
+     * First, the file internal_voices.txt is looked for in the
+     * same directory as VoiceManager.class.  If the file does not
+     * exist, the VoiceManager moves on.  Next, it looks for
+     * voices.txt in the same directory as freetts.jar.  If the file
+     * does not exist, the VoiceManager moves on.  Next, if the
+     * property "freetts.voicesfile" is defined, then that file is
+     * read in.  If the property is defined and the file does not
+     * exist, then an error is raised.
+     *
+     * Every voices file that is read in contains a list of
+     * VoiceDirectory class names.  The VoiceManager instantiates each
+     * and calls getVoices() on each.
+     *
+     * [[[TODO: dynamic loading]]]
      *
      * @return the array of new instances of all available voices
      */
     public Voice[] getVoices() {
+        //[[[TODO: may want to double-check to not load the same
+        //voicedirectory more than once]]]
         try {
             Vector voiceVector = new Vector();
 
@@ -209,7 +229,7 @@ public class VoiceManager {
      * unable to determin.  (For example this class does not reside
      * inside a jar file).
      */
-    protected String getBaseDirectory() {
+    private String getBaseDirectory() {
         String name = this.getClass().getName();
         int lastdot = name.lastIndexOf('.');
         if (lastdot != -1) {
@@ -241,7 +261,7 @@ public class VoiceManager {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    protected String[] getVoiceDirectoryNamesFromFile(String fileName) 
+    private String[] getVoiceDirectoryNamesFromFile(String fileName) 
             throws FileNotFoundException, IOException {
         InputStream is = new FileInputStream(fileName);
         if (is == null) {
@@ -260,7 +280,7 @@ public class VoiceManager {
      * @return an array of the names of the VoiceDirectory subclasses
      * @throws IOException
      */
-    protected String[] getVoiceDirectoryNamesFromInputStream(InputStream is) 
+    private String[] getVoiceDirectoryNamesFromInputStream(InputStream is) 
             throws IOException {
         Vector nameVector = new Vector();
         BufferedReader reader = new
@@ -285,7 +305,7 @@ public class VoiceManager {
      * @return an array of new Voice instances of the voices provided
      * by the voice directories listed in the voices file
      */
-    protected Voice[] getVoicesFromFile(String fileName) 
+    private Voice[] getVoicesFromFile(String fileName) 
             throws FileNotFoundException, IOException {
         try {
             Vector voiceVector = new Vector();
@@ -315,7 +335,7 @@ public class VoiceManager {
      * @param src the source array
      * @param dest the destination Vector
      */
-    protected void insertInto(Object[] src, Vector dest) {
+    private void insertInto(Object[] src, Vector dest) {
         for (int i = 0; i < src.length; i++) {
             dest.add(src[i]);
         }

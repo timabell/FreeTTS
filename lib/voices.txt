@@ -11,4 +11,3 @@ com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory
 
 # Uncomment to allow MBROLA voices:
 #de.dfki.lt.freetts.en.us.MbrolaVoiceDirectory
-com.sun.speech.freetts.en.us.sun_time_paul.PaulVoiceDirectory
