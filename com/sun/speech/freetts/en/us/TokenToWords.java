@@ -337,16 +337,6 @@ public class TokenToWords implements UtteranceProcessor {
     }
 
 
-    private static boolean matchesAlphabetPattern(String tokenVal) {
-	for (int i = 0; i < tokenVal.length(); i++) {
-	    if (!isLetter(tokenVal.charAt(i))) {
-		return false;
-	    }
-	}
-	return true;
-    }
-
-
     /**
      * Returns true if the given token matches part of a phone number
      *
