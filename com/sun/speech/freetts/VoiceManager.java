@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.File;
 
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.MalformedURLException;
@@ -428,7 +429,7 @@ public class VoiceManager {
             throws FileNotFoundException {
         try {
             UniqueVector voiceJarURLs = new UniqueVector();
-            File dir = new File(dirName);
+            File dir = new File(new URI("file://" + dirName));
             if (!dir.isDirectory()) {
                 throw new FileNotFoundException("File is not a directory: "
                         + dirName);
@@ -454,6 +455,8 @@ public class VoiceManager {
                 }
             }
             return voiceJarURLs;
+        } catch (java.net.URISyntaxException e) {
+            throw new Error("Error reading directory name '" + dirName + "'.");
         } catch (MalformedURLException e) {
             throw new Error("Error reading jars from directory "
                     + dirName + ". ");
