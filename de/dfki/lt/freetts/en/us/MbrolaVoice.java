@@ -42,7 +42,10 @@ public class MbrolaVoice extends CMUVoice {
     private String databaseDirectory; // where the voice database is
     private String database;          // name of the voice database
 
-
+    private static final String MRPA_TO_SAMPA_RENAME_LIST =
+        "V ah i iy I ih U uh { ae @ ax r= er A aa O ao u uw E eh EI ey AI ay OI oy aU aw @U ow j y h hh N ng S sh T th Z zh D dh tS ch dZ jh _ pau";
+    
+    
     /**
      * Creates an MbrolaVoice.
      *
@@ -98,19 +101,20 @@ public class MbrolaVoice extends CMUVoice {
      * Returns the command line that invokes the MBROLA executable.
      * The command will be in the form of:
      *
-     * <pre> {mbrolaExecutable} -e -I {mbrolaRenameTable} {mbrolaVoiceDB} 
+     * <pre> {mbrolaExecutable} -e -R {mbrolaRenameList} {mbrolaVoiceDB} 
      * - -.raw </pre>
      */
-    protected String getMbrolaCommand() {
+    protected String[] getMbrolaCommand() {
 
         // Construct the mbrola command in such a way that
         // mbrola reads from stdin and writes raw, headerless audio data
         // to stdout; translates CMU us radio to sampa phonetic symbols;
         // and only complains, but does not abort, when encountering an
         // unknown diphone:
-        String cmd = getMbrolaBinary() + " -e -I " + getRenameTable() + " " + 
-            getDatabase() + " - -.raw";
-        
+        String[] cmd = 
+            {getMbrolaBinary(), "-e", "-R \"" + getRenameList() + "\"", 
+             getDatabase(), "-", "-.raw"};
+        // System.out.println(cmd);
         return cmd;
     }
 
@@ -138,9 +142,8 @@ public class MbrolaVoice extends CMUVoice {
      *
      * @return the absolute file name of the rename table
      */
-    public String getRenameTable() {
-        return getMbrolaBase() + File.separator + "us1" + 
-            File.separator + "us1mrpa";
+    public String getRenameList() {
+        return MRPA_TO_SAMPA_RENAME_LIST;
     }
 
     /**
