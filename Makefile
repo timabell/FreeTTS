@@ -151,6 +151,9 @@ clean::
 	rm -f $(DEPLOY_DOCS_TARGET) 
 	rm -rf $(WSC_STAGING_AREA)
 
+clean-voices: clean
+	chmod u+x ${TOP}/bin/clean-voices.sh
+	${TOP}/bin/clean-voices.sh ${EN_US_VOICES}
 
 ####################################################
 # Creates the freetts tarball ready for deploying
