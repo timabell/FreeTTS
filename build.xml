@@ -1032,4 +1032,23 @@ environment to use JSAPI.
 	<delete dir="${deploy_dir}"/>
     </target>
 
+    <target name="debug" 
+	    depends="all" 
+	    if="netbeans.home"
+	    description="Debug Project">
+        <java fork="true" classname="FreeTTSHelloWorld">
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xnoagent"/>
+            <jvmarg value="-Djava.compiler=none"/>
+            <jvmarg value="-Dfreetts.voices=com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y"/>
+            <classpath>
+                <pathelement path="${src_dir}"/>
+                <pathelement path="bld/demo_classes/freetts/HelloWorld"/>
+                <pathelement path="${classes_dir}"/>
+                <pathelement location="lib/jsapi.jar"/>
+            </classpath>
+        </java>
+    </target>
+
 </project>
