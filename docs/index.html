@@ -150,7 +150,9 @@ Repository</a>
 specification?</a></li>
 <li><a href="#import_voice_data">How do I import new voice data from Festival or Flite?</a></li>
 <li><a href="#linux_sound">Why do the demos keep crashing when I run on Linux?</a></li>
-<li><a href="#no_jsapi">Why do I get a NoClassDefFoundError when I try to run a demo?</li>
+<li><a href="#no_jsapi">Why do I get a NoClassDefFoundError when I try
+to run a demo?</a></li>
+<li><a href="#old_java">Why do I get an UnsupportedClassVersionError  when I try to run a demo?</a></li>
 <li><a href="#where_is_recognizer">Where is the speech recognizer?</a></li>
 </ul>
 
@@ -812,9 +814,27 @@ these Bug Parade reports for more details:
 <p>
 <li><a name="no_jsapi"><b>Why do I get a NoClassDefFoundError when I try to run a
 demo?</b></a></li>
+<p>
 You probably need to install the JSAPI 1.0 specification implementation. See 
 <a href="#prerequisites">Prerequisites for building and running FreeTTS</a>
 for more details.
+
+<p>
+<li><a name="old_java"><b>Why do I get an
+UnsupportedClassVersionError  when I try to run a demo?</b></a></li>
+<p>
+You probably are trying to run with an older (pre jdk1.4 beta3)
+version of the java runtime. To verify this type:
+<pre>
+% java -version
+</pre>
+
+You should see something like: java version "1.4.0-beta3". If you see
+something older that this, such as <code> java version "1.2.2" <code>
+then you are indeed running with an older version of the java runtime.
+See <a href="#prerequisites">Prerequisites for building and running
+FreeTTS</a>
+for more details on what is needed to run FreeTTS.
 
 <p>
 <li><a name="where_is_recognizer"><b>Where is the speech recognizer?</b></a></li>
