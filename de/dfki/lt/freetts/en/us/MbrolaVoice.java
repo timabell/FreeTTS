@@ -112,7 +112,7 @@ public class MbrolaVoice extends CMUVoice {
         // and only complains, but does not abort, when encountering an
         // unknown diphone:
         String[] cmd = 
-            {getMbrolaBinary(), "-e", "-R \"" + getRenameList() + "\"", 
+            {getMbrolaBinary(), "-e", "-R", "\"" + getRenameList() + "\"", 
              getDatabase(), "-", "-.raw"};
         // System.out.println(cmd);
         return cmd;
