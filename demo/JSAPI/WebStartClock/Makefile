@@ -76,18 +76,7 @@ run: all
 # Builds and signs the jars
 ########################################
 jars:
-	rm -f wsc.jar
-	rm -f jsapi.jar
-	rm -f clockKey
-	(cd $(TOP); \
-	$(MAKE) all; \
-	mkdir $(WSC_STAGING_AREA); \
-	cp -r $(WEBSTARTCLOCK_CLASSES) $(WSC_STAGING_AREA); \
-	rm -rf $(WEBSTARTCLOCK_EXCLUDES); \
-	(cd $(WSC_STAGING_AREA); $(JAR) cvf wsc.jar *); \
-	mv $(WSC_STAGING_AREA)/wsc.jar $(PWD); \
-	rm -rf $(WSC_STAGING_AREA); )
-	chmod a+x wsc.jar
+	$(MAKE) unsignedjars
 	$(MAKE) key
 	$(MAKE) signjars
 
