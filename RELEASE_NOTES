@@ -12,6 +12,13 @@ Change history for FreeTTS.
 XXXX,XX, 2004 Release 1.2XXX
     - Added importing tools specifically for CMU ARCTIC Voices.
     - Fixed problem in mbrola phonem remapping.
+    - In the Voice class, removed the call to AudioPlayer.drain() 
+      if the audio is cancelled, since it will block until the next audio
+      is available.
+    - Fixed problem in FreeTTSSynthesizer where in some cases waiting 
+      threads are not notified when a queue item is cancelled.
+    - Made the JavaStreamingAudioPlayer.cancel() method unsynchronized
+      so that audio output can be stopped immediately.
 
 
 June 15, 2004 Release 1.2beta2
