@@ -32,7 +32,8 @@ WEBSTARTCLOCK_CLASSES = \
 	classes/Clock*.class \
 	classes/JSAPIClock*.class \
 	classes/TimeUtils.class \
-	classes/com
+	classes/com \
+	classes/de
 
 WEBSTARTCLOCK_EXCLUDES = \
 	$(WSC_STAGING_AREA)/com/sun/speech/freetts/diphone \
@@ -89,6 +90,24 @@ jars:
 	chmod a+x wsc.jar
 	$(MAKE) key
 	$(MAKE) signjars
+
+########################################
+# Builds an unsigned jar
+########################################
+
+unsignedjars:
+	rm -f wsc.jar
+	rm -f jsapi.jar
+	rm -f clockKey
+	(cd $(TOP); \
+	$(MAKE) all; \
+	mkdir $(WSC_STAGING_AREA); \
+	cp -r $(WEBSTARTCLOCK_CLASSES) $(WSC_STAGING_AREA); \
+	rm -rf $(WEBSTARTCLOCK_EXCLUDES); \
+	(cd $(WSC_STAGING_AREA); $(JAR) cvf wsc.jar *); \
+	mv $(WSC_STAGING_AREA)/wsc.jar $(PWD); \
+	rm -rf $(WSC_STAGING_AREA); )
+	chmod a+x wsc.jar
 
 
 ########################################
