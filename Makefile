@@ -175,7 +175,7 @@ emacspeak-server-jar:
 deploy_docs:
 	rm -f $(DEPLOY_DOCS_TARGET) 
 	rm -rf $(DOC_STAGING_AREA)
-	$(MAKE) emacsdocs
+	$(MAKE) javadocs
 	(cd docs; $(MAKE) deploy)
 	mkdir $(DOC_STAGING_AREA)
 	$(MAKE) webstartclock
@@ -189,7 +189,7 @@ deploy_docs:
 
 push_docs_test:
 	sscp $(DEPLOY_DOCS_TARGET)
-	sshh tar xzfC $(DEPLOY_DOCS_TARGET) $(PUSH_DEST_TEST_DOC)
+	sshh tar xzfC $(DEPLOY_DOCS_TARGET) $(PUSH_DEST_DOC_TEST)
 
 push_docs:
 	sscp $(DEPLOY_DOCS_TARGET)
