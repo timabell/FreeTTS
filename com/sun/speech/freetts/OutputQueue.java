@@ -1,6 +1,6 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
- * Portions Copyright 1999-2001 Language Technologies Institute, 
+ * Portions Copyright 2004 Sun Microsystems, Inc.
+ * Portions Copyright 1999-2004 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
  * 
@@ -102,6 +102,13 @@ public class OutputQueue {
 	utterance = (Utterance) list.removeFirst();
 	notify();
 	return utterance;
+    }
+
+    /**
+     * Removes all items from this OutputQueue.
+     */
+    public synchronized void removeAll() {
+        list.clear();
     }
 }
 
