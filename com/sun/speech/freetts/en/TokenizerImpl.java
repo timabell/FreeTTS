@@ -183,19 +183,19 @@ public class TokenizerImpl implements Tokenizer {
 	token = new Token();
 	
 	// Skip whitespace
-	token.setWhitespace(getTokenSubpart(whitespaceSymbols));
+	token.setWhitespace(getTokenOfCharClass(whitespaceSymbols));
 	
 	// quoted strings currently ignored
 	
 	// get prepunctuation
-	token.setPrepunctuation(getTokenSubpart(prepunctuationSymbols));
+	token.setPrepunctuation(getTokenOfCharClass(prepunctuationSymbols));
 	
 	// get the symbol itself
 	if (singleCharSymbols.indexOf(currentChar) != -1) {
 	    token.setWord(String.valueOf((char) currentChar));
 	    getNextChar();
 	} else {
-	    token.setWord(getTokenSubpart2(whitespaceSymbols));
+	    token.setWord(getTokenNotOfCharClass(whitespaceSymbols));
 	}
 
 	token.setPosition(currentPosition);
@@ -272,8 +272,8 @@ public class TokenizerImpl implements Tokenizer {
      *          in the string charClass
      *
      */
-    private String getTokenSubpart(String charClass) {
-	return getTokenSubpartMeat(charClass, true);
+    private String getTokenOfCharClass(String charClass) {
+	return getTokenByCharClass(charClass, true);
     }
 
     /**
@@ -289,13 +289,13 @@ public class TokenizerImpl implements Tokenizer {
      *          it encounters characters in endingCharClass
      *
      */
-    private String getTokenSubpart2(String endingCharClass) {
-	return getTokenSubpartMeat(endingCharClass, false);
+    private String getTokenNotOfCharClass(String endingCharClass) {
+	return getTokenByCharClass(endingCharClass, false);
     }
     
     /**
-     * Provides a `compressed' method from getTokenSubpart() and 
-     * getTokenSubpart2().
+     * Provides a `compressed' method from getTokenOfCharClass() and 
+     * getTokenNotOfCharClass().
      * If parameter containThisCharClass is <code>true</code>, 
      * then a string from the
      * current position to the last character in charClass is returned.
@@ -311,8 +311,8 @@ public class TokenizerImpl implements Tokenizer {
      * @return  a string of characters from the current position until
      *          it encounters characters in endingCharClass
      */
-    private String getTokenSubpartMeat(String charClass, 
-	    			boolean containThisCharClass) {	
+    private String getTokenByCharClass(String charClass, 
+                                       boolean containThisCharClass) {	
 	StringBuffer buffer = new StringBuffer();
 	
 	// if we want the returned string to contain chars in charClass, then
