@@ -19,6 +19,7 @@ import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**

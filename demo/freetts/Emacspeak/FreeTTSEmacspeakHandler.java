@@ -8,8 +8,8 @@
 
 import com.sun.speech.freetts.Voice;
 
+import com.sun.speech.freetts.util.Utilities;
 import java.net.Socket;
-
 import java.util.Vector;
 
 
@@ -31,7 +31,7 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
 	setSocket(socket);
 	this.speakCommandHandler = new SpeakCommandHandler(voice);
 	this.speakCommandHandler.start();
-	setDebug(Boolean.getBoolean("debug"));
+	setDebug(Utilities.getBoolean("debug"));
     }
 
 

@@ -8,6 +8,7 @@
 package com.sun.speech.freetts.audio;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -55,9 +56,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Constructs a default JavaClipAudioPlayer 
      */
     public JavaClipAudioPlayer() {
-	debug = Boolean.getBoolean
+	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-	closeDelay = Long.getLong
+	closeDelay = Utilities.getLong
 	    ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
 	     150L).longValue();
 	setPaused(false);

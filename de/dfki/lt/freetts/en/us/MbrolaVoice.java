@@ -10,6 +10,7 @@
 
 package de.dfki.lt.freetts.en.us;
 
+import com.sun.speech.freetts.util.Utilities;
 import java.io.File;
 import java.net.URL;
 
@@ -97,7 +98,7 @@ public class MbrolaVoice extends CMUVoice {
      * @return the absolute name of the MBROLA directory
      */
     public String getMbrolaBase() {
-        return System.getProperty("mbrola.base");
+        return Utilities.getProperty("mbrola.base", ".");
     }
 
     /**

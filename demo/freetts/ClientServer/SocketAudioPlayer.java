@@ -7,6 +7,7 @@
  */
 
 import com.sun.speech.freetts.audio.AudioPlayer;
+import com.sun.speech.freetts.util.Utilities;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class SocketAudioPlayer implements AudioPlayer {
 	try {
 	    this.dataOutputStream = new DataOutputStream
 		(socket.getOutputStream());
-            debug = Boolean.getBoolean("debug");
+            debug = Utilities.getBoolean("debug");
 	} catch (IOException ioe) {
 	    ioe.printStackTrace();
 	}

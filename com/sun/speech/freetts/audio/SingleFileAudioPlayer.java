@@ -8,6 +8,7 @@
 package com.sun.speech.freetts.audio;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFileFormat.Type;
@@ -50,7 +51,7 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	this.baseName = baseName + "." + type.getExtension();
 	this.outputType = type;
 
-	debug = Boolean.getBoolean
+	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
 	outputList = new Vector();
     }

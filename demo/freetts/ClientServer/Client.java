@@ -9,6 +9,7 @@
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
+import com.sun.speech.freetts.util.Utilities;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -28,19 +29,19 @@ import javax.sound.sampled.AudioFormat;
  */
 public class Client {
 
-    private String serverAddress = System.getProperty("server", "localhost");
-    private int serverPort = Integer.getInteger("port", 5555).intValue();
+    private String serverAddress = Utilities.getProperty("server", "localhost");
+    private int serverPort = Utilities.getInteger("port", 5555).intValue();
 
     private static final int AUDIO_BUFFER_SIZE = 256;
 
-    private boolean debug = Boolean.getBoolean("debug");
+    private boolean debug = Utilities.getBoolean("debug");
 
     private BufferedReader systemInReader;  // for reading user input text
     private BufferedReader reader;
     private DataInputStream dataReader;     // for reading raw bytes
     private PrintWriter writer;
     private AudioPlayer audioPlayer;
-    private int sampleRate = Integer.getInteger("sampleRate", 16000).intValue();
+    private int sampleRate = Utilities.getInteger("sampleRate", 16000).intValue();
     private int sampleSize = 16;            // in bits
     private byte[] socketBuffer = new byte[AUDIO_BUFFER_SIZE];
 

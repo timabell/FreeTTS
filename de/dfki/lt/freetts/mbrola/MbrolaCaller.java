@@ -14,6 +14,7 @@ import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.util.Utilities;
 
 import java.io.*;
 import java.util.*;
@@ -34,7 +35,7 @@ public class MbrolaCaller implements UtteranceProcessor {
      */
     public MbrolaCaller(String cmd) {
         this.cmd = cmd;
-	closeDelay = Long.getLong
+	closeDelay = Utilities.getLong
 	    ("de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay",
 	     100L).longValue();
     }

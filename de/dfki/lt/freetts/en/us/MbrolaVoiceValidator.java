@@ -12,6 +12,7 @@ package de.dfki.lt.freetts.en.us;
 
 import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.ValidationException;
+import com.sun.speech.freetts.util.Utilities;
 
 import java.io.File;
 
@@ -42,7 +43,7 @@ public class MbrolaVoiceValidator implements Validator {
      * @throws ValidationException if this MbrolaVoice is invalid
      */
     public void validate() throws ValidationException {
-        String mbrolaBase = System.getProperty("mbrola.base");
+        String mbrolaBase = Utilities.getProperty("mbrola.base", null);
         File mbrolaBinary = new File(mbrolaVoice.getMbrolaBinary());
         File mbrolaRenameTable = new File(mbrolaVoice.getRenameTable());
         File mbrolaVoiceDB = new File(mbrolaVoice.getDatabase());

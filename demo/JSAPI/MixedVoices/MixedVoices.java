@@ -20,6 +20,7 @@ import javax.speech.synthesis.Voice;
 import javax.speech.synthesis.Speakable;
 import javax.speech.synthesis.SpeakableAdapter;
 import javax.speech.synthesis.SpeakableEvent;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Sample program that demonstrates how multiple voices

@@ -21,6 +21,7 @@ import javax.speech.Engine;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.SynthesizerProperties;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Simple program showing how to use the Limited Domain (time)

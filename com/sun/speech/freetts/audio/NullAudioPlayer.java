@@ -9,6 +9,7 @@ package com.sun.speech.freetts.audio;
 
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 import java.io.OutputStream;
 import java.io.IOException;
 import javax.sound.sampled.AudioFormat;
@@ -24,7 +25,7 @@ public class NullAudioPlayer implements AudioPlayer {
     private float volume = 1.0f;
     private AudioFormat audioFormat;
     private final static boolean TRACE 
-	= Boolean.getBoolean("com.sun.speech.freetts.audio.trace");
+	= Utilities.getBoolean("com.sun.speech.freetts.audio.trace");
     private boolean firstSound = true;
     private int totalBytes = 0;
     private int totalWrites = 0;

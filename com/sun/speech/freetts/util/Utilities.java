@@ -177,6 +177,9 @@ public class Utilities {
      *
      * @param defaultValue the default value to use if the property
      * cannot be found.
+     *
+     * @return the string value for the property, or the defaultValue if 
+     *  the property cannot be found
      */
     public static String getProperty(String name, String defaultValue) {
 	String value;
@@ -184,6 +187,70 @@ public class Utilities {
 	    value = System.getProperty(name, defaultValue);
 	} catch (SecurityException se) {
 	    value = defaultValue;
+	}
+	return value;
+    }
+
+    /**
+     * Gets a boolean property by name. 
+     *
+     * @param name the name of the property
+     *
+     * @return  If there is no property with the specified name, or 
+     *  if the specified name is empty or null, then false is returned. 
+     *  otherwise the boolean value of the property is returned
+     *
+     */
+    public static boolean getBoolean(String name) {
+	boolean value;
+	try {
+	    value = Boolean.getBoolean(name);
+	} catch (SecurityException se) {
+	    value = false;
+	}
+	return value;
+    }
+
+    /**
+     * Gets a long property by name. 
+     *
+     * @param name the name of the property
+     *
+     * @param defaultValue the default value to use if the property
+     * cannot be found.
+     *
+     * @return the long value for the property, or the defaultValue if 
+     *  the property cannot be found
+     *
+     */
+    public static Long getLong(String name, long defaultValue) {
+	Long value;
+	try {
+	    value = Long.getLong(name, defaultValue);
+	} catch (SecurityException se) {
+	    value = new Long(defaultValue);
+	}
+	return value;
+    }
+
+    /**
+     * Gets an Integer property by name. 
+     *
+     * @param name the name of the property
+     *
+     * @param defaultValue the default value to use if the property
+     * cannot be found.
+     *
+     * @return the Integer value for the property, or the defaultValue if 
+     *  the property cannot be found
+     *
+     */
+    public static Integer getInteger(String name, int defaultValue) {
+	Integer value;
+	try {
+	    value = Integer.getInteger(name, defaultValue);
+	} catch (SecurityException se) {
+	    value = new Integer(defaultValue);
 	}
 	return value;
     }

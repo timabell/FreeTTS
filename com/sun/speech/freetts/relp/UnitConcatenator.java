@@ -18,6 +18,7 @@ import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Concatenates the Units in the given Utterance to the target_lpc
@@ -33,7 +34,7 @@ public class UnitConcatenator implements UtteranceProcessor {
     static private final int ADD_RESIDUAL = 3;
     public final static String PROP_OUTPUT_LPC = 
 	"com.sun.speech.freetts.outputLPC";
-    private boolean outputLPC = Boolean.getBoolean(PROP_OUTPUT_LPC);
+    private boolean outputLPC = Utilities.getBoolean(PROP_OUTPUT_LPC);
 
 
     /**

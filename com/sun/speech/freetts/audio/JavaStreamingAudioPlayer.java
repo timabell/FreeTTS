@@ -8,6 +8,7 @@
 package com.sun.speech.freetts.audio;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.SourceDataLine;
@@ -85,13 +86,13 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private boolean firstSample = true;
     private long cancelDelay;
 
-    private final static long DRAIN_DELAY = Long.getLong
+    private final static long DRAIN_DELAY = Utilities.getLong
       ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 150L).longValue();
 
     /**
      * controls the buffering to java audio
      */
-    private final static int AUDIO_BUFFER_SIZE = Integer.getInteger(
+    private final static int AUDIO_BUFFER_SIZE = Utilities.getInteger(
      "com.sun.speech.freetts.audio.AudioPlayer.bufferSize", 8192).intValue();
        
 
@@ -99,9 +100,9 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * Constructs a default JavaStreamingAudioPlayer 
      */
     public JavaStreamingAudioPlayer() {
-	debug = Boolean.getBoolean
+	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-        cancelDelay = Long.getLong
+        cancelDelay = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.cancelDelay",
              0L).longValue();
         line = null;

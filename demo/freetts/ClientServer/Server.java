@@ -12,6 +12,7 @@ import com.sun.speech.freetts.en.us.CMULexicon;
 
 import de.dfki.lt.freetts.en.us.MbrolaVoice;
 import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
+import com.sun.speech.freetts.util.Utilities;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -35,13 +36,13 @@ public class Server extends TTSServer {
 
     // 8k Voice
     private Voice voice8k;
-    private String voice8kClassName = System.getProperty
+    private String voice8kClassName = Utilities.getProperty
 	("voice8kClassName", "com.sun.speech.freetts.en.us.CMUDiphoneVoice");
     private String voice8kDatabaseName = "cmu_kal/diphone_units.bin";
 
     // 16k Voice
     private Voice voice16k;
-    private String voice16kClassName = System.getProperty
+    private String voice16kClassName = Utilities.getProperty
 	("voice16kClassName", "com.sun.speech.freetts.en.us.CMUDiphoneVoice");
     private String voice16kDatabaseName = "cmu_kal/diphone_units16.bin";
 
@@ -51,7 +52,7 @@ public class Server extends TTSServer {
      * by default.
      */
     public Server() {
-	port = Integer.getInteger("port", 5555).intValue();
+	port = Utilities.getInteger("port", 5555).intValue();
 	try {
 	    voice8k = loadVoice(voice8kClassName, voice8kDatabaseName);
 	    voice16k = loadVoice(voice16kClassName, voice16kDatabaseName);
@@ -166,7 +167,7 @@ class SocketTTSHandler implements Runnable {
     private static final int INVALID_SAMPLE_RATE = 1;
 
     // metrics variables
-    private boolean metrics = Boolean.getBoolean("metrics");
+    private boolean metrics = Utilities.getBoolean("metrics");
     private long requestReceivedTime;
     private long requestSpeakTime;
 

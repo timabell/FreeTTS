@@ -9,6 +9,7 @@
 import java.net.Socket;
 
 import javax.speech.synthesis.Synthesizer;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -29,7 +30,7 @@ public class JSAPIEmacspeakHandler extends EmacspeakProtocolHandler {
     public JSAPIEmacspeakHandler(Socket socket, Synthesizer synthesizer) {
 	setSocket(socket);
 	this.synthesizer = synthesizer;
-        setDebug(Boolean.getBoolean("debug"));
+        setDebug(Utilities.getBoolean("debug"));
     }
 
 

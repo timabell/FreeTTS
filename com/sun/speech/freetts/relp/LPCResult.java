@@ -21,6 +21,7 @@ import javax.sound.sampled.AudioFormat;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.util.WaveUtils;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -52,7 +53,7 @@ public class LPCResult {
     private float lpcRange;
 
     private final static int MAX_SAMPLE_SIZE = 
-	Integer.getInteger("com.sun.speech.freetts.LpcResult.maxSamples",
+	Utilities.getInteger("com.sun.speech.freetts.LpcResult.maxSamples",
 		1024).intValue();
 
     /**
