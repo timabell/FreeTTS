@@ -120,8 +120,8 @@ public class EngineMonitor {
      */
     public Component getStatePanel() {
         if (statePanel == null) {
-            statePanel = new JPanel();
-            statePanel.setLayout(new GridLayout(1,2));
+	    JPanel newStatePanel = new JPanel();
+            newStatePanel.setLayout(new GridLayout(1,2));
             
             JPanel engineStatePanel = new JPanel();
             engineStatePanel.setLayout(new GridLayout(4,2));
@@ -142,7 +142,8 @@ public class EngineMonitor {
             engineStatePanel.add(deallocatingResourcesLabel);
             engineStatePanel.add(new JLabel(""));
             engineStatePanel.add(allocatingResourcesLabel);
-            statePanel.add(engineStatePanel);
+            newStatePanel.add(engineStatePanel);
+	    statePanel = newStatePanel;
         }
         return statePanel;
     }

@@ -14,6 +14,9 @@ Release 1.1.1
       the proper spot.
     - Added RELEASE_NOTES to the deploy_doc Make target.
     - Fixed all run.bat files to run properly under Win32 systems.
+    - Fixed race condition in com.sun.speech.engine.EngineMontior that
+      would cause a NullPointerException in the Player demo on
+      occasion.
 
 January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page
