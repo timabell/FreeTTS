@@ -9,6 +9,7 @@ package com.sun.speech.freetts.jsapi;
 
 import com.sun.speech.engine.synthesis.BaseVoice;
 import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.Validator;
 
 /**
  * Extends the BaseVoice class to encapsulate FreeTTSSynthesizer specific data.
@@ -18,6 +19,7 @@ public class FreeTTSVoice extends BaseVoice {
     private String freettsVoiceClassName;
     private Voice freettsVoice;
     private String dbName = null;
+    private Validator validator;
 
     /**
      * Constructs a FreeTTSVoice
@@ -36,20 +38,36 @@ public class FreeTTSVoice extends BaseVoice {
      * @param dbName the name of the database associated with this voice
      */
     public FreeTTSVoice(String id,
-                     String name,
-                     int gender,
-                     int age,
-                     String style,
-                     float pitch,
-                     float pitchRange,
-                     float speakingRate,
-                     float volume,
-		     String className,
-		     String dbName) {
+                        String name,
+                        int gender,
+                        int age,
+                        String style,
+                        float pitch,
+                        float pitchRange,
+                        float speakingRate,
+                        float volume,
+                        String className,
+                        String dbName,
+                        String validatorName) {
         super(id, name, gender, age, style, pitch, pitchRange,
 		speakingRate, volume);   
 	this.freettsVoiceClassName = className;
 	this.dbName = dbName;
+        
+        if (validatorName != null) {
+            try {
+                Class clazz = Class.forName(validatorName);
+                validator = (Validator) clazz.newInstance();
+            } catch (ClassNotFoundException cnfe) {
+                cnfe.printStackTrace();
+            } catch (IllegalAccessException iae) {
+                iae.printStackTrace();
+            } catch (InstantiationException ie) {
+                ie.printStackTrace();
+            }
+        } else {
+            validator = null;
+        }
     }
 
     /**
@@ -116,6 +134,19 @@ public class FreeTTSVoice extends BaseVoice {
      */
     public Object clone() {
         return super.clone();
+    }
+
+    /**
+     * Returns true if this is a valid FreeTTSVoice. A FreeTTSVoice
+     * is valid if its validator returns true. This method just
+     * returns true if the FreeTTSVoice has no validator. 
+     */
+    public boolean isValid() {
+        if (validator == null) {
+            return true;
+        } else {
+            return validator.isValid();
+        }
     }
 }
 
