@@ -96,12 +96,12 @@ public class JTime {
              * FreeTTSEngineCentral directly.  See the WebStartClock
              * demo for an example of how to do this.
              */
-	    SynthesizerModeDesc desc = new SynthesizerModeDesc
-		(null,          // engine name
-		 "time",        // mode name
-		 Locale.US,     // locale
-		 null,          // running
-		 null);         // voice
+	    SynthesizerModeDesc desc = new SynthesizerModeDesc(
+                null,          // engine name
+                "time",        // mode name
+                Locale.US,     // locale
+                null,          // running
+                null);         // voice
 
 	    synthesizer = Central.createSynthesizer(desc);
 

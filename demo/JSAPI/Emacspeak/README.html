@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,61 +13,91 @@
 -->
 
 <html>
+    <head><title>JSAPI Emacspeak Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>JSAPI Emacspeak Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>JSAPI Emacspeak Demo</title>
-  </head>
+        <p>This demo implements a JSAPI text-to-speech server that 
+	can be used with Emacspeak. For the non-JSAPI version, please
+	refer to <a href="../../freetts/Emacspeak/README.html">
+	FreeTTS Emacspeak</a>.
 
-  <body bgcolor="#FFFFFF">
+        <p><b>NOTE</b>: To build and run this JSAPI demo, you must 
+        <a href="../../../docs/jsapi_setup.html">set up your environment to
+	use JSAPI</a>.
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-	      <h1>JSAPI Emacspeak Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <h3>Building</h3>
+        <p>To build this demo, merely type the following in a shell:
+        <ul>
+            <code>ant -find build.xml</code>
+        </ul>
+        <p>Doing so will create
+        <code>bld/bin/EmacspeakServer.jar</code>, which you can run
+        using <code>java -jar</code> (see "Running the Server" below).
 
-    <pre>
+        <h3>Running the Server</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/EmacspeakServer.jar</code></p>
+        </ul>
 
-This demo implements a JSAPI text-to-speech server that 
-can be used with Emacspeak. For the non-JSAPI version, please
-refer to <a href="../../freetts/Emacspeak/README.html">FreeTTS Emacspeak</a>.
+        <p>This runs the TTS Server at port 2222. To change the port,
+        modify the "port" system property:
+        <ul>
+            <p><code>java -Dport=2222 -jar bin/EmacspeakServer.jar</code></p>
+        </ul>
 
-To use this Emacspeak TTS Server:
+        <p>The following should appear:
+        <ul>
+	    <code>Creating Unlimited domain FreeTTS Speech Synthesizer 
+	    from Sun Labs...</code>
+	    <br><code>Loading Unlimited domain FreeTTS Speech Synthesizer 
+	    from Sun Labs...</code>
+	    <br><code>...Ready</code>
+            <br><code>Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]</code>
+        </ul>
 
-1. Type "gmake run" in this directory. This runs the TTS Server
-   at port 2222. To change the port, modify the System property
-   in the Makefile. The following should appear:
-<b>
-Creating Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
-Loading Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
-...Ready
-Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
-</b>
+        <h3>Specifying a Voice</h3> 
 
-   If you want to use MBROLA voices, please refer to the 
-   <a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions.
-   Remember that you must set the <code>MBROLA_DIR</code> environment 
-   variable to your MBROLA directory. To use MBROLA voices, type one of:
+        <p>By default, this application will use the "kevin16" voice
+        that comes with the lib/cmu_us_kal.jar file.  You can, however,
+        specify a voice by passing the name of a voice as the
+        first (and only) parameter on the command line:</p>
+        <ul>
+            <p><code>java -jar bin/EmacspeakServer.jar kevin</code>
+            <br><code>java -jar bin/EmacspeakServer.jar kevin16</code>
+            <br><code>java -Dmbrola.base=/usr/local/mbrola -jar
+            bin/EmacspeakServer.jar mbrola_us1</code> (*)</p>
+	</ul>
+    
+        <p>(*) You must <a href="../../../mbrola/README.html">setup
+        and install MBROLA</a> before using MBROLA voices.</p>
 
-   gmake runMbrola1
-   gmake runMbrola2
-   gmake runMbrola3
+        <h3>Connecting to the Server from Emacspeak</h3>
+        <p>In your emacspeak (i.e., emacs with emacspeak running), type the
+	following command:
+        <ul>
+            <code>M-x emacspeak-remote-connect-to-server</code>
+	</ul>
 
-2. In your emacspeak (i.e., emacs with emacspeak running), type
-   M-x emacspeak-remote-connect-to-server
+        <p>When you are prompted with "<b>Remote host:</b>", specify the
+        machine the Emacspeak TTS Server is running. The port is 2222
+        by default. Emacspeak should connect to the TTS Server.
 
-3. When you are prompted with "<b>Remote host:</b>", specify the
-   machine the Emacspeak TTS Server is running. The port is 2222
-   by default. Emacspeaks should connect to the TTS Server.
-
-4. At this point, you should hear "<b>Connecting to server on host...</b>"
-   at your emacspeak client. You should see the following on 
-   the server-side:
-<b>
+        <p>At this point, you should hear "<b>Connecting to server on 
+	host...</b>" at your emacspeak client. You should see the following 
+	on the server-side:
+	<ul>
+<pre>
 Creating Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
 Loading Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
 ...Ready
@@ -107,16 +137,15 @@ IN   : tts_set_character_scale 1.25
 SPEAK:
 IN   : d
 SPEAK:
-</b>
+</pre>
+        </ul>
 
-    </pre>
-    
-    <hr>
+        <hr>
 
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-
-  </body>
-
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
 </html>
-

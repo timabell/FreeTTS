@@ -95,12 +95,12 @@ public class HelloWorld {
              * FreeTTSEngineCentral directly.  See the WebStartClock
              * demo for an example of how to do this.
              */
-	    SynthesizerModeDesc desc = new SynthesizerModeDesc
-		(null,          // engine name
-		 "general",     // mode name
-		 Locale.US,     // locale
-		 null,          // running
-		 null);         // voice
+	    SynthesizerModeDesc desc = new SynthesizerModeDesc(
+                null,          // engine name
+                "general",     // mode name
+                Locale.US,     // locale
+                null,          // running
+                null);         // voice
 	    Synthesizer synthesizer = Central.createSynthesizer(desc);
 
             /* Just an informational message to guide users that didn't

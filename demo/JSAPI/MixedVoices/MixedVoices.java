@@ -26,17 +26,21 @@ import javax.speech.synthesis.SpeakableEvent;
  * and synthesizers can be used.
  */
 public class MixedVoices {
+    
+    private final static void usage() {
+	System.out.println("MixedVoices [-showEvents] [-showPropertyChanges]");
+    }
 
     public static String noSynthesizerMessage(String synthesizer) {
-        String message = "Can't find " + synthesizer + ".\n" +
-            "Make sure that there is a \"speech.properties\" file at either " +
-            "of these locations: \n";
+        String message = "Can't find " + synthesizer + ".\n"
+            + "Make sure that there is a \"speech.properties\" file at "
+            + "either of these locations: \n";
         message += "user.home    : " + System.getProperty("user.home") + "\n";
         message += "java.home/lib: " + System.getProperty("java.home")
-	    + File.separator + "lib\n";
+            + File.separator + "lib\n";
         return message;
     }
-     
+    
     public static void main(String[] argv) {
 	boolean showEvents = false;
 	boolean showPropertyChanges = false;
@@ -53,59 +57,66 @@ public class MixedVoices {
 	}
 
 	System.out.println(" ** Mixed Voices - JSAPI Demonstration program **");
-	// alan is a limited-domain voice that only knows how talk
-	// about time.
-
+	/* alan is a limited-domain voice that only knows how talk
+         * about the time of day.
+         */
 	Voice alan = new Voice("alan", 
 		Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
 
-
-	// kevin in an 8khz unlimited-domain diphone voice
+	/* kevin in an 8khz general domain diphone voice
+         */
 	Voice kevin = new Voice("kevin", 
 		Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
 
-	// kevinHQ in a 16khz unlimited-domain diphone voice
+        /* kevin16 in a 16khz general domain diphone voice
+         */
 	Voice kevinHQ = new Voice("kevin16", 
 		Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
 
 	try {
+	    /* Find a synthesizer that has the general domain voice
+             * we are looking for.  NOTE:  this uses the Central class
+             * of JSAPI to find a Synthesizer.  The Central class
+             * expects to find a speech.properties file in user.home
+             * or java.home/lib.
+             *
+             * If your situation doesn't allow you to set up a
+             * speech.properties file, you can circumvent the Central
+             * class and do a very non-JSAPI thing by talking to
+             * FreeTTSEngineCentral directly.  See the WebStartClock
+             * demo for an example of how to do this.
+             */
+	    SynthesizerModeDesc generalDesc = new SynthesizerModeDesc(
+		null,          // engine name
+                "general",     // mode name
+                Locale.US,     // locale
+                null,          // running
+                null);         // voice
+            
+	    final Synthesizer synthesizer1 =
+                Central.createSynthesizer(generalDesc);
 
-	    // Create a new SynthesizerModeDesc that will match the 
-	    // Unlimited domain FreeTTS Synthesizer.
-
-	    SynthesizerModeDesc unlimitedDesc = 
-		new SynthesizerModeDesc(
-		    null,
-		    "general",
-		    Locale.US,
-		    Boolean.FALSE,         // running?
-		    null);                 // voice
-
-	    final Synthesizer synthesizer1 
-			= Central.createSynthesizer(unlimitedDesc);
 	    if (synthesizer1 == null) {
-		System.err.println
-		    (noSynthesizerMessage("general domain synthesizer"));
+		System.err.println(
+                    noSynthesizerMessage("general domain synthesizer"));
 		System.exit(1);
 	    }
 
-	    // Create a new SynthesizerModeDesc that will match the 
-	    // Limited domain FreeTTS Synthesizer.
+	    /* Find a synthesizer that has the time domain voice.
+             */
+	    SynthesizerModeDesc limitedDesc = new SynthesizerModeDesc(
+                null,          // engine name
+                "time",        // mode name
+                Locale.US,     // locale
+                null,          // running
+                null);         // voice
 
-	    SynthesizerModeDesc limitedDesc = 
-		new SynthesizerModeDesc(
-		    null,
-		    "time",
-		    Locale.US,
-		    Boolean.FALSE,         // running?
-		    null);                 // voice
-
-	    final Synthesizer synthesizer2 
-		= Central.createSynthesizer(limitedDesc);
+	    final Synthesizer synthesizer2 =
+                Central.createSynthesizer(limitedDesc);
 
 	    if (synthesizer2 == null) {
-		System.err.println
-		    (noSynthesizerMessage("time domain synthesizer"));
+		System.err.println(
+                    noSynthesizerMessage("time domain synthesizer"));
 		System.exit(1);
 	    }
 
@@ -113,83 +124,70 @@ public class MixedVoices {
 	    synthesizer1.allocate();
 	    synthesizer2.allocate();
 
-	    // get it ready to speak
+	    /* get general domain synthesizer ready to speak
+             */
 	    System.out.print("Loading voices...");
 	    synthesizer1.getSynthesizerProperties().setVoice(kevinHQ);
 	    synthesizer1.getSynthesizerProperties().setVoice(kevin);
 
-	    // setup a listener so we can see property changes on
-	    // synthesizer1
-
 	    if (showPropertyChanges) {
-		synthesizer1.getSynthesizerProperties().
-		    			addPropertyChangeListener(
-		    new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent pce) {
-			    if (pce.getNewValue() instanceof Voice) {
+		synthesizer1.getSynthesizerProperties().addPropertyChangeListener(
+                    new PropertyChangeListener() {
+                        public void propertyChange(
+                            PropertyChangeEvent pce) {
+                            if (pce.getNewValue() instanceof Voice) {
 				String newVoice = 
 				    ((Voice) pce.getNewValue()).getName();
-				System.out.println("  PCE Voice changed to " 
-				    + newVoice);
+				System.out.println(
+                                    "  PCE Voice changed to " + newVoice);
 			    } else {
-				System.out.println("  PCE " +
-				    pce.getPropertyName() + " changed from " 
+				System.out.println(
+                                    "  PCE " + pce.getPropertyName()
+                                    + " changed from " 
 				    + pce.getOldValue() + " to " +
 				    pce.getNewValue() + ".");
 			    }
 			}
-		    }
-		);
+		    });
 	    }
-
+            
 	    if (showEvents) {
 		synthesizer1.addSpeakableListener(
 		    new SpeakableAdapter() {
-
 			public void markerReached(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void speakableCancelled(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void speakableEnded(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void speakablePaused(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void speakableResumed(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void speakableStarted(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void topOfQueue(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			public void wordStarted(SpeakableEvent e) {
 			    dumpEvent(e);
 			}
-
 			private void dumpEvent(SpeakableEvent e) {
 			    System.out.println(" EVT: " + e.paramString() 
-				    + " source: " + e.getSource());
+                                               + " source: " + e.getSource());
 			}
-		    }
-		);
+		    });
 	    }
 	    
 	    System.out.println("And here we go!");
 	    synthesizer1.resume();
 	    synthesizer2.resume();
-
 	    
 	    // speak the "Hello world" string
 	    synthesizer1.speakPlainText("Hello! My name is Kevin.", null);
@@ -198,7 +196,6 @@ public class MixedVoices {
 	    synthesizer1.speakPlainText("Listen to him count!", null);
 
 	    // get synth2 ready to speak
-
 	    synthesizer2.waitEngineState(Synthesizer.ALLOCATED);
 	    synthesizer2.resume();
 
@@ -299,10 +296,6 @@ public class MixedVoices {
 	}
 
 	System.exit(0);
-    }
-
-    private final static void usage() {
-	System.out.println("MixedVoices [-showEvents] [-showPropertyChanges]");
     }
 }
 

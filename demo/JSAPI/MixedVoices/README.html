@@ -13,64 +13,68 @@
 -->
 
 <html>
-  <head>
-    <title>JSAPI MixedVoices Player</title>
-  </head>
+    <head><title>JSAPI MixedVoices Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>JSAPI MixedVoices Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <body bgcolor="#FFFFFF">
+        <p>The MixedVoice demo demonstrates how to use multiple voices
+        and synthesizers in JSAPI. It also demonstrates how to
+        change various synthesizer properties in JSAPI.
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-              <h1>JSAPI MixedVoices Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <p><b>NOTE</b>: To build and run this JSAPI demo, you must 
+        <a href="../../../docs/jsapi_setup.html">set up your environment to
+	use JSAPI</a>.
 
-    <pre>
+        <h3>Building</h3>
+        <p>To build this demo, merely type the following in a shell:
+        <ul>
+            <code>ant -find build.xml</code>
+        </ul>
+        <p>Doing so will create
+        <code>bld/bin/MixedVoices.jar</code>, which you can run
+        using <code>java -jar</code> (see "Running" below).
 
-The MixedVoice demo demonstrates how to use multiple voices
-and synthesizers in JSAPI. It also demonstrates how to
-change various synthesizer properties in JSAPI.
+        <h3>Running</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/MixedVoices.jar</code></p>
+        </ul>
 
-
-To run this MixedVoices demo on a Unix system, type:
-
-gmake run
-
-To run this demo on a win32 system, type:
-
-$ run MixedVoices
-
-
-To see how the synthesizer properties change, type:
-
-gmake runVerbose
-
-
-To see the properties change and events, type:
-
-gmake runVeryVerbose
-
-
-You should see the following output and hear two people speaking
+        <p>You should see the following output and hear two people speaking
 playfully:
+        <ul>
+	<code>** Mixed Voices - JSAPI Demonstration program **</code>
+	<br>
+	<code>Allocating synthesizers...Loading voices...And here we go!</code>
+        </ul>
 
-<b>
- ** Mixed Voices - JSAPI Demonstration program **
-  Allocating synthesizers...Loading voices...And here we go!
-</b>
+        <p>To see how the synthesizer properties change, append the
+        string <code>-showPropertyChanges</code> to the command line:
+        <ul>
+            <p><code>java -jar bin/MixedVoices.jar -showPropertyChanges</code></p>
+        </ul>
 
-      </pre>
+        <p>To see JSAPI events, append the
+        string <code>-showEvents</code> to the command line:
+        <ul>
+            <p><code>java -jar bin/MixedVoices.jar -showEvents</code></p>
+        </ul>
 
-    <hr>
+        <hr>
 
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
     </body>
-
 </html>
-

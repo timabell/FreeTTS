@@ -30,37 +30,28 @@ public class EmacspeakServer extends TTSServer {
     private Synthesizer synthesizer;
     private String synthesizerName;
     private String voiceName;
-    private String modeName = "general";
-    private Locale locale = Locale.US;
-    private Boolean running = null;
-    private Voice[] voices = null;
     private Voice voice;
 
 
     /**
      * Constructs a EmacspeakServer.
      */
-    public EmacspeakServer() {
-	loadSynthesizer();
+    public EmacspeakServer(String voiceName) {
+	loadSynthesizer(voiceName);
     }
-
 
     /**
      * Creates and loads the synthesizer.
      */
-    private void loadSynthesizer() {
-        voiceName = System.getProperty
-            ("voiceName", "kevin16");
+    private void loadSynthesizer(String voiceName) {
 
-        voice = new Voice
-            (voiceName, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
+        voice = new Voice(voiceName, 
+			  Voice.GENDER_DONT_CARE, 
+			  Voice.AGE_DONT_CARE, 
+			  null);
 
-        synthesizerName = System.getProperty
-            ("synthesizerName",
-             "");
-
-	SynthesizerModeDesc modeDesc = new SynthesizerModeDesc
-	    (synthesizerName, modeName, locale, running, voices);
+	SynthesizerModeDesc modeDesc = new SynthesizerModeDesc(
+	    null, "general", Locale.US, null, null);
 
 	try {
 	    System.out.println("Creating " + synthesizerName + "...");
@@ -95,7 +86,7 @@ public class EmacspeakServer extends TTSServer {
      * @return a no synthesizer message
      */
     private String noSynthesizerMessage() {
-        String message = "PlayerModelImpl: no synthesizer created.\n" +
+        String message = "No synthesizer created.\n" +
             "Make sure that there is a \"speech.properties\" file at either " +
             "of these locations: \n";
         message += "user.home    : " + System.getProperty("user.home") + "\n";
@@ -125,7 +116,16 @@ public class EmacspeakServer extends TTSServer {
      * Starts this TTS Server.
      */
     public static void main(String[] args) {
-	EmacspeakServer server = new EmacspeakServer();
+        String voiceName = (args.length > 0)
+            ? args[0]
+            : "kevin16";
+        
+        System.out.println();
+        System.out.println("Using voice: " + voiceName);
+        System.out.println();
+
+	EmacspeakServer server = new EmacspeakServer(voiceName);
+
 	(new Thread(server)).start();
     }
 }

@@ -28,67 +28,114 @@
       </table>
     </center>
 
-    <p>The Player demonstrates the use of JSAPI to build applications. It is capable of performing text-to-speech on ASCII text, ASCII text files, JSML text, and JSML files. Here is a snapshot of the Player:
+    <p>The Player demonstrates the use of JSAPI to build
+    applications. It is capable of performing text-to-speech on ASCII
+    text, ASCII text files, JSML text, and JSML files. Here is a
+    snapshot of the Player:
 
       <p><center><img src="player.jpg"></center>
 
-      <p><h3>How to run the Player?</h3>
-      
-      <p>If you want the Player to use MBROLA voices, please refer to the <a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions. Remember that you must set the <code>MBROLA_DIR</code> environment variable to your MBROLA directory.
+        <h3>Building</h3>
+        <p>To build this demo, merely type the following in a shell:
+        <ul>
+            <code>ant -find build.xml</code>
+        </ul>
+        <p>Doing so will create
+        <code>bld/bin/Player.jar</code>, which you can run
+        using <code>java -jar</code> (see "Running" below).
+
+
+        <h3>Running</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/Player.jar</code></p>
+        </ul>
+
+        <p>The player will find all available voices, including voices
+        in all domains (e.g., general and time), and allow you to
+        select them for synthesizing text. If you want the Player to
+        use MBROLA voices, you must <a
+        href="../../../mbrola/README.html">setup
+        and install MBROLA</a> before using MBROLA voices.</p>
+
+        <h3>Instructions for Use</h3>
+        <ul>
+            <li><b>Plain Text</b>: Simply enter text at the
+	    <b>"Enter text"</b> text area, then press the button
+	    <b>"Speak Text"</b>. The text you entered will be played,
+	    and inserted to the Play List.
 	
-      <p>To run the Player on a Unix system, type, in this directory: <pre>gmake run</pre>
-      To run the Player on a Win32 system , type, in this directory: <pre>run Player</pre>
+            <li><p><b>Text File</b>: Select the <b>File</b> menu,
+            <b>Speak</b>, <b>Text File...</b>. A file choosing dialog
+            will appear. Select a text file, which will be added to
+            the Play List and played. Do not use this method if you
+            want to play a JSML file. Instead, see the bullet <i>JSML
+            file</i>.
 
-    <p><h3>How do I play stuff?</h3>
-    
-    <ul>
-      <li><b>Plain text</b>
-	<br>Simply enter text at the <b>"Enter text"</b> text area, then press the button <b>"Speak Text"</b>. The text you entered will be played, and inserted to the Play List. 
-	<p>
+            <li><p><b>JSML Text</b>: Simply enter JSML text at the
+            <b>"Enter text"</b> text area, then press the button
+            <b>"Speak JSML"</b>. The text you entered will be played,
+            and inserted to the Play List.
 
-      <li><b>Text file</b>
-	<br>Select the <b>File</b> menu, <b>Speak</b>, <b>Text File...</b>. A file choosing dialog will appear. Select a text file, which will be added to the Play List and played. Do not use this method if you want to play a JSML file. Instead, see the bullet <i>JSML file</i>.
-	<p>
+            <li><p><b>JSML File</b>: Select the <b>File</b> menu,
+            <b>Speak</b>, <b>JSML File...</b>. A file choosing dialog
+            will appear. Select a JSML file, which will be added to
+            the Play List and played. There are some JSML files in
+            this directory which you can try out. Do not use this
+            method if you want to play a text file. Instead, see the
+            bullet <i>Text file</i>.
 
-      <li><b>JSML text</b>
-	<br>Simply enter JSML text at the <b>"Enter text"</b> text area, then press the button <b>"Speak JSML"</b>. The text you entered will be played, and inserted to the Play List.
-	<p>
-	
-      <li><b>JSML file</b>
-	<br>Select the <b>File</b> menu, <b>Speak</b>, <b>JSML File...</b>. A file choosing dialog will appear. Select a JSML file, which will be added to the Play List and played. There are some JSML files in this directory which you can try out. Do not use this method if you want to play a text file. Instead, see the bullet <i>Text file</i>.
-	<p>
+            <li><p><b>URL</b>: It is assumed that the URL is a JSML
+            URL. Select the <b>File</b> menu, <b>Speak</b>,
+            <b>URL...</b>. A dialog will appear asking you to enter a
+            URL. After entering the URL, press <b>OK</b>. The new URL
+            will be added to your Play List, and will start to play.    
+        </ul>
 
-      <li><b>URL</b>
-	<br>It is assumed that the URL is a JSML URL. Select the <b>File</b> menu, <b>Speak</b>, <b>URL...</b>. A dialog will appear asking you to enter a URL. After entering the URL, press <b>OK</b>. The new URL will be added to your Play List, and will start to play.
-	<p>
+        <p><b>NOTE:</b> To play any item(s) on the Play List again,
+        simply select it on the Play List and press <b>Play</b>.  To
+        clear the text in the text area, press <b>Clear</b>.
 
-    </ul>
+        <h3>Other Features</h3> <p>In addition to text-to-speech, the
+        Player has the following functionality:
+        <ol>
+            <li>Pause and resume the playing of text (<b>Pause</b> button).
+            <li>Cancel the current utterance (<b>Cancel</b> button).
+            <li>Change the volume (<b>Volume</b> slider), speaking
+            rate in words per minute (<b>Words/min</b> slider), the
+            pitch (<b>Pitch/Hz</b> slider), and the range
+            (<b>Range</b> slider). The <i>pitch</i> is the base pitch
+            of the voice, where <i>range</i> is amount of pitch
+            variation allowed. Note that these changes will take
+            effect only on the next utterance.
+            <li>Change to another synthesizer (<b>Synthesizer</b>
+            combo box) and voice (<b>Voice</b> combo box).
+            <li>Monitor the progress of the text-to-speech process
+            (select menu <b>Monitor</b>, <b>Show</b>).
+	    <li>Change the default look & feel (select <b>Style</b>
+	    menu, <b>Look & Feel</b>, and then select the desired look
+	    & feel).
+        </ol>
 
-<p><b>Note:</b>
-<br>To play any item(s) on the Play List again, simply select it on the Play List and press <b>Play</b>.
-<br>To clear the text in the text area, press <b>Clear</b>.
-    
-    <p><h3>What else?</h3>
+        <h3>Engine Monitor</h3> 
 
-    <p>In addition to text-to-speech, the Player has the following functionality:
-    <ol>
-      <li>Pause and resume the playing of text (<b>Pause</b> button).
-      <li>Cancel the current utterance (<b>Cancel</b> button).
-      <li>Change the volume (<b>Volume</b> slider), speaking rate in words per minute (<b>Words/min</b> slider), the pitch (<b>Pitch/Hz</b> slider), and the range (<b>Range</b> slider). The <i>pitch</i> is the base pitch of the voice, where <i>range</i> is amount of pitch variation allowed. Note that these changes will take effect only on the next utterance.
-      <li>Change to another synthesizer (<b>Synthesizer</b> combo box) and voice (<b>Voice</b> combo box).
-      <li>Monitor the progress of the text-to-speech process (select menu <b>Monitor</b>, <b>Show</b>).
-	<li>Change the default look & feel (select <b>Style</b> menu, <b>Look & Feel</b>, and then select the desired look & feel).
-    </ol>
+        <p>The Player also includes a Synthesizer Engine Monitor,
+        which allows you to observe the changes in the state of the
+        synthesizer during different stages, e.g., when initializing,
+        performing TTS, etc.. Simply select the <b>Monitor</b> menu,
+        <b>Show</b>) to see it working. To hide it, select the
+        <b>Monitor</b> menu, <b>Hide</b>. Here's a snapshot of the
+        Player with the Monitor:
 
-    <p><h3>Engine Monitor</h3>
+        <p><center><img src="monitor.jpg"></center>
 
-    <p>The Player includes a Synthesizer Engine Monitor, which allows you to observe the changes in the state of the synthesizer during different stages, e.g., when initializing, performing TTS, etc.. Simply select the <b>Monitor</b> menu, <b>Show</b>) to see it working. To hide it, select the <b>Monitor</b> menu, <b>Hide</b>. Here's a snapshot of the Player with the Monitor:
+        <hr>
 
-      <p><center><img src="monitor.jpg"></center>
-
-    <hr>
-
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-  </body>
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
 </html>
