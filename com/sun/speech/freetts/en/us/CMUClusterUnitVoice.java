@@ -41,8 +41,8 @@ public class CMUClusterUnitVoice extends CMUVoice {
     public CMUClusterUnitVoice(boolean createLexicon) {
 	super(createLexicon);
 	setRate(150f);
-	setPitch(105F);
-	setPitchRange(14F);
+	setPitch(100F);
+	setPitchRange(12F);
     }
 
     /**

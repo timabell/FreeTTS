@@ -637,7 +637,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    u1_p_st = u1_p_end / 3;
 
 	    if ((u0_end - u0_st) < (u1_p_end - u1_p_st)) {
-		fcount = u0_end - u1_p_st;
+		fcount = u0_end - u0_st;
 	    } else {
 		fcount = u1_p_end - u1_p_st;
 	    }
@@ -665,7 +665,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    }
 
 	    cost.u0Move = clunitDB.getStart(u0) + best_u0;
-	    cost.u1Move = clunitDB.getStart(u1_p) + best_u1_p + 1;
+	    cost.u1Move = clunitDB.getStart(u1_p) + best_u1_p;
 	    cost.cost = 30000 + best_val;
 	    return cost;
 	}
