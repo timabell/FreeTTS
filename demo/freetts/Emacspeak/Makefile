@@ -25,3 +25,27 @@ all:: ${CLASSES} ${STUBS}
 
 run: 
 	$(JAVA_CMD) -Ddebug=true -Dport=2222 FreeTTSEmacspeakServer
+
+runMbrola1:
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dport=2222 \
+	-DvoiceClass=de.dfki.lt.freetts.en.us.MbrolaVoiceUS1 \
+	FreeTTSEmacspeakServer
+
+runMbrola2:
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dport=2222 \
+	-DvoiceClass=de.dfki.lt.freetts.en.us.MbrolaVoiceUS2 \
+	FreeTTSEmacspeakServer
+
+runMbrola3:
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dport=2222 \
+	-DvoiceClass=de.dfki.lt.freetts.en.us.MbrolaVoiceUS3 \
+	FreeTTSEmacspeakServer
