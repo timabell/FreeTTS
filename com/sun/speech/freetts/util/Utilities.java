@@ -167,6 +167,26 @@ public class Utilities {
 	}
 	return new String(charBuffer, 0, size);
     }
+
+
+    /**
+     * Gets a property by name and returns its value. If the property
+     * cannot be found, the default is returned
+     *
+     * @param name the name of the property
+     *
+     * @param defaultValue the default value to use if the property
+     * cannot be found.
+     */
+    public static String getProperty(String name, String defaultValue) {
+	String value;
+	try {
+	    value = System.getProperty(name, defaultValue);
+	} catch (SecurityException se) {
+	    value = defaultValue;
+	}
+	return value;
+    }
 }
 
   

@@ -13,6 +13,11 @@ xxxxxxxxx x, 200x Release 1.1.x
     - Fixed race condition in JavaStreamingAudioPlayer that would
       cause output to not be totally cancelled.
 
+    - Refactored all System.getProperty calls to call a wrapper
+      utility called Utilities.getPropery. This method catches a
+      SecurityException and deals with it properly, so that it can be
+      called from an applet.
+
 September 6, 2002 Release 1.1.1
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.

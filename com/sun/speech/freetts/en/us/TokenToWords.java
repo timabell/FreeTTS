@@ -983,8 +983,8 @@ public class TokenToWords implements UtteranceProcessor {
 	    if (state[1].equals("ambiguous")) {
 		String pName = (String) tokenItem.findFeature("p.name");
 		String nName = (String) tokenItem.findFeature("n.name");
-                System.out.println("pName = " + pName);
-                System.out.println("nName = " + nName);
+                // System.out.println("pName = " + pName);
+                // System.out.println("nName = " + nName);
 		int nNameLength = nName.length();
 		FeatureSet featureSet = tokenItem.getFeatures();
 

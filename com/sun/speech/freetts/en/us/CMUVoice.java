@@ -25,6 +25,7 @@ import com.sun.speech.freetts.PhoneSetImpl;
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.Segmenter;
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 import com.sun.speech.freetts.cart.CARTImpl;
 import com.sun.speech.freetts.cart.Phraser;
@@ -50,7 +51,7 @@ import java.io.IOException;
 public abstract class CMUVoice extends Voice {
     private PhoneSet phoneSet;
     private boolean useBinaryIO =
-	System.getProperty("com.sun.speech.freetts.useBinaryIO",
+	Utilities.getProperty("com.sun.speech.freetts.useBinaryIO",
 		"true").equals("true");
     /**
      * Creates a CMU voice

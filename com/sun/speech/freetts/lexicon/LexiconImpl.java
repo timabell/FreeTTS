@@ -150,7 +150,7 @@ abstract public class LexiconImpl implements Lexicon {
      * Use the new IO package?
      */
     private boolean useNewIO =
-	System.getProperty("com.sun.speech.freetts.useNewIO",
+	Utilities.getProperty("com.sun.speech.freetts.useNewIO",
 		"true").equals("true");
     
     /**
@@ -177,7 +177,7 @@ abstract public class LexiconImpl implements Lexicon {
         // Find out when to convert the phone string into an array.
         //
         String tokenize =
-	    System.getProperty("com.sun.speech.freetts.lexicon.LexTokenize",
+	    Utilities.getProperty("com.sun.speech.freetts.lexicon.LexTokenize",
                                "never");
 	tokenizeOnLoad = tokenize.equals("load");
 	tokenizeOnLookup = tokenize.equals("lookup");

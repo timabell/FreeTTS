@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -49,9 +50,9 @@ public class PathExtractorImpl implements PathExtractor {
 	"com.sun.speech.freetts.lazyCartCompile";
 
     private final static boolean INTERPRET_PATHS = 
-	System.getProperty(INTERPRET_PATHS_PROPERTY, "false").equals("true");
+	Utilities.getProperty(INTERPRET_PATHS_PROPERTY, "false").equals("true");
     private final static boolean LAZY_COMPILE  = 
-	System.getProperty(LAZY_COMPILE_PROPERTY, "true").equals("true");
+	Utilities.getProperty(LAZY_COMPILE_PROPERTY, "true").equals("true");
 
     private String pathAndFeature;
     private String path;

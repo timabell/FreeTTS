@@ -111,11 +111,11 @@ public class DiphoneUnitDatabase {
     private SampleInfo sampleInfo;
     
     private boolean useNewIO =
-	System.getProperty("com.sun.speech.freetts.useNewIO",
+	Utilities.getProperty("com.sun.speech.freetts.useNewIO",
 		"true").equals("true");
     // cache can be 'preload' 'none', 'soft' or 'hard'
     private String cacheType = 
-	System.getProperty(
+	Utilities.getProperty(
 	    "com.sun.speech.freetts.diphone.UnitDatabase.cacheType",
 	    "preload");
     private boolean useIndexing = !cacheType.equals("preload");

@@ -138,14 +138,18 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	features = new FeatureSetImpl();
 	featureProcessors = new HashMap();
 
-	nominalRate = Float.parseFloat(
-		System.getProperty(PROP_PREFIX + "speakingRate","150"));
-	pitch = Float.parseFloat(
-		System.getProperty(PROP_PREFIX + "pitch","100"));
-	range = Float.parseFloat(
-		System.getProperty(PROP_PREFIX + "range","10"));
-	volume = Float.parseFloat(
-		System.getProperty(PROP_PREFIX + "volume","1.0"));
+	try {
+	    nominalRate = Float.parseFloat(
+		    Utilities.getProperty(PROP_PREFIX + "speakingRate","150"));
+	    pitch = Float.parseFloat(
+		    Utilities.getProperty(PROP_PREFIX + "pitch","100"));
+	    range = Float.parseFloat(
+		    Utilities.getProperty(PROP_PREFIX + "range","10"));
+	    volume = Float.parseFloat(
+		    Utilities.getProperty(PROP_PREFIX + "volume","1.0"));
+	} catch (SecurityException se) {
+	     // can't get properties, just use defaults
+	}
         outputQueue = null;
     }
 

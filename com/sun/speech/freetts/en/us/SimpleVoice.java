@@ -26,6 +26,7 @@ import com.sun.speech.freetts.PhoneSet;
 import com.sun.speech.freetts.PhoneSetImpl;
 import com.sun.speech.freetts.Segmenter;
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 import com.sun.speech.freetts.cart.CARTImpl;
 import com.sun.speech.freetts.cart.Phraser;
@@ -52,13 +53,13 @@ public class SimpleVoice extends Voice {
     private String freettsPrefix = "com.sun.speech.freetts";
 
     private boolean useBinaryIO =
-	System.getProperty(freettsPrefix+".useBinaryIO", "true").equals("true");
+     Utilities.getProperty(freettsPrefix+".useBinaryIO", "true").equals("true");
 
     private String silence =
-	System.getProperty(freettsPrefix+".silence", "pau");
+	Utilities.getProperty(freettsPrefix+".silence", "pau");
 
     private String joinType =
-	System.getProperty(freettsPrefix+".joinType", "modified_lpc");
+	Utilities.getProperty(freettsPrefix+".joinType", "modified_lpc");
     
 
     /**

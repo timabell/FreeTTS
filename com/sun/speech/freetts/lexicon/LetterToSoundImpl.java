@@ -30,6 +30,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Provides the phone list for words using the CMU6 letter-to-sound
@@ -242,7 +243,7 @@ public class LetterToSoundImpl implements LetterToSound {
         // Find out when to convert the phone string into an array.
         //
         String tokenize =
-	    System.getProperty("com.sun.speech.freetts.lexicon.LTSTokenize",
+	    Utilities.getProperty("com.sun.speech.freetts.lexicon.LTSTokenize",
                                "load");
 	tokenizeOnLoad = tokenize.equals("load");
 	tokenizeOnLookup = tokenize.equals("lookup");

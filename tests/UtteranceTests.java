@@ -392,7 +392,7 @@ public class UtteranceTests extends TestCase {
  */
 class TestUtteranceProcessor implements UtteranceProcessor {
     String name;
-    TestUtteranceProcessor(String name) {
+    public TestUtteranceProcessor(String name) {
 	this.name = name;
     }
 
