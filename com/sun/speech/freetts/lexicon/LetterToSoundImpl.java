@@ -540,6 +540,9 @@ public class LetterToSoundImpl implements LetterToSound {
             }
 	    c = word.charAt(pos);
 	    startIndex = (Integer) letterIndex.get(Character.toString(c));
+	    if (startIndex == null) {
+		continue;
+	    }
             assert (startIndex != null);
             stateIndex = startIndex.intValue();
             currentState = getState(stateIndex);

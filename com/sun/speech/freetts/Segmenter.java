@@ -90,10 +90,15 @@ public class Segmenter implements UtteranceProcessor {
 
 	    String[] phones = null;
 
-	    Item parent = word.getItemAs("Token").getParent();
-	    FeatureSet featureSet = parent.getFeatures();
+	    Item token = word.getItemAs("Token");
+	    FeatureSet featureSet = null;
+
+	    if (token != null) {
+		Item parent = token.getParent();
+		featureSet = parent.getFeatures();
+	    }
 	    
-	    if (featureSet.isPresent("phones")) {
+	    if (featureSet != null && featureSet.isPresent("phones")) {
 		phones = (String[]) featureSet.getObject("phones");
 	    } else {
 		phones = lex.getPhones(word.toString(), null);
