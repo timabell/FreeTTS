@@ -106,6 +106,7 @@ EMACS_SERVER_EXCLUDES =  				\
 	    $(STAGING_AREA)/com/sun/speech/engine 	\
 	    $(STAGING_AREA)/com/sun/speech/freetts/jsapi \
 	    $(STAGING_AREA)/com/sun/speech/freetts/clunits \
+	    $(STAGING_AREA)/com/sun/speech/freetts/FreeTTSTime.java \
 	    $(STAGING_AREA)/$(API_DIR)			\
 	    $(STAGING_AREA)/com/sun/speech/freetts/en/us/cmu_awb/ \
 	    $(STAGING_AREA)/com/sun/speech/freetts/en/us/CMUClusterUnitVoice.java \
