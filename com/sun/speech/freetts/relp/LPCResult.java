@@ -403,6 +403,10 @@ public class LPCResult {
     }
 
 
+    public byte[] getWaveSamples()
+    {
+        return getWaveSamples(2*getNumberOfSamples(), null);
+    }
 
     /**
      * get the samples for this utterance
