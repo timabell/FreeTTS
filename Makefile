@@ -116,6 +116,7 @@ deploy: all jars zips
 	gzip freetts.tar
 
 deploy_docs:
+	(cd docs; $(MAKE))
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 	rm -rf $(DOC_STAGING_AREA)
 	mkdir $(DOC_STAGING_AREA)
