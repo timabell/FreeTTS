@@ -26,11 +26,15 @@ import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.clunits.ClusterUnitPitchmarkGenerator;
 import com.sun.speech.freetts.clunits.ClusterUnitSelector;
+import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.en.us.FeatureProcessors;
 import com.sun.speech.freetts.lexicon.Lexicon;
 import com.sun.speech.freetts.relp.AudioOutput;
 import com.sun.speech.freetts.relp.UnitConcatenator;
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
+
+import de.dfki.lt.freetts.de.GermanLexicon;
 
 /**
  * A simple dummy voice as a starting point for non-US-English
@@ -72,6 +76,12 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 		setRate(150f);
 		setPitch(100F);
 		setPitchRange(12F);
+        if (lexicon != null) {
+            setLexicon(lexicon);
+        } else {
+            // Use a small dummy lexicon
+            setLexicon(new CMULexicon("cmutimelex"));
+        }
 		this.database = database;
 		this.unitNamer = unitNamer;
 		this.phonesetURL = phonesetURL;
@@ -144,7 +154,7 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 	return new UnitConcatenator();
     }
     protected void setupFeatureProcessors() throws IOException {
-    		if(phonesetURL != null){
+        if(phonesetURL != null){
     		       phoneSet  = new PhoneSetImpl(phonesetURL);
          		}
     		if(partOfSpeechURL != null){
