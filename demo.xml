@@ -26,7 +26,8 @@
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
     <property name="lib_dir"            value="lib"/>
     <property name="bin_dir"            value="bin"/>
-    <property name="webstart_dir"	value="${build_dir}/webstart"/>
+    <property name="webstart_bld_dir"	value="${build_dir}/webstart"/>
+    <ptoprtyy name="webstart_dir"	value="demo/JSAPI/WebStartClock"/>
     <property name="deploy_dir"		value="deploy"/>
 
 
@@ -309,7 +310,7 @@ your environment to use JSAPI.
     <!-- * Make the WebStartClock.tar package for deployment.     * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** --> 
-    <property name="keystore" value="${webstart_dir}/keystore"/>
+    <property name="keystore" value="${webstart_bld_dir}/keystore"/>
     <property name="keypass" value="freetts"/>
     <target name="check_keystore.isPresent">
         <available file="${keystore}" property="keystore.isPresent"/>
@@ -317,7 +318,7 @@ your environment to use JSAPI.
     <target name="genkey" 
 	    depends="check_keystore.isPresent" 
 	    unless="keystore.isPresent">
-	<mkdir dir="${webstart_dir}"/>
+	<mkdir dir="${webstart_bld_dir}"/>
         <genkey alias="freetts"
 		storepass="${keypass}"
 		keypass="${keypass}"
@@ -335,51 +336,60 @@ your environment to use JSAPI.
 
     <target name="deploy_webstartclock"
 	    depends="all,compile_jsapi_webstartclock,genkey">
-        <copy file="lib/jsapi.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/jsapi.jar"
+        <copy file="lib/jsapi.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/jsapi.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/jsapi.jar" todir="${webstart_dir}"/>
 
-        <copy file="${lib_dir}/freetts.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/freetts.jar"
+        <copy file="${lib_dir}/freetts.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/freetts.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/freetts.jar" todir="${webstart_dir}"/>
 
-        <copy file="${lib_dir}/en_us.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/en_us.jar"
+        <copy file="${lib_dir}/en_us.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/en_us.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/en_us.jar" todir="${webstart_dir}"/>
 
-        <copy file="${lib_dir}/cmutimelex.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/cmutimelex.jar"
+        <copy file="${lib_dir}/cmutimelex.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/cmutimelex.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/cmutimelex.jar" 
+	      todir="${webstart_dir}"/>
 
-        <copy file="${lib_dir}/cmu_time_awb.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/cmu_time_awb.jar"
+        <copy file="${lib_dir}/cmu_time_awb.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/cmu_time_awb.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/cmu_time_awb.jar" 
+	      todir="${webstart_dir}"/>
 
-        <copy file="${bin_dir}/WebStartClock.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/WebStartClock.jar"
+        <copy file="${bin_dir}/WebStartClock.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/WebStartClock.jar"
 		 alias="freetts"
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
+	<copy file="${webstart_bld_dir}/WebStartClock.jar" 
+	      todir="${webstart_dir}"/>
 
 	<mkdir dir="${deploy_dir}"/>
         <tar destfile="${deploy_dir}/WebStartClock.tar">
-	     <tarfileset dir="${webstart_dir}" includes="*.jar"/>
+	     <tarfileset dir="${webstart_bld_dir}" includes="*.jar"/>
              <tarfileset dir="${src_dir}/demo/JSAPI/WebStartClock"
 			 includes="clock.jnlp"/>
         </tar>
