@@ -567,8 +567,9 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 		if (queue.size() != 0) {
 		    item = (FreeTTSSynthesizerQueueItem) queue.remove(0);
 		    if (item != null) {
-			item.postSpeakableCancelled();
-			queueDrained();
+			// item.postSpeakableCancelled();
+			item.cancelled();
+                        queueDrained();
 		    }
 		}
 	    }
@@ -589,7 +590,8 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	    }
 	    for (Iterator i = copy.iterator(); i.hasNext(); ) {
 		item = (FreeTTSSynthesizerQueueItem) i.next();
-		item.postSpeakableCancelled();
+		// item.postSpeakableCancelled();
+                item.cancelled();
 	    }
         }
         
@@ -608,8 +610,9 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 		} else {
 		    item = (FreeTTSSynthesizerQueueItem) queue.remove(index);
 		    if (item != null) {
-			item.postSpeakableCancelled();
-			queueDrained();
+			// item.postSpeakableCancelled();
+			item.cancelled();
+                        queueDrained();
 		    }
 		}
 	    }
