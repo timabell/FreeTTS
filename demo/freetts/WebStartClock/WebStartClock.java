@@ -30,6 +30,12 @@ public class WebStartClock extends JFrame {
     private int speakInterval = 300000;    // in milliseconds
     private int sleepTime = 5000;          // in milliseconds
 
+    private static char announceMnemonic = 'A';
+    private static char minutesMnemonic = 'M';
+    private static char speakMnemonic = 'S';
+
+    private boolean debug = true;
+    
 
     /**
      * Constructs a default WebStartClock.
@@ -52,6 +58,8 @@ public class WebStartClock extends JFrame {
         getContentPane().add(timePanel, BorderLayout.CENTER);
 
         JButton speakButton = new JButton("Speak");
+        speakButton.setMnemonic(speakMnemonic);
+
         speakButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 Runnable speaker = new Runnable() {
@@ -82,10 +90,13 @@ public class WebStartClock extends JFrame {
     private JPanel createAnnouncePanel() {
         JPanel announcePanel = new JPanel(new FlowLayout());
         announceCheckBox = new JCheckBox("announce every", true);
+        announceCheckBox.setMnemonic(announceMnemonic);
         announceCheckBox.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ie) {
                 if (ie.getStateChange() == ItemEvent.SELECTED) {
                     lastSpeakTime = calendar.getTimeInMillis();
+                    debugPrintln
+                        ("Last speak time: "  + String.valueOf(lastSpeakTime));
                 }
             }
         });
@@ -96,19 +107,23 @@ public class WebStartClock extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String text = intervalTextField.getText();
                 if (text.matches("[1-9][0-9]*")) {
-                    System.out.println("New announce interval : " + text);
+                    debugPrintln("New announce interval : " + text);
                     speakInterval = Integer.parseInt(text) * 60000;
                 } else {
-                    System.err.println("Invalid minutes input: " + text);
+                    debugPrintln("Invalid minutes input: " + text);
                     intervalTextField.setText
                         (String.valueOf(speakInterval / 60000));
                 }
             }
         });
 
+        JLabel minutesLabel = new JLabel("mins");
+        minutesLabel.setDisplayedMnemonic(minutesMnemonic);
+        minutesLabel.setLabelFor(intervalTextField);
+
         announcePanel.add(announceCheckBox);
         announcePanel.add(intervalTextField);
-        announcePanel.add(new JLabel("mins"));
+        announcePanel.add(minutesLabel);
         return announcePanel;
     }
 
@@ -193,6 +208,18 @@ public class WebStartClock extends JFrame {
      */
     private boolean isTimeToSpeak() {
         return ((lastSpeakTime + speakInterval) < calendar.getTimeInMillis());
+    }
+
+
+    /**
+     * Print method for debug purposes.
+     *
+     * @param the debug message to print
+     */
+    private void debugPrintln(String line) {
+        if (debug) {
+            System.out.println(line);
+        }
     }
 
 
