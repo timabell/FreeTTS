@@ -157,12 +157,14 @@ public class PathExtractorImpl implements PathExtractor {
 	Item pitem = findItem(item);
 	Object results = null;
 	if (pitem != null) {
+	    Utilities.debug("findFeature: Item [" + pitem + "], feature '" + feature + "'");
 
 	    FeatureProcessor fp =
 		pitem.getOwnerRelation().getUtterance().
 		    getVoice().getFeatureProcessor(feature);
 
 	    if (fp != null) {
+		Utilities.debug("findFeature: There is a feature processor for '" + feature + "'");
 		try {
 		    results = fp.process(pitem);
 		} catch (ProcessException pe) {
@@ -175,6 +177,7 @@ public class PathExtractorImpl implements PathExtractor {
 	}
 
 	results = (results == null) ? "0" : results;
+	Utilities.debug("findFeature: ...results = '" + results + "'");
 	return results;
     }
 
