@@ -73,20 +73,23 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 
     private SourceDataLine line;
     private float volume = 1.0f;  // the current volume
-    private boolean debug = false;
     private long timeOffset = 0L;
     private BulkTimer timer = new BulkTimer();
-    private AudioFormat defaultFormat = // default format is 8khz
-	new AudioFormat(8000f, 16, 1, true, true);
+
+    // default format is 8khz
+    private AudioFormat defaultFormat = new AudioFormat
+    (8000f, 16, 1, true, true);
+    private AudioFormat currentFormat = defaultFormat;
+
+    private boolean debug = false;
     private boolean firstSample = true;
     private long cancelDelay;
 
-    // These system properties control how to work around the
-    // drain bug
-    private final static boolean DRAIN_WORKS_PROPERLY = Boolean.getBoolean(
-	"com.sun.speech.freetts.audio.AudioPlayer.drainWorksProperly");
-    private final static long DRAIN_DELAY = Long.getLong(
-    "com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 5L).longValue();
+    // These system properties control how to work around the drain bug
+    private final static boolean DRAIN_WORKS_PROPERLY = Boolean.getBoolean
+    ("com.sun.speech.freetts.audio.AudioPlayer.drainWorksProperly");
+    private final static long DRAIN_DELAY = Long.getLong
+    ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 5L).longValue();
 
     /**
      * controls the buffering to java audio
@@ -101,11 +104,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public JavaStreamingAudioPlayer() {
 	debug = Boolean.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-	cancelDelay = Long.getLong
+        cancelDelay = Long.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
              0L).longValue();
 	setPaused(false);
-	openLine(defaultFormat);
     }
 
     /**
@@ -117,10 +119,8 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *     the given format
      */
     public synchronized void setAudioFormat(AudioFormat format) {
-	if (!getAudioFormat().matches(format)) {
-	    debugPrint("AF changed to " + format);
-	    openLine(format);
-	}
+	currentFormat = format;
+        debugPrint("AF changed to " + format);
     }
 
 
@@ -130,7 +130,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * @return format the audio format
      */
     public AudioFormat getAudioFormat() {
-	return line.getFormat();
+	return currentFormat;
     }
 
     /**
@@ -175,10 +175,12 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     /**
      * Pauses audio output
      */
-    public void pause() {
-	if (!isPaused()) {
+    public synchronized void pause() {
+        if (!isPaused()) {
 	    setPaused(true);
-	    line.stop();
+            if (line != null) {
+                line.stop();
+            }
 	}
     }
 
@@ -188,13 +190,12 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public synchronized void resume() {
 	if (isPaused()) {
 	    setPaused(false);
-	    if (!cancelled) {
+	    if (!cancelled && line != null) {
 		 line.start();
-	    }
-	    notify();
+                 notify();
+            }
 	}
     }
-	
 
 
     /**
@@ -214,11 +215,13 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	} catch (InterruptedException ie) {
 	    ie.printStackTrace();
 	}
-	synchronized (line) {
-	    line.stop();
-	    line.flush();
-	}
-	notify();
+        if (line != null) {
+            synchronized (line) {
+                line.stop();
+                line.flush();
+            }
+            notify();
+        }
     }
 
     /**
@@ -228,11 +231,13 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     public synchronized void reset() {
 	timer.start("audioOut");
-	waitResume();
-	if (cancelled && !done) {
-	    cancelled = false;
-	    line.start();
-	}
+        if (line != null) {
+            waitResume();
+            if (cancelled && !done) {
+                cancelled = false;
+                line.start();
+            }
+        }
     }
 
     /**
@@ -240,8 +245,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     public synchronized void close() {
 	done = true;
-	line.close();
-	notify();
+        if (line != null && line.isOpen()) {
+            line.close();
+            notify();
+        }
     }
         
 
@@ -267,9 +274,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    volume = 0.0f;
 	}
 	this.volume = volume;
-	setVolume(line, volume);
-    }	      
-
+    }
 
     /**
      * Sets us in pause mode
@@ -296,7 +301,8 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * @param vol the volume (range 0 to 1)
      */
     private void setVolume(SourceDataLine line, float vol) {
-	if (line.isControlSupported (FloatControl.Type.MASTER_GAIN)) {
+	if (line != null &&
+            line.isControlSupported (FloatControl.Type.MASTER_GAIN)) {
 	    FloatControl volumeControl = 
 		(FloatControl) line.getControl (FloatControl.Type.MASTER_GAIN);
 	    float range = volumeControl.getMaximum() -
@@ -306,12 +312,20 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     }
 
     /**
-     *  Starts the output of a set of data. Audio data for a single
-     *  utterance should be grouped between begin/end pairs.
+     * Starts the output of a set of data.
+     * For this JavaStreamingAudioPlayer, it actually opens the audio line.
+     * Since this is a streaming audio player, the <code>size</code>
+     * parameter has no meaning and effect at all, so any value can be used.
+     * Audio data for a single utterance should be grouped 
+     * between begin/end pairs.
      *
-     * @param size the size of data between now and the end
+     * @param size supposedly the size of data between now and the end,
+     *    but since this is a streaming audio player, this parameter
+     *    has no meaning and effect at all
      */
     public void begin(int size) {
+        debugPrint("opening Stream...");
+        openLine(currentFormat);
     }
 
     /**
@@ -322,8 +336,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *      output was cancelled or interrupted.
      *
      */
-    public boolean  end()  {
-	return true;
+    public synchronized boolean end()  {
+        if (line != null) {
+            drain();
+            line.close();
+            line = null;
+            notify();
+            debugPrint("ended stream...");
+	}
+        return true;
     }
 
     /**
@@ -350,17 +371,20 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * ]]]
      */
     public boolean drain()  {
-
-	if (DRAIN_WORKS_PROPERLY) {
-	    line.drain();
-	} else {
-	    while (line.available() != line.getBufferSize()) {
-		try {
-		    Thread.sleep(DRAIN_DELAY);
-		} catch (InterruptedException ie) {
-		}
-	    }
-	}
+        if (line != null) {
+            if (DRAIN_WORKS_PROPERLY) {
+                if (line.isOpen()) {
+                    line.drain();
+                }
+            } else {
+                while (line.available() != line.getBufferSize()) {
+                    try {
+                        Thread.sleep(DRAIN_DELAY);
+                    } catch (InterruptedException ie) {
+                    }
+                }
+            }
+        }
 	timer.stop("audioOut");
 
 	return !cancelled;
@@ -408,6 +432,11 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *       	<code> false </code>if the write was cancelled.
      */
     public boolean write(byte[] bytes, int offset, int size) {
+
+        if (line == null) {
+            return false;
+        }
+
 	int bytesRemaining = size;
 	int curIndex = offset;
 

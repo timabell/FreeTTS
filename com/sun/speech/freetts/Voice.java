@@ -200,7 +200,8 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      *         <code>false</code> otherwise
      */
     public boolean speak(FreeTTSSpeakable speakable) {
-	boolean ok = true;
+	log("speak(FreeTTSSpeakable) called");
+        boolean ok = true;
 	boolean posted = false;
 
 	audioPlayer.startFirstSampleTimer();
@@ -412,6 +413,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		runProcessor(audioOutput, utterance, timer);
 	    }  catch (ProcessException pe) {
 		ok = false;
+                pe.printStackTrace();
 	    }
 	    if (ok && utterance.isLast()) {
 		audioPlayer.drain();
