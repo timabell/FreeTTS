@@ -111,7 +111,7 @@ deploy: all jars zips
 	mv $(STAGING_AREA)/docs/README.txt  $(STAGING_AREA)
 	rm -f $(DEPLOY_EXCLUDED_FILES)
 	rm -rf $(DEPLOY_EXCLUDED_DIRECTORIES)
-	find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
+	-find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
 	rm -rf  $(STAGING_AREA)/$(API_DIR)
 	tar cf freetts.tar $(STAGING_AREA)
 	gzip freetts.tar
@@ -125,7 +125,7 @@ deploy_docs:
 	mkdir $(DOC_STAGING_AREA)
 	cp -r $(DEPLOY_DOCS) $(DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_EXCLUDED_FILES) 
-	find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
+	-find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	tar cvf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
 	gzip $(DEPLOY_DOCS_TARGET)
 	rm -rf $(DOC_STAGING_AREA)
@@ -137,7 +137,7 @@ deploy_xp_docs:
 	cp -r docs/audio $(XP_DOC_STAGING_AREA)/audio
 	cp license.terms acknowledgments.txt $(XP_DOC_STAGING_AREA)
 	cp docs/FreeTTSStuff.html $(XP_DOC_STAGING_AREA)
-	find $(XP_DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
+	-find $(XP_DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	tar cvf $(XP_DEPLOY_DOCS_TARGET) $(XP_DOC_STAGING_AREA)
 	gzip $(XP_DEPLOY_DOCS_TARGET)
 	rm -rf $(XP_DOC_STAGING_AREA)
@@ -192,6 +192,6 @@ javadoc.zip: javadocs
 
 lib/freetts.jar:
 	(cd classes; \
-	$(JAR) cf ../$@ `$(FIND_CMD) com -type f -print | \
+	$(JAR) cf ../$@ `find com -type f -print | \
 		egrep -v -f ../build/freetts_exclude_list`\
 	)

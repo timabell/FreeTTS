@@ -15,7 +15,7 @@ SHELL=sh
 # Which JDK is used to build things
 
 ifeq ($(JAVA_HOME),)
-    JAVA_HOME=c:/jdk1.3
+    JAVA_HOME=e:/jdk1.4
 endif
 
 ifeq ($(JUNIT_HOME),)
@@ -32,4 +32,3 @@ DOCS_DIR = ${TOP}/docs/api
 MSDOS = true
 PATH_SEP = /
 CSEP = ;
-FIND_CMD = e:/mksnt/find
