@@ -39,7 +39,7 @@ public class LetterToSoundTest extends TestCase {
     protected void setUp() {
 	try {
             lts = new LetterToSoundImpl( 
-	     new URL("file:../com/sun/speech/freetts/en/us/cmu6_lts.bin"), true);
+	     new URL("file:../com/sun/speech/freetts/en/us/cmulex_lts.bin"), true);
             assertTrue("LTS Rules created", lts != null);
             reader = new BufferedReader(new FileReader("LTS.txt"));
             assertTrue("Data File opened", reader != null);
@@ -109,9 +109,9 @@ public class LetterToSoundTest extends TestCase {
     public void testBinaryLoad() {
 	try {
 	    LetterToSoundImpl text = new LetterToSoundImpl(
-		    new URL("file:../en/us/cmu6_lts.txt"),  false);
+		    new URL("file:../en/us/cmulex_lts.txt"),  false);
 	    LetterToSoundImpl binary = new LetterToSoundImpl(
-		    new URL("file:../en/us/cmu6_lts.bin"),  true);
+		    new URL("file:../en/us/cmulex_lts.bin"),  true);
 	    
 	    assertTrue("text binary compare", text.compare(binary));
 	} catch (IOException ioe) {
