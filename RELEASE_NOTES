@@ -10,6 +10,9 @@ Change history for FreeTTS.
 --------------------------
 
 xxxxxxxxx x, 200x Release 1.1.x
+    - Fixed bug in TokenToWords that causes abbreviations like "OK"
+      and "HI" to be spoken as a US state rather than just "ok" and "hi".
+
     - Fixed race condition in JavaStreamingAudioPlayer that would
       cause output to not be totally cancelled.
 
