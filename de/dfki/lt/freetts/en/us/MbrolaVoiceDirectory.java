@@ -12,7 +12,9 @@ import java.util.Locale;
 
 import com.sun.speech.freetts.ValidationException;
 
-//TODO documentation
+/**
+ * Provides access to MBROLA voices.
+ */
 public class MbrolaVoiceDirectory extends VoiceDirectory {
     
     public Voice[] getVoices() {
@@ -61,6 +63,9 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
         }
     }
 
+    /**
+     * Prints out the MBROLA voices.
+     */
     public static void main(String[] args) {
         System.out.println((new MbrolaVoiceDirectory()).toString());
     }
