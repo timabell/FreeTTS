@@ -914,7 +914,7 @@ public class TokenToWords implements UtteranceProcessor {
 	    wordRelation.addWord("to");
 	    featureSet.setString("name", bbb);
 	    tokenToWords(bbb);
-	    featureSet.setString("name", tokenVal);
+	    featureSet.setString("name", "");
 	} else {	    
 	    tokenToWords(aaa);
 	    tokenToWords(bbb);

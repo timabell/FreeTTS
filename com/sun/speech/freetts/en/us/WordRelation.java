@@ -53,7 +53,7 @@ public class WordRelation {
     public void addBreak() {
 	Item wordItem = (Item) relation.getTail();
 	if (wordItem != null) {
-	    FeatureSet featureSet = new FeatureSetImpl();
+	    FeatureSet featureSet = wordItem.getFeatures();
 	    featureSet.setString("break", "1");
 	}
     }
