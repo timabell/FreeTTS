@@ -19,6 +19,8 @@ Release 1.1.1
       occasion.
     - Added emacspeak deploy options
     - Added non-JSAPI version of Emacspeak speech server
+    - Fixed non-JSAPI Emacspeak demo crashing problem by using the
+      JavaStreamingAudioPlayer (instead of ClipPlayer) as the default.
 
 January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page
