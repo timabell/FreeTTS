@@ -74,6 +74,7 @@
             ((string-equal char "4") 24) ((string-equal char "5") 25)
             ((string-equal char "6") 26) ((string-equal char "7") 27)
             ((string-equal char "8") 28) ((string-equal char "9") 29)
+            ((string-equal char "?") 48) ((string-equal char "@") 49)
             ((string-equal char "A") 50) ((string-equal char "a") 50)
             ((string-equal char "B") 51) ((string-equal char "b") 51)
             ((string-equal char "C") 52) ((string-equal char "c") 52)
@@ -100,6 +101,8 @@
             ((string-equal char "X") 73) ((string-equal char "x") 73)
             ((string-equal char "Y") 74) ((string-equal char "y") 74)
             ((string-equal char "Z") 75) ((string-equal char "z") 75)
+
+
             (t 255)
         )
     )
