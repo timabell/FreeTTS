@@ -9,25 +9,28 @@
 Change history for FreeTTS.
 --------------------------
 
-November 22, 2003 Release 1.2.0
+December 22, 2003 Release 1.2beta
+    - Many documentation updates to prep for beta release.
+
+November 22, 2003 Release 1.2beta
     - Abandon GNUMake in favor of Ant.
     - Many documentation updates.
     - Add capability to set the AudioPlayer on a JSAPI Voice. 
 
-September 3, 2003 Release 1.2.0
+September 3, 2003 Release 1.2beta
     - Modified MBROLA output to work on Solaris and Mac
 
-August 15, 2003 Release 1.2.0
+August 15, 2003 Release 1.2beta
     - Added support to import voices from FestVox into FreeTTS
     - Extended voice packaging scheme to simplify management and addition
       of new voices.
     - VoiceManager class provices API to access voices.
     - Dynamic detection of voice jarfiles is supported.
 
-Jun 5, 2003 Release 1.2.0
+Jun 5, 2003 Release 1.2beta
     - Updated FreeTTS version message
 
-Jun 4, 2003 Release 1.2.0
+Jun 4, 2003 Release 1.2beta
     - Imported changes from Flite 1.2:
         - Regenerated cmulex_addenda, cart_dump
         - Reads year "1200" as "twelve hundred" rather than "twelve oh
