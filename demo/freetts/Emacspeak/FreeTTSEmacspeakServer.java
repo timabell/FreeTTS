@@ -51,9 +51,8 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 	    emacsVoice = (Voice) voiceClass.newInstance();
 
             if (emacsVoice instanceof MbrolaVoice) {
-                Validator validator = new
-                    MbrolaVoiceValidator((MbrolaVoice) emacsVoice);
-                if (!validator.isValid()) {
+                if (!(new MbrolaVoiceValidator((MbrolaVoice) emacsVoice)).
+                    isValid()) {
                     throw new IllegalStateException
                         ("Problem starting MBROLA voice");
                 }
