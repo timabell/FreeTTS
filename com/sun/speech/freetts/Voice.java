@@ -746,7 +746,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * @see #isVerbose
      */
     public void log(String message) {
-	if (!verbose) {
+	if (verbose) {
 	    System.out.println(message);
 	}
     }
