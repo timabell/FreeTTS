@@ -23,7 +23,7 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
         String base = Utilities.getProperty("mbrola.base", null);
 
         if (base == null || base.trim().length() == 0) {
-            System.err.println(
+            System.out.println(
                 "System property \"mbrola.base\" is undefined.  "
                 + "Will not use MBROLA voices.");
             return new Voice[0];

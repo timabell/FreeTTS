@@ -48,7 +48,7 @@
 	       source="1.4"
 	       deprecation="true"
 	       srcdir="${src_dir}"
-	       includes="com/**,de/**"
+	       includes="com/**,de/**,tests/**"
 	       destdir="${classes_dir}">
 	    <classpath refid="extra_libs"/>
 	</javac>
@@ -328,7 +328,7 @@
                 dir="${classes_dir}"
 	        excludes="com/sun/speech/freetts/en/**,
 		          de/**,
-		          test/**,
+		          tests/**,
 		          **/*.bin,
 		          **/*.idx"/>
             <fileset
@@ -743,6 +743,39 @@
             <fileset dir="${demo_classes_dir}/util"
 	             includes="TimeUtils.class"/>
         </jar>
+    </target>
+
+
+    <!-- ********************************************************** --> 
+    <!-- *                                                        * -->
+    <!-- * Runs the unit tests.                                   * -->
+    <!-- *                                                        * -->
+    <!-- * This will execute AllTests.java from the test          * -->
+    <!-- * directory.  You can also tell ant to run one test by   * -->
+    <!-- * adding the following to the ant command line:          * -->
+    <!-- *                                                        * -->
+    <!-- *    -Dtestcase=<fully qualified classname>              * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** --> 
+    <path id="test_classpath">
+        <pathelement location="${lib_dir}/freetts.jar"/>
+        <pathelement location="${classes_dir}"/>
+        <pathelement location="${junit.jar}"/>
+        <path refid="extra_libs"/>
+    </path>
+    <target name="junit" depends="jars">
+        <junit dir="tests"
+	       fork="yes"
+	       printsummary="false" 
+	       haltonfailure="true">
+            <classpath refid="test_classpath"/>
+            <formatter type="plain" usefile="false"/>
+            <test name="${testcase}" if="testcase"/>
+            <batchtest unless="testcase">
+                <fileset dir="${classes_dir}"
+			 includes="tests/AllTests.class"/>
+            </batchtest>
+        </junit>
     </target>
 
 

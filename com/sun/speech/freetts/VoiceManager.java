@@ -30,8 +30,8 @@ import java.net.URLStreamHandlerFactory;
 // [[[TODO: Enable and test dynamic loader]]]
 
 /**
- * The VoiceManager is what provides access to voices for all of
- * FreeTTS.  There is only one instance of the VoiceManager.  
+ * Provides access to voices for all of FreeTTS.  There is only one
+ * instance of the VoiceManager.  
  *
  * Each call to getVoices() creates a new instance of each voice.
  *
@@ -88,7 +88,7 @@ public class VoiceManager {
      * Any jarfile whose Manifest contains
      * "FreeTTSVoiceDefinition: true" is assumed to be a FreeTTS
      * voice, and the Manifest's "Main-Class" entry is assumed to be
-     * the name of the voice directory.  The dependancies of the voice
+     * the name of the voice directory.  The dependencies of the voice
      * jarfiles specified by the "Class-Path" Manifest entry are also
      * loaded.
      *
@@ -136,8 +136,8 @@ public class VoiceManager {
             UniqueVector voiceDirectoryNames =
                 getVoiceDirectoryNamesFromFiles();
 
-            System.out.println("TEST: got " +
-                    voiceDirectoryNames.size() + " names from voices files");
+            //System.out.println("TEST: got " +
+            //        voiceDirectoryNames.size() + " names from voices files");
 
             // Get list of voice jars
             UniqueVector pathURLs = getVoiceJarURLs();
@@ -145,17 +145,17 @@ public class VoiceManager {
                     getVoiceDirectoryNamesFromJarURLs(pathURLs));
 
             //TEST
-            for (int i = 0; i < voiceDirectoryNames.size(); i++) {
-                System.out.println("TEST vd: " + voiceDirectoryNames.get(i));
-            }
+            //for (int i = 0; i < voiceDirectoryNames.size(); i++) {
+            //    System.out.println("TEST vd: " + voiceDirectoryNames.get(i));
+            //}
 
-            // Get dependancies
+            // Get dependencies
                 // Copy of vector made because vector may be modified by
-                // each call to getDependancyURLs
+                // each call to getDependencyURLs
             URL[] voiceJarURLs = (URL[])
                 pathURLs.toArray(new URL[pathURLs.size()]);
             for (int i = 0; i < voiceJarURLs.length; i++) {
-                getDependancyURLs(voiceJarURLs[i], pathURLs);
+                getDependencyURLs(voiceJarURLs[i], pathURLs);
             }
 
             // Extend class path
@@ -164,17 +164,17 @@ public class VoiceManager {
             }
 
             //TEST
-            System.out.println("TEST ClassLoader Path:");
-            URL[] classPath = classLoader.getURLs();
-            for (int i = 0; i < classPath.length; i++) {
-                System.out.println(classPath[i]);
-            }
+            //System.out.println("TEST ClassLoader Path:");
+            //URL[] classPath = classLoader.getURLs();
+            //for (int i = 0; i < classPath.length; i++) {
+            //    System.out.println(classPath[i]);
+            //}
 
             // Create an instance of each voice directory
             UniqueVector voiceDirectories = new UniqueVector();
             for (int i = 0; i < voiceDirectoryNames.size(); i++) {
-                System.out.println("TEST About to try and load " + (String)
-                        voiceDirectoryNames.get(i));
+                //System.out.println("TEST About to try and load " + (String)
+                //        voiceDirectoryNames.get(i));
                 Class c = Class.forName((String) voiceDirectoryNames.get(i),
                         true, classLoader);
                 voiceDirectories.add(c.newInstance());
@@ -206,11 +206,11 @@ public class VoiceManager {
      * to get the urls Class-Path entry.  These urls are passed to
      * this method recursively.
      *
-     * @param dependancyURLs a vector containing all of the dependant
+     * @param dependencyURLs a vector containing all of the dependant
      * urls found.  This parameter is modified as urls are added to
      * it.
      */
-    private void getDependancyURLs(URL url, UniqueVector dependancyURLs) {
+    private void getDependencyURLs(URL url, UniqueVector dependencyURLs) {
         try {
             String urlDirName = getURLDirName(url);
             if (url.getProtocol().equals("jar")) { // only check deps of jars
@@ -239,18 +239,18 @@ public class VoiceManager {
                         }
                     } catch (MalformedURLException e) {
                         System.err.println(
-                                "Warning: unable to resolve dependancy "
+                                "Warning: unable to resolve dependency "
                                 + classPath[i]
                                 + " referenced by " + url);
                         continue;
                     }
 
-                    System.out.println("TEST: adding dep url: " + classPathURL);
+                    //System.out.println("TEST: adding dep url: " + classPathURL);
                     // don't get in a recursive loop if two jars
                     // are mutually dependant
-                    if (!dependancyURLs.contains(classPathURL)) {
-                        dependancyURLs.add(classPathURL);
-                        getDependancyURLs(classPathURL, dependancyURLs);
+                    if (!dependencyURLs.contains(classPathURL)) {
+                        dependencyURLs.add(classPathURL);
+                        getDependencyURLs(classPathURL, dependencyURLs);
                     }
                 }
             }
@@ -316,14 +316,14 @@ public class VoiceManager {
         try {
             UniqueVector voiceDirectoryNames = new UniqueVector();
             for (int i = 0; i < urls.size(); i++) {
-                System.out.println("TEST: reading manifest of " +
-                        (URL)urls.get(i));
+                //System.out.println("TEST: reading manifest of " +
+                //        (URL)urls.get(i));
                 JarURLConnection jarConnection =
                     (JarURLConnection) ((URL) urls.get(i)).openConnection();
                 Attributes attributes = jarConnection.getMainAttributes();
                 String mainClass =
                     attributes.getValue(Attributes.Name.MAIN_CLASS);
-                System.out.println("TEST: Main-Class: " + mainClass);
+                //System.out.println("TEST: Main-Class: " + mainClass);
                 if (mainClass == null || mainClass.trim().equals("")) {
                     throw new Error("No Main-Class found in jar "
                             + (URL)urls.get(i));
@@ -365,7 +365,7 @@ public class VoiceManager {
             String[] dirNames = voicesPath.split(pathSeparator);
             for (int i = 0; i < dirNames.length; i++) {
                 try {
-                    System.out.println("TEST: adding voicepath " + dirNames[i]);
+                    //System.out.println("TEST: adding voicepath " + dirNames[i]);
                     voiceJarURLs.addVector(getVoiceJarURLsFromDir(dirNames[i]));
                 } catch (FileNotFoundException e) {
                     throw new Error("Error loading jars from voicespath "
@@ -394,13 +394,13 @@ public class VoiceManager {
             }
             File[] files = dir.listFiles();
             for (int i = 0; i < files.length; i++) {
-                System.out.println("TEST: checking url " + files[i].getName());
+                //System.out.println("TEST: checking url " + files[i].getName());
                 if (files[i].isFile() && (!files[i].isHidden()) &&
                         files[i].getName().endsWith(".jar")) {
                     URL jarURL = files[i].toURL();
                     jarURL = new URL("jar", "",
                             "file:"+ jarURL.getPath() + "!/");
-                    System.out.println("TEST: reading url " + jarURL);
+                    //System.out.println("TEST: reading url " + jarURL);
                     JarURLConnection jarConnection = (JarURLConnection)
                         jarURL.openConnection();
                     Attributes attributes = jarConnection.getMainAttributes();
@@ -560,7 +560,7 @@ public class VoiceManager {
             }
             line = line.trim();
             if (!line.startsWith("#") && !line.equals("")) {
-                System.out.println("TEST Adding vd " + line);
+                //System.out.println("TEST Adding vd " + line);
                 names.add(line);
             }
         }
