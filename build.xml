@@ -7,6 +7,7 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
+    <property name="version"		value="1_2_0"/>
     <path id="extra_libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
@@ -16,6 +17,9 @@
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
     <property name="lib_dir"            value="${build_dir}/lib"/>
     <property name="bin_dir"            value="${build_dir}/bin"/>
+    <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
+    <property name="javadoc_zip"	value="javadoc.zip"/>
+    <property name="deploy_dir"		value="deploy"/>
 
 
     <!-- ********************************************************** -->
@@ -456,7 +460,6 @@
     <!-- * Generates the javadoc                                  * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
     <property name="javadoc_desc"	value="FreeTTS 1.2"/>
     <property name="javadoc_pkgs"	
 	      value="com.sun.speech.engine,
@@ -779,6 +782,96 @@
         </junit>
     </target>
 
+    <target name="javadoc_zip"
+	    depends="javadoc">
+        <zip destfile="${build_dir}/${javadoc_zip}">
+            <fileset dir="${build_dir}" includes="javadoc"/>
+        </zip>
+    </target>
+
+
+    <!-- ********************************************************** --> 
+    <!-- *                                                        * -->
+    <!-- * Make the packages for deployment.                      * -->
+    <!-- *                                                        * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** --> 
+    <fileset id="srcs"
+	     dir="${src_dir}"
+	     includes="com/**,de/**"/>
+
+    <fileset id="legal"
+	     dir="${src_dir}"
+	     includes="acknowledgments.txt,
+	               license.terms"/>
+
+    <fileset id="javadoc_zip"
+	     dir="${build_dir}"
+	     includes="${javadoc_zip}"/>
+
+    <fileset id="docs"
+	     dir="."
+	     includes="README.txt,RELEASE_NOTES,docs/**"
+             excludes="docs/*.awk"/>
+
+    <fileset id="demos"
+	     dir="${src_dir}"
+	     includes="demo/**"/>
+
+    <fileset id="tests"
+	     dir="."
+	     includes="tests/**,wave/**,data/**"/>
+
+    <fileset id="binaries"
+	     dir="${build_dir}"
+	     includes="lib/**,bin/**"
+             excludes="lib/jsapi.jar,lib/mbrola.jar"/>
+
+    <fileset id="jsapi_sh"
+	     dir="."
+	     includes="lib/jsapi.sh,lib/jsapi.exe"/>
+
+    <target name="deploy"
+	    depends="deploy_srcs,deploy_binaries,deploy_tests"
+	    description="Creates *.zip files for deployment"/>
+
+    <target name="deploy_srcs"
+	    depends="javadoc_zip">
+        <mkdir dir="${deploy_dir}"/>
+        <zip destfile="${deploy_dir}/freetts-srcs-${version}.zip">
+            <fileset refid="legal"/>
+            <fileset dir="." includes="build.xml"/>
+            <fileset refid="srcs"/>
+            <fileset refid="demos"/>
+            <fileset dir="." includes="speech.properties"/>
+            <fileset refid="jsapi_sh"/>
+            <fileset refid="docs"/>
+            <fileset refid="javadoc_zip"/>
+        </zip>
+    </target>
+
+    <target name="deploy_binaries"
+	    depends="javadoc_zip">
+        <mkdir dir="${deploy_dir}"/>
+        <copy file="${mbrola_jar}" tofile="${mbrola_jar}.disabled"/>
+        <chmod dir="lib" perm="ugo+x" includes="jsapi.sh"/>
+        <zip destfile="${deploy_dir}/freetts-bin-${version}.zip">
+            <fileset refid="legal"/>
+            <fileset refid="binaries"/>
+            <fileset refid="jsapi_sh"/>
+            <fileset dir="." includes="speech.properties"/>
+            <fileset refid="docs"/>
+            <fileset refid="javadoc_zip"/>
+        </zip>
+    </target>
+
+    <target name="deploy_tests">
+        <mkdir dir="${deploy_dir}"/>
+        <zip destfile="${deploy_dir}/freetts-tests-${version}.zip">
+            <fileset refid="legal"/>
+            <fileset refid="tests"/>
+        </zip>
+    </target>
 
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->
