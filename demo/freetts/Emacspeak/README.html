@@ -15,7 +15,7 @@
 <html>
 
   <head>
-    <title>JSAPI Emacspeak Demo</title>
+    <title>FreeTTS Emacspeak Demo</title>
   </head>
 
   <body bgcolor="#FFFFFF">
@@ -24,7 +24,7 @@
       <table bgcolor="#FFCC66" width="100%">
           <tr>
             <td align=center width="100%">
-	      <h1>JSAPI Emacspeak Demo</h1>
+	      <h1>FreeTTS Emacspeak Demo</h1>
             </td>
           </tr>
       </table>
@@ -32,9 +32,9 @@
 
     <pre>
 
-This demo implements a JSAPI text-to-speech server that 
-can be used with Emacspeak. For the non-JSAPI version, please
-refer to <a href="../../freetts/Emacspeak/README.html">FreeTTS Emacspeak</a>.
+This demo implements a text-to-speech server that 
+can be used with Emacspeak. This is the non-JSAPI version,
+for the JSAPI version, refer to <a href="../../JSAPI/Emacspeak/README.html">JSAPI Emacspeak</a>.
 
 To use this Emacspeak TTS Server:
 
@@ -42,8 +42,8 @@ To use this Emacspeak TTS Server:
    at port 2222. To change the port, modify the System property
    in the Makefile. The following should appear:
 <b>
-Creating Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
-Loading Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
+Creating com.sun.speech.freetts.en.us.CMUDiphoneVoice...
+Loading com.sun.speech.freetts.en.us.CMUDiphoneVoice...
 ...Ready
 Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
 </b>
@@ -58,9 +58,10 @@ Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
 4. At this point, you should hear "<b>Connecting to server on host...</b>"
    at your emacspeak client. You should see the following on 
    the server-side:
+
 <b>
-Creating Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
-Loading Unlimited domain FreeTTS Speech Synthesizer from Sun Labs...
+Creating com.sun.speech.freetts.en.us.CMUDiphoneVoice...
+Loading com.sun.speech.freetts.en.us.CMUDiphoneVoice...
 ...Ready
 Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
 ... new socket connection
@@ -77,9 +78,7 @@ SPEAK:
 IN   : tts_set_character_scale 1.25
 SPEAK:
 IN   : s
-IN   : q {Connecting to server on host sunlabs.east  port 2222 }
-Connecting to server on host sunlabs.east  port 2222
-SPEAK: "Connecting to server on host sunlabs.east  port 2222"
+IN   : q {Connecting to server on host sunlabs  port 2222 }
 IN   : d
 SPEAK:
 IN   : d
@@ -98,6 +97,7 @@ IN   : tts_set_character_scale 1.25
 SPEAK:
 IN   : d
 SPEAK:
+SPEAK: "Connecting to server on host sunlabs  port 2222"
 </b>
 
     </pre>
