@@ -327,7 +327,7 @@ class FeatureProcessors {
 	 * processing
 	 */
 	public String process(Item item) throws ProcessException {
-	    int v = item.getFeatures().getInt("name");
+	    int v = Integer.parseInt(item.getFeatures().getString("name"));
 	    if ((v > 0) && (v < 32)) {
 		return "1";
 	    } else {
