@@ -14,6 +14,7 @@ import com.sun.speech.freetts.ProcessException;
 
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
+import com.sun.speech.freetts.audio.PoliteStreamingAudioPlayer;
 
 import javax.sound.sampled.AudioFormat;
 
@@ -89,7 +90,7 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
 
         BufferedInputStream fromMbrola =
             (BufferedInputStream) utterance.getObject("fromMbrola");
-        
+  
         if (fromMbrola == null) {
             throw new ProcessException
                 ("No \"fromMbrola\" object is associated with utterance");
@@ -103,8 +104,12 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
             int nrRead = -1; // -1 means end of file
             while ((nrRead = fromMbrola.read(buffer)) != -1) {
                 if (!streamPlayer.write(buffer, 0, nrRead)) {
+                    // drain the input stream
+                    while ((nrRead = fromMbrola.read(buffer)) != -1) {}
+                    fromMbrola.close();
+                    streamPlayer.end();
                     throw new ProcessException
-                        ("Cannot write audio data to audio player");
+                        ("Cannot write audio data to Player");
                 }
             }
             fromMbrola.close();
