@@ -154,7 +154,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
      * @return <code> true </code> if this item has been cancelled; 
      *   otherwise <code> false </code>
      */
-    protected boolean isCancelled() {
+    protected synchronized boolean isCancelled() {
 	return cancelled;
     }
 
@@ -164,7 +164,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
      * processed.
      * @return true if it has been processed
      */
-    public boolean isCompleted() {
+    public synchronized boolean isCompleted() {
 	return done;
     }
 
@@ -192,7 +192,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
      */
     public synchronized void cancelled() {
 	postSpeakableCancelled();
-	notify();
+	notifyAll();
     }
 
     /**
@@ -200,7 +200,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
      */
     public synchronized void completed() {
 	postSpeakableEnded();
-	notify();
+	notifyAll();
     }
 
     /**
@@ -340,7 +340,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     // item that is playing is cancelled.
 	synchronized(this) {
 	    shouldPost = !done;
-	    done = true;
+            done = true;
 	}
 	if (shouldPost) {
 	    SpeechEventUtilities.postSpeechEvent(
