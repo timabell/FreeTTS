@@ -33,7 +33,7 @@ runserver: all
 
 runMbrola1Server: all
 	$(JAVA_CMD) \
-	-Ddebug=true \
+	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
 	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS1 \
@@ -41,7 +41,7 @@ runMbrola1Server: all
 
 runMbrola2Server: all
 	$(JAVA_CMD) \
-	-Ddebug=true \
+	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
 	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS2 \
@@ -49,7 +49,7 @@ runMbrola2Server: all
 
 runMbrola3Server: all
 	$(JAVA_CMD) \
-	-Ddebug=true \
+	-Ddebug=false \
 	-Dmbrola.base=$(MBROLA_DIR) \
 	-Dmetrics=true \
 	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS3 \
@@ -62,6 +62,6 @@ runcclient: cclient
 runjclient: all
 	$(JAVA_CMD) \
 	-Ddebug=false \
-	-Dmetrics=true \
+	-Dmetrics=false \
 	-Dserver=localhost \
 	-DsampleRate=16000 Client
