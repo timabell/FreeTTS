@@ -148,6 +148,8 @@ fi
 
 # The scheme and java files should be in the same directory as this script
 HELPERDIR=`dirname $0`
+# Make sure that HELPERDIR contains an absolute path:
+echo $HELPERDIR | grep "^/" > /dev/null || HELPERDIR=`pwd`/$HELPERDIR
 
 # This assumes that FreeTTS is configured with this directory structure
 FREETTSDIR="$HELPERDIR/../.."
