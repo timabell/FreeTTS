@@ -37,7 +37,9 @@ public class MbrolaVoiceValidator implements Validator {
     }
 
     /**
-     * Returns true if the MbrolaVoice tested is valid.
+     * Validates this MbrolaVoice.
+     *
+     * @throws ValidationException if this MbrolaVoice is invalid
      */
     public void validate() throws ValidationException {
         String mbrolaBase = System.getProperty("mbrola.base");
