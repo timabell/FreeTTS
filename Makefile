@@ -224,6 +224,7 @@ push_docs:
 	sshh tar xzfC $(DEPLOY_DOCS_TARGET) $(PUSH_DEST_DOC)
 
 all::
+	$(MAKE) jars
 
 # we don't have the dependencies for jar files done up so we just
 # remove the old ones and make the new ones
