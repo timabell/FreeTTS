@@ -71,7 +71,7 @@ public class FindSTS {
                 // Generate sts data
                 STS[] stsData = findSTS(wave, lpc, lpc_min, lpc_range);
 
-                // Check computation
+                // Verify STS data for sanity
                 Wave reconstructedWave = new
                     Wave(wave.getSampleRate(), stsData, lpc,
                             lpc_min, lpc_range);
@@ -132,11 +132,11 @@ public class FindSTS {
                     start + lpc.getNumChannels(), lpc.getFrame(i),
                     lpc.getNumChannels(), size);
 
-            frame = new int[lpc.getNumChannels()-1];
+            frame = new int[lpc.getNumChannels() - 1];
             for (int j = 1; j < lpc.getNumChannels(); j++) {
-                frame[j-1] = (int)
-                    ((((lpc.getFrameEntry(i, j)-lpc_min)/lpc_range))
-                     * (float)65535.0);
+                frame[j - 1] = (int)
+                    ((((lpc.getFrameEntry(i, j) - lpc_min) / lpc_range))
+                     * (float) 65535.0);
             }
 
             stsData[i] = new STS(frame, size, residual);
@@ -706,6 +706,7 @@ class STS {
         return frame[index];
     }
 }
+
 
 /**
  * This class is for general purpose functions such as reading and

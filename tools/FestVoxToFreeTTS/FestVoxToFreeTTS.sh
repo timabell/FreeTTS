@@ -8,12 +8,6 @@
 # redistribution of this file, and for a DISCLAIMER OF ALL
 # WARRANTIES.
 
-# [[[TODO: for now, requires FLITEDIR 
-# Alan Black suggested that he will create a scheme builtin quicksort
-# so as to remove the need for the flite_sort dependency.
-# ]]]
-
-
 #[[[TODO: confirm bourne compatibility]]]
 
 usage() {
@@ -60,13 +54,6 @@ if [ ! "$ESTDIR" ]; then
     usage
 fi
 
-if [ ! "$FLITEDIR" ]; then
-    echo "environment variable FLITEDIR is not set"
-    echo "Please set this to point to the base directory of CMU Flite"
-    echo "[[[TODO: $0 currently relies on a few flite depenecies]]]"
-    echo "[[[TODO: This should change in the future.]]]"
-fi
-
 if [ ! -f $VOICEDIR/etc/voice.defs ]; then
    echo "Can't find $VOICEDIR/etc/voice.defs file"
    echo "don't know what voice to convert"
@@ -85,7 +72,7 @@ if ! festival --version; then
     usage
 fi
 
-if ! java -version >/dev/null || ! javac -help 2>/dev/null; then
+if ! java -version >/dev/null 2>/dev/null || ! javac -help 2>/dev/null; then
     echo "Error: java and javac must be in path."
     echo
     usage
@@ -212,14 +199,30 @@ idx_non_diphone() {
                         line,p,"CLUNIT_NONE");
             }
         }' | cat > $VOICEDIR/festival/clunits/$FV_VOICENAME.scm
-        # [[[TODO: flite_sort is a flite binary]]]
         cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
-            $FLITEDIR/tools/flite_sort |
-            sed 's/^.* -- //'  >$VOICEDIR/festival/clunits/$FV_VOICENAME.unitordered.scm
+           sed 's/^.* -- //'  \
+            >$VOICEDIR/festival/clunits/$FV_VOICENAME.fileordered.scm
         cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
-            sed 's/^.* -- //'  >$VOICEDIR/festival/clunits/$FV_VOICENAME.fileordered.scm
+           sed 's/-- //'  | awk '{printf("( %s )\n",$0)}' \
+            >$VOICEDIR/festival/clunits/$FV_VOICENAME.unitlabeled.scm
+        # crazy formatting to exactly match diff of flite_sort
+        festival --heap 5000000 -b \
+            $HELPERDIR/qsort.scm \
+            '(begin (set! clindex (load
+                "'$VOICEDIR/festival/clunits/$FV_VOICENAME.unitlabeled.scm'" t))
+             (set! clindex (qsort clindex carstring<? carstring=?))
+             (while (not (null? clindex))
+                ;(format t "%l\n" (cadr (car clindex)))
+                (set! x (car (cdr (car clindex))))
+                (format t "( %l %l %f %f %f %l %l ) \n"
+                    (nth 0 x) (nth 1 x) (nth 2 x)
+                    (nth 3 x) (nth 4 x) (nth 5 x) (nth 6 x))
+                (set! clindex (cdr clindex))
+             ))' > $VOICEDIR/festival/clunits/$FV_VOICENAME.unitordered.scm
+
         festival --heap 5000000 -b \
             $HELPERDIR/FestVoxClunitsToFreeTTS.scm \
+            $HELPERDIR/qsort.scm \
             '(dump_clunits "'$FV_VOICENAME'" "'$VOICEDIR'"
             "'$OUTDIR'" "misc.txt" "unittypes.txt" "cart.txt" "units.txt"
             "lpc.txt" "lpc_header.txt" "mcep.txt" "mcep_header.txt"
@@ -238,11 +241,20 @@ idx_non_diphone() {
 
 idx_diphone() {
     echo "Building diphone index"
-    # [[[TODO: flite_sort is a flite binary]]]
-    sed '1,/EST_Header_End/d' dic/*.est |
-    awk '{printf("%s ( %s )\n",$1,$0)}' |
-    $FLITEDIR/tools/flite_sort |
-    sed 's/^.* (/(/' >dic/diphidx.scm
+
+    sed '1,/EST_Header_End/d' $VOICEDIR/dic/*.est |
+    awk '{printf("( %s )\n",$0)}' >$VOICEDIR/dic/diphidx.unsorted.scm
+    festival --heap 5000000 -b \
+        $HELPERDIR/qsort.scm \
+        '(begin (set! diphindex (load
+            "'$VOICEDIR/dic/diphidx.unsorted.scm'" t))
+         (set! diphindex (qsort diphindex carstring<? carstring=?))
+         (while (not (null? diphindex))
+            (set! x (car diphindex))
+            (format t "( %l %l %l %l %l ) \n"
+                (nth 0 x) (nth 1 x) (nth 2 x) (nth 3 x) (nth 4 x))
+            (set! diphindex (cdr diphindex))
+         ))' > $VOICEDIR/dic/diphidx.scm
 
     festival --heap 5000000 -b \
         $HELPERDIR/FestVoxDiphoneToFreeTTS.scm \
