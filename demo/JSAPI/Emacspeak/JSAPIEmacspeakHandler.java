@@ -43,7 +43,7 @@ public class JSAPIEmacspeakHandler extends EmacspeakProtocolHandler {
 	// split around "[*]"
 	String[] parts = input.split(PARENS_STAR_REGEX);
 	for (int i = 0; i < parts.length; i++) {
-	    System.out.println(parts[i]);
+	    debugPrintln(parts[i]);
 	    synthesizer.speakPlainText(parts[i], null);
 	}
     }
@@ -54,5 +54,19 @@ public class JSAPIEmacspeakHandler extends EmacspeakProtocolHandler {
      */
     public void cancelAll() {
         synthesizer.cancelAll();
+    }
+
+
+    /**
+     * Sets the speaking rate.
+     *
+     * @param wpm the new speaking rate (words per minute)
+     */
+    public void setRate(float wpm) {
+        try {
+            synthesizer.getSynthesizerProperties().setSpeakingRate(wpm);
+        } catch (java.beans.PropertyVetoException e) {
+            // ignore and do nothing
+        }
     }
 }

@@ -58,6 +58,16 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
 
 
     /**
+     * Sets the speaking rate.
+     *
+     * @param wpm the new speaking rate (words per minute)
+     */
+    public void setRate(float wpm) {
+        speakCommandHandler.setRate(wpm);
+    }
+    
+    
+    /**
      * This thread is used to separate the handling of Voice.speak() from
      * the thread that accepts commands from the client, so that the 
      * latter won't be blocked by the former.
@@ -94,7 +104,9 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
                             ie.printStackTrace();
                         }
                     }
-                    firstCommand = commandList.remove(0);
+                    if (commandList.size() > 0) {
+                        firstCommand = commandList.remove(0);
+                    }
                 }
                 if (firstCommand != null) {
                     voice.speak((String) firstCommand);
@@ -116,8 +128,8 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
                 commandList.notifyAll();
             }
         }
-        
-        
+    
+    
         /**
          * Removes all the commands from this Handler.
          */
@@ -126,6 +138,16 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
                 voice.getAudioPlayer().cancel();
                 commandList.removeAllElements();
             }
+        }
+        
+        
+        /**
+         * Sets the speaking rate.
+         *
+         * @param wpm the new speaking rate (words per minute)
+         */
+        public void setRate(float wpm) {
+            voice.setRate(wpm);
         }
         
         

@@ -16,7 +16,12 @@ import java.net.SocketTimeoutException;
 
 
 /**
- * Implements a very simplified version of the Emacspeak speech server.
+ * Implements a very simplified (and incomplete) version of the
+ * Emacspeak speech server.
+ *
+ * See the Emacspeak protocol document at
+ * http://emacspeak.sourceforge.net/info/html/TTS-Servers.html
+ * for more information.
  */
 public abstract class EmacspeakProtocolHandler implements Runnable {
 
@@ -27,14 +32,14 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 
     // synthesizer related variables
     protected static final String PARENS_STAR_REGEX = "[.]*\\[\\*\\][.]*";
-    private int lastSpokenCommandType;
     private static final int NOT_HANDLED_COMMAND = 1;
     private static final int LETTER_COMMAND = 2;
     private static final int QUEUE_COMMAND = 3;
     private static final int TTS_SAY_COMMAND = 4;
     private static final int STOP_COMMAND = 5;
     private static final int EXIT_COMMAND = 6;
-
+    private static final int RATE_COMMAND = 7;
+    
     private String lastQueuedCommand;
     private String stopQuestionStart = "Active processes exist;";
 
@@ -107,15 +112,17 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
      */
     private static int getCommandType(String command) {
 	int type = NOT_HANDLED_COMMAND;
-	if (matches("l {", "}", command)) {
-	    type = LETTER_COMMAND;
-	} else if (matches("q {", "}",  command)) {
-	    type = QUEUE_COMMAND;
-	} else if (matches("tts_say", "}", command)) {
-	    type = TTS_SAY_COMMAND;
-	} else if (command.equals("s")) {
-	    type = STOP_COMMAND;
-	} else if (command.equals("exit")) {
+        if (command.startsWith("l ")) {
+            type = LETTER_COMMAND;
+        } else if (command.startsWith("q ")) {
+            type = QUEUE_COMMAND;
+        } else if (command.startsWith("tts_say ")) {
+            type = TTS_SAY_COMMAND;
+        } else if (command.startsWith("tts_set_speech_rate ")) {
+            type = RATE_COMMAND;
+        } else if (command.equals("s")) {
+            type = STOP_COMMAND;
+        } else if (command.equals("exit")) {
             type = EXIT_COMMAND;
         }
 	return type;
@@ -123,7 +130,10 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 
 
     /**
-     * Returns the text of the given input that is within curly brackets.
+     * Returns the text of the given input that is within curly
+     * brackets.  If there are no curly brackets (allowed in the
+     * Emacspeak protocol if the text has no spaces), then it
+     * just returns the text after the first space.
      *
      * @param input the input text
      *
@@ -133,13 +143,19 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 	String result = "";
 	if (input.length() > 0) {
 	    int first = input.indexOf('{');
+            if (first == -1) {
+                first = input.indexOf(' ');
+            }
 	    int last = input.lastIndexOf('}');
+            if (last == -1) {
+                last = input.length();
+            }
 	    if (first != -1 && last != -1 &&
 		first < last) {
 		result = input.substring(first+1, last);
 	    }
 	}
-	return result;
+	return result.trim();
     }
 
 
@@ -155,6 +171,14 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
      * Removes all the queued text.
      */
     public abstract void cancelAll();
+
+
+    /**
+     * Sets the speaking rate.
+     *
+     * @param wpm the new speaking rate (words per minute)
+     */
+    public abstract void setRate(float wpm);
 
 
     /**
@@ -176,11 +200,17 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
                         notifyAll();
                     } else if (commandType == STOP_COMMAND) {
                         cancelAll();
+                    } else if (commandType == RATE_COMMAND) {
+                        try {
+                            setRate(Float.parseFloat(
+                                        textInCurlyBrackets(command)));
+                        } catch (NumberFormatException e) {
+                            // ignore and do nothing
+                        }
                     } else if (commandType != NOT_HANDLED_COMMAND) {
-                        String content = textInCurlyBrackets(command).trim();
+                        String content = textInCurlyBrackets(command);
                         if (content.length() > 0) {
                             speak(content);
-                            lastSpokenCommandType = commandType;
                         }
                         // detect if emacspeak is trying to quit
                         detectQuitting(commandType, content);
@@ -192,7 +222,7 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } finally {
-            debugPrintln("FreeTTSEmacspeakHandler: thread terminated");
+            debugPrintln("EmacspeakProtocolHandler: thread terminated");
         }
     }
 
