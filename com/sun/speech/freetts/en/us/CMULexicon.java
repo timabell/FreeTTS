@@ -22,6 +22,8 @@ import com.sun.speech.freetts.lexicon.LetterToSound;
 import com.sun.speech.freetts.lexicon.LexiconImpl;
 import com.sun.speech.freetts.util.BulkTimer;
 
+import com.sun.speech.freetts.VoiceManager;
+
 /**
  * Provides a CMU lexicon-specific implementation of a Lexicon that is
  * stored in a text file.
@@ -81,11 +83,25 @@ public class CMULexicon extends LexiconImpl {
      * @param basename the basename for the lexicon.
      */
     public CMULexicon(String basename) {
-	Class cls = CMULexicon.class;
-	URL letterToSoundURL = cls.getResource(basename + "_lts.bin");
-	URL compiledURL = cls.getResource(basename + "_compiled.bin");
-	URL addendaURL = cls.getResource(basename + "_addenda.bin");
-	setLexiconParameters(compiledURL, addendaURL, letterToSoundURL, true);
+        this(basename, true);
+    }
+
+    public CMULexicon(String basename, boolean useBinaryIO) {
+        java.net.URLClassLoader classLoader =
+                VoiceManager.getVoiceClassLoader();
+        String type = (useBinaryIO ? "bin" : "txt");
+
+        URL letterToSoundURL = classLoader.getResource(
+                "com/sun/speech/freetts/en/us/" + basename + "_lts." + type);
+        URL compiledURL = classLoader.getResource(
+                "com/sun/speech/freetts/en/us/" + basename
+                + "_compiled." + type);
+        URL addendaURL = classLoader.getResource(
+                "com/sun/speech/freetts/en/us/" + basename
+                + "_addenda." + type);
+
+	setLexiconParameters(compiledURL, addendaURL,
+                letterToSoundURL, useBinaryIO);
     }
     
     /**
@@ -109,31 +125,7 @@ public class CMULexicon extends LexiconImpl {
      */ 
     static public CMULexicon getInstance( String basename, boolean useBinaryIO) 
 						throws IOException {
-	URL compiledURL;
-	URL addendaURL;
-	URL letterToSoundURL;
-
-	LetterToSound letterToSound;
-	Class cls = CMULexicon.class;
-	CMULexicon lexicon;
-
-	
-	if (useBinaryIO) {
-	    letterToSoundURL = cls.getResource(basename + "_lts.bin");
-	    compiledURL = cls.getResource(basename + "_compiled.bin");
-	    addendaURL = cls.getResource(basename + "_addenda.bin");
-	}
-	else {
-	    letterToSoundURL = cls.getResource(basename + "_lts.txt");
-	    compiledURL = cls.getResource(basename + "_compiled.txt");
-	    addendaURL = cls.getResource(basename + "_addenda.txt");
-
-	    System.out.println("lts is " + letterToSoundURL);
-	    System.out.println("com is " + compiledURL);
-	    System.out.println("ad is " + addendaURL);
-	}
-	lexicon = new CMULexicon(compiledURL, addendaURL,
-		letterToSoundURL, useBinaryIO);
+	CMULexicon lexicon = new CMULexicon(basename, useBinaryIO);
 	lexicon.load();
         return lexicon;
     }

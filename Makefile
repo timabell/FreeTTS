@@ -13,7 +13,7 @@ GTAR = /pkg/gnu/bin/tar
 ZIP = zip
 
 # List any sub directories that need to be built
-SUBDIRS = com de demo bin tests docs
+SUBDIRS = com de demo tests bin docs
 
 # List src dirs that get deployed
 # SRCDIRS = javax com
@@ -158,7 +158,7 @@ clean-voices: clean
 ####################################################
 # Creates the freetts tarball ready for deploying
 ####################################################
-deploy: all jars zips
+deploy: all zips
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
 	(cd docs; $(MAKE) deploy)

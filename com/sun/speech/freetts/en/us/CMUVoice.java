@@ -61,8 +61,6 @@ public abstract class CMUVoice extends Voice {
     /**
      * Creates a simple voice
      *
-     * @param createLexicon if <code>true</code> automatically load up
-     * the default CMU lexicon; otherwise, don't load it.
      * @param name the name of the voice
      * @param gender the gender of the voice
      * @param age the age of the voice
@@ -73,15 +71,14 @@ public abstract class CMUVoice extends Voice {
      * @param organization the organization which created the voice
      * &quot;general&quot;, &quot;time&quot;, or
      * &quot;weather&quot;.
+     * @param lexicon the lexicon to load
      */
-    public CMUVoice(boolean createLexicon, String name, Gender gender,
+    public CMUVoice(String name, Gender gender,
             Age age, String description, Locale locale, String domain,
-            String organization) {
+            String organization, CMULexicon lexicon) {
         super(name, gender, age, description, locale, domain,
                 organization);
-	if (createLexicon) {
-	    setLexicon(new CMULexicon());
-	}
+        setLexicon(lexicon);
     }
 
     // overrides Voice.loader

@@ -1,6 +1,7 @@
 package com.sun.speech.freetts.en.us.cmu_us_kal;
 
 import com.sun.speech.freetts.en.us.CMUDiphoneVoice;
+import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.VoiceDirectory;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Gender;
@@ -20,17 +21,15 @@ public class KevinVoiceDirectory extends VoiceDirectory {
      * @return an array of new Voice instances
      */
     public Voice[] getVoices() {
-        Voice kevin = new CMUDiphoneVoice(true, "kevin", Gender.MALE,
+        CMULexicon lexicon = new CMULexicon("cmulex");
+        Voice kevin = new CMUDiphoneVoice("kevin", Gender.MALE,
                 Age.YOUNGER_ADULT, "default 8-bit diphone voice",
-                Locale.US, "general", "cmu");
-        Voice kevin16 = new CMUDiphoneVoice(true, "kevin16", Gender.MALE,
+                Locale.US, "general", "cmu", lexicon,
+                this.getClass().getResource("cmu_us_kal.bin"));
+        Voice kevin16 = new CMUDiphoneVoice("kevin16", Gender.MALE,
                 Age.YOUNGER_ADULT, "default 16-bit diphone voice",
-                Locale.US, "general", "cmu");
-
-        kevin.getFeatures().setString(Voice.DATABASE_NAME,
-                "cmu_us_kal/cmu_us_kal.bin");
-        kevin16.getFeatures().setString(Voice.DATABASE_NAME,
-                "cmu_us_kal/cmu_us_kal16.bin");
+                Locale.US, "general", "cmu", lexicon,
+                this.getClass().getResource("cmu_us_kal16.bin"));
 
         Voice[] voices = {kevin, kevin16};
         return voices;

@@ -602,10 +602,10 @@ if [ "$2" = "install" ]; then
         > "$EN_US_DIR/$VP_FULL_NAME/Makefile"
 
 
-    # put entry in voices.txt
-    if ! egrep "^$FULL_VOICEDIRECTORY_CLASS" "$FREETTSDIR/lib/voices.txt" >/dev/null 2>/dev/null; then
-        echo "$FULL_VOICEDIRECTORY_CLASS" >> "$FREETTSDIR/lib/voices.txt"
-    fi
+    # put entry in voices.txt  (Not needed with automatic voice detection -dv)
+    #if ! egrep "^$FULL_VOICEDIRECTORY_CLASS" "$FREETTSDIR/lib/voices.txt" >/dev/null 2>/dev/null; then
+    #    echo "$FULL_VOICEDIRECTORY_CLASS" >> "$FREETTSDIR/lib/voices.txt"
+    #fi
 
     echo "The voice has been successfully installed in"
     echo "$EN_US_DIR/$VP_FULL_NAME/"

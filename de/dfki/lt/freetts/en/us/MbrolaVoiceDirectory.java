@@ -1,5 +1,6 @@
 package de.dfki.lt.freetts.en.us;
 
+import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.VoiceDirectory;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Gender;
@@ -26,21 +27,23 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
                 ("System property \"mbrola.base\" is undefined. " +
                  "You might need to set the MBROLA_DIR environment variable.");
         } else {
+
+            CMULexicon lexicon = new CMULexicon("cmulex");
             
             Voice mbrola1 = new MbrolaVoice
-                (true, "us1", "us1", 150f, 180F, 22F,
+                ("us1", "us1", 150f, 180F, 22F,
                  "mbrola1", Gender.FEMALE, Age.YOUNGER_ADULT, "MBROLA Voice 1",
-                 Locale.US, "general", "mbrola");
+                 Locale.US, "general", "mbrola", lexicon);
 
             Voice mbrola2 = new MbrolaVoice
-                (true, "us2", "us2", 150f, 115F, 12F,
+                ("us2", "us2", 150f, 115F, 12F,
                  "mbrola2", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 2",
-                 Locale.US, "general", "mbrola");
+                 Locale.US, "general", "mbrola", lexicon);
 
             Voice mbrola3 = new MbrolaVoice
-                (true, "us3", "us3", 150f, 125F, 12F,
+                ("us3", "us3", 150f, 125F, 12F,
                  "mbrola3", Gender.MALE, Age.YOUNGER_ADULT, "MBROLA Voice 3",
-                 Locale.US, "general", "mbrola");
+                 Locale.US, "general", "mbrola", lexicon);
 
             Voice[] voices = {mbrola1, mbrola2, mbrola3};
             

@@ -24,17 +24,19 @@ import com.sun.speech.freetts.Age;
 import com.sun.speech.freetts.Gender;
 import java.util.Locale;
 
+import java.net.URL;
+
 /**
  * Defines limited domain synthesis voice that specializes
  * in telling the time (with an english accent).
  */
 public class CMUClusterUnitVoice extends CMUVoice {
 
+    protected URL database;
+
     /**
      * Creates a simple cluster unit voice
      *
-     * @param createLexicon if <code>true</code> automatically load up
-     * the default CMU lexicon; otherwise, don't load it.
      * @param name the name of the voice
      * @param gender the gender of the voice
      * @param age the age of the voice
@@ -45,15 +47,29 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @param organization the organization which created the voice
      * &quot;general&quot;, &quot;time&quot;, or
      * &quot;weather&quot;.
+     * @param lexicon the lexicon to load
+     * @param database the url to the database containing unit data
+     * for this voice.
      */
-    public CMUClusterUnitVoice(boolean createLexicon, String name,
-            Gender gender, Age age, String description, Locale locale,
-            String domain, String organization) {
-	super(createLexicon, name, gender, age, description, locale,
-                domain, organization);
+    public CMUClusterUnitVoice(String name, Gender gender, Age age,
+            String description, Locale locale, String domain,
+            String organization, CMULexicon lexicon, URL database) {
+	super(name, gender, age, description, locale,
+                domain, organization, lexicon);
 	setRate(150f);
 	setPitch(100F);
 	setPitchRange(12F);
+        this.database = database;
+    }
+
+    /**
+     * Gets the url to the database that defines the unit data for this
+     * voice.
+     *
+     * @return a url to the database
+     */
+    public URL getDatabase() {
+        return database;
     }
 
     /**
@@ -77,14 +93,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
      *     processor
      */
     protected UtteranceProcessor getUnitSelector() throws IOException {
-	String unitDatabaseName = getFeatures().getString(DATABASE_NAME);
-
-	if (unitDatabaseName == null) {
-            throw new Error("CMUClusterUnitVoice not defined with data file");
-	}
-
-	return new ClusterUnitSelector(
-		getResource(unitDatabaseName));
+	return new ClusterUnitSelector(getDatabase());
     }
 
     /**

@@ -21,6 +21,7 @@ import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.en.us.CMUVoice;
+import com.sun.speech.freetts.en.us.CMULexicon;
 
 import de.dfki.lt.freetts.mbrola.ParametersToMbrolaConverter;
 import de.dfki.lt.freetts.mbrola.MbrolaCaller;
@@ -45,8 +46,6 @@ public class MbrolaVoice extends CMUVoice {
     /**
      * Creates an MbrolaVoice.
      *
-     * @param createLexicon if <code>true</code> automatically load up
-     *    the default CMU lexicon; otherwise, don't load it.
      * @param databaseDirectory the directory within the MBROLA directory
      *    where the voice database of this voice is located
      * @param database the name of the voice database of this voice
@@ -61,14 +60,15 @@ public class MbrolaVoice extends CMUVoice {
      * @param locale the locale of the voice
      * @param domain the domain of this voice.  For example,
      * @param organization the organization which created the voice
+     * @param lexicon the lexicon to use
      */
-    public MbrolaVoice(boolean createLexicon, String databaseDirectory, 
+    public MbrolaVoice(String databaseDirectory, 
                        String database, float rate, float pitch, float range,
                        String name, Gender gender, Age age,
                        String description, Locale locale, String domain,
-                       String organization) {
-	super(createLexicon, name, gender, age, description, locale,
-              domain, organization);
+                       String organization, CMULexicon lexicon) {
+	super(name, gender, age, description, locale,
+              domain, organization, lexicon);
         setRate(rate);
         setPitch(pitch);
         setPitchRange(range);

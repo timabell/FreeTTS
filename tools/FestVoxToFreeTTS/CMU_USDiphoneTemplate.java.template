@@ -1,6 +1,7 @@
 package com.sun.speech.freetts.en.us.%VOICENAME%;
 
 import com.sun.speech.freetts.en.us.CMUDiphoneVoice;
+import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.VoiceDirectory;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Gender;
@@ -20,13 +21,15 @@ public class %CLASSNAME% extends VoiceDirectory {
      * @return an array of new Voice instances
      */
     public Voice[] getVoices() {
-        // Change voice properties here
-        Voice voice = new CMUDiphoneVoice(true, "%NAME%",
-                Gender.%GENDER%, Age.%AGE%, "%DESCRIPTION%",
-                Locale.US, "%DOMAIN%", "%ORGANIZATION%");
+        // default to the generic lexicon
+        CMULexicon lexicon = new CMULexicon("cmulex");
 
-        voice.getFeatures().setString(Voice.DATABASE_NAME,
-                "%VOICENAME%/%VOICENAME%.bin");
+        // Change voice properties here
+        Voice voice = new CMUDiphoneVoice("%NAME%",
+                Gender.%GENDER%, Age.%AGE%, "%DESCRIPTION%",
+                Locale.US, "%DOMAIN%", "%ORGANIZATION%",
+                lexicon,
+                this.getClass().getResource("%VOICENAME%.bin"));
 
         Voice[] voices = {voice};
         return voices;

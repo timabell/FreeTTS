@@ -20,12 +20,11 @@ public class AlanVoiceDirectory extends VoiceDirectory {
      * @return an array of new Voice instances
      */
     public Voice[] getVoices() {
-        Voice alan = new CMUClusterUnitVoice(false, "alan", Gender.MALE,
+        CMULexicon lexicon = new CMULexicon("cmutimelex");
+        Voice alan = new CMUClusterUnitVoice("alan", Gender.MALE,
                 Age.YOUNGER_ADULT, "default time-domain cluster unit voice",
-                Locale.US, "time", "cmu");
-        alan.getFeatures().setString(Voice.DATABASE_NAME,
-                "cmu_time_awb/cmu_time_awb.bin");
-        alan.setLexicon(new CMULexicon("cmutimelex"));
+                Locale.US, "time", "cmu", lexicon,
+                this.getClass().getResource("cmu_time_awb.bin"));
         Voice[] voices = {alan};
         return voices;
     }
