@@ -40,7 +40,7 @@ import javax.sound.sampled.AudioSystem;
 public class FreeTTS {
 
     private final static String VERSION =
-    "FreeTTS 1.2.0, December, 2003";
+    "FreeTTS 1.2beta, December, 2003";
     private Voice voice;
     private static AudioPlayer audioPlayer = null;
     private boolean silent = false;

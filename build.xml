@@ -17,7 +17,7 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="version"		value="1_2_0"/>
+    <property name="version"		value="1_2_beta"/>
     <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
