@@ -1,5 +1,5 @@
 /**
- * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 2001-2003 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
  * All Rights Reserved.  Use is subject to license terms.
@@ -46,7 +46,7 @@ import javax.sound.sampled.AudioSystem;
 public class FreeTTS {
 
     private final static String VERSION =
-    "freetts Version 1.1.1, Aug 29, 2002";
+    "freetts Version 1.2.0-beta, June 5, 2003";
     private Voice voice;
     private static AudioPlayer audioPlayer = null;
     private boolean silent = false;

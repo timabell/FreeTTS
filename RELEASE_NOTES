@@ -9,7 +9,10 @@
 Change history for FreeTTS.
 --------------------------
 
-Jun 4, 2003 Release 1.2
+Jun 5, 2003 Release 1.2.0-beta
+    - Updated FreeTTS version message
+
+Jun 4, 2003 Release 1.2.0-beta
     - Imported changes from Flite 1.2:
         - Regenerated cmulex_addenda, cart_dump
         - Reads year "1200" as "twelve hundred" rather than "twelve oh

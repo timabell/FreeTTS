@@ -15,7 +15,7 @@ include ${TOP}/build/Makefile.config
 deploy:	index.php
 
 index.php:    index.html
-	$(AWK) -f create_php.awk < $< > $@
+	gawk -f create_php.awk < $< > $@
 
 clean::
 	rm -f index.php
