@@ -41,7 +41,8 @@ public class ParametersToMbrolaConverter implements UtteranceProcessor {
         Relation targetRelation = utterance.getRelation(Relation.TARGET);
 
         Item segment = segmentRelation.getHead();
-        Item target = targetRelation.getHead();
+        Item target = null;
+	if (targetRelation != null) target = targetRelation.getHead();
         float prevEnd = 0f;
         while (segment != null) {
             String name = segment.getFeatures().getString("name");
