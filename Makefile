@@ -150,22 +150,22 @@ javadocs:
 	$(MAKE)  DOC_DEST=$(API_DIR) docs
 
 lib/cmulex.jar: 
-	$(JAR) cf $@ -C classes $(CMULEX_FILES)
+	(cd classes; $(JAR) cf ../$@ $(CMULEX_FILES))
 
 lib/cmutimelex.jar: 
-	$(JAR) cf $@ -C classes $(CMUTIME_FILES)
+	(cd classes; $(JAR) cf ../$@ $(CMUTIME_FILES))
 
 lib/cmukal8.jar: 
-	$(JAR) cf $@ -C classes $(CMUKAL8_FILES)
+	(cd classes; $(JAR) cf ../$@ $(CMUKAL8_FILES))
 
 lib/cmukal16.jar:
-	$(JAR) cf $@ -C classes $(CMUKAL16_FILES)
+	(cd classes; $(JAR) cf ../$@ $(CMUKAL16_FILES))
 
 lib/cmuawb.jar:
-	$(JAR) cf $@ -C classes $(CMUAWB_FILES)
+	(cd classes; $(JAR) cf ../$@ $(CMUAWB_FILES))
 
 lib/jsapi.jar:
-	$(JAR) cf $@ -C classes $(JSAPI_FILES)
+	(cd classes; $(JAR) cf ../$@ $(JSAPI_FILES))
 
 lib/demo.jar: 
 	( cd classes; $(JAR) cf ../$@ `ls *.class`)

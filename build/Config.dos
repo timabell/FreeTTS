@@ -32,3 +32,4 @@ DOCS_DIR = ${TOP}/docs/api
 MSDOS = true
 PATH_SEP = /
 CSEP = ;
+AWK=awk

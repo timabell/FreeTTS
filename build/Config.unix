@@ -31,3 +31,4 @@ DOCS_DIR = ${TOP}/docs/api
 MSDOS = false
 PATH_SEP = /
 CSEP = :
+AWK=nawk
