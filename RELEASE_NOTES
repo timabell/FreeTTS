@@ -9,10 +9,11 @@
 Change history for FreeTTS.
 --------------------------
 
-May 10, 2004 Release 1.2
+June 15, 2004 Release 1.2beta2
     - Added experimental CMUArcticVoice that may (or may not) work
       with the CMU ARCTIC databases.
-    - Added CMUTimeVoice, which has noop post lexical processing.
+    - Added CMUTimeVoice, which has noop post lexical processing
+      to support the FestVox limited domain time voice scheme.
       Modified FestVoxToFreeTTS to use this voice in the template.
     - Restructured cluster unit voice for simple extensions.
     - Added com.sun.speech.freetts.lexicon.userAddenda property

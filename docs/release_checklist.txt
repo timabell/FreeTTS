@@ -13,7 +13,6 @@ Here are the steps to release a new version of FreeTTS:
    ./docs/index.html: <h2><i>FreeTTS 1.2</i>
    ./build.xml:    <property name="version"          value="1.2"/>
    ./build.xml:    <property name="javadoc_desc"     value="FreeTTS 1.2beta"/>
-   ./demo.xml:     <property name="version"          value="1_2_0"/>
    ./com/sun/speech/freetts/FreeTTS.java:    
          private final static String VERSION = "FreeTTS 1.2, May, 2004";
 
