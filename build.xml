@@ -243,6 +243,10 @@ environment to use JSAPI.
             <arg line="-dest ${classes_dir}/${user_voice_path}"/>
             <arg line="-generate_binary ${user_voice}.txt"/>
          </java>
+       	 <copy todir="${classes_dir}/${user_voice_path}"
+               failonerror="false">
+             <fileset dir="${src_dir}/${user_voice_path}" includes="phoneset.txt"/>
+	 </copy>
     </target>
 
     <target name="diphone_voice_db"
