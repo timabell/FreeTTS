@@ -1,0 +1,38 @@
+Input Texts
+=============
+1.txt - set of 1 word sentences
+10.txt - set of 10 word sentences
+100.txt - set of 100 word sentences
+2.txt - set of 2 word sentences
+5.txt - set of 5 word sentences
+alice.txt - First several chapters of 'Alice in wondernald'
+alice2 - Tweaked version of alice.txt (eliminates some troubling
+homophones)
+first.wave.txt - Text used in first wave test 
+gettysburg_address.txt - the gettysburg address
+journey.txt - Journey to the center of the earth input text
+numbers.test - Text normalization test input
+numbers.test.words - Text normaliztion test input
+README - This description
+shuffle.awk - script that outputs words in random order
+simple.txt - very small simple input text
+SmallSet.txt - small simple input text
+TinySet.txt - set of very very small text inputs
+TokenGame.txt - Tokenizer test input text
+
+
+Reference Output Texts
+============================
+alice.flite.v1.0-beta.utt - utterance output of flite 1.0
+alice2.flite.v1.0-beta.rel - Flite 1.0 beta relation output
+alice2.flite.v1.0-beta.utt - Flite 1.0 beta utterance output
+alice2.flite.v1.1-beta.rel - Flite 1.1 beta relation output
+alice2.flite.v1.1-rel - Flite 1.1 relation output
+alice2.flite.v1.1-utt - Flite 1.1 utterance output
+flite1.1_float.first.wave.txt - Flite 1.1 first wave output
+flite1.1_float_time.txt - Flite 1.1 time output
+flite_time.v1.0-beta.rel - Flite time 1.0 relation output
+flite_time.v1.1.rel = Flite time 1.1 relation output 
+freetts_wave.txt - FreeTTS wave output
+TokenGame.flite.v1.1.rel - Flite 1.1 token output
+wave.dump.txt - wave output
