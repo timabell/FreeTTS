@@ -50,21 +50,21 @@ public class MbrolaVoiceValidator implements Validator {
 
         if (mbrolaBase == null || mbrolaBase.length() == 0) {
             throw new ValidationException
-                (toString() +
-                 ": System property \"mbrola.base\" is undefined. " +
+                ("System property \"mbrola.base\" is undefined. " +
                  "You might need to set the MBROLA_DIR environment variable.");
         }
         if (!mbrolaBinary.exists()) {
             throw new ValidationException
-                (toString() + ": MBROLA binary does not exist");
+                ("No MBROLA binary at: " + mbrolaVoice.getMbrolaBinary());
         }
         if (!mbrolaRenameTable.exists()) {
             throw new ValidationException
-                (toString() + ": MBROLA rename table does not exist");
+                ("No MBROLA rename table at: " + mbrolaVoice.getRenameTable());
         }
         if (!mbrolaVoiceDB.exists()) {
             throw new ValidationException
-                (toString() + ": voice database does not exist");
+                ("No voice database for " + mbrolaVoice.getName() + 
+                 " at: " + mbrolaVoice.getDatabase());
         }
     }
 
