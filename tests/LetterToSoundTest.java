@@ -39,7 +39,7 @@ public class LetterToSoundTest extends TestCase {
     protected void setUp() {
 	try {
             lts = new LetterToSoundImpl( 
-	     new URL("file:../com/sun/speech/freetts/en/us/cmulex_lts.bin"), true);
+	     new URL("file:../classes/com/sun/speech/freetts/en/us/cmulex_lts.bin"), true);
             assertTrue("LTS Rules created", lts != null);
             reader = new BufferedReader(new FileReader("LTS.txt"));
             assertTrue("Data File opened", reader != null);

@@ -61,6 +61,10 @@ DEPLOY_FILES =  \
 	    speech.properties \
 	    license.terms \
 	    acknowledgments.txt \
+	    RELEASE_NOTES \
+	    README.txt \
+	    overview.html \
+	    index.html \
 	    Makefile
 
 DEPLOY_TARGET = freetts.tar.gz
@@ -100,10 +104,9 @@ deploy: all jars zips
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
 	(cd docs; $(MAKE) deploy)
+	(cd tests; $(MAKE) clean)
 	mkdir $(STAGING_AREA)
 	cp -r $(DEPLOY_FILES) $(STAGING_AREA)
-	mv $(STAGING_AREA)/docs/RELEASE_NOTES  $(STAGING_AREA)
-	mv $(STAGING_AREA)/docs/README.txt  $(STAGING_AREA)
 	rm -f $(DEPLOY_EXCLUDED_FILES)
 	rm -rf $(DEPLOY_EXCLUDED_DIRECTORIES)
 	-find $(STAGING_AREA) -name CVS -exec rm -rf {} \;
@@ -114,9 +117,9 @@ deploy: all jars zips
 	rm -rf $(STAGING_AREA)
 
 deploy_docs:
-	(cd docs; $(MAKE))
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 	rm -rf $(DOC_STAGING_AREA)
+	$(MAKE) javadocs
 	(cd docs; $(MAKE) deploy)
 	mkdir $(DOC_STAGING_AREA)
 	cp -r $(DEPLOY_DOCS) $(DOC_STAGING_AREA)

@@ -62,31 +62,38 @@ ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmulex_compiled.bin:	cmulex_compiled.txt
 	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -generate_binary
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) -f cmulex_compiled.bin cmulex_addenda.bin
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmulex_addenda.bin:	cmulex_addenda.txt
 	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -generate_binary
 	$(RM) $@
 	cp cmulex_addenda.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) `basename $@`
+	$(RM) -f cmulex_compiled.bin cmulex_addenda.bin
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutimelex_addenda.bin: cmutimelex_addenda.txt
 	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -name cmutimelex -generate_binary
 	$(RM) $@
 	cp cmutimelex_addenda.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) cmutimelex_addenda.bin cmutimelex_compiled.bin
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutimelex_compiled.bin: cmutimelex_compiled.txt
 	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -name cmutimelex -generate_binary
 	$(RM) $@
 	cp cmutimelex_compiled.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) cmutimelex_addenda.bin cmutimelex_compiled.bin
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmulex_lts.bin:	cmulex_lts.txt
 	$(JAVA_CMD) com.sun.speech.freetts.lexicon.LetterToSoundImpl -name cmulex_lts -generate_binary
 	$(RM) $@
 	cp cmulex_lts.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) `basename $@`
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutimelex_lts.bin:	cmutimelex_lts.txt
 	$(JAVA_CMD) com.sun.speech.freetts.lexicon.LetterToSoundImpl -name cmutimelex_lts -generate_binary
 	$(RM) $@
 	cp cmutimelex_lts.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) `basename $@`
 
 release_doc:
 	$(JDK)/bin/javadoc -windowtitle "FreeTTS" -d $(DOC_DEST)  $(FILES)
