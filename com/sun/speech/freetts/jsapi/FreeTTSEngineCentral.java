@@ -461,13 +461,12 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	for (Iterator i = descriptors.iterator(); i.hasNext();) {
 	    FreeTTSSynthesizerModeDesc desc =
 		(FreeTTSSynthesizerModeDesc) i.next();
-	    if (require == null || 
-                (desc.isValid() && desc.match(require))) {
-		if (el == null) {
-		    el = new EngineList();
-		}
-		el.addElement(desc);
-	    }
+	    if (require == null || (desc.match(require) && desc.isValid())) {
+                if (el == null) {
+                    el = new EngineList();
+                }
+                el.addElement(desc);
+            }
 	}
         return el;
     }
