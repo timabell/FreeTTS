@@ -1009,7 +1009,7 @@ jsapi.exe from the lib directory.
 
     <fileset id="docs"
 	     dir="."
-	     includes="overview.html,README.txt,RELEASE_NOTES,
+	     includes="index.html,overview.html,README.txt,RELEASE_NOTES,
                        docs/**,mbrola/*.html,
                        javadoc/**"
              excludes="docs/*.awk"/>
