@@ -14,4 +14,4 @@ include ${TOP}/build/Makefile.config
 # Any extra actions to perform when cleaning
 clean::
 all::
-	chmod +x benchmark collectMetrics freetts jtime freettsServer jtimeServer jarfreetts jm
+	chmod +x benchmark collectMetrics freetts jtime freettsServer jtimeServer jarfreetts jm jj jjs jl jlc jm2 jms jms2 jprof2 jt

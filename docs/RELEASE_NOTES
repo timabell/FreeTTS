@@ -8,6 +8,46 @@
 
 Change history for FreeTTS.
 --------------------------
+
+January 24, 2002  Release 1.1
+
+    - Created index.php to automatically put news on freetts front page
+    - Added a very small, time-domain specific lexicon 
+    - Updated voice to allow easier switching betwen different
+      lexicons
+    - Adapted cluster unit database layout to conform to flite 1.1
+      format
+    - Adapted cluster unit selection to conform to new database
+      layout
+    - Upgraded 16khz diphone database with Flite 1.1 data.
+    - Added support for duration shrinking/stretching at the segment
+      level.
+    - Added support for pitch shift adjustments at the segment level.
+    - More sophisticated phrasing CARTS.
+    - PostLexicalAnalyzer now deals with "'ve" and "'ll"
+    - Some refactoring of the FeatureProcessors
+    - A number of new Feature processors have been added.
+    - Added ASCII file support for Pronounceable finite state machines
+    - Expanded tokenizer. New features include:
+	1) processing abbreviations (e.g. U.S.A.)
+	2) 7-digit phone numbers,
+	3) partial phone numbers
+	4) time (e.g. 12:35)
+	5) digits w/ dashes (e.g. 999-999-999)
+	6) Roman numerals (e.g. IV)
+	7) St Andrew's St.
+	8) US Money (e.g. $14.53)
+	9) "80s" or "70s"
+	10) fractions (e.g. 3/4)
+	11) US states (e.g. NH, MA)
+
+    - Improved rules for generating binary forms of the databases
+    - Specifies 'Locale.US' (instead of null) when constructing a 
+      SynthesizerModeDesc in the demo codeA
+    - Output of regression tests are more consistent
+
+
+
 January  16, 2002 V1.1.	  - New ClusterUnitDatabase layout for festvox
                             compatibility.
                             Incorporated DurationStretch code 
