@@ -27,3 +27,8 @@ all:: ${CLASSES} ${STUBS}
 run: 
 	$(JAVA_CMD) HelloWorld
 
+runMbrola:
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	HelloWorld

@@ -21,10 +21,15 @@ public class HelloWorld {
     
     public static void main(String[] argv) {
 	try {
+
+            String synthesizerName = System.getProperty
+                ("synthesizerName",
+                 "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs");
+
 	    // Create a new SynthesizerModeDesc that will match the FreeTTS
 	    // Synthesizer.
 	    SynthesizerModeDesc desc = new SynthesizerModeDesc
-		("Unlimited domain FreeTTS Speech Synthesizer from Sun Labs",
+		(synthesizerName,
 		 null,
 		 Locale.US,
 		 Boolean.FALSE,         // running?
