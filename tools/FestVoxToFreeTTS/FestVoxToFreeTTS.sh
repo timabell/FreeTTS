@@ -152,36 +152,42 @@ HELPERDIR=`dirname $0`
 # This assumes that FreeTTS is configured with this directory structure
 FREETTSDIR="$HELPERDIR/../.."
 
+# We need some files from the ArcticToFreeTTS directory...
+ARCTICDIR="$FREETTSDIR/tools/ArcticToFreeTTS"
+
 #This is where some temperary files are generated as well as the final voice
 OUTDIR=$VOICEDIR/FreeTTS
 mkdir $OUTDIR >/dev/null 2>/dev/null
 
+(cd $ARCTICDIR; mkdir -p classes; cd src; javac -d ../classes *.java)
+
 if [ "$2" = "lpc" ]; then
-    echo "Finding LPC coefficients"
+    echo Creating lpc files
+    mkdir -p $VOICEDIR/lpc
     (cd $VOICEDIR
-     for f in wav/*.wav; do
-        bin/make_lpc $f  # festival script
-     done
+    bin/make_lpc wav/*.wav
     )
 
-    echo "Finding LPC min, max, and range"
-    for f in $VOICEDIR/lpc/*.lpc; do
-        $ESTDIR/bin/ch_track -otype est_ascii $f  # EST binary
+    echo Creating lpc/lpc.params
+    for file in $VOICEDIR/lpc/*.lpc; do
+	$ESTDIR/bin/ch_track -otype est_ascii $file
     done | sed '1,/EST_Header_End/d' |
     awk 'BEGIN {min=0; max=0;} {
-            for (i=4; i<=NF; i++) {
-                if ($i < min) min = $i;
-                if ($i > max) max = $i;
-            }
-        } END {
-            printf("LPC_MIN=%f\n",min);
-            printf("LPC_MAX=%f\n",max);
-            printf("LPC_RANGE=%f\n",max-min);
-        }' >$VOICEDIR/lpc/lpc.params
+         for (i=4; i<=NF; i++) {
+             if ($i < min) min = $i;
+             if ($i > max) max = $i;
+         }
+     } END {
+         printf("LPC_MIN=%f\n",min);
+         printf("LPC_MAX=%f\n",max);
+         printf("LPC_RANGE=%f\n",max-min);
+     }' > $VOICEDIR/lpc/lpc.params
 fi
 
 # build sts files
 if [ "$2" = "sts" ]; then
+ if [ "$FV_TYPE" = "diphone" ]; then
+   # need to create scheme-formatted sts files for diphones
    echo "Finding STS files"
    . $VOICEDIR/lpc/lpc.params
 
@@ -200,96 +206,67 @@ if [ "$2" = "sts" ]; then
       java -cp "$HELPERDIR/FindSTS.jar" FindSTS $LPC_MIN $LPC_RANGE $f \
         $VOICEDIR/wav/$fname.wav $VOICEDIR/sts/$fname.sts
    done
+ else
+  # create STS files in the same format as for ARCTIC voices for clunits
+  # and limited domain voices
+    (cd $VOICEDIR
+	echo "Creating short term signal (STS) files in sts/*.sts"
+	mkdir -p sts
+	java -cp $ARCTICDIR/classes FindSTS \
+	    `find wav -type f | cut -f2 -d/ | cut -f1 -d.`
+    )
+ fi
 fi
 
 if [ "$2" = "mcep" ]; then
-    echo "Finding MCEP min max and range"
-    for i in $VOICEDIR/mcep/*.mcep; do
-        $ESTDIR/bin/ch_track -otype est_ascii $i
+    # MCEP coefficients are not used for diphones
+    echo Creating mcep/mcep.params and converting mcep files to text
+    for file in $VOICEDIR/mcep/*.mcep; do
+    echo $file MCEP
+    $ESTDIR/bin/ch_track -otype est_ascii $file > $file.txt
+    cat $file.txt
     done | sed '1,/EST_Header_End/d' |
     awk 'BEGIN {min=0; max=0;} {
-            for (i=4; i<=NF; i++) {
-                if ($i < min) min = $i;
-                if ($i > max) max = $i;
-            }
-        } 
-        END {printf("(set! mcep_min %f)\n",min);
-        printf("(set! mcep_max %f)\n",max);
-        printf("(set! mcep_range %f)\n",max-min);
-    }' >$VOICEDIR/mcep/mcep.params.scm
+         for (i=4; i<=NF; i++) {
+             if ($i < min) min = $i;
+             if ($i > max) max = $i;
+         }
+     } END {
+         printf("MCEP_MIN=%f\n",min);
+         printf("MCEP_MAX=%f\n",max);
+         printf("MCEP_RANGE=%f\n",max-min);
+     }' > $VOICEDIR/mcep/mcep.params
 fi
 
 idx_non_diphone() {
-    echo "Building clunits/ldom index"
-    sed '1,/EST_Header_End/d' \
-            $VOICEDIR/festival/clunits/$FV_VOICENAME.catalogue |
-        awk 'BEGIN {p="CLUNIT_NONE";} {
-            if ((NR > 1) && (t != "0_0")) {
-                n = split(t,bits,"_");
-                unit_type = substr(t,1,length(t)-(length(bits[n])+1));
-                unit_occur = bits[n];
-                if ((t == "0_0") || (f != $2) || ($1 == "0_0"))
-                    printf("%s_%05d -- ( %s %s %s )\n",
-                            unit_type,unit_occur,line,p,"CLUNIT_NONE");
-                else
-                    printf("%s_%05d -- ( %s %s unit_%s )\n",
-                            unit_type,unit_occur, line,p,$1);
-            }
-            line = $0;
-            if ((t == "0_0") || (f != $2))
-                p = "CLUNIT_NONE";
-            else
-                p=sprintf("unit_%s",t);
-            t=$1;
-            f=$2;
-        } 
-        END {
-            if (t != "0_0") {
-                n = split(t,bits,"_");
-                unit_type = substr(t,1,length(t)-(length(bits[n])+1));
-                unit_occur = bits[n];
-                printf("%s_%05d -- ( %s %s %s )\n", unit_type,unit_occur,
-                        line,p,"CLUNIT_NONE");
-            }
-        }' | cat > $VOICEDIR/festival/clunits/$FV_VOICENAME.scm
-        cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
-           sed 's/^.* -- //'  \
-            >$VOICEDIR/festival/clunits/$FV_VOICENAME.fileordered.scm
-        cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
-           sed 's/-- //'  | awk '{printf("( %s )\n",$0)}' \
-            >$VOICEDIR/festival/clunits/$FV_VOICENAME.unitlabeled.scm
-        # crazy formatting to exactly match diff of flite_sort
-        festival --heap 5000000 -b \
-            $HELPERDIR/qsort.scm \
-            '(begin (set! clindex (load
-                "'$VOICEDIR/festival/clunits/$FV_VOICENAME.unitlabeled.scm'" t))
-             (set! clindex (qsort clindex carstring<? carstring=?))
-             (while (not (null? clindex))
-                ;(format t "%l\n" (cadr (car clindex)))
-                (set! x (car (cdr (car clindex))))
-                (format t "( %l %l %f %f %f %l %l ) \n"
-                    (nth 0 x) (nth 1 x) (nth 2 x)
-                    (nth 3 x) (nth 4 x) (nth 5 x) (nth 6 x))
-                (set! clindex (cdr clindex))
-             ))' > $VOICEDIR/festival/clunits/$FV_VOICENAME.unitordered.scm
+echo Creating unit index
+(cd $VOICEDIR
+    echo Creating FreeTTS/misc.txt
+    festival -b \
+    festvox/$FV_FULLVOICENAME.scm \
+	$ARCTICDIR/scheme/dump_misc.scm \
+	"(begin (voice_${FV_FULLVOICENAME}) (dump_misc))" > \
+	FreeTTS/misc.txt
 
-        festival --heap 5000000 -b \
-            $HELPERDIR/FestVoxClunitsToFreeTTS.scm \
-            $HELPERDIR/qsort.scm \
-            '(dump_clunits "'$FV_VOICENAME'" "'$VOICEDIR'"
-            "'$OUTDIR'" "misc.txt" "unittypes.txt" "cart.txt" "units.txt"
-            "lpc.txt" "lpc_header.txt" "mcep.txt" "mcep_header.txt"
-            "weights.txt")'
-        # parentheses allow script to only temporarily change to $OUTDIR
-        (cd $OUTDIR
-            rm -f README 2>/dev/null
-            rm -f $FV_FULLVOICENAME.txt 2>/dev/null
-            echo "The data for the voice $FV_FULLVOICENAME is stored in" > README
-            echo "$FV_FULLVOICENAME.txt  All other files may be ignored." >> README
-            echo "*** Generated by $0 $1 $2" > $FV_FULLVOICENAME.txt
-            echo "*** clunits " `date` >> $FV_FULLVOICENAME.txt
-            cat misc.txt unittypes.txt cart.txt units.txt lpc_header.txt \
-            lpc.txt mcep_header.txt mcep.txt weights.txt >> $FV_FULLVOICENAME.txt)
+# UnitDatabase outputs its own info...
+    java -cp $ARCTICDIR/classes UnitDatabase \
+	festival/clunits/${FV_VOICENAME}.catalogue \
+	`find wav -type f | cut -f2 -d/ | cut -f1 -d.`
+
+echo Creating FreeTTS/trees.txt
+festival -b \
+    festvox/$FV_FULLVOICENAME.scm \
+    $ARCTICDIR/scheme/dump_trees.scm \
+    "(begin (voice_${FV_FULLVOICENAME}) (dump_trees))" > \
+    FreeTTS/trees.txt
+
+echo Creating FreeTTS/weights.txt
+festival -b \
+    festvox/$FV_FULLVOICENAME.scm \
+    $ARCTICDIR/scheme/dump_join_weights.scm \
+    "(begin (voice_${FV_FULLVOICENAME}) (dump_join_weights))" > \
+    FreeTTS/weights.txt
+)
 }
 
 idx_diphone() {
@@ -365,6 +342,9 @@ setGender() {
 
 setAge() {
     while true; do
+	echo ""
+	echo ""
+	echo ""
         echo "Please enter the number corresponding to the age of this voice:"
         echo "     0 <Cancel>"
         echo "     1 Neutral:       Voice with an age that is indeterminate."
@@ -374,6 +354,9 @@ setAge() {
         echo "     5 Middle Adult:  Age roughly 40 to 60 years."
         echo "     6 Older Adult:   Age roughly 60 years and up."
         echo "     Q <Quit>:        Abort the conversion process."
+	echo ""
+	echo ""
+
         read
 
         if [ "$REPLY" = "0" ]; then

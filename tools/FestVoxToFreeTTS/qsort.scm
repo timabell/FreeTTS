@@ -101,7 +101,10 @@
             ((string-equal char "X") 88) ((string-equal char "x") 120)
             ((string-equal char "Y") 89) ((string-equal char "y") 121)
             ((string-equal char "Z") 90) ((string-equal char "z") 122)
-	    ((string-equal char ":") 58)
+	    ((string-equal char ":") 58) ((string-equal char "ä") 253)
+	    ((string-equal char "ö") 271)((string-equal char "ü") 277)
+	    ((string-equal char "Ä") 221)((string-equal char "Ö") 239)
+	    ((string-equal char "Ü") 393)
 
             (t 255)
         )
