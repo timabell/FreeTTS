@@ -21,7 +21,7 @@ if [ -f wavetest.diff ]; then
 	rm wavetest.diff
 fi
 
-FREETTS_CLASSES=$TOP_DIR/classes:$TOP_DIR/lib/CommandInterpreter.jar
+FREETTS_CLASSES=$TOP_DIR/classes
 if [ -z "${JAVA_HOME}" ] ; then
     JAVA_HOME=/lab/speech/java/j2sdk1.4.0
 fi
