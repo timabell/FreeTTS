@@ -594,7 +594,7 @@
     <target name="javadoc_zip"
 	    depends="javadoc">
         <zip destfile="${build_dir}/${javadoc_zip}">
-            <fileset dir="${build_dir}" includes="javadoc"/>
+            <fileset dir="${build_dir}" includes="javadoc/**"/>
         </zip>
     </target>
 
