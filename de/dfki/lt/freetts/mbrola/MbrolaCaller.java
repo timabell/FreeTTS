@@ -16,6 +16,7 @@ import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Item;
 
 import java.io.*;
+import java.util.*;
 
 /**
  * Calls external MBROLA binary to synthesise the utterance.
@@ -61,6 +62,7 @@ public class MbrolaCaller implements UtteranceProcessor {
         // Go through Segment relation and print values into Mbrola
 	Relation segmentRelation = utterance.getRelation(Relation.SEGMENT);
         Item segment = segmentRelation.getHead();
+
         while (segment != null) {
             String name = segment.getFeatures().getString("name");
             // Individual duration of segment, in milliseconds:
@@ -73,32 +75,45 @@ public class MbrolaCaller implements UtteranceProcessor {
             toMbrola.println(name + " " + dur + targets);
             segment = segment.getNext();
         }
+
         toMbrola.flush();
-
-	// BUG:
-	// There is a  bug that causes the final 'close' on a stream
-	// going to a sub-process to not be seen by the sub-process on
-	// occasion. This seems to occur mainly when the close occurs
-	// very soon after the creation and writing of data to the
-	// sub-process.  This delay can help work around the problem
-	// If we delay before the close by 
-	// a small amount (100ms), the hang is averted.  This is a WORKAROUND
-	// only and should be removed once the bug in the 'exec' is
-	//  fixed.  We get the delay from the property:
-	//
-	// de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay,
-	// 
-
-	if (closeDelay > 0l) {
-	    try {
-		Thread.sleep(closeDelay);
-	    } catch (InterruptedException ie) {
-	    }
-	}
+        if (closeDelay > 0l) {
+            try {
+                Thread.sleep(closeDelay);
+            } catch (InterruptedException ie) {
+            }
+        }
         toMbrola.close();
+      
+        // reading the audio output
+        byte[] buffer = new byte[1024];
+        
+        // In order to avoid resizing a large array, we save the audio data
+        // in the chunks in which we read it.
 
-        // remember the BufferedInputStream in the utterance:
-        utterance.setObject("fromMbrola", fromMbrola);
+        List audioData = new ArrayList();
+        int totalSize = 0;
+        int nrRead = -1; // -1 means end of file
+
+        try {
+            while ((nrRead = fromMbrola.read(buffer)) != -1) {
+                if (nrRead < buffer.length) {
+                    byte[] slice = new byte[nrRead];
+                    System.arraycopy(buffer, 0, slice, 0, nrRead);
+                    audioData.add(slice);
+                } else {
+                    audioData.add(buffer);
+                    buffer = new byte[buffer.length];
+                }
+                totalSize += nrRead;
+            }
+            fromMbrola.close();
+        } catch (IOException e) {
+            throw new ProcessException("Cannot read from mbrola");
+        }
+
+        utterance.setObject("mbrolaAudio", audioData);
+        utterance.setInt("mbrolaAudioLength", totalSize);
     }
 
     public String toString() {
