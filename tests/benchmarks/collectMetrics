@@ -1,0 +1,18 @@
+#!/bin/sh
+FREETTS=../../bld/lib/freetts.jar
+export FREETTS
+
+java -jar $FREETTS -silent -run TinySet -metrics -file ../data/TinySet.txt
+
+java -jar $FREETTS -silent -run SmallSet -metrics -file ../data/SmallSet.txt
+
+java -jar $FREETTS -silent -run gettysburg_address -metrics -file ../data/gettysburg_address.txt
+
+java -jar $FREETTS -silent -run alice -metrics -file ../data/alice.txt
+java -server -jar $FREETTS -silent -run aliceServer -metrics -file ../data/alice.txt
+
+java -jar $FREETTS -silent -run journey -metrics -file ../data/journey.txt
+java -server -jar $FREETTS -silent -run journeyServer -metrics -file ../data/journey.txt
+
+java -cp $FREETTS com.sun.speech.freetts.FreeTTSTime -metrics -silent -run ClunitsTest -timeTest -time 06:42
+java -server -cp $FREETTS com.sun.speech.freetts.FreeTTSTime -metrics -silent -run ClunitsTestServer -timeTest -time 06:42

@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Gather time to first sample data
+#
+FREETTS=../../bld/lib/freetts.jar
+DATA=../data
+export FREETTS DATA
+
+java -jar $FREETTS -silent -run "client lines 1" -metrics -lines $DATA/1.txt
+java -jar $FREETTS -silent -run "client lines 2" -metrics -lines $DATA/2.txt
+java -jar $FREETTS -silent -run "client lines 5" -metrics -lines $DATA/5.txt
+java -jar $FREETTS -silent -run "client lines 10" -metrics -lines $DATA/10.txt
+java -jar $FREETTS -silent -run "client lines 100" -metrics -lines $DATA/100.txt
+
+java -jar $FREETTS -server -silent -run "server lines 1" -metrics -lines $DATA/1.txt
+java -jar $FREETTS -server -silent -run "server lines 2" -metrics -lines $DATA/2.txt
+java -jar $FREETTS -server -silent -run "server lines 5" -metrics -lines $DATA/5.txt
+java -jar $FREETTS -server -silent -run "server lines 10" -metrics -lines $DATA/10.txt
+java -jar $FREETTS -server -silent -run "server lines 100" -metrics -lines $DATA/100.txt

@@ -1,0 +1,5 @@
+#!/bin/sh
+FREETTS=../../bld/lib/freetts.jar
+export FREETTS
+
+java -jar $FREETTS -dumpWave -text "Hello world.  This is Duke coming to you from inside the java virtual machine.  I'm happy to have a voice because I've been meaning to tell you how much I care." > duke.dump.txt
