@@ -11,8 +11,8 @@ TOP = ..
 
 include ${TOP}/build/Makefile.config
 
-all::	index.php
 
+deploy:	index.php
 
 index.php:    index.html
 	nawk -f create_php.awk < $< > $@
