@@ -14,55 +14,85 @@
           </tr>
       </table>
 
+      <p>This demo shows how to use FreeTTS with Java<sup>TM</sup> Web
+      Start.  With Java Web Start, you launch applications simply by
+      clicking on a Web page link. If the application is not present
+      on your computer, Java Web Start automatically downloads all
+      necessary files. It then caches the files on your computer so
+      the application is always ready to be relaunched anytime you
+      want -- either from an icon on your desktop or from the browser
+      link. And no matter which method you use to launch the
+      application, the most current version of the application is
+      always presented to you.  
+
       <p><h2>Setup</h2>
 
       <p><h3>Server</h3>
 
       <ol>
-	
-	<li>Your webserver must be configured to return the proper MIME type for the JNLP content. Refer to the Java<sup>TM</sup> Web Start Developer's Guide, <a href="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#website">Setting up the Web site</a>, for details. <p>
-
+	<li>Your web server must be configured to return the proper
+	MIME type for the JNLP content. Refer to the Java<sup>TM</sup>
+	Web Start Developer's Guide, 
+        <a href="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#website">
+        Setting up the Web site</a>, for details.
       </ol>
 
       <p><h3>Client</h3>
 
       <ol>
-	<li><b>Download and install Java Web Start.</b> <br>Java Web Start is already included in the latest version of J2SE<sup>TM</sup>. Since you will need J2SE version 1.4 for FreeTTS, no extra download and installation should be required. However, if you are using an older version of J2SE, go to <a href="http://java.sun.com/products/javawebstart/">http://java.sun.com/products/javawebstart/</a> to download Java Web Start. Java Web Start will not work with any version of the JDK 1.1.x software, or earlier versions. <p>Refer to the <a href="http://java.sun.com/products/javawebstart/1.2/docs/installguide.html">Java Web Start Installation Guide</a> for installation. It also tells you how to set up your web browser appropriately, which normally means handling the Java Web Start MIME type (<code>"application/x-java-jnlp-file"</code>) using the <code>javaws</code> executable file in your Java Web Start directory.
+	<li><b>Download and install Java Web Start.</b> Java Web Start
+	is already included in the latest version of
+	J2SE<sup>TM</sup>. Since you will need J2SE version 1.4 for
+	FreeTTS, no extra download and installation should be
+	required. Refer to the 
+        <a href="http://java.sun.com/products/javawebstart/1.2/docs/installguide.html">
+        Java Web Start Installation Guide</a> for installation. It
+        also tells you how to set up your web browser appropriately, which
+	normally means handling the Java Web Start MIME type
+	(<code>"application/x-java-jnlp-file"</code>) using the
+	<code>javaws</code> executable file in your Java Web Start
+	directory.
 
-	  <p>
+	<li><p><b><font color="ff0000">IMPORTANT:</font> Edit the file
+	clock.jnlp</b>. Change the <code>"&lt;jnlp
+	codebase=\"...\"&gt;"</code> tag to point to the absolute URL
+	of this directory, e.g.,
+	<code>codebase="http://www.yourwebsite.com/FreeTTS/demo/freetts/WebStartClock"</code>. 
+        Unfortunately, the codebase attribute currently cannot be
+        relative. For more
+	information, refer to the 
+        <a href="http://java.sun.com/products/javawebstart/faq.html#50">
+        Java Web Start FAQ</a>. Moreover, if you use file URLs (e.g.,
+	"file:/home/usr1/..."), it might not work properly on
+	differently platforms. So we encourage you to use HTTP
+	URLs.
 
-	<li><b>Generate <code>jsapi.jar</code></b> - Web Start Clock uses JSAPI. The JSAPI 1.0 specification implementation (i.e., the javax.speech.* classes) is not available under a BSD-style license. Instead, we are making the binaries available under a separate binary code license. <p>
+        <p>If you have created your own voice for the time
+        domain (see <a
+        href="../../../tools/FestVoxToFreeTTS/README.html">FestVoxToFreeTTS</a>),
+        you can modify <code>clock.jnlp</code> to tell it to use your
+        voice.  Merely change the following line in
+        <code>clock.jnlp</code> to use the class name of the
+        <code>VoiceDirectory</code> for your voice:
+        <ul>
+            <code>&lt;property name="freetts.voices"</code>
+            <code>          value="com.sun.speech.freetts.en.us.cmu_time_awb.AlanVoiceDirectory"/></code>
+        </ul>
 
-	  <ul>
-	    <li><b>UNIX Systems</b>
-	      <ol>
-		<li>Go to FreeTTS/lib directory.
-		<li>Type  <code>sh ./jsapi.sh</code>
-		<li> If the binary license agreement is acceptable, accept it by typing "y". The <code>jsapi.jar</code> file will be unpacked and deposited into the lib directory.
-	      </ol>
-	      <p>
-
-	    <li><b>Windows Systems</b>
-	      <ol>
-		<li> Go to the FreeTTS/lib directory
-		<li> Type <code> .\jsapi.exe </code>
-		<li> If the binary license agreement is acceptable, accept it by clicking "I Agree". The <code>jsapi.jar</code> file will be unpacked and deposited into the <code>lib</code> directory.
-	      </ol>
-	  </ul>
-	  <p>
-
-	<li><b><font color="ff0000">IMPORTANT:</font> Edit the file clock.jnlp</b>. <br>Change the <code>"&lt;jnlp codebase=\"...\"&gt;"</code> tag to point to the absolute URL of this directory, e.g., <code>codebase="http://www.yourwebsite.com/FreeTTS/demo/freetts/WebStartClock"</code>. Unfortunately, the codebase attribute currently cannot be relative. For more information, refer to the <a href="http://java.sun.com/products/javawebstart/faq.html#50">Java Web Start FAQ</a>. Moreover, if you use file URLs (e.g., "file:/home/usr1/..."), it might not work properly on differently platforms. So we encourage you to use HTTP URLs. <p>
-
-	<li><b>Build wsc.jar</b>.
-	  <br>Make sure that you have unzipped and compiled the sources. If not, go to the top level directory, type <pre>jar xf src.zip<br>make all</pre>
-	  Type <code>"gmake jars"</code> in this directory. This will:
-	  <ol>
-	      <li>Create the <code>wsc.jar</code> JAR file
-	      <li>Copy the <code>jsapi.jar</code> JAR file to this directory
-	      <li>Create a key. You will be prompted for information about the new key, such as password, name, etc.. This will create the "clockKey" file in this directory.
-	      <li>Sign both <code>wsc.jar</code> and <code>jsapi.jar</code> with the key. You will be prompted for the password twice.
-	  </ol>
-	  
+	<li><p><b>Build WebStartClock</b>.  If you are not planning on
+	making any changes to WebStartClock, you do not need to
+	rebuild anything.  However, if you would like to make changes
+	to WebStartClock and would like to rebuild it, run the
+	following command:
+        <ul>
+            <code>ant -find build.xml deploy_webstartclock</code>
+        </ul>
+        <p>This will create a WebStartClock.tar file containing all
+        the files you need to copy to your web server.  Note that you 
+	must also unpack <code>jsapi.jar</code> to build the
+	WebStartClock.  See <a href="../../../docs/jsapi_setup.html">
+	how set up your environment to use JSAPI</a> to unpack
+	<code>jsapi.jar</code>.
       </ol>
 
       <p><h2>Demo</h2>
