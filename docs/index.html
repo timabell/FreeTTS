@@ -67,7 +67,9 @@
 <br><a href="audio/cookiecooks.au">AU</a> format
 <br><a href="audio/cookiecooks.wav">WAV</a> format
 
-<p><b>Tricky Tokenizing (16k):</b><br><i>"For 3/4 or 75% of his time, Dr. Walker practices for $90 a visit on Dr. Dr., next to King Philip X of St. Lameer St. in Nashua NH."</i>
+<p><b>Tricky Tokenizing (16k):</b><br>
+<i>"For 3/4 or 75% of his time, Dr. Walker practices for $90 a visit on
+Dr. Dr., next to King Philip X of St. Lameer St. in Nashua NH."</i>
 <br><a href="audio/complex.au">AU</a> format
 <br><a href="audio/complex.wav">WAV</a> format
 
@@ -461,7 +463,7 @@ variable to point to your JDK directory (e.g.  /usr/java/j2sdk1.4.0beta3).
 
 
 <li>The output class files are placed in the 'classes' directory.</li>
-</ul>
+</ol>
 <p>
 <i>Note that you make receive complaints about missing directories if
 you build the sources without unpacking  the 'tests.zip' 
@@ -507,48 +509,7 @@ The regression tests also make use of a standard set of UNIX utilities such as
      % gmake alltests
 </pre>
 
-<li>The test output should look like this:</li>
 
-<pre>
-................
-Time: 27.852
-
-OK (16 tests)
-
-
-
-./utteranceTest.sh
-              Unit 0 differences of 3538. Test Passed.
-        target_end 0 differences of 3538. Test Passed.
-                 f0  differences of 1462. Test Passed.
-             accent 0 differences of 374. Test Passed.
-            stress 0 differences of 1362. Test Passed.
-           Segment 0 differences of 1790. Test Passed.
-       SylStructure 0 differences of 522. Test Passed.
-               Word 0 differences of 522. Test Passed.
-             Phrase 0 differences of 146. Test Passed.
-              Token 0 differences of 515. Test Passed.
-               pos 0 differences of 1462. Test Passed.
-            endtone 0 differences of 276. Test Passed.
-./utteranceTimeTest.sh
-                Unit 0 differences of 41. Test Passed.
-          target_end 0 differences of 41. Test Passed.
-                   f0  differences of 35. Test Passed.
-               accent 0 differences of 8. Test Passed.
-              stress 0 differences of 30. Test Passed.
-             Segment 0 differences of 41. Test Passed.
-        SylStructure 0 differences of 12. Test Passed.
-                Word 0 differences of 12. Test Passed.
-               Phrase 0 differences of 5. Test Passed.
-               Token 0 differences of 12. Test Passed.
-                 pos 0 differences of 35. Test Passed.
-             endtone 0 differences of 10. Test Passed.
-            file_pos 0 differences of 12. Test Passed.
-
-0 lines in lpctest.diff file. See lpctest.res for the LPC residual file.
-0 samples differ in timeTest.wave
-0 lines in wavetest.diff file. See wavetest.res for the wave file.
-</pre>
     <li> To run just the unit tests, use the following commands: </li>
     <p>
      <pre>
@@ -556,14 +517,7 @@ OK (16 tests)
 	 % gmake tests
      </pre>
     <p>
-    <li> The output should look like this: </li>
-    <p>
-    <pre>
-    ................
-    Time: 27.852
-    OK (16 tests)
-    </pre>
-    <p>
+<li>The test output should be self explanatory.</li>
 </li>
 </ul>
 </ul>
@@ -679,13 +633,17 @@ FreeTTS synthesizer and make it speak.
 <li>Java 2 SDK, Standard Edition, v 1.4 Beta 3
 </ul>
 
-<p>We rendered Chapter One of <i>Alice's Adventures in Wonderland</i> by Lewis Carroll using both Flite and FreeTTS. The results are summarized below:
+<p>We rendered the first two chapters of <i>Alice's Adventures in Wonderland</i>
+by Lewis Carroll (about 20 minutes of text), 
+and the entire text of Jules Verne's <i>Journey to
+the Center of the Earth</i> (about 10 hours of text) 
+using both Flite and FreeTTS. The results are summarized below:
 
 <p><table border="1" cellspacing="0" cellpadding="1" width="60%">
 <tr><td></td><td bgcolor="#ccccee"><b>Flite</b></td><td  bgcolor="#ccccee"><b>FreeTTS</b></td></tr>
-<tr><td bgcolor="#ccccee">Load Time</td><td>0s</td><td>3.4s</td></tr>
-<tr><td bgcolor="#ccccee">Processing Time</td><td>44s</td><td>24.1s</td></tr>
-<tr><td bgcolor="#ccccee"><b>Total</b></td><td><b>44s</b></td><td><b>27.5s</b></td></tr>
+<tr><td bgcolor="#ccccee">Processing Time for 'Alice' text</td><td> 44s</td><td> 24.1s</td></tr>
+<tr><td bgcolor="#ccccee">Processing Time for 'Journey'
+text</td><td> 1019s</td><td> 353s</td></tr>
 </table>
 
 <p>With a sentence of average length (using the alice test), the time to first sound, disregarding loading times, is about 0.05 seconds.
