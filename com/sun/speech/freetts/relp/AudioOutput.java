@@ -53,7 +53,7 @@ public class AudioOutput implements UtteranceProcessor {
 
 	utterance.getVoice().log("=== " +
 		utterance.getString("input_text"));
-	if (!lpcResult.playWave(audioPlayer)) {
+	if (!lpcResult.playWave(audioPlayer, utterance)) {
 	    throw new ProcessException("Output Cancelled");
 	}
     }

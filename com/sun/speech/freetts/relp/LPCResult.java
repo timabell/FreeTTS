@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import javax.sound.sampled.AudioFormat;
 import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.FreeTTSSpeakable;
 import com.sun.speech.freetts.audio.AudioPlayer;
 import com.sun.speech.freetts.util.WaveUtils;
 import com.sun.speech.freetts.util.Utilities;
@@ -398,8 +399,9 @@ public class LPCResult {
      *
      * @return the wave
      */
-    public boolean  playWave(AudioPlayer player) {
-	    return playWaveSamples(player, getNumberOfSamples() * 2);
+    public boolean  playWave(AudioPlayer player, Utterance utterance) {
+        return playWaveSamples(player, utterance.getSpeakable(),
+                               getNumberOfSamples() * 2);
     }
 
 
@@ -482,7 +484,9 @@ public class LPCResult {
      * @param player where to send the audio
      * @param numberSamples the number of samples
      */
-    private boolean  playWaveSamples(AudioPlayer player, int numberSamples) {
+    private boolean  playWaveSamples(AudioPlayer player, 
+                                     FreeTTSSpeakable speakable,
+                                     int numberSamples) {
 	boolean ok = true;
 	int numberChannels = getNumberOfChannels();
 	int pmSizeSamples;
@@ -501,7 +505,9 @@ public class LPCResult {
 
 	// for each frame in the LPC result
 	player.begin(numberSamples);
-	for (int r = 0, i = 0; ok && i < numberOfFrames; i++) {
+	for (int r = 0, i = 0;
+             (ok &= !speakable.isCompleted()) && 
+                 i < numberOfFrames; i++) {
 	    
 	    // unpack the LPC coefficients
 	    short[] frame =  getFrame(i);
@@ -534,7 +540,8 @@ public class LPCResult {
 		samples[s++] = lobyte(sample);
 
 		if (s >= MAX_SAMPLE_SIZE) {
-		    if (!player.write(samples)) {
+		    if ((ok &= !speakable.isCompleted()) && 
+                        !player.write(samples)) {
 			ok = false;
 		    }
 		    s = 0;
@@ -546,13 +553,13 @@ public class LPCResult {
 	}
 
         // write out the very last samples
-        if (s > 0) {
+        if ((ok &= !speakable.isCompleted()) && s > 0) {
             ok = player.write(samples, 0, s);
             s = 0;
         }
 
         // tell the AudioPlayer it is the end of Utterance
-	if (ok) {
+	if (ok &= !speakable.isCompleted()) {
             ok = player.end();
         }
 
