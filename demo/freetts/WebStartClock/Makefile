@@ -25,6 +25,7 @@ AUDIO_DIR = com/sun/speech/freetts/audio
 
 WEBSTARTCLOCK_CLASSES = \
 	classes/WebStartClock*.class \
+	classes/TimeUtils.class \
 	classes/com
 
 WEBSTARTCLOCK_EXCLUDES = \
@@ -32,6 +33,7 @@ WEBSTARTCLOCK_EXCLUDES = \
 	$(WSC_STAGING_AREA)/com/sun/speech/freetts/jsapi \
 	$(WSC_STAGING_AREA)/com/sun/speech/freetts/diphone \
 	$(WSC_STAGING_AREA)/com/sun/speech/freetts/FreeTTSTime.class \
+	$(WSC_STAGING_AREA)/$(EN_US_DIR)/CMUDiphoneVoice.class \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmu_kal/ \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.bin \
 	$(WSC_STAGING_AREA)/$(EN_US_DIR)/cmulex_compiled.txt \
@@ -77,3 +79,6 @@ webstartclock.jar:
 	chmod a+x webstartclock.jar
 	keytool -genkey -keystore clockKey -alias freetts
 	jarsigner -keystore clockKey webstartclock.jar freetts 
+
+runjar: all
+	java -cp ./webstartclock.jar WebStartClock

@@ -8,7 +8,7 @@
 </information>
 <offline-allowed/>
 <security>
-  <j2ee-application-client-permissions/>
+  <all-permissions/>
 </security>
 <resources>
   <j2se version="1.4+" />
