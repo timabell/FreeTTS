@@ -229,4 +229,6 @@ lib/freetts.jar:
 	(cd classes; \
 	$(JAR) cf ../$@ `find com -type f -print | \
 		egrep -v -f ../build/freetts_exclude_list`\
+                `find de -type f -print | \
+		egrep -v -f ../build/freetts_exclude_list`\
 	)
