@@ -44,27 +44,33 @@ public class MbrolaVoiceValidator implements Validator {
         File mbrolaRenameTable = new File(mbrolaVoice.getRenameTable());
         File mbrolaVoiceDB = new File(mbrolaVoice.getDatabase());
 
-        if (mbrolaBase == null) {
+        boolean valid = true;
+
+        if (mbrolaBase == null || mbrolaBase.length() == 0) {
             System.err.println
                 (toString() +
-                 ": System property \"mbrola.base\" is undefined.");
-            return false;
+                 ": System property \"mbrola.base\" is undefined." +
+                 "You might need to set the MBROLA_DIR environment variable.");
+            valid = false;
         }
         if (!mbrolaBinary.exists()) {
             System.err.println(toString() + ": MBROLA binary does not exist");
-            return false;
+            valid = false;
         }
         if (!mbrolaRenameTable.exists()) {
             System.err.println(toString() +
                                ": MBROLA rename table does not exist");
-            return false;
+            valid = false;
         }
         if (!mbrolaVoiceDB.exists()) {
             System.err.println(toString() + ": voice database does not exist");
-            return false;
+            valid = false;
         }
-
-        return true;
+        if (!valid) {
+            System.err.println(toString() + ": " + mbrolaVoice.toString() +
+                               " is invalid");
+        }
+        return valid;
     }
 
     /**
