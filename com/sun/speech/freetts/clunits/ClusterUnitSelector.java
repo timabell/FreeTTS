@@ -166,7 +166,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
      *
      * @param seg the segment item that gets the name
      */
-    private void setUnitName(Item seg) {
+    protected void setUnitName(Item seg) {
 	String cname = null;
 
 	String segName = seg.getFeatures().getString("name");

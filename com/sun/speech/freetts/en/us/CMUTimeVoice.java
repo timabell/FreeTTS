@@ -27,11 +27,11 @@ import java.util.Locale;
 import java.net.URL;
 
 /**
- * Defines voice that does cluster unit selection.
+ * Defines limited domain synthesis voice that specializes
+ * in telling the time.  This is based on data created by
+ * the example time domain voice in FestVox.
  */
-public class CMUClusterUnitVoice extends CMUVoice {
-
-    protected URL database;
+public class CMUTimeVoice extends CMUClusterUnitVoice {
 
     /**
      * Creates a simple cluster unit voice
@@ -50,79 +50,36 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @param database the url to the database containing unit data
      * for this voice.
      */
-    public CMUClusterUnitVoice(String name, Gender gender, Age age,
+    public CMUTimeVoice(String name, Gender gender, Age age,
             String description, Locale locale, String domain,
             String organization, CMULexicon lexicon, URL database) {
 	super(name, gender, age, description, locale,
-                domain, organization, lexicon);
-	setRate(150f);
-	setPitch(100F);
-	setPitchRange(12F);
-        this.database = database;
+                domain, organization, lexicon, database);
     }
 
     /**
-     * Gets the url to the database that defines the unit data for this
-     * voice.
-     *
-     * @return a url to the database
-     */
-    public URL getDatabase() {
-        return database;
-    }
-
-    /**
-     * Sets up the FeatureSet for this Voice.
-     *
-     * @throws IOException if an I/O error occurs
-     */
-    protected void setupFeatureSet() throws IOException {
-	super.setupFeatureSet();
-	getFeatures().setString(FEATURE_JOIN_TYPE, "simple_join");
-    }
-
-    /**
-     * Returns the unit selector to be used by this voice.
-     * Derived voices typically override this to customize behaviors.
-     * This voice uses  a cluster unit selector as the unit selector.
+     * The FestVox voice does not take advantage of any post lexical
+     * processing.  As a result, it doesn't end up getting certain
+     * units that are expected by the typical post lexical processing.
+     * For example, if "the" is followed by a word that begins with
+     * a vowel, the typical post lexical processing will change its
+     * pronunciation from "dh ax" to "dh iy".  We don't want this
+     * in this voice.
      * 
-     * @return the post lexical processor
+     * @return the post lexical analyzer in use by this voice
      * 
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitSelector() throws IOException {
-	return new ClusterUnitSelector(getDatabase());
+    protected UtteranceProcessor getPostLexicalAnalyzer() throws IOException {
+        /* Do nothing
+         */
+        return new UtteranceProcessor() {
+            public void processUtterance(Utterance utterance)
+                throws ProcessException {
+            }
+        };
     }
-
-    /**
-     * Returns the pitch mark generator to be used by this voice.
-     * Derived voices typically override this to customize behaviors.
-     * There is no default unit selector
-     * 
-     * @return the post lexical processor
-     * 
-     * @throws IOException if an IO error occurs while getting
-     *     processor
-     */
-    protected UtteranceProcessor getPitchmarkGenerator() throws IOException {
-	return new ClusterUnitPitchmarkGenerator();
-    }
-
-    /**
-     * Returns the unit concatenator to be used by this voice.
-     * Derived voices typically override this to customize behaviors.
-     * There is no default unit selector
-     * 
-     * @return the post lexical processor
-     * 
-     * @throws IOException if an IO error occurs while getting
-     *     processor
-     */
-    protected UtteranceProcessor getUnitConcatenator() throws IOException {
-	return new UnitConcatenator();
-    }
-
     
     /**
      * Converts this object to a string
@@ -130,6 +87,6 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @return a string representation of this object
      */
     public String toString() {
-	return "CMUClusterUnitVoice";
+	return "CMUTimeVoice";
     }
 }

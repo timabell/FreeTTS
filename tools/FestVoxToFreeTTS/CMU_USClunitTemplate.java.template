@@ -1,6 +1,6 @@
 package com.sun.speech.freetts.en.us.%VOICENAME%;
 
-import com.sun.speech.freetts.en.us.CMUClusterUnitVoice;
+import com.sun.speech.freetts.en.us.CMUTimeVoice;
 import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.VoiceDirectory;
 import com.sun.speech.freetts.Voice;
@@ -11,8 +11,8 @@ import java.util.Locale;
 
 /**
  * This voice directory provides a US/English Cluster Unit voice imported
- * from FestVox.
- *
+ * from FestVox.  This is expressly written for the CMU Time voice, so
+ * it will require editing if you are importing any other type of voice.
  */
 public class %CLASSNAME% extends VoiceDirectory {
     /**
@@ -26,7 +26,7 @@ public class %CLASSNAME% extends VoiceDirectory {
         CMULexicon lexicon = new CMULexicon("cmulex");
 
         // Change voice properties here
-        Voice voice = new CMUClusterUnitVoice("%NAME%",
+        Voice voice = new CMUTimeVoice("%NAME%",
                 Gender.%GENDER%, Age.%AGE%, "%DESCRIPTION%",
                 Locale.US, "%DOMAIN%", "%ORGANIZATION%",
                 lexicon,

@@ -244,10 +244,10 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     }
 
     /**
-     * Utility function that sends a <code>TOP_OF_QUEUE</code> event
+     * Utility function that sends a <code>MARKER_REACHED</code> event
      * to all speakable listeners.
      *
-     * @param event the <code>TOP_OF_QUEUE</code> event
+     * @param event the <code>MARKER_REACHED</code> event
      *
      * @see #postMarkerReached
      */

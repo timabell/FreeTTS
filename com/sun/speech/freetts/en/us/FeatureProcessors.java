@@ -1108,9 +1108,12 @@ public class FeatureProcessors {
 	 * processing
 	 */
 	public String process(Item seg) throws ProcessException {
-	    Item s = seg.getItemAs(
-                Relation.SYLLABLE_STRUCTURE).getNext();
+	    Item s = seg.getItemAs(Relation.SYLLABLE_STRUCTURE);
+            if (s == null) {
+                return "coda";
+            }
 
+            s = s.getNext();
 	    while (s != null) {
 		if ("+".equals(getPhoneFeature(s, "vc"))) {
 		    return "onset";
@@ -1118,6 +1121,7 @@ public class FeatureProcessors {
 
 		s = s.getNext();
 	    }
+            
 	    return "coda";
 	}
     }
