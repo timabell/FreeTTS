@@ -468,7 +468,7 @@ annotations are not used by this class, but are merely copied from
 the CART result to the &quot;accent&quot; and &quot;endtone&quot;
 features of the syllable Relation. 
 </P>
-<P>This processor relies on two <A HREF="#CART">CARTs </A>: an accent
+<P>This processor relies on two <A HREF="#cart">CARTs </A>: an accent
 CART and a tone CART. This processor iterates through each syllable
 in the syllable relation, applies each CART to the syllable and sets
 the accent and endtone features of the Item based upon the results of
@@ -617,7 +617,7 @@ Processing
 <P>FreeTTS uses a number of interesting data structures. These are
 described here. 
 </P>
-<H3><A NAME="CART"></A>Classification and Regression Trees (CART) 
+<H3><A NAME="cart"></A>Classification and Regression Trees (CART) 
 </H3>
 <P>The use of Classification and Regression Trees is described in the
 paper by L. Breiman, J. H. Friedman, R. A. Olshen, and C. J. Stone.
@@ -835,7 +835,7 @@ processing proceeds as follow:
 		</TR>
 	</TABLE>
 </CENTER>
-<H3>Lexicon 
+<H3><a name="lexicon">Lexicon</a> 
 </H3>
 <P>The Lexicon provides a mapping of words to their pronunciations.
 FreeTTS provides a generic lexicon interface
