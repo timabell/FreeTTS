@@ -134,7 +134,7 @@ public class DiphoneUnitDatabase {
     /**
      * Creates the DiphoneUnitDatabase from the given input stream.
      *
-     * @param URL the location of the database
+     * @param url the location of the database
      * @param isBinary if <code>true</code> the database is in 
      *		binary format; otherwise it is in text format
      *

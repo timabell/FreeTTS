@@ -60,7 +60,7 @@ public class HelloWorld {
             synthesizer.getSynthesizerProperties().setVoice(voice);
 	    
 	    // speak the "Hello world" string
-	    synthesizer.speakPlainText("Hello, world!", null);
+	    synthesizer.speakPlainText("Hello, Mr. Pig!", null);
 	    
 	    // wait till speaking is done
 	    synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);

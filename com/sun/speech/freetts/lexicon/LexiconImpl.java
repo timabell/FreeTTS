@@ -158,7 +158,7 @@ abstract public class LexiconImpl implements Lexicon {
      *
      * @param compiledURL a URL pointing to the compiled lexicon
      * @param addendaURL a URL pointing to lexicon addenda
-     * @param letterToSound a LetterToSound to use if a word cannot
+     * @param letterToSoundURL a LetterToSound to use if a word cannot
      *   be found in the compiled form or the addenda
      * @param binary if <code>true</code>, the input streams are binary;
      *   otherwise, they are text.

@@ -97,10 +97,10 @@ public class BaseSynthesizerProperties extends BaseEngineProperties
      * given default values.
      *
      * @param defaultVoice the default voice
-     * @param defaultVoice the default pitch
-     * @param defaultVoice the default pitch range
-     * @param defaultVoice the default speaking rate
-     * @param defaultVoice the default volume
+     * @param defaultPitch the default pitch
+     * @param defaultPitchRange the default pitch range
+     * @param defaultSpeakingRate the default speaking rate
+     * @param defaultVolume the default volume
      */
     public BaseSynthesizerProperties(Voice defaultVoice,
                                      float defaultPitch,

@@ -954,7 +954,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Given a phoneme and a feature name, returns the feature.
      *
-     * @param phoneme the phoneme of interest
+     * @param phone the phoneme of interest
      * @param featureName the name of the feature of interest
      *
      * @return the feature with the given name
@@ -1031,7 +1031,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Sets the duration  stretch
      *
-     * @param strecth the duration stretch (1.0 is no stretch)
+     * @param stretch the duration stretch (1.0 is no stretch)
      */
     public void setDurationStretch(float stretch) {
 	this.durationStretch = stretch;
@@ -1107,7 +1107,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     /**
      * Sets the dumpfile for this voice.
      *
-     * @param dumpfile the dumpfile
+     * @param waveDumpFile the dumpfile
      */
     public void setWaveDumpFile(String waveDumpFile) {
 	this.waveDumpFile = waveDumpFile;

@@ -458,7 +458,7 @@ public class NumberExpander {
      * Expands the given string of letters as a list of single char symbols.
      *
      * @param letters the string of letters to expand
-     * @param letterList words are added to this Relation
+     * @param wordRelation words are added to this Relation
      */
     public static void expandLetters(String letters, 
 				     WordRelation wordRelation) {

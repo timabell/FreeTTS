@@ -57,7 +57,7 @@ public class MixedVoices {
 	// alan is a limited-domain voice that only knows how talk
 	// about time.
 
-	Voice alan = new Voice("alan", 
+	Voice alan = new Voice("paul", 
 		Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
 
 

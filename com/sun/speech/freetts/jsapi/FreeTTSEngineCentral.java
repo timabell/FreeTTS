@@ -52,7 +52,7 @@ public class FreeTTSEngineCentral implements EngineCentral {
      * Returns a list containing references to all matching 
      *	synthesizers.
      *
-     * @param required  an engine mode that describes the desired
+     * @param require  an engine mode that describes the desired
      * 			synthesizer
      *
      * @return an engineList containing matching engines, or null if

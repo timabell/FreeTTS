@@ -353,8 +353,7 @@ public class FreeTTS {
     /**
      * Sets streaming audio. If true, output will be sent to 
      *
-     * @param multiAudio if <code>true</code> send output to multiple
-     * files.
+     * @param streamingAudio if <code>true</code> stream audio
      */
     public void setStreamingAudio(boolean streamingAudio) {
 	this.streamingAudio = streamingAudio;

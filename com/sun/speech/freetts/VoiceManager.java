@@ -255,7 +255,7 @@ public class VoiceManager {
      * Get the names of the voice directories from an input stream.
      * Blank lines and lines beginning with "#" are ignored.
      *
-     * @param fileName the name of the voices file to read from
+     * @param is the name of the voices file to read from
      *
      * @return an array of the names of the VoiceDirectory subclasses
      * @throws IOException

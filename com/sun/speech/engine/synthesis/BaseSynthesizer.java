@@ -59,7 +59,7 @@ abstract public class BaseSynthesizer extends BaseEngine
     /**
      * Creates a new Synthesizer in the <code>DEALLOCATED</code> state.
      *
-     * @param desc the operating mode of this <code>Synthesizer</code>
+     * @param mode the operating mode of this <code>Synthesizer</code>
      */
     public BaseSynthesizer(SynthesizerModeDesc mode) {
         super(mode);

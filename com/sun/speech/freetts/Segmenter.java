@@ -155,7 +155,7 @@ public class Segmenter implements UtteranceProcessor {
      * merely removes the last character of the phone.  Subclasses
      * should override this if another method is to be used.
      *
-     * @param the phone to convert
+     * @param phone the phone to convert
      *
      * @return de-stressed phone
      */

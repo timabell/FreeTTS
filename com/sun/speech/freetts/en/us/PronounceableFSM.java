@@ -157,9 +157,6 @@ public class PronounceableFSM {
      * input string.
      *
      * @param inputString the input string to be tested
-     * @param startFromFront whether the reading of the input string
-     * should start from the front or from the end (i.e. in reverse
-     * order)
      *
      * @return true if this FSM accepts, false if it rejects
      */

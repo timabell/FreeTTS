@@ -138,7 +138,6 @@ public class BaseVoice extends Voice {
     /**
      * Converts a Voice to a printable string.
      *
-     * @param v the voice
      */
     public String toString() {
         StringBuffer buf = new StringBuffer();

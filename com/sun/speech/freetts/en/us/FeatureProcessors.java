@@ -653,7 +653,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return consonant cplace
 	 *
@@ -677,7 +677,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return consonant type
 	 *
@@ -701,7 +701,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 * 
 	 * @return consonant voicing
 	 *
@@ -725,7 +725,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return vowel or consonant
 	 *
@@ -749,7 +749,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return vowel frontness
 	 *
@@ -773,7 +773,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 * 
 	 * @return vowel height
 	 *
@@ -798,7 +798,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return vowel length
 	 *
@@ -825,7 +825,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  item  the item to process
 	 *
 	 * @return volwel rnd
 	 *
@@ -915,7 +915,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 * 
 	 * @return "1" if fricative; else "0"
 	 *
@@ -937,7 +937,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 * 
 	 * @return "1" if fricative; else "0"
 	 *
@@ -961,7 +961,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if coda stop "1"; otherwise "0"
 	 *
@@ -983,7 +983,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if Onset Stop "1"; otherwise "0"
 	 *
@@ -1005,7 +1005,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if coda stop "1"; otherwise "0"
 	 *
@@ -1027,7 +1027,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if Onset Stop "1"; otherwise "0"
 	 *
@@ -1049,7 +1049,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if coda stop "1"; otherwise "0"
 	 *
@@ -1074,7 +1074,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if coda stop "1"; otherwise "0"
 	 *
@@ -1100,7 +1100,7 @@ public class FeatureProcessors {
 	/**
 	 * Performs some processing on the given item.
 	 *
-	 * @param  syl  the item to process
+	 * @param  seg  the item to process
 	 *
 	 * @return if onset coda "1"; otherwise "0"
 	 *
@@ -1226,7 +1226,7 @@ public class FeatureProcessors {
     /**
      * Gets the punctuation associated with the word
      *
-     * @param  word  the word to process
+     * @param  item  the word to process
      *
      * @return  the punctuation associated with the word
      *
