@@ -322,7 +322,6 @@
         <mkdir dir="${lib_dir}"/>
         <jar destfile="${freetts_jar}" 
 	     manifest="${src_dir}/com/sun/speech/freetts/freetts.Manifest"
-	     filesonly="true"
 	     compress="true">
             <fileset 
                 dir="${classes_dir}"
