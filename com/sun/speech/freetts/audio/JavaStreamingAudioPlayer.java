@@ -86,14 +86,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 
     private boolean debug = false;
     private boolean firstSample = true;
+
     private long cancelDelay;
+    private long drainDelay;
+    private long openFailDelayMs;
+    private long totalOpenFailDelayMs;
 
     private Object openLock = new Object();
     private Object lineLock = new Object();
 
-
-    private final static long DRAIN_DELAY = Utilities.getLong
-      ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 150L).longValue();
 
     /**
      * controls the buffering to java audio
@@ -118,6 +119,16 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         cancelDelay = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.cancelDelay",
              0L).longValue();
+        drainDelay = Utilities.getLong
+            ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay",
+             150L).longValue();
+        openFailDelayMs = Utilities.getLong
+            ("com.sun.speech.freetts.audio.AudioPlayer.openFailDelayMs",
+             0L).longValue();
+        totalOpenFailDelayMs = Utilities.getLong
+            ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
+             0L).longValue();
+        
         line = null;
 	setPaused(false);
     }
@@ -170,19 +181,37 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
             }
         }
 	DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-	try {
-	    line = (SourceDataLine) AudioSystem.getLine(info);
-            line.addLineListener(new JavaStreamLineListener());
 
-            synchronized (openLock) {
-                line.open(format, AUDIO_BUFFER_SIZE);
+        boolean opened = false;
+        long totalDelayMs = 0;
+
+        do {
+            try {
+                line = (SourceDataLine) AudioSystem.getLine(info);
+                line.addLineListener(new JavaStreamLineListener());
+                
+                synchronized (openLock) {
+                    line.open(format, AUDIO_BUFFER_SIZE);
+                    try {
+                        openLock.wait();
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+                    opened = true;
+                }                
+            } catch (LineUnavailableException lue) {
+                System.err.println("LINE UNAVAILABLE: " +
+                                   "Format is " + currentFormat);
                 try {
-                    openLock.wait();
+                    Thread.sleep(openFailDelayMs);
+                    totalDelayMs += openFailDelayMs;
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
             }
+        } while (!opened && totalDelayMs < totalOpenFailDelayMs);
 
+        if (opened) {
             setVolume(line, volume);
             resetTime();
             if (isPaused() && line.isRunning()) {
@@ -190,10 +219,12 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
             } else {
                 line.start();
             }
-	} catch (LineUnavailableException lue) {
-            lue.printStackTrace();
-	    throw new UnsupportedOperationException("Can't get line");
-	}
+        } else {
+            if (line != null) {
+                line.close();
+            }
+            line = null;
+        }
     }
 
 
@@ -397,7 +428,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *	[[[ WORKAROUND TODO
      *   The javax.sound.sampled drain is almost working properly.  On
      *   linux, there is still a little bit of sound that needs to go
-     *   out, even after drain is called. Thus, the DRAIN_DELAY. We
+     *   out, even after drain is called. Thus, the drainDelay. We
      *   wait for a few hundred milliseconds while the data is really
      *   drained out of the system
      * ]]]
@@ -407,9 +438,9 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
             debugPrint("started draining...");
 	    if (line.isOpen()) {
 		line.drain();
-		if (DRAIN_DELAY > 0L) {
+		if (drainDelay > 0L) {
 		    try {
-			Thread.sleep(DRAIN_DELAY);
+			Thread.sleep(drainDelay);
 		    } catch (InterruptedException ie) {
 		    }
 		}

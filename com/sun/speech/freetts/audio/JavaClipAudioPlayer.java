@@ -51,8 +51,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
 
-    private int openFailDelayMs;
-    private int totalOpenFailDelayMs;
+    private long openFailDelayMs;
+    private long totalOpenFailDelayMs;
 
 
     /**
@@ -61,12 +61,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public JavaClipAudioPlayer() {
 	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-        openFailDelayMs = Utilities.getInteger
+        openFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.openFailDelayMs",
-             0).intValue();
-        totalOpenFailDelayMs = Utilities.getInteger
+             0).longValue();
+        totalOpenFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
-             0).intValue();
+             0).longValue();
 	setPaused(false);
     }
 
@@ -286,7 +286,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
                 
         boolean opened = false;
-        int totalDelayMs = 0;
+        long totalDelayMs = 0;
         do {
             // keep trying to open the clip until the specified
             // delay is exceeded
