@@ -20,9 +20,11 @@ import com.sun.speech.freetts.audio.RawFileAudioPlayer;
 
 import com.sun.speech.freetts.en.us.CMUDiphoneVoice;
 
+import de.dfki.lt.freetts.en.us.MbrolaVoice;
 import de.dfki.lt.freetts.en.us.MbrolaVoiceUS1;
 import de.dfki.lt.freetts.en.us.MbrolaVoiceUS2;
 import de.dfki.lt.freetts.en.us.MbrolaVoiceUS3;
+import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -668,36 +670,23 @@ class VoiceManager {
             voice.getFeatures().setString
                 (Voice.DATABASE_NAME, "cmu_kal/diphone_units16.bin");
         } else if (voiceName.startsWith("mbrola")) {
-            if (isMbrolaBaseDefined()) {
-                if (voiceName.equals("mbrola1")) {
-                    voice = new MbrolaVoiceUS1(createLexicon);
-                } else if (voiceName.equals("mbrola2")) {
-                    voice = new MbrolaVoiceUS2(createLexicon);
-                } else if (voiceName.equals("mbrola3")) {
-                    voice = new MbrolaVoiceUS3(createLexicon);
+            if (voiceName.equals("mbrola1")) {
+                voice = new MbrolaVoiceUS1(createLexicon);
+            } else if (voiceName.equals("mbrola2")) {
+                voice = new MbrolaVoiceUS2(createLexicon);
+            } else if (voiceName.equals("mbrola3")) {
+                voice = new MbrolaVoiceUS3(createLexicon);
+            }
+            if (voice != null) {
+                Validator validator = new
+                    MbrolaVoiceValidator((MbrolaVoice) voice);
+                if (!validator.isValid()) {
+                    throw new IllegalStateException
+                        ("Problem starting MBROLA voice");
                 }
-            } else {
-                throw new IllegalStateException
-                    ("System property \"mbrola.base\" undefined. You might " +
-                     "need to define the MBROLA_DIR environment variable.");
             }
         }
-
         return voice;
-    }
-
-    /**
-     * Returns true if the "mbrola.base" system property exists.
-     * Otherwise, returns false.
-     *
-     * @return true if the "mbrola.base" system property exists
-     */
-    private boolean isMbrolaBaseDefined() {
-        String mbrolaBase = System.getProperty("mbrola.base");
-        if (mbrolaBase != null && mbrolaBase.equals("")) {
-            return false;
-        }
-        return (mbrolaBase != null);
     }
 }
 
