@@ -121,11 +121,11 @@ public class FreeTTSVoice extends BaseVoice {
 
 
     /**
-     * Gets a FreeTTS voice from this JSAPI voice
+     * Gets a FreeTTS com.sun.speech.freetts.Voice from this JSAPI voice
      *
-     * @return a FreeTTS voice or null, if the voice cannot be found
+     * @return a FreeTTS Voice or null, if the voice cannot be found
      */
-    synchronized com.sun.speech.freetts.Voice getFreeTTSVoice() {
+    public synchronized com.sun.speech.freetts.Voice getVoice() {
         return freettsVoice;
     }
 

@@ -844,18 +844,38 @@
        foo0.wav, foo1.wav, foo2.wav, etc.. Again, the file format is
        determined by the extension of the filename.<br>
 
-    <p>If you are writing your own non-JSAPI application you can use
-       one of the file-based audio players. See the FreeTTS API
-       documentation for:
+    <p>If you are writing your own application, you can set the audio player
+       of the FreeTTS Voice to one of the file-based audio players.
+       See the FreeTTS API documentation for:
 
     <ul>
       <li><a href="../javadoc/com/sun/speech/freetts/Voice.html">Voice</a> -
           describes how to set the 
           <a href="../javadoc/com/sun/speech/freetts/audio/AudioPlayer.html">
-          AudioPlayer</a> for a voice.</li>
+          AudioPlayer</a> for a voice.</li><br>
+      <li><a href="../javadoc/com/sun/speech/freetts/jsapi/FreeTTSVoice.html#getVoice()">
+          FreeTTSVoice.getVoice</a> - allows you to get the underlying 
+          FreeTTS Voice object from the JSAPI FreeTTSVoice object.  
+	  NOTE that doing this means you end up straying from the
+	  JSAPI specification.  An example of how you might use this
+          method is as follows:
+<pre>
+    desc = (SynthesizerModeDesc) synthesizer.getEngineModeDesc();
+    javax.speech.synthesis.Voice[] jsapiVoices = desc.getVoices();
+    javax.speech.synthesis.Voice jsapiVoice = voices[0];
+    
+    /* Non-JSAPI modification of voice audio player
+     */
+    if (jsapiVoice instanceof com.sun.speech.freetts.jsapi.FreeTTSVoice) {
+        com.sun.speech.freetts.Voice freettsVoice = 
+            ((com.sun.speech.freetts.jsapi.FreeTTSVoice) jsapiVoice).getVoice();
+        freettsVoice.setAudioPlayer(new SingleFileAudioPlayer());
+    }
+</pre>
+      </li>
       <li><a href="../javadoc/com/sun/speech/freetts/audio/SingleFileAudioPlayer.html">
           SingleFileAudioPlayer</a> - an AudioPlayer that sends all
-          output to a single file.</li>
+          output to a single file.</li><br>
       <li><a href="../javadoc/com/sun/speech/freetts/audio/MultiFileAudioPlayer.html">
           MultiFileAudioPlayer</a> - an AudioPlayer that sends each utterance to a separate file.</li>
     </ul>
@@ -969,10 +989,39 @@
 	 different mechanism.  A detailed discussion of this approach
 	 in the FreeTTS Help forum: 
          <a href="https://sourceforge.net/forum/message.php?msg_id=1549044">
-         Avoiding the need for speech.properties.</a>
+         Avoiding the need for speech.properties.</a> 
 
       <p>The <a href="../demo/JSAPI/WebStartClock/README.html">
-         WebStartClock demo</a> also provides an example of how to do this.
+         WebStartClock demo</a> also provides an example of how to do this:
+<pre>
+    public void createSynthesizer() {
+        try {
+            SynthesizerModeDesc desc = 
+                new SynthesizerModeDesc(null, 
+                                        "time", /* use "time" or "general" */
+                                        Locale.US, 
+                                        Boolean.FALSE,
+                                        null);
+
+            FreeTTSEngineCentral central = new FreeTTSEngineCentral();
+            EngineList list = central.createEngineList(desc); 
+            
+            if (list.size() > 0) { 
+                EngineCreate creator = (EngineCreate) list.get(0); 
+                synthesizer = (Synthesizer) creator.createEngine(); 
+            } 
+            if (synthesizer == null) {
+                System.err.println("Cannot create synthesizer");
+                System.exit(1);
+            }
+            synthesizer.allocate();
+            synthesizer.resume();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+</pre>
   </li>
 
   <li><b><a name="What_does_the_message_Line_unavailable"></a>What does
