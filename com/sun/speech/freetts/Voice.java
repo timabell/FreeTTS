@@ -516,7 +516,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
                 speakable.completed();
                 log(" --- completed ---");
 	    } else if (!ok) {
-		getAudioPlayer().drain();
+		// getAudioPlayer().drain();
 		speakable.cancelled();
                 log(" --- cancelled ---");
 	    } else {
