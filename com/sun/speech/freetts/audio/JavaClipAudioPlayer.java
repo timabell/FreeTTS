@@ -42,15 +42,18 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 
     private float volume = 1.0f;  // the current volume
     private boolean debug = false;
+    private boolean audioMetrics = false;
     private BulkTimer timer = new BulkTimer();
     private AudioFormat defaultFormat = // default format is 8khz
 	new AudioFormat(8000f, 16, 1, true, true);
     private AudioFormat currentFormat = defaultFormat;
     private boolean firstSample = true;
+    private boolean firstPlay = true;
     private int curIndex = 0;
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
 
+    private long drainDelay;
     private long openFailDelayMs;
     private long totalOpenFailDelayMs;
 
@@ -61,12 +64,17 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public JavaClipAudioPlayer() {
 	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
+        drainDelay = Utilities.getLong
+            ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay",
+             150L).longValue();
         openFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.openFailDelayMs",
              0).longValue();
         totalOpenFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
              0).longValue();
+	audioMetrics = Utilities.getBoolean
+	    ("com.sun.speech.freetts.audio.AudioPlayer.showAudioMetrics");
 	setPaused(false);
     }
 
@@ -128,6 +136,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * immediately false.
      */
     public void cancel() {
+	if (audioMetrics) {
+	    timer.start("audioCancel");
+	}
         if (currentClip != null) {
             currentClip.stop();
             currentClip.close();
@@ -137,6 +148,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             paused = false;
             notifyAll();
         }
+	if (audioMetrics) {
+	    timer.stop("audioCancel");
+	    timer.getTimer("audioCancel").showTimesShortTitle("");
+	    timer.getTimer("audioCancel").showTimesShort(0);
+	}
     }
 
     /**
@@ -161,15 +177,28 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 
     /**
      * Closes this audio player
+     *
+     *	[[[ WORKAROUND TODO
+     *   The javax.sound.sampled drain is almost working properly.  On
+     *   linux, there is still a little bit of sound that needs to go
+     *   out, even after drain is called. Thus, the drainDelay. We
+     *   wait for a few hundred milliseconds while the data is really
+     *   drained out of the system
+     * ]]]
      */
     public synchronized void close() {
         if (currentClip != null) {
-            currentClip.stop();
+	    currentClip.drain();
+	    if (drainDelay > 0L) {
+		try {
+		    Thread.sleep(drainDelay);
+		} catch (InterruptedException e) {
+		}
+	    }
             currentClip.close();
         }
         notifyAll();
-    }
-        
+    }        
 
     /**
      * Returns the current volume.
@@ -313,6 +342,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             ok = false;
         } else {
             setVolume(currentClip, volume);
+	    if (audioMetrics && firstPlay) {
+		firstPlay = false;
+		timer.stop("firstPlay");
+		timer.getTimer("firstPlay").showTimesShortTitle("");
+		timer.getTimer("firstPlay").showTimesShort(0);
+	    }
             currentClip.start();                
             try {
                 // wait for audio to complete
@@ -359,6 +394,10 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         if (firstSample) {
             firstSample = false;
             timer.stop("firstAudio");
+	    if (audioMetrics) {
+		timer.getTimer("firstAudio").showTimesShortTitle("");
+		timer.getTimer("firstAudio").showTimesShort(0);
+	    }
         }
         System.arraycopy(bytes, offset, outputData, curIndex, size);
         curIndex += size;
@@ -399,6 +438,10 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public void startFirstSampleTimer() {
 	timer.start("firstAudio");
 	firstSample = true;
+	if (audioMetrics) {
+	    timer.start("firstPlay");
+	    firstPlay = true;
+	}
     }
 
 

@@ -85,6 +85,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private AudioFormat currentFormat = defaultFormat;
 
     private boolean debug = false;
+    private boolean audioMetrics = false;
     private boolean firstSample = true;
 
     private long cancelDelay;
@@ -128,6 +129,8 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         totalOpenFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
              0L).longValue();
+	audioMetrics = Utilities.getBoolean
+	    ("com.sun.speech.freetts.audio.AudioPlayer.showAudioMetrics");
         
         line = null;
 	setPaused(false);
@@ -267,6 +270,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public void cancel() {
         debugPrint("cancelling...");
 
+	if (audioMetrics) {
+	    timer.start("audioCancel");
+	}
+
         if (cancelDelay > 0) {
             try {
                 Thread.sleep(cancelDelay);
@@ -287,6 +294,12 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
             cancelled = true;
             notify();
         }
+
+	if (audioMetrics) {
+	    timer.stop("audioCancel");
+	    timer.getTimer("audioCancel").showTimesShortTitle("");
+	    timer.getTimer("audioCancel").showTimesShort(0);
+	}
 
         debugPrint("...cancelled");
     }
@@ -504,6 +517,10 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	if (firstSample) {
 	    firstSample = false;
 	    timer.stop("firstAudio");
+	    if (audioMetrics) {
+		timer.getTimer("firstAudio").showTimesShortTitle("");
+		timer.getTimer("firstAudio").showTimesShort(0);
+	    }
 	}
 	debugPrint(" au write " + bytesRemaining + 
                    " pos " + line.getMicrosecondPosition() 
