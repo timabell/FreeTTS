@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,62 +13,69 @@
 -->
 
 <html>
+    <head><title>JSAPI Time Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>JSAPI Time Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>JSAPI JTime Demo</title>
-  </head>
+        <p>This demo provides a simple example of using JSAPI to tell
+        the time using the high quality FreeTTS cluster unit selection
+        voice.</p>
 
-  <body bgcolor="#FFFFFF">
+        <h3>Running</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/JTime.jar</code></p>
+        </ul>
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-              <h1>JSAPI JTime Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <p>You should hear the current time and see the following prompt:</p>
+        <ul>
+            <li><b>Enter time (HH:MM):</b></li>
+        </ul>
 
-    <pre>
+        <p>Enter the time in a format as follows:</p>
+        <ul>
+            <li><b>Enter time (HH:MM): 12:35</b></li>
+        </ul>
 
-The JSAPI JTime demo uses a high quality (cluster unit) voice
-to tell you the time.
+        <p>You should hear "The time is now exactly twenty-five to one
+        in the afternoon".</p> 
+        <p><img src="../../../docs/images/speaker1.gif"> Click <a
+        href="../../../docs/audio/12-35.au">AU</a> or <a
+        href="../../../docs/audio/12-35.wav">WAV</a> to listen to it.</p>
 
+        <h3>Specifying a Voice</h3> 
 
-To run this JTime demo on Unix system, type:
+        <p>By default, this application will use the "alan" voice
+        that comes with the lib/cmu_time_awb.jar file.  As of this
+        release, the "alan" voice is the only time voice that comes
+        with FreeTTS.</p>
+        <p>We now have, however, the ability for you to
+        create your own FreeTTS voices.  See the 
+        <a href="../../../tools/FestVoxToFreeTTS/README.html">
+        FestVoxToFreeTTS</a> documentation for creating your own
+        voice.  Once you create your own voice, place its jar
+        file in the lib directory.  The specify the name of the 
+        voice as the first (and only) parameter on the command line 
+        (replace "myvoicename" with the name of your new voice):</p>
+        <ul>
+            <p><code>java -jar bin/JTime.jar myvoicename</code>
+	</ul>
+    
+        <hr>
 
-% gmake run
-
-To run this JTime demo on a win32 system, type:
-
-$ run JTime
-
-
-You should hear the current time and see the following prompt:
-
-<b>
-Enter time (HH:MM):
-</b>
-
-Enter the time in a format as follows:
-
-<b>
-Enter time (HH:MM): 12:35
-</b>
-
-You should hear "The time is now exactly twenty-five to one in 
-the afternoon". <img src="../../../docs/images/speaker1.gif"> Click <a href="../../../docs/audio/12-35.au">AU</a> or <a href="../../../docs/audio/12-35.wav">WAV</a> to listen to it.
-
-    </pre>
-
-    <hr>
-
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-
-
-  </body>
-  
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
 </html>
-

@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<!--
+
+/**
+ * Copyright 2003 Sun Microsystems, Inc.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
+ */
+
+-->
+
+<html>
+    <head><title>FestVox to FreeTTS</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>FestVox To FreeTTS</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
+
+        <p>As of FreeTTS 1.2, FreeTTS provides support to import
+        voice data directly from FestVox.  This page describes the
+        overall process for doing the import.</p>
+
+        <h3>Creating a Voice</h3>
+        <p>You must first create a voice using 
+        <a href="http://festvox.org">FestVox</a>.  We've had success
+        using FestVox 2.0 on both Linux (RedHat 9.0) and Solaris (use
+        gcc 3.2.2 to compile FestVox and Festival on Solaris).
+        <b>NOTE that we did not create FestVox, nor can we provide
+        support for it.</b>  The creators of FestVox, however, did a
+        great job and you can refer to their documentation for where 
+        to send any questions or comments.</p>
+
+        <p>FestVox currently provides support for creating two types
+        of voices:  diphone and unit selection.  The diphone voices
+        support general domain synthesis (i.e., they try to speak any
+        text you throw at them).  They are time consuming to create,
+        and are usually not a good first choice when learning how to
+        create voices.  The unit selection, or limited domain, voices
+        only support a limited somain (e.g., telling the time), and
+        generally sound very good.</p>
+
+        <p>If you want to experiment with voice creation and
+        conversion, we recommend you start with creating a time
+        telling voice.</p>
+
+        <p>Please refer to the <a href="http://festvox.org/bsv/">
+	FestVox Documentation</a> for information on creating a voice.
+        <a href="http://www.festvox.org/bsv/bsv-usukdiphone-ch.html">
+        Section IV.19</a> of the FestVox documentation provides a 
+        good tutorial on making a US Diphone voice, and 
+        <a href="http://www.festvox.org/bsv/x1003.html">
+        Section II.5.6</a> provides a good tutorial on recording a
+        cluster unit voice for the limited domain of telling
+        the time.  <a href="http://www.festvox.org/bsv/bsv-ldom-ch.html">
+        Section II.5</a> provides a good general explanation of
+        creating a limited domain voice in general.</p>
+
+        <h3>Importing a FestVox Voice into FreeTTS (quick explanation)</h3>
+        <ul>
+            <li>Make sure ant, festival, java, and javac are in your path.
+            <li>Define the ESTDIR environment variable.
+            <li>Execute <code>&lt;FreeTTSdir>/tools/FestVoxToFreeTTS/FestVoxToFreeTTS.sh &lt;voicedir></code>
+            <li>Follow the prompts asking you about the voice's properties.
+            <li>Test it with <code>java -jar &lt;FreeTTSdir>/lib/freetts.jar -voice &lt;voicename></code>
+        </ul>
+
+        <p>You have now imported a voice into FreeTTS.
+
+        <p>See "FestVoxToFreeTTS.sh --help" for more information.
+
+        <h3>Importing a FestVox Voice into FreeTTS (full explanation)</h3>
+        <p>FreeTTS follows many of the same steps that 
+        <a href="http://cmuflite.org">Flite</a> follows for importing 
+        voices.  For a more detailed description of the process,
+        please read
+        <a href="http://www.speech.cs.cmu.edu/flite/doc/flite_8.html#SEC14">
+        Section 8</a> of the
+        <a href="http://www.speech.cs.cmu.edu/flite/doc/index.html">
+        Flite documentation</a>.
+
+        <p>To import a voice into FreeTTS, you first need to do the
+        following things:
+        <ol>
+            <li>Compile <a href="http://festvox.org">Festival 1.4.3 and
+            FestVox 2.0</a> as well as the speech tools that come with
+            Festival.  Refer to the Festival documentation for details
+            of setting this up on your system.  We've only built
+            Festival and FestVox on RedHat 9.0 and Solaris.  For both
+            systems, we used gcc 3.2.2.
+
+            <li>"festival", "java", and "javac" must be in your path.
+            For example, we used the following command under bash on
+            RedHat (modify appropriately):
+            <ul>
+               <p><code>export
+               PATH=$PATH:/usr/java/j2sdk1.4.2/bin:/home/jim/festival/bin/</code>
+            </ul>
+
+            <li>You must set the ESTDIR environment variable to point
+            to the speech tools.  For example:
+            <ul>
+               <p><code>export
+               ESTDIR=/home/jim/speech_tools</code>
+            </ul>
+        </ol>
+
+        <p>To convert a voice, run the
+        <code>FestVoxToFreeTTS.sh</code> script from a command line
+        prompt located in the <code>tools/FestVoxToFreeTTS</code>
+        directory:
+        <ul>
+           <p><code>FestVoxToFreeTTS.sh &lt;voicedir></code>
+        </ul>
+        <p>where &lt;voicedir> is the directory the FestVox voice 
+        resides in.  The contents of <voicedir> will looks something
+        like the following:</p>
+        <ul>
+<pre>
+bin/  etc/       FreeTTS/  lpc/     prompt-cep/  recording/  wav/
+cep/  f0/        group/    mcep/    prompt-lab/  scratch/    wavn/
+dic/  festival/  lab/      pm/      prompt-utt/  sts/        wrd/
+emu/  festvox/   lar/      pm_lab/  prompt-wav/  versions/
+</pre>
+        </ul>
+
+        <p>The script will automatically detect whether it is a
+        cluster unit voice or a diphone voice by looking at the 
+        &lt;voicedir>/etc/voice.defs file.  If no such file exists, 
+        you will need to create it.  An example for a time-telling 
+        voice would be something like the following:
+
+        <ul>
+<pre>
+FV_INST=sun
+FV_LANG=time
+FV_NAME=dtv
+FV_TYPE=ldom
+FV_VOICENAME=$FV_INST"_"$FV_LANG"_"$FV_NAME
+FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
+</pre>
+        </ul>
+
+        <p>If possible, you can let festival automatically generate
+        this for you.  Try
+        &lt;<code>festvoxdir>/src/general/guess_voice_defs</code>. 
+
+        <p>FreeTTS will create a new directory
+	<code>&lt;voicedir>/FreeTTS/</code>.  In that directory is the
+	text which contains all the data for the voice (along with a
+	few other intermediate files).  The voice file will have a
+	name such as <code>sun_time_dtv.txt</code>.
+
+        <p>The various stages of the conversion process can be called
+        directly by passing a second argument to
+        <code>FestVoxToFreeTTS.sh</code> such as "sts" or "mcep".
+        These should be used carefully.  More information on these
+        stages can be found in the Flite documentation.  
+
+        <p>If you do not pass a second argument (recommended) the 
+        conversion tool will run the processing stages in the
+        following order: "lpc", "sts", "mcep" (if a cluster unit
+        voice), "idx", "install", and "compile".  The "install" and 
+        "compile" are specific to FreeTTS and are not mentioned in 
+        the Flite documentation.  They are the stages that construct 
+        the framework for the voice within freetts and compile the
+        result.
+
+        <p>When the process gets to the install phase, you will
+        encounter a menu.  The install phase only knows how to handle
+        US English voices.  If you have any other languages/locales,
+        then you should probably exit at this step.  Unfortunately
+        adding new languages or locales is beyond the scope of this
+        document.
+
+        <p>The menu allows you to define various features about the
+        voice:
+        <ul>
+            <li><b>Name</b>: The name you want to call this voice.
+            For example "kevin", "kevin16", "alan", or "dave".
+
+            <li><b>Gender</b>: The gender of the voice.  Select
+            help from the menu for a full listing of genders.
+
+            <li><b>Age</b>: The age of the voice.  Select help
+            from the menu for a full listing of ages.
+
+            <li><b>Description</b>: A sentence or so that
+            describes this voice for others.  
+
+            <li><b>Full Name</b>: - The name that will be used to
+            name the voice files and directory.  It must be unique
+            to this installation of FreeTTS as well as any other
+            copy of FreeTTS you expect to use this voice.  For the
+            sake of similarity to other voices, it is highly
+            recommended to not change this property unless it
+            conflicts with an existing voice.  The format for the
+            name follows the convention:
+            <code>&lt;domain>_&lt;locale>_&lt;name></code>.
+            The &lt;name> does not have to match the Name
+            property.  The domain generally matches an Internet
+            domain or some other globally unique identity.  For
+            limited domain voices, you might use the limited domain
+            name instead of locale.  Example names include
+            <code>cmu_us_kal</code>, <code>cmu_time_awb</code>, 
+            and <code>sun_us_dtv</code>.
+
+            <li><b>Domain</b>: The domain if this is a limited 
+            (ldom) voice, otherwise it must be set to "general".
+
+            <li><b>Organization</b>: The organization which
+            recorded the voice.  For example "cmu" or "sun".
+        </ul>
+
+        <p>If there already exists a voice with the same Full Name,
+        you are given the option to over-write it, cancel, or change
+        the properties.
+
+        <p>When this is done, the voice is put into the FreeTTS
+        directory structure
+        <code>&lt;FreeTTSdir>/com/sun/speech/freetts/en/us/&lt;voice
+        Full Name></code>.  It is recommended to visit this directory
+        and confirm that everything looks correct.  If this is a
+        limited domain voice for something other than the cmu time
+        domain, then you will likely have to make some changes to make
+        it look at the correct lexicon.
+
+        <p>The compiled voice is put in 
+        <code>&lt;FreeTTSdir>/lib/&lt;voice Full Name>.jar</code>.
+
+        <p>The voice will automatically be added to the list of
+        available voices for FreeTTS.
+
+        <p>You can now test your voice with:
+        <ul>
+            <p><code>java -jar lib/freetts.jar myvoicename</code>
+            (general domain)
+            <p><code>java -jar bin/JTime.jar myvoicename</code>
+            (time domain)
+        </ul> <p>where myvoicename is the name property you assigned
+        to your voice in the "install" phase.
+
+        <h3>Files in this directory</h3>
+        <ul>
+            <li><b>FestVoxToFreeTTS.sh</b>: The bash script that
+            performs the conversion process.
+            <li><b>FestVoxClunitsToFreeTTS.scm</b>: Performs the idx
+            stage of the conversion for cluster unit voices.
+            <li><b>FestVoxDiphoneToFreeTTS.scm</b>: Performs the idx
+            stage of the conversion for diphone voices.
+            <li><b>qsort.scm</b>: A simple quicksort implementation in
+            scheme.  
+            <li><b>FindSTS.java</b>: Generates the sts file for a
+            given recording.  Used by FestVoxToFreeTTS.sh.
+            <li><b>FindSTS.jar</b>: A compiled version of FindSTS.java
+            (automatically generated)
+            <li><b>README</b>: This file.
+            <li><b>CMU_USDiphoneTemplate.java</b>: A template voice 
+            directory for en/us diphone voices.
+            <li><b>CMU_USTimeTemplate.java</b>: A template voice
+            directory for en/us time limited domain cluster unit 
+            voices.
+            <li><b>VoiceMakefileTemplate.txt</b>: A template Makefile for
+            both ldom and diphone voices.
+        </ul>
+
+        <hr>
+
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
+</html>

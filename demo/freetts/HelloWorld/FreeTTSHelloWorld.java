@@ -34,17 +34,6 @@ public class FreeTTSHelloWorld {
 
         listAllVoices();
         
-        /* You can run "java -jar" on any of the voice jars that come
-         * with FreeTTS to get a list of the names of the voices
-         * contained in that file:
-         *
-         *    java -jar lib/cmu_us_kal.jar
-         *    java -jar lib/cmu_time_awb.jar
-         *    java -Dmbrola.base=/usr/local/mbrola -jar lib/mbrola.jar
-         *
-         * You can then use any one of the names as the argument to
-         * this sample application.
-         */
         String voiceName = (args.length > 0)
             ? args[0]
             : "kevin16";

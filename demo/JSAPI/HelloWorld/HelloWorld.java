@@ -69,18 +69,12 @@ public class HelloWorld {
     
     public static void main(String[] args) {
 
+        /* List all the "general" domain voices, which are voices that
+         * are capable of attempting to speak almost any text you
+         * throw at them.
+         */
         listAllVoices("general");
 
-        /* You can run "java -jar" on any of the voice jars that come
-         * with FreeTTS to get a list of the names of the voices
-         * contained in that file:
-         *
-         *    java -jar lib/cmu_us_kal.jar
-         *    java -Dmbrola.base=/usr/local/mbrola -jar lib/mbrola.jar
-         *
-         * You can then use any one of the names as the argument to
-         * this sample application.
-         */
         String voiceName = (args.length > 0)
             ? args[0]
             : "kevin16";
@@ -105,7 +99,7 @@ public class HelloWorld {
 		(null,          // engine name
 		 "general",     // mode name
 		 Locale.US,     // locale
-		 Boolean.FALSE, // running
+		 null,          // running
 		 null);         // voice
 	    Synthesizer synthesizer = Central.createSynthesizer(desc);
 
