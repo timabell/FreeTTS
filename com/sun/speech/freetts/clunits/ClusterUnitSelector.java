@@ -127,15 +127,23 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    setUnitName(s);
 	}
 
+    // Carry out the CART lookup for the target costs, and the viterbi
+    // search for finding the best path (join costs) through the candidates.
 	vd.decode();
 
+    // Now associate the candidate units in the best path 
+    // with the items in the segment relation.
 	if (!vd.result("selected_unit")) {
 	    utterance.getVoice().error("clunits: can't find path");
 	}
 
+    // If optimal coupling was used, the join points must now be copied
+    // from the path elements to the actual items in the segment relation.
 	vd.copyFeature("unit_prev_move");
 	vd.copyFeature("unit_this_move");
 
+    // Based on this data, create a Unit relation giving the details of the
+    // units to concatenate.
 	Relation unitRelation = utterance.createRelation(Relation.UNIT);
 
 	for (Item s = segs.getHead(); s != null; s = s.getNext()) {
@@ -143,6 +151,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    FeatureSet unitFeatureSet = unit.getFeatures();
 	    int unitEntry = s.getFeatures().getInt("selected_unit");
 
+        // The item name is the segment name
 	    unitFeatureSet.setString("name", s.getFeatures().getString("name"));
 
 	    int unitStart;
@@ -169,6 +178,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    if (true) { 
 		unitFeatureSet.setInt("unit_start", clunit.getStart());
 		unitFeatureSet.setInt("unit_end", clunit.getEnd());
+        unitFeatureSet.setInt("instance", unitEntry - clunitDB.getUnitIndex(clunitName, 0));
 	    } // add the rest of these things for debugging.
 
 	    if (DEBUG) {
@@ -272,7 +282,10 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	private ClusterUnitDatabase clunitDB;
 
 	/**
-	 * Creates a Viterbi class to process the given segment.
+	 * Creates a Viterbi class to process the given utterance.
+     * A queue of ViterbiPoints corresponding to the Items in the Relation segs 
+     * is built up.
+     * 
 	 */
 	public Viterbi(Relation segs, ClusterUnitDatabase db) {
 	    ViterbiPoint last = null;
@@ -280,17 +293,20 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    f = new FeatureSetImpl();
 	    for (Item s = segs.getHead(); true; s = s.getNext()) {
 		ViterbiPoint n = new ViterbiPoint(s);
+        // The number of ViterbiPaths associated with each ViterbiPoint
+        // is determined using the variable numStates.
+        // TODO: Where can numStates be set?
 		if (numStates > 0) {
 		    n.initPathArray(numStates);
 		}
-		if (last != null) { 
+		if (last != null) { // continue to build up the queue
 		    last.next = n;
-		} else {
+		} else { // timeline is the start of the queue
 		    timeline = n;
 		}
 		last = n;
 
-		if (s == null) {
+		if (s == null) { // no further segments, leave loop
 		    lastPoint = n;
 		    break;
 		}
@@ -331,26 +347,53 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Find the best path candidate.
+     * Carry out a Viterbi search in for a prepared queue of ViterbiPoints.
+     * In a nutshell, each Point represents a target item (a target segment);
+     * for each target Point, a number of Candidate units in the voice database 
+     * are determined; a Path structure is built up, based on local best transitions.
+     * Concretely, a Path consists of a (possibly empty) previous Path, a current Candidate,
+     * and a Score. This Score is a quality measure of the Path; it is calculated as the
+     * sum of the previous Path's score, the Candidate's score, and the Cost of joining
+     * the Candidate to the previous Path's Candidate. At each step, only one Path 
+     * leading to each Candidate is retained, viz. the Path with the best Score.
+     * All that is left to do is to call result() to get the best-rated
+     * path from among the paths associated with the last Point, and to associate
+     * the resulting Candidates with the segment items they will realise. 
 	 */
 	void decode() {
 	    for (ViterbiPoint p = timeline; p.next != null; p = p.next) {
+            // The candidates for the current item:
 		p.cands = getCandidate(p.item);
 		if (DEBUG) {
 		    debug("decode " + p.cands);
 		}
 		if (numStates != 0) {
 		    if (numStates == -1) {
+                // put as many (empty) path elements into p.next as there are candidates in p
 			p.next.initDynamicPathArray(p.cands);
 		    }
 
-		    for (int i = 0; i < p.numStates; i++) {
+            // Now go through all existing paths and all candidates for the current item;
+            // tentatively extend each existing path to each of the candidates,
+            // but only retain the 
+            // Attention: p.numStates is not numStates!
+            // numStates = a general flag indicating which type of viterbi search
+            //             to use (only -1 seems to be implemented);
+            // p.numStates = the number of paths in p.statePaths, i.e. p.numStates==p.statePaths.length
+            for (int i = 0; i < p.numStates; i++) {
 			if ((p == timeline && i == 0) || 
 				(p.statePaths[i] != null)) {
+                // We are at the very beginning of the search, or have a usable path to extend
 			    // debug("   dc p " + p);
 			    for (ViterbiCandidate c = p.cands; 
 					c != null; c = c.next) {
+                    // For the candidate c, create a path extending the previous path
+                    // p.statePaths[i] to that candidate: 
 				ViterbiPath np = getPath(p.statePaths[i], c);
+                // Compare this path to the existing best path (if any) leading to
+                // candidate c; only retain the one with the better score.
+                // TODO: why should the paths leading to the candidates realising p
+                // be stored in p.next?
 				addPaths(p.next, np);
 			    }
 			}
@@ -379,10 +422,16 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	/**
 	 * Add the new path to the state path if it is
-	 * better than the current path.
+	 * better than the current path. In this, state means
+     * the position of the candidate associated with this
+     * path in the candidate queue
+     * for the corresponding segment item. In other words,
+     * this method uses newPath as the one path leading to
+     * the candidate newPath.candidate, if it has a better
+     * score than the previously best path leading to that candidate.
 	 *
 	 * @param point where the path is added
-	 * @param newPath the path to try to add.
+	 * @param newPath the path to add if its score is best
 	 */
 	void addPath(ViterbiPoint point, ViterbiPath newPath) {
 	    if (point.statePaths[newPath.state] == null) {
@@ -464,12 +513,23 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Finds the best candiate.
+	 * Finds the best (queue of) candidate(s) for a given (segment) item.
+     * This traverses a CART tree for target cluster selection as described in 
+     * the paper introducing the clunits algorithm. This corresponds to the
+     * "target costs" described for general unit selection.
+     * @return the first candidate in the queue of candidate units for this item.
 	 */
 	private ViterbiCandidate getCandidate(Item item) {
+        // TODO: This should better be called getCandidates() (plural form),
+        // because what it does is find all the candidates for the item
+        // and return the head of the queue.
 	    String unitType = item.getFeatures().getString("clunit_name");
 	    CART cart = clunitDB.getTree(unitType);
+        // Here, the unit candidates are selected.
 	    int[] clist = (int[]) cart.interpret(item);
+        // Now, clist is an array of instance numbers for the units of type
+        // unitType that belong to the best cluster according to the CART.
+        
 	    ViterbiCandidate p;
 	    ViterbiCandidate all;
 	    ViterbiCandidate gt;
@@ -477,9 +537,10 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    all = null;
 	    for (int i = 0; i < clist.length; i++) {
 		p = new ViterbiCandidate();
-		p.next = all;
-		p.item = item;
+		p.next = all; // link them reversely: the first in clist will be at the end of the queue
+		p.item = item; // The item is the same for all these candidates in the queue.
 		p.score = 0;
+        // remember the absolute unit index:
 		p.setInt(clunitDB.getUnitIndex(unitType,  clist[i]));
 		all = p;
 		// this is OK
@@ -488,8 +549,17 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		}
 	    }
 
+        // Take into account candidates for previous item?
+        // Depending on the setting of EXTEND_SELECTIONS in the database,
+        // look the first candidates for the preceding item,
+        // and add the units following these (which are not yet candidates)
+        // as candidates. EXTEND_SELECTIONS indicates how many of these
+        // are added. A high setting will add candidates which don't fit the
+        // target well, but which can be smoothly concatenated with the context.
+        // In a sense, this means trading target costs against join costs.
 	    if (clunitDB.getExtendSelections() > 0 &&
 		    item.getPrevious() != null) {
+            // Get the candidates for the preceding (segment) item
 		ViterbiCandidate lc = (ViterbiCandidate) (item.
 		    getPrevious().getFeatures().getObject("clunit_cands"));
 		if (DEBUG) {
@@ -505,12 +575,15 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		    if (nu == ClusterUnitDatabase.CLUNIT_NONE) {
 			continue;
 		    }
-
+		    
+            // Look through the list of candidates for the current item:
 		    for (gt = all; gt != null; gt = gt.next) {
 			if (DEBUG) {
 			    debug("       gt " + gt.ival + " nu " + nu);
 			}
 			if (nu == gt.ival) {
+                // The unit following one of the candidates for the preceding
+                // item already is a candidate for the current item.
 			    break;
 			}
 		    }
@@ -521,6 +594,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 			      " " + all.ival);
 		    }
 		    if ((gt == null)&&clunitDB.isUnitTypeEqual(nu, all.ival)) {
+                // nu is of the right unit type and is not yet one of the candidates.
+                // add it to the queue of candidates for the current item:
 			p = new ViterbiCandidate();
 			p.next = all;
 			p.item = item;
@@ -536,12 +611,19 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Finds the best path.
+	 * Construct a new path element linking a previous path to the given candidate.
+     * The (penalty) score associated with the new path is calculated as the sum of
+     * the score of the old path plus the score of the candidate itself plus the
+     * join cost of appending the candidate to the nearest candidate in the given path.
+     * This join cost takes into account optimal coupling if the database has
+     * OPTIMAL_COUPLING set to 1. The join position is saved in the new path, as
+     * the features "unit_prev_move" and "unit_this_move".
 	 *
-	 * @param path the path of interest
-	 * @param candiate the candidate of interest
+	 * @param path the previous path, or null if this candidate starts a new path
+	 * @param candiate the candidate to add to the path
 	 *
-	 * @return the best path
+	 * @return a new path, consisting of this candidate appended to the previous path, and
+     * with the cumulative (penalty) score calculated. 
 	 */
 	private ViterbiPath getPath(ViterbiPath path, 
 		ViterbiCandidate candidate) {
@@ -583,7 +665,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	    // cost *= clunitDB.getContinuityWeight();
 	    cost *= 5;	// magic number ("continuity weight") from flite
-	    newPath.state = candidate.pos;
+	    // TODO: remove the state attribute from ViterbiPath, as it is simply path.candidate.pos!
+        newPath.state = candidate.pos;
 	    if (path == null) {
 		newPath.score = cost + candidate.score;
 	    } else {
@@ -594,7 +677,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Find the best path.
+	 * Find the best path. This requires decode() to have been run.
 	 *
 	 * @return the best path.
 	 */
@@ -612,6 +695,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	    best = worst;
 
+        // TODO: do not need t, can use lastPoint throughout
 	    t = lastPoint;
 
 	    if (numStates != 0) {
@@ -619,6 +703,10 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		    debug("fbp ns " + numStates + " t " 
 			    + t.numStates + " best " + best);
 		}
+        // All paths end in lastPoint, and take into account
+        // previous path segment's scores. Therefore, it is
+        // sufficient to find the best path from among the
+        // paths for lastPoint.
 		for (int i = 0; i < t.numStates; i++) {
 		    if (t.statePaths[i] != null && 
 			(isBetterThan(t.statePaths[i].score, best))) {
@@ -631,12 +719,12 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Gets the cost for a pair of units.
+     * Find the optimal coupling frame for a pair of units.
 	 *
 	 * @param u0  first unit to try
 	 * @param u1  second unit to try
 	 *
-	 * @return the cost
+	 * @return the cost for this coupling, including the best coupling frame
 	 */
 	Cost getOptimalCouple(int u0, int u1) {
 	    int a,b;
@@ -649,11 +737,15 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	    u1_p = clunitDB.getPrevUnit(u1);
 
+        // If u0 precedes u1, the cost is 0, and we're finished.
 	    if (u1_p == u0) {
 		return cost;
 	    }
 
 
+        // If u1 does not have a previous unit, or that previous
+        // unit does not belong to the same phone, the optimal
+        // couple frame must be found between u0 and u1.
 	    if (u1_p == ClusterUnitDatabase.CLUNIT_NONE ||
 		    clunitDB.getPhone(u0) !=
 		    clunitDB.getPhone(u1_p)) {
@@ -661,7 +753,13 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		return cost;
 	    }
 
-
+	    // If u1 has a valid previous unit, try to find the optimal
+        // couple point between u0 and that previous unit, u1_p.
+        
+        // Find out which of u1_p and u0 is shorter.
+	    // In both units, we plan to start from one third of the unit length,
+        // and to compare frame coupling frame by frame until the end of the
+        // shorter unit is reached.
 	    u0_end = clunitDB.getEnd(u0) - clunitDB.getStart(u0);
 	    u1_p_end = clunitDB.getEnd(u1_p) - clunitDB.getStart(u1_p);
 	    u0_st = u0_end / 3;
@@ -669,11 +767,18 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	    if ((u0_end - u0_st) < (u1_p_end - u1_p_st)) {
 		fcount = u0_end - u0_st;
+            // We could now shift the starting point for coupling in the longer unit
+            // so that the distance from the end is the same in both units:
+            /* u1_p_st = u1_p_end - fcount; */
 	    } else {
 		fcount = u1_p_end - u1_p_st;
+            // We could now shift the starting point for coupling in the longer unit
+            // so that the distance from the end is the same in both units:
+            /* u0_st = u0_end - fcount; */
 	    }
 
-
+	    // Now go through the two units, and search for the frame pair where
+        // the acoustic distance is smallest.
 	    best_u0 = u0_end;
 	    best_u1_p = u1_p_end;
 	    best_val = Integer.MAX_VALUE;
@@ -694,7 +799,9 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		    best_u1_p = u1_p_st + i;
 		}
 	    }
-
+        
+        // u0Move is the new end for u0
+        // u1Move is the new start for u1
 	    cost.u0Move = clunitDB.getStart(u0) + best_u0;
 	    cost.u1Move = clunitDB.getStart(u1_p) + best_u1_p;
 	    cost.cost = 30000 + best_val;
@@ -762,10 +869,14 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 
     /**
-     * Represents a point in the Viterbi path.
+     * Represents a point in the Viterbi path. A point corresponds to an item,
+     * e.g. a Segment.
+     * Each ViterbiPoint knows
+     * about its next ViterbiPoint, i.e. they can form a queue.
      */
     static class ViterbiPoint {
 	Item item = null;
+    // TODO: remove the numStates attribute from ViterbiPoint, as this is only statePaths.length
 	int numStates = 0;
 	int numPaths = 0;
 	ViterbiCandidate cands = null;
@@ -774,7 +885,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	ViterbiPoint next = null;
 
 	/**
-	 * Creates a ViterbiPoint for the given item.
+	 * Creates a ViterbiPoint for the given item. A typical item of choice is a Segment item.
 	 *
 	 * @param item the item of interest
 	 */
@@ -796,9 +907,14 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Initializes the dynamic path array.
+	 * Initializes the dynamic path array. The path array will have
+     * as many ViterbiPath members as there are candidates in the
+     * queue starting with candidate.
+     * Side effect on parameter: This will set the pos member of the
+     * candidates in the queue starting with candidate to the position
+     * in the queue.  
 	 *
-	 * @param candidate the candidate of interest
+	 * @param candidate the first candidate of interest
 	 */
 	public void initDynamicPathArray(ViterbiCandidate candidate) {
 	    int i = 0;
@@ -818,7 +934,9 @@ public class ClusterUnitSelector implements UtteranceProcessor {
     }
 
     /**
-     * Represents a candiate for the Viterbi algorthm.
+     * Represents a candidate for the Viterbi algorthm.
+     * Each candidate knows about its next candidate, i.e. they can form
+     * a queue.
      */
     static class ViterbiCandidate {
 	int score = 0;
@@ -838,7 +956,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	}
 
 	/**
-	 * Sets the integer value  for this candidate.
+	 * Sets the integer value  for this candidate. This can be used for saving
+     * the unit index of the candidate unit represented by this ViterbiCandidate.
 	 * 
 	 * @param ival the integer value
 	 */
