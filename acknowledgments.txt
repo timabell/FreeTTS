@@ -20,6 +20,10 @@ CMULEX (http://www.speech.cs.cmu.edu/cgi-bin/cmudict) and the letter
 to sound rules are constructed using the Lenzo and Black techniques 
 for building LTS decision graphs.
 
+Support for MBROLA voice output was contributed by Marc Schröder,
+text-to-speech Researcher in the Language Technology Lab at DFKI, Saarbrücken,
+Germany.
+
 The speech team at Sun graciously thanks all involved, especially Alan
 W. Black and Kevin A. Lenzo for their expertise and for making both
 Festival and Flite available via open source.
