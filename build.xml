@@ -964,7 +964,7 @@
 
     <!-- freetts-bin -->
     <target name="deploy_binaries"
-	    depends="javadoc_zip">
+	    depends="javadoc_zip,jars">
         <mkdir dir="${deploy_dir}"/>
         <chmod dir="lib" perm="ugo+x" includes="jsapi.sh"/>
         <zip destfile="${deploy_dir}/freetts-bin-${version}.zip">

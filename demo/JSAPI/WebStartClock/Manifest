@@ -1,2 +1,2 @@
 Main-Class: JSAPIClock
-Class-Path: ../lib/freetts.jar
+Class-Path: ../lib/freetts.jar ../lib/jsapi.jar

@@ -296,7 +296,7 @@ public class VoiceManager {
                 }
             }
         } catch (IOException e) {
-            System.err.println("[[[TODO print warning?]]]");
+	    e.printStackTrace();
         }
     }
 
