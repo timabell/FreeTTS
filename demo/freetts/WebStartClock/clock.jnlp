@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="URL of directory where webstartclock.jar is">
+<information>
+  <title>FreeTTS Clock</title>
+  <vendor>Sun Microsystems Laboratories</vendor>
+  <homepage href="http://freetts.sourceforge.net" />
+  <description>FreeTTS Clock</description>
+</information>
+<offline-allowed/>
+<security>
+  <j2ee-application-client-permissions/>
+</security>
+<resources>
+  <j2se version="1.4+" />
+  <jar href="webstartclock.jar"/>
+</resources>
+<application-desc main-class="WebStartClock" />
+</jnlp>
