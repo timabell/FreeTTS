@@ -11,12 +11,15 @@
 package com.sun.speech.freetts;
 
 /**
- * A validation function, which shows that certain conditions are valid.
+ * Implementors of this interface can be validated via the isValid
+ * method.
  */
 public interface Validator {
 
     /**
      * Returns true if the condition tested is valid.
+     *
+     * @return <code> true </code> if the condition tested is valid
      */
     public boolean isValid();
 }
