@@ -24,7 +24,22 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 all:: ${CLASSES} ${STUBS}
 
 run: all
-	$(JAVA_CMD) FreeTTSHelloWorld
+	$(JAVA_CMD) FreeTTSHelloWorld 
+
+runMbrola1: all
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS1
+
+runMbrola2: all
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS2
+
+runMbrola3: all
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	FreeTTSHelloWorld de.dfki.lt.freetts.en.us.MbrolaVoiceUS3
 
 audio: all
 	$(JAVA_CMD) Audio
