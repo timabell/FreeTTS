@@ -15,4 +15,4 @@ include ${TOP}/build/Makefile.config
 clean::
 	$(RM) time.wave time.rel
 all::
-	chmod +x benchmark collectMetrics freetts jtime freettsServer jtimeServer jarfreetts jm jj jjs jl jlc jm2 jms jms2 jprof2 jt baseFreeTTS baseFreeTTS2
+	chmod +x benchmark collectMetrics freetts jtime freettsServer jtimeServer jm jj jjs jl jlc jm2 jms jms2 jprof2 jt baseFreeTTS baseFreeTTS2

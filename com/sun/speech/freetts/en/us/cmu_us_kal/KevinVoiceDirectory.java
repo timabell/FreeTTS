@@ -18,9 +18,9 @@ public class KevinVoiceDirectory extends VoiceDirectory {
                 Age.YOUNGER_ADULT, "default 16-bit diphone voice", Locale.US);
 
         kevin.getFeatures().setString(Voice.DATABASE_NAME,
-                "cmu_us_kal/diphone_units.bin");
+                "cmu_us_kal/cmu_us_kal.bin");
         kevin16.getFeatures().setString(Voice.DATABASE_NAME,
-                "cmu_us_kal/diphone_units16.bin");
+                "cmu_us_kal/cmu_us_kal16.bin");
 
         Voice[] voices = {kevin, kevin16};
         return voices;

@@ -49,7 +49,7 @@ verify_binaries: all
 	$(JAVA_CMD) com.sun.speech.freetts.clunits.ClusterUnitDatabase -compare -showtimes
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu_time_awb.bin:	cmu_time_awb.txt
-	$(JAVA_CMD) com.sun.speech.freetts.clunits.ClusterUnitDatabase -generate_binary
+	$(JAVA_CMD) com.sun.speech.freetts.clunits.ClusterUnitDatabase -generate_binary cmu_time_awb.txt
 	$(RM) $@
 	cp `basename $@`  ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
