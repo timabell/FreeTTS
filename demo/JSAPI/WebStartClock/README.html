@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>FreeTTS Web Start Clock</title>
+  </head>
+
+  <body bgcolor="#FFFFFF">
+
+      <table bgcolor="#FFCC66" width="100%">
+          <tr>
+            <td align=center width="100%">
+              <h1>FreeTTS Web Start Clock</h1>
+            </td>
+          </tr>
+      </table>
+
+      <p><h2>Setup</h2>
+
+      <p><h3>Server</h3>
+
+      <ol>
+	
+	<li>Your webserver must be configured to return the proper MIME type for the JNLP content. Refer to the Java<sup>TM</sup> Web Start Developer's Guide, <a href="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#website">Setting up the Web site</a>, for details. <p>
+
+      </ol>
+
+      <p><h3>Client</h3>
+
+      <ol>
+	<li><b>Download and install Java Web Start.</b> <br>Java Web Start is already included in the latest version of J2SE<sup>TM</sup>. Since you will need J2SE version 1.4 for FreeTTS, no extra download and installation should be required. However, if you are using an older version of J2SE, go to <a href="http://java.sun.com/products/javawebstart/">http://java.sun.com/products/javawebstart/</a> to download Java Web Start. Java Web Start will not work with any version of the JDK 1.1.x software, or earlier versions. <p>Refer to the <a href="http://java.sun.com/products/javawebstart/1.2/docs/installguide.html">Java Web Start Installation Guide</a> for installation. It also tells you how to set up your web browser appropriately, which normally means handling the Java Web Start MIME type (<code>"application/x-java-jnlp-file"</code>) using the <code>javaws</code> executable file in your Java Web Start directory.
+
+	  <p>
+
+	<li><b>Build <code>jsapi.jar</code></b> - Web Start Clock uses JSAPI. The JSAPI 1.0 specification implementation (i.e., the javax.speech.* classes) is not available under a BSD-style license. Instead, we are making the binaries available under a separate binary code license. <p>
+
+	  <ul>
+	    <li><b>UNIX Systems</b>
+	      <ol>
+		<li>Go to FreeTTS/lib directory.
+		<li>Type  <code>sh ./jsapi.sh</code>
+		<li> If the binary license agreement is acceptable, accept it by typing "y". The <code>jsapi.jar</code> file will be unpacked and deposited into the lib directory.
+	      </ol>
+	      <p>
+
+	    <li><b>Windows Systems</b>
+	      <ol>
+		<li> Go to the FreeTTS/lib directory
+		<li> Type <code> .\jsapi.exe </code>
+		<li> If the binary license agreement is acceptable, accept it by clicking "I Agree". The <code>jsapi.jar</code> file will be unpacked and deposited into the <code>lib</code> directory.
+	      </ol>
+	  </ul>
+	  <p>
+
+	<li><b><font color="ff0000">IMPORTANT:</font> Edit the file clock.jnlp</b>. <br>Change the <code>"&lt;jnlp codebase=\"...\"&gt;"</code> tag to point to the full URL of this directory, e.g., <code>codebase="file:/home/user1/FreeTTS/demo/freetts/WebStartClock"</code>. <p>
+
+	<li><b>Build wsc.jar</b>. <br>Type <code>"gmake wsc.jar"</code> in this directory. This will:
+	  <ol>
+	      <li>Create the <code>wsc.jar</code> JAR file
+	      <li>Copy the <code>jsapi.jar</code> JAR file to this directory
+	      <li>Create a key. You will be prompted for information about the new key, such as password, name, etc.. This will create the "clockKey" file in this directory.
+	      <li>Sign both <code>wsc.jar</code> and <code>jsapi.jar</code> with the key. You will be prompted for the password twice.
+	  </ol>
+	  
+      </ol>
+
+      <p><h2>Demo</h2>
+
+      <img src="webstartclock.jpg">
+
+      <p>After you have done the "Setup" above, launch the Web Start Clock demo by clicking on this link: <h4><a href="clock.jnlp">Launch</a></h4>
+
+      <p>
+      <hr>
+
+See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
+
+  </body>
+</html>
