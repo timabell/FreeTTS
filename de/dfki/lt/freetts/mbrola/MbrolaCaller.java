@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class MbrolaCaller implements UtteranceProcessor {
 
-    private String cmd;
+    private String[] cmd;
     private long closeDelay = 0l;
 
     /**
@@ -33,7 +33,7 @@ public class MbrolaCaller implements UtteranceProcessor {
      * as it is, which means that it must contain full path specifications
      * and the correct file separators.
      */
-    public MbrolaCaller(String cmd) {
+    public MbrolaCaller(String[] cmd) {
         this.cmd = cmd;
 	closeDelay = Utilities.getLong
 	    ("de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay",
@@ -73,8 +73,9 @@ public class MbrolaCaller implements UtteranceProcessor {
             // expressed in percent of segment duration; the second value in
             // each pair is f0, in Hz.
             String targets = segment.getFeatures().getString("mbr_targets");
-            //System.out.println(name + " " + dur + " " + targets);
-            toMbrola.println(name + " " + dur + " " + targets);
+            String output = (name + " " + dur + " " + targets);
+            // System.out.println(output);
+            toMbrola.println(output);
             segment = segment.getNext();
         }
 
@@ -127,6 +128,10 @@ public class MbrolaCaller implements UtteranceProcessor {
             fromMbrola.close();
         } catch (IOException e) {
             throw new ProcessException("Cannot read from mbrola");
+        }
+
+        if (totalSize == 0) {
+            throw new Error("No audio data read");
         }
 
         utterance.setObject("mbrolaAudio", audioData);
