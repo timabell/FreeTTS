@@ -1,4 +1,4 @@
-Copyright 2001 Sun Microsystems, Inc.
+Copyright 2003 Sun Microsystems, Inc.
 
 See the file "license.terms" for information on usage and redistribution of
 this file, and for a DISCLAIMER OF ALL WARRANTIES.
@@ -25,11 +25,11 @@ platforms.
 
 --------- Importing a FestVox Voice into FreeTTS (quick explanation) ---------
 
-* Make sure festival, java, and javac are in your path.
+* Make sure ant, festival, java, and javac are in your path.
 * Define the ESTDIR environment variable.
 * Execute <FreeTTSdir>/tools/FestVoxToFreeTTS/FestVoxToFreeTTS.sh <voicedir>
    * Follow the prompts asking you about the voice's properties.
-* Test it with <FreeTTSdir>/bin/freetts -voice <voicename>
+* Test it with java -jar <FreeTTSdir>/lib/freetts.jar -voice <voicename>
 
 You have now imported a voice into FreeTTS.
 
@@ -37,23 +37,26 @@ See "FestVoxToFreeTTS.sh --help" for more information.
 
 --------- Importing a FestVox Voice into FreeTTS (full explanation) ---------
 
-FreeTTS follow many of the same steps that Flite
+FreeTTS follows many of the same steps that Flite
 (http://www.speech.cs.cmu.edu/flite) does for importing voices.  For a
 more detailed description of the process, please read Section 8 of the
-Flite documentation
-(http://www.speech.cs.cmu.edu/flite/doc/index.html).
+Flite documentation (http://www.speech.cs.cmu.edu/flite/doc/index.html).
 
 To import a voice into FreeTTS, you first need to do the following things:
+
 1. Compile Festival (http://festvox.org/) as well as the speech tools that
     come with Festival.  Refer to the Festival documentation for details
     of setting this up on your system.
+
 2. You must have Java and a Java Compiler installed on your system.
     See http://java.sun.com if you do not already have this.
     Java version 1.4.2 is known to work.
+
 3. "festival", "java", and "javac" must be in your path.  For example, I used
     the following command under bash (modify appropriately):
     "export PATH=$PATH:/usr/java/j2sdk1.4.2/bin:\
      /home/dv144877/festival/bin/"
+
 4. You must set the ESTDIR environment variable to point to the speech tools.
     e.g. "export ESTDIR=/home/dv144877/speech_tools"
 
