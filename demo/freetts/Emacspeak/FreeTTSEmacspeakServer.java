@@ -25,21 +25,23 @@ public class FreeTTSEmacspeakServer extends TTSServer {
     /**
      * Constructs a EmacspeakServer.
      */
-    public FreeTTSEmacspeakServer() {
+    public FreeTTSEmacspeakServer(String voiceName) {
 	System.setProperty
 	    ("com.sun.speech.freetts.audio.AudioPlayer.cancelDelay", "0");
-	createVoice();
+	createVoice(voiceName);
     }
 
 
     /**
      * Creates and loads the Voice.
      */
-    private void createVoice() {
-	String voiceName = System.getProperty("voiceName", "kevin16");
+    private void createVoice(String voiceName) {
         VoiceManager voiceManager = VoiceManager.getInstance();
         emacsVoice = voiceManager.getVoice(voiceName);
-
+        if (emacsVoice == null) {
+            System.err.println("No such voice with the name: " + voiceName);
+            System.exit(1);
+        }
         emacsVoice.allocate();
         emacsVoice.setAudioPlayer(new JavaStreamingAudioPlayer());
     }
@@ -66,7 +68,16 @@ public class FreeTTSEmacspeakServer extends TTSServer {
      * Starts this TTS Server.
      */
     public static void main(String[] args) {
-	FreeTTSEmacspeakServer server = new FreeTTSEmacspeakServer();
+        String voiceName = (args.length > 0)
+            ? args[0]
+            : "kevin16";
+        
+        System.out.println();
+        System.out.println("Using voice: " + voiceName);
+        System.out.println();
+
+	FreeTTSEmacspeakServer server = new FreeTTSEmacspeakServer(voiceName);
+
 	(new Thread(server)).start();
     }
 }

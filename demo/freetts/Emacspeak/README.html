@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,71 +13,87 @@
 -->
 
 <html>
+    <head><title>Emacspeak Demo (non-JSAPI version)</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>Emacspeak Demo (non-JSAPI version)</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>FreeTTS Emacspeak Demo</title>
-  </head>
+        <p>This demo implements a text-to-speech server that can be
+        used with Emacspeak. This is the non-JSAPI version, for the
+        JSAPI version, refer to <a
+        href="../../JSAPI/Emacspeak/README.html">JSAPI Emacspeak</a>
+        (If this link doesn't work, it may be because you have the
+        stripped down Emacspeak only version of FreeTTS.  To get the
+        full version, go to <a href="http://freetts.sourceforge.net/">
+        http://freetts.sourceforge.net</a>).
 
-  <body bgcolor="#FFFFFF">
+        <h3>Building</h3>
+        <p>To build this demo, merely type the following in a shell:
+        <ul>
+            <code>ant -find build.xml</code>
+        </ul>
+        <p>Doing so will create
+        <code>bld/bin/FreeTTSEmacspeakServer.jar</code>, which you can run
+        using <code>java -jar</code> (see "Running the Server" below).
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-	      <h1>FreeTTS Emacspeak Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <h3>Running the Server</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/FreeTTSEmacspeakServer.jar</code></p>
+        </ul>
 
-    <pre>
+        <p>This runs the TTS Server at port 2222. To change the port,
+        modify the "port" system property:
+        <ul>
+            <p><code>java -Dport=2222 -jar bin/FreeTTSEmacspeakServer.jar</code></p>
+        </ul>
 
-This demo implements a text-to-speech server that 
-can be used with Emacspeak. This is the non-JSAPI version,
-for the JSAPI version, refer to <a href="../../JSAPI/Emacspeak/README.html">JSAPI Emacspeak</a> (If this link 
-doesn't work, it may be because you have the stripped down Emacspeak 
-only version of FreeTTS.  To get the full version, 
-go to <a href="http://freetts.sourceforge.net/">http://freetts.sourceforge.net</a>).
+        <p>The following should appear:
+        <ul>
+            <code>Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]</code>
+        </ul>
 
-To use this Emacspeak TTS Server:
+        <h3>Specifying a Voice</h3> 
 
-1. Type "gmake run" in this directory. This runs the TTS Server
-   at port 2222. To change the port, modify the System property
-   in the Makefile. The following should appear:
-<b>
-Creating com.sun.speech.freetts.en.us.CMUDiphoneVoice...
-Loading com.sun.speech.freetts.en.us.CMUDiphoneVoice...
-...Ready
+        <p>By default, this application will use the "kevin16" voice
+        that comes with the lib/cmu_us_kal.jar file.  You can, however,
+        specify a voice by passing the name of a voice as the
+        first (and only) parameter on the command line:</p>
+        <ul>
+            <p><code>java -jar bin/FreeTTSEmacspeakServer.jar kevin</code>
+            <br><code>java -jar bin/FreeTTSEmacspeakServer.jar kevin16</code>
+            <br><code>java -Dmbrola.base=/usr/local/mbrola -jar
+            bin/FreeTTSEmacspeakServer.jar mbrola_us1</code> (*)</p>
+	</ul>
+    
+        <p>(*) You must <a href="../../../mbrola/README.html">setup
+        and install MBROLA</a> before using MBROLA voices.</p>
+
+        <h3>Connecting to the Server from Emacspeak</h3>
+        <p>In your emacspeak (i.e., emacs with emacspeak running), type the
+	following command:
+        <ul>
+            <code>M-x emacspeak-remote-connect-to-server</code>
+	</ul>
+
+        <p>When you are prompted with "<b>Remote host:</b>", specify the
+        machine the Emacspeak TTS Server is running. The port is 2222
+        by default. Emacspeak should connect to the TTS Server.
+
+        <p>At this point, you should hear "<b>Connecting to server on 
+	host...</b>" at your emacspeak client. You should see the following 
+	on the server-side:
+	<ul>
+<pre>
 Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
-</b>
-
-   If you want to use MBROLA voices, please refer to the 
-   <a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions.
-   Remember that you must set the <code>MBROLA_DIR</code> environment 
-   variable to your MBROLA directory. To use MBROLA voices, type one of:
-
-   gmake runMbrola1
-   gmake runMbrola2
-   gmake runMbrola3
-
-
-2. In your emacspeak (i.e., emacs with emacspeak running), type
-   M-x emacspeak-remote-connect-to-server
-
-3. When you are prompted with "<b>Remote host:</b>", specify the
-   machine the Emacspeak TTS Server is running. The port is 2222
-   by default. Emacspeaks should connect to the TTS Server.
-
-4. At this point, you should hear "<b>Connecting to server on host...</b>"
-   at your emacspeak client. You should see the following on 
-   the server-side:
-
-<b>
-Creating com.sun.speech.freetts.en.us.CMUDiphoneVoice...
-Loading com.sun.speech.freetts.en.us.CMUDiphoneVoice...
-...Ready
-Waiting on ServerSocket[addr=0.0.0.0/0.0.0.0,port=0,localport=2222]
-... new socket connection
 IN   : tts_set_punctuations all
 SPEAK:
 IN   : tts_capitalize 0
@@ -91,7 +107,9 @@ SPEAK:
 IN   : tts_set_character_scale 1.25
 SPEAK:
 IN   : s
-IN   : q {Connecting to server on host sunlabs  port 2222 }
+IN   : q {Connecting to server on host sunlabs.east  port 2222 }
+Connecting to server on host sunlabs.east  port 2222
+SPEAK: "Connecting to server on host sunlabs.east  port 2222"
 IN   : d
 SPEAK:
 IN   : d
@@ -110,17 +128,15 @@ IN   : tts_set_character_scale 1.25
 SPEAK:
 IN   : d
 SPEAK:
-SPEAK: "Connecting to server on host sunlabs  port 2222"
-</b>
+</pre>
+        </ul>
 
-    </pre>
-    
-    <hr>
+        <hr>
 
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-
-  </body>
-
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
 </html>
-

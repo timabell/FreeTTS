@@ -28,7 +28,6 @@ public class EmacspeakServer extends TTSServer {
 
     // synthesizer related variables
     private Synthesizer synthesizer;
-    private String synthesizerName;
     private String voiceName;
     private Voice voice;
 
@@ -54,8 +53,6 @@ public class EmacspeakServer extends TTSServer {
 	    null, "general", Locale.US, null, null);
 
 	try {
-	    System.out.println("Creating " + synthesizerName + "...");
-
 	    synthesizer = Central.createSynthesizer(modeDesc);
 
 	    if (synthesizer == null) {
@@ -63,16 +60,12 @@ public class EmacspeakServer extends TTSServer {
 		System.exit(1);
 	    }
 
-	    System.out.println("Loading " + synthesizerName + "...");
-
 	    synthesizer.allocate();
 	    synthesizer.resume();
 	    synthesizer.getSynthesizerProperties().setVolume(1.0f);
 	    synthesizer.getSynthesizerProperties().setVoice(voice);
-
-	    System.out.println("...Ready");
 	} catch (Exception e) {
-	    System.out.println("Error creating " + synthesizerName);
+	    System.out.println("Error creating synthesizer");
 	    System.exit(1);
 	}
     }
