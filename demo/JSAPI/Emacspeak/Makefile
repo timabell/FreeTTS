@@ -27,4 +27,36 @@ all:: ${CLASSES} ${STUBS}
 # "synthesizerName".
 
 run: 
-	$(JAVA_CMD) -Ddebug=true -Dport=2222 -DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" EmacspeakServer
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dport=2222 \
+	-DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" \
+	-DvoiceName="kevin16" \
+	EmacspeakServer
+
+runMbrola1:
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Ddebug=true \
+	-Dport=2222 \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola1" \
+	EmacspeakServer
+
+runMbrola2:
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Ddebug=true \
+	-Dport=2222 \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola2" \
+	EmacspeakServer
+
+runMbrola3:
+	$(JAVA_CMD) \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Ddebug=true \
+	-Dport=2222 \
+	-DsynthesizerName="FreeTTS MBROLA Speech Synthesizer from DFKI" \
+	-DvoiceName="mbrola3" \
+	EmacspeakServer
