@@ -22,6 +22,9 @@ import java.io.IOException;
 
 import com.sun.speech.freetts.Age;
 import com.sun.speech.freetts.Gender;
+
+import de.dfki.lt.freetts.ConcatenativeVoice;
+
 import java.util.Locale;
 
 import java.net.URL;
@@ -29,7 +32,7 @@ import java.net.URL;
 /**
  * Defines voice that does cluster unit selection.
  */
-public class CMUClusterUnitVoice extends CMUVoice {
+public class CMUClusterUnitVoice extends CMUVoice implements ConcatenativeVoice {
 
     protected URL database;
 
@@ -91,7 +94,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitSelector() throws IOException {
+    public UtteranceProcessor getUnitSelector() throws IOException {
 	return new ClusterUnitSelector(getDatabase());
     }
 
@@ -105,7 +108,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getPitchmarkGenerator() throws IOException {
+    public UtteranceProcessor getPitchmarkGenerator() throws IOException {
 	return new ClusterUnitPitchmarkGenerator();
     }
 
@@ -119,7 +122,7 @@ public class CMUClusterUnitVoice extends CMUVoice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitConcatenator() throws IOException {
+    public UtteranceProcessor getUnitConcatenator() throws IOException {
 	return new UnitConcatenator();
     }
 

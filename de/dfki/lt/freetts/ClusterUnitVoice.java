@@ -31,7 +31,7 @@ import com.sun.speech.freetts.relp.UnitConcatenator;
  * cluster unit voices. All NLP stuff would need to be implemented
  * in order for this to become a full TTS voice.
  */
-public class ClusterUnitVoice extends Voice {
+public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 
 	protected URL database;
 	public ClusterUnitVoice(String name, Gender gender, Age age,
@@ -81,7 +81,7 @@ public class ClusterUnitVoice extends Voice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitSelector() throws IOException {
+    public UtteranceProcessor getUnitSelector() throws IOException {
 	return new ClusterUnitSelector(getDatabase());
     }
     
@@ -95,7 +95,7 @@ public class ClusterUnitVoice extends Voice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getPitchmarkGenerator() throws IOException {
+    public UtteranceProcessor getPitchmarkGenerator() throws IOException {
 	return new ClusterUnitPitchmarkGenerator();
     }
     
@@ -109,7 +109,7 @@ public class ClusterUnitVoice extends Voice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitConcatenator() throws IOException {
+    public UtteranceProcessor getUnitConcatenator() throws IOException {
 	return new UnitConcatenator();
     }
 

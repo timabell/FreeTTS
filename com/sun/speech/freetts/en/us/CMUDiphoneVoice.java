@@ -22,6 +22,9 @@ import com.sun.speech.freetts.Voice;
 
 import com.sun.speech.freetts.Gender;
 import com.sun.speech.freetts.Age;
+
+import de.dfki.lt.freetts.ConcatenativeVoice;
+
 import java.util.Locale;
 
 import java.io.IOException;
@@ -32,7 +35,7 @@ import java.net.URL;
 /**
  * Defines an unlimited-domain diphone synthesis based voice 
  */
-public class CMUDiphoneVoice extends CMUVoice {
+public class CMUDiphoneVoice extends CMUVoice implements ConcatenativeVoice {
 
     protected URL database;
 
@@ -118,12 +121,12 @@ public class CMUDiphoneVoice extends CMUVoice {
      * This voice uses a DiphonePitchMark generator to generate
      * pitchmarks.
      * 
-     * @return the post lexical processor
+     * @return the pitchmark processor
      * 
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getPitchmarkGenerator() throws IOException {
+    public UtteranceProcessor getPitchmarkGenerator() throws IOException {
 	return new DiphonePitchmarkGenerator();
     }
 
@@ -132,12 +135,12 @@ public class CMUDiphoneVoice extends CMUVoice {
      * Derived voices typically override this to customize behaviors.
      * This voice uses a relp.UnitConcatenator to concatenate units.
      * 
-     * @return the post lexical processor
+     * @return the unit concatenator processor
      * 
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitConcatenator() throws IOException {
+    public UtteranceProcessor getUnitConcatenator() throws IOException {
 	return new UnitConcatenator();
     }
 
@@ -149,12 +152,12 @@ public class CMUDiphoneVoice extends CMUVoice {
      * unit selector requires the name of a diphone database. If no
      * diphone database has been specified then an Error is thrown.
      * 
-     * @return the post lexical processor
+     * @return the unit selector processor
      * 
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitSelector() throws IOException {
+    public UtteranceProcessor getUnitSelector() throws IOException {
 	return new DiphoneUnitSelector(getDatabase());
     }
 
