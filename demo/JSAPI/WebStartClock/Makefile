@@ -15,6 +15,10 @@ FILES = $(shell echo *.java)
 # List any sub directories that need to be built
 SUBDIRS = 
 
+GTAR=/pkg/gnu/bin/tar
+
+PUSH_DEST = /home/groups/f/fr/freetts/htdocs/WebStartClock
+
 
 
 ########### WebStartClock deploy macros ########################
@@ -22,6 +26,7 @@ SUBDIRS =
 WSC_STAGING_AREA = ./WebStartClock
 EN_US_DIR = com/sun/speech/freetts/en/us
 AUDIO_DIR = com/sun/speech/freetts/audio
+KEY=clockKey
 
 WEBSTARTCLOCK_CLASSES = \
 	classes/Clock*.class \
@@ -58,13 +63,18 @@ WEBSTARTCLOCK_EXCLUDES = \
 include ${TOP}/build/Makefile.config
 
 CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
+PUSH_FILES = wsc.jar jsapi.jar clockKey clock.jnlp
+TAR_FILE=webstartclock.tar
 
 all:: ${CLASSES} ${STUBS}
 
 run: all
 	$(JAVA_CMD) JSAPIClock
 
-wsc.jar:
+########################################
+# Builds and signs the jars
+########################################
+jars:
 	rm -f wsc.jar
 	rm -f jsapi.jar
 	rm -f clockKey
@@ -77,11 +87,45 @@ wsc.jar:
 	mv $(WSC_STAGING_AREA)/wsc.jar $(PWD); \
 	rm -rf $(WSC_STAGING_AREA); )
 	chmod a+x wsc.jar
-	keytool -genkey -keystore clockKey -alias freetts
-	jarsigner -keystore clockKey wsc.jar freetts 
+	$(MAKE) key
+	$(MAKE) signjars
+
+
+########################################
+# Builds the key file
+########################################
+key:
+	rm -f $(KEY)
+	$(JAVA_HOME)/bin/keytool -keypass freetts -storepass freetts -genkey  -keystore $(KEY) -alias freetts -dname "CN=Sun Labs, OU=Sun Microsystems, O=Sun Microsystems, L=Burlington, ST=MA, C=US"
+
+########################################
+# Signs the jar files
+########################################
+signjars:
 	cp $(TOP)/lib/jsapi.jar .
-	jarsigner -keystore clockKey jsapi.jar freetts
+	$(JAVA_HOME)/bin/jarsigner -storepass freetts -keypass freetts -keystore clockKey wsc.jar freetts 
+	$(JAVA_HOME)/bin/jarsigner -storepass freetts -keypass freetts  -keystore clockKey jsapi.jar freetts 
+
+	# jarsigner -keystore clockKey wsc.jar freetts 
 
 runjar: all
 	java -cp "./wsc.jar$(CSEP)../../../lib/jsapi.jar" JSAPIClock
 
+
+###############################################
+# Pushes out the webstart files to sourceforge
+###############################################
+push:
+	$(GTAR) cf $(TAR_FILE) $(PUSH_FILES)
+	sscp $(TAR_FILE)
+	sshh tar xfC $(TAR_FILE) $(PUSH_DEST)
+	rm $(TAR_FILE)
+
+###############################################
+# Cleans out the cruft
+###############################################
+
+clean::
+	rm -f wsc.jar
+	rm -f jsapi.jar
+	rm -f $(KEY)
