@@ -10,11 +10,12 @@ Change history for FreeTTS.
 --------------------------
 
 Release 1.1.1
+    - Added WebStart clock
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.
     - Added RELEASE_NOTES to the deploy_doc Make target.
     - Fixed all run.bat files to run properly under Win32 systems.
-    - Fixed race condition in com.sun.speech.engine.EngineMontior that
+    - Fixed race condition in com.sun.speech.engine.EngineMonitor that
       would cause a NullPointerException in the Player demo on
       occasion.
     - Added emacspeak deploy options
@@ -22,6 +23,23 @@ Release 1.1.1
     - Fixed non-JSAPI Emacspeak demo crashing problem by using the
       JavaStreamingAudioPlayer (instead of ClipPlayer) as the default.
     - Added RawFileAudioPlayer to write raw audio bytes to a binary file.
+    - Changed all  JDK_DIR references to JAVA_HOME
+    - Fixed problem in parsing certain dates (MonthRange)
+    - Fixed problem with some number parsing 
+    - Removed hardcoded array size of LPCResult.residualToFloatMap
+    - Fixed problem where output thread was not being shut down when a
+      voice was closed.
+    - Added TokenGame test which exercises some tricky tokenizing
+    - Screen shots of Player in demo/JSAPI/Player/readme.html now of
+      current version.
+    - parameterized utterance tests to allow easy addition of more
+      tests
+    - demo/freetts/ClientServer batch files specifies host and port
+    - Added contributors agreement: ContributorsAgreement.pdf
+    - Added handout: FreeTTS_handout.pdf FreeTTS_handout.sxw
+    - Added 'How to contribute' section to the web page
+
+
 
 January 30, 2002  Release 1.1
     - Created index.php to automatically put news on freetts front page
