@@ -105,6 +105,7 @@ clean::
 deploy: all jars zips
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
+	(cd docs; $(MAKE) deploy)
 	mkdir $(STAGING_AREA)
 	cp -r $(DEPLOY_FILES) $(STAGING_AREA)
 	mv $(STAGING_AREA)/docs/RELEASE_NOTES  $(STAGING_AREA)
@@ -122,6 +123,7 @@ deploy_docs:
 	(cd docs; $(MAKE))
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 	rm -rf $(DOC_STAGING_AREA)
+	(cd docs; $(MAKE) deploy)
 	mkdir $(DOC_STAGING_AREA)
 	cp -r $(DEPLOY_DOCS) $(DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_EXCLUDED_FILES) 
