@@ -28,18 +28,13 @@ public class EmacspeakServer extends TTSServer {
 
     // synthesizer related variables
     private Synthesizer synthesizer;
-    private String synthesizerName = System.getProperty
-	("synthesizerName",
-	 "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs");
+    private String synthesizerName;
+    private String voiceName;
     private String modeName = null;
     private Locale locale = Locale.US;
     private Boolean running = null;
     private Voice[] voices = null;
-
-
-    // kevinHQ in a 16khz unlimited-domain diphone voice
-    private Voice kevinHQ = new Voice
-	("kevin16", Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
+    private Voice voice;
 
 
     /**
@@ -54,6 +49,16 @@ public class EmacspeakServer extends TTSServer {
      * Creates and loads the synthesizer.
      */
     private void loadSynthesizer() {
+        voiceName = System.getProperty
+            ("voiceName", "kevin16");
+
+        voice = new Voice
+            (voiceName, Voice.GENDER_DONT_CARE, Voice.AGE_DONT_CARE, null);
+
+        synthesizerName = System.getProperty
+            ("synthesizerName",
+             "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs");
+
 	SynthesizerModeDesc modeDesc = new SynthesizerModeDesc
 	    (synthesizerName, modeName, locale, running, voices);
 
@@ -72,7 +77,7 @@ public class EmacspeakServer extends TTSServer {
 	    synthesizer.allocate();
 	    synthesizer.resume();
 	    synthesizer.getSynthesizerProperties().setVolume(1.0f);
-	    synthesizer.getSynthesizerProperties().setVoice(kevinHQ);
+	    synthesizer.getSynthesizerProperties().setVoice(voice);
 
 	    System.out.println("...Ready");
 	} catch (Exception e) {
