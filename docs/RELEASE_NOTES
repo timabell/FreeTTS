@@ -8,6 +8,7 @@
 
 Change history for FreeTTS.
 --------------------------
+January   8, 2002 V1.0.5  - Fixed Locale.US problem in JSAPI demos.
 January   8, 2002 V1.0.4  - Fixed speech.properties path message in demos.
 			  - Added SourceForge news to docs front page.
 December 21, 2001 V1.0.3  - Added .bat files for win32 demos
