@@ -314,7 +314,7 @@ public class FreeTTSEngineCentral implements EngineCentral {
 
 	String modeName = props.getProperty(
 		synth + "." + mode + ".modeName", mode);
-	SynthesizerModeDesc desc = new FreeTTSSynthesizerModeDesc(
+	FreeTTSSynthesizerModeDesc desc = new FreeTTSSynthesizerModeDesc(
 		engineName, modeName, locale, lexiconName,
 		audioPlayerClass);
 	String voices = props.getProperty(synth + "." + mode + ".voices");
@@ -329,10 +329,12 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	}
 
 	// if a mode has no voices, we ignore it
-
-	if (desc.getVoices().length > 0) {
+        try {
+            desc.validate();
             descriptors.add(desc);
-	}
+        } catch (ValidationException ve) {
+            System.err.println(ve.getMessage());
+        }
     }
 
 
