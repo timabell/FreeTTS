@@ -83,7 +83,6 @@ jars:
 ########################################
 # Builds an unsigned jar
 ########################################
-
 unsignedjars:
 	rm -f wsc.jar
 	rm -f jsapi.jar
@@ -94,9 +93,9 @@ unsignedjars:
 	cp -r $(WEBSTARTCLOCK_CLASSES) $(WSC_STAGING_AREA); \
 	rm -rf $(WEBSTARTCLOCK_EXCLUDES); \
 	(cd $(WSC_STAGING_AREA); $(JAR) cvf wsc.jar *); \
-	mv $(WSC_STAGING_AREA)/wsc.jar $(PWD); \
+	chmod a+x $(WSC_STAGING_AREA)/wsc.jar; \
+	mv $(WSC_STAGING_AREA)/wsc.jar $(CURDIR); \
 	rm -rf $(WSC_STAGING_AREA); )
-	chmod a+x wsc.jar
 
 
 ########################################
