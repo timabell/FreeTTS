@@ -245,7 +245,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         }
 
         synchronized (lineLock) {
-            if (line != null) {
+            if (line != null && line.isRunning()) {
                 line.stop();
                 line.flush();
             }
