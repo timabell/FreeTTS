@@ -103,6 +103,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     private BulkTimer runTimer = new BulkTimer();
     private BulkTimer threadTimer = new BulkTimer();
     private boolean externalOutputQueue = false;
+    private boolean externalAudioPlayer = false;
 
 
     private float nominalRate = 150;	// nominal speaking rate for this voice
@@ -999,9 +1000,11 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     public void deallocate() {
 	setLoaded(false);
 
-        if (audioPlayer != null) {
-            audioPlayer.close();
-            audioPlayer = null;
+        if (!externalAudioPlayer) {
+            if (audioPlayer != null) {
+                audioPlayer.close();
+                audioPlayer = null;
+            }
         }
         
 	if (!externalOutputQueue) {
@@ -1162,12 +1165,14 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     }
 
     /**
-     * Sets the audio player associated with this voice.
+     * Sets the audio player associated with this voice. The caller is
+     * responsible for closing this player.
      *
      * @param player the audio player
      */
     public void setAudioPlayer(AudioPlayer player) {
 	audioPlayer = player;
+        externalAudioPlayer = true;
     }
 
     /**
