@@ -198,7 +198,7 @@ deploy_docs:
 	rm -f $(DEPLOY_DOCS_EXCLUDED_FILES) 
 	-find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	$(GTAR) czf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
-	# rm -rf $(DOC_STAGING_AREA)
+	-rm -rf $(DOC_STAGING_AREA)
 
 ####################################################
 # Deploys the docs to the sourceforge test area
