@@ -328,13 +328,10 @@ public class FreeTTSEngineCentral implements EngineCentral {
 	    }
 	}
 
-	// if a mode has no voices, we ignore it
-        try {
-            desc.validate();
-            descriptors.add(desc);
-        } catch (ValidationException ve) {
-            System.err.println(ve.getMessage());
-        }
+	// Add it to the list of modes, regardless of whether
+        // it has any valid voices. The createEngineCentral()
+        // method will check for validity of the mode.
+        descriptors.add(desc);
     }
 
 
