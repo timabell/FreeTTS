@@ -27,4 +27,13 @@ rm -f $CUR_PWD/timeTest.wave
 ./jtime  -dumpWave $CUR_PWD/timeTest.wave -silent -time 06:51 
 
 cd $CUR_PWD
-diff $TOP_DIR/data/freetts_wave.txt timeTest.wave | wc | awk '{print $1 " samples differ in timeTest.wave"}'
+diff $TOP_DIR/data/flite1.1_float_time.txt timeTest.wave | wc | awk '
+{
+	if ($1 == 0) {
+	    printf("%s differences in timeTest.wave.  Test PASSED\n", $1);
+	} else {
+	    printf("%s differences in timeTest.wave.  Test FAILED\n", $1);
+	}
+}
+
+'

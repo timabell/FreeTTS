@@ -29,6 +29,14 @@ fi
 ${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 	com.sun.speech.freetts.FreeTTS -silent -dumpWave $PWD/wavetest.res -file $TOP_DIR/wave/08-01-01.wave.text
 
-diff wavetest.res first.wave.txt > wavetest.diff
+diff wavetest.res ../data/flite1.1_float.first.wave.txt > wavetest.diff
 
-wc wavetest.diff | awk '{print $1 " lines in wavetest.diff file. See wavetest.res for the wave file."}'
+wc wavetest.diff | awk '
+{
+	if ($1 == 0) {
+	    printf("%s differences in waveTest.res.  Test PASSED\n", $1);
+	} else {
+	    printf("%s differences in waveTest.res.  Test FAILED\n", $1);
+	}
+}
+'
