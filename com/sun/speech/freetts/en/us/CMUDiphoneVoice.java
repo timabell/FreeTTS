@@ -35,7 +35,16 @@ import java.net.URL;
 public class CMUDiphoneVoice extends CMUVoice {
 
     protected URL database;
-        
+
+    /**
+     * Creates a simple voice.  This is merely for backwards
+     * compatibility with versions of FreeTTS earlier than v1.2
+     * (i.e., before the voice manager was introduced).
+     */
+    public CMUDiphoneVoice() {
+        this(null, null, null, null, null, null, null, null, null);
+    }
+    
     /**
      * Creates a simple voice
      *
@@ -70,6 +79,14 @@ public class CMUDiphoneVoice extends CMUVoice {
      * @return a url to the database
      */
     public URL getDatabase() {
+        if (database == null) {
+            /* This is merely for backwards compatibility with
+             * versions of FreeTTS earlier than v1.2 (i.e.,
+             * before the voice manager was introduced).
+             */
+            String name = getFeatures().getString(Voice.DATABASE_NAME);
+            database = this.getClass().getResource(name);
+        }
         return database;
     }
 
