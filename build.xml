@@ -1033,7 +1033,7 @@ jsapi.exe from the lib directory.
 
     <fileset id="jsapi_sh"
 	     dir="."
-	     includes="lib/jsapi.sh,lib/jsapi.exe"/>
+	     includes="lib/jsapi.sh,lib/jsapi.exe,lib/README.txt"/>
 
     <target name="deploy"
 	    depends="deploy_init,
@@ -1049,7 +1049,11 @@ jsapi.exe from the lib directory.
 	<mkdir dir="${deploy_dir}/freetts-${version}"/>
 	<copy todir="${deploy_dir}/freetts-${version}"
 	      includeEmptyDirs="false">
-             <fileset dir="." includes="build.xml,demo.xml,speech.properties"/>
+             <fileset dir="." 
+		      includes="build.xml,
+		                demo.xml,
+                                speech.properties,
+		                lib/voices.txt"/>
 	     <fileset refid="srcs"/>
 	     <fileset refid="legal"/>
 	     <fileset refid="docs"/>

@@ -12,7 +12,7 @@ Here are the steps to release a new version of FreeTTS:
    ./docs/index.html: <title>FreeTTS 1.2
    ./docs/index.html: <h2><i>FreeTTS 1.2</i>
    ./build.xml:    <property name="version"          value="1.2"/>
-   ./build.xml:    <property name="javadoc_desc"     value="FreeTTS 1.2beta"/>
+   ./build.xml:    <property name="javadoc_desc"     value="FreeTTS 1.2"/>
    ./com/sun/speech/freetts/FreeTTS.java:    
          private final static String VERSION = "FreeTTS 1.2, May, 2004";
 
@@ -58,6 +58,23 @@ Here are the steps to release a new version of FreeTTS:
 
    Run each of the demos. Refer to the individual demo directories for
    instructions.
+
+   As part of this, you also need to make sure the emacspeak-server 
+   build works.  To do this:
+
+   1) Run "ant freetts_only_tarball" to create
+      deploy/freetts-only-1.2.tar.gz.
+
+   2) Gunzip/untar freetts-only-1.2.tar.gz into
+      a separate directory.  Cd to that dir.
+
+   3) Run "ant emacspeak-server" to create
+      emacspeak-server.jar.  This is a standalone
+      jar file you can run for emacspeak and yasr.
+      It should build without problem or having to
+      build anything else.  
+
+   4) Run java -jar emacspeak-server.jar
 
 6. Build the release tarball
 
