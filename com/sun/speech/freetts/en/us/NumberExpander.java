@@ -101,6 +101,8 @@ public class NumberExpander {
      */
     private NumberExpander() {
     }
+
+
     /**
      * Expands a digit string into a list of English words of those digits.
      * For example, "1234" expands to "one two three four"
@@ -228,6 +230,7 @@ public class NumberExpander {
 	return expandLargeNumber(numberString, "million", 6, numberList);
     }
 
+
     /**
      * Expands a string that is a 10 to 12 digits number into a list
      * of English words. For example, "27000000000" into twenty-seven
@@ -242,6 +245,7 @@ public class NumberExpander {
 						 List numberList) {
 	return expandLargeNumber(numberString, "billion", 9, numberList);
     }
+
 
     /**
      * Expands a string that is a number longer than 3 digits into a list
@@ -280,6 +284,7 @@ public class NumberExpander {
 	return numberList;
     }
 
+
     /**
      * Returns the number string list of the given string starting at
      * the given index. E.g., expandNumberAt("1100", 1) gives "one hundred"
@@ -311,7 +316,7 @@ public class NumberExpander {
 	int numberDigits = numberString.length();
 	for (int i = 0; i < numberDigits; i++) {
 	    char digit = numberString.charAt(i);
-	    if ('0' <= digit && digit <= '9') {
+	    if (isDigit(digit)) {
 		numberList.add(digit2num[numberString.charAt(i)-'0']);
 	    } else {
 		numberList.add("umpty");
@@ -320,6 +325,7 @@ public class NumberExpander {
 	return numberList;
     }
     
+
     /**
      * Returns the digit string of an ordinal number.
      *
@@ -369,6 +375,7 @@ public class NumberExpander {
 	return numberList;
     }
 
+
     /**
      * Finds a match of the given string in the given array,
      * and returns the element at the same index in the returnInArray
@@ -395,6 +402,7 @@ public class NumberExpander {
 	return null;
     }
     
+
     /**
      * Expands the given number string as pairs as in years or IDs
      *
@@ -407,10 +415,12 @@ public class NumberExpander {
 	
 	int numberDigits = numberString.length();
 	
-	if ((numberDigits == 4 &&
-	     (numberString.charAt(1) == '0' ||
-	      numberString.charAt(2) == '0')) ||
-	    numberDigits < 3) {
+	if ((numberDigits == 2) && (numberString.charAt(0) == '0')) {
+	    numberList.add("oh");
+	    expandDigits(numberString.substring(1,2), numberList);
+	} else if ((numberDigits == 4 &&
+		    numberString.charAt(1) == '0') ||
+		   numberDigits < 3) {
 	    expandNumber(numberString, numberList);
 	} else if (numberDigits % 2 == 1) {
 	    String firstDigit = digit2num[numberString.charAt(0)-'0'];
@@ -422,25 +432,69 @@ public class NumberExpander {
 	}
 	return numberList;
     }
+
+
+    /**
+     * Expands the given number string as a real number.
+     *
+     * @param numberString the string which is the real number to expand
+     * @param numberList words are added to this list
+     *
+     * @return a list of English words
+     */
+    public static List expandReal(String numberString, List numberList) {
+
+	int stringLength = numberString.length();
+	int position;
+
+	if (numberString.charAt(0) == '-') {
+	    // negative real numbers
+	    numberList.add("minus");
+	    expandReal(numberString.substring(1, stringLength), numberList);
+	} else if (numberString.charAt(0) == '+') {
+	    // prefixed with a '+'
+	    numberList.add("plus");
+	    expandReal(numberString.substring(1, stringLength), numberList);
+	} else if ((position = numberString.indexOf('e')) != -1 ||
+		   (position = numberString.indexOf('E')) != -1) {
+	    // numbers with 'E' or 'e'
+	    expandReal(numberString.substring(0, position), numberList);
+	    numberList.add("e");
+	    expandReal(numberString.substring(position + 1), numberList);
+	} else if ((position = numberString.indexOf('.')) != -1) {
+	    // numbers with '.'
+	    expandReal(numberString.substring(0, position), numberList);
+	    numberList.add("point");
+	    expandReal(numberString.substring(position + 1), numberList);
+	} else {
+	    // everything else
+	    expandNumber(numberString, numberList);
+	}
+
+	return numberList;
+    }
     
+
     /**
      * Returns the given string of letters as a list of single char symbols.
      *
      * @param letters the string of letters to expand
-     * @param  letterList  words are added to this list
+     * @param letterList words are added to this list
      *
      * @return a list of single char symbols
      */
     public static List expandLetters(String letters, List letterList) {
 	letters = letters.toLowerCase();
-	String numbers = "0123456789";
 	char c;
 			
 	for (int i = 0; i < letters.length(); i++) {
 	    // if this is a number
 	    c = letters.charAt(i);
-	    if (numbers.indexOf((int) c) != -1) {
+
+	    if (isDigit(c)) {
 		letterList.add(digit2num[c-'0']);
+	    } else if (letters.equals("a")) {
+		letterList.add("_a");
 	    } else {
 		letterList.add(String.valueOf(c));
 	    }
@@ -448,5 +502,51 @@ public class NumberExpander {
 
 	return letterList;
     }
-}
+    
+    
+    /**
+     * Returns the integer value of the given string of Roman numerals.
+     *
+     * @param roman the string of Roman numbers
+     *
+     * @return the integer value
+     */
+    public static int expandRoman(String roman) {
+	int value = 0;
 
+	for (int p = 0; p < roman.length(); p++) {
+	    char c = roman.charAt(p);
+	    if (c == 'X') {
+		value += 10;
+	    } else if (c == 'V') {
+		value += 5;
+	    } else if (c == 'I') {
+		if (p+1 < roman.length()) {
+		    char p1 = roman.charAt(p+1);
+		    if (p1 == 'V') {
+			value += 4;
+			p++;
+		    } else if (p1 == 'X') {
+			value += 9;
+			p++;
+		    }
+		} else {
+		    value += 1;
+		}
+	    }
+	}
+	return value;
+    }
+
+
+    /**
+     * Returns true if the given character is a digit (0-9 only).
+     *
+     * @param ch the character to test
+     *
+     * @return true or false
+     */
+    public static boolean isDigit(char ch) {
+	return ('0' <= ch && ch <= '9');
+    }
+}
