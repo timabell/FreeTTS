@@ -708,18 +708,22 @@ using both Flite and FreeTTS. The results are summarized below:
 
 <p><table border="1" cellspacing="0" cellpadding="1" width="60%">
 <tr><td></td><td bgcolor="#ccccee"><b>Flite</b></td><td  bgcolor="#ccccee"><b>FreeTTS</b></td></tr>
-<tr><td bgcolor="#ccccee">Processing Time for 'Alice' text</td><td> 44s</td><td> 24.1s</td></tr>
+<tr><td bgcolor="#ccccee">Loading Time for 'Alice' text</td><td> 0.0s</td><td> 2.9s</td></tr>
+<tr><td bgcolor="#ccccee">Processing Time for 'Alice' text</td><td>
+43.7s</td><td> 30.8s</td></tr>
+<tr><td bgcolor="#ccccee">Loading Time for 'Journey'
+text</td><td> 0.0s</td><td> 5.8s</td></tr>
 <tr><td bgcolor="#ccccee">Processing Time for 'Journey'
 text</td><td> 1019s</td><td> 353s</td></tr>
+<tr><td bgcolor="#ccccee">Time to first Sample
+</td><td> 79ms</td><td> 38ms</td></tr>
 </table>
-
-<p>With a sentence of average length (using the alice test), the time to first sound, disregarding loading times, is about 0.05 seconds.
 
 <p>On a 2-CPU system with the following configuration:
 
 <p>
 <ul>
-<li>two [[[ TODO: CPU specification ]]]
+<li> Dual 360MHz CPU SPARC v9 Processor system
 <li>Solaris<sup><font size="-1">TM</font></sup> 8 in 64-bit mode
 <li>Java 2 SDK, Standard Edition, v 1.4 Release Candidate
 </ul>
@@ -728,12 +732,18 @@ text</td><td> 1019s</td><td> 353s</td></tr>
 
 <p><table border="1" cellspacing="0" cellpadding="1" width="60%">
 <tr><td></td><td bgcolor="#ccccee"><b>Flite</b></td><td  bgcolor="#ccccee"><b>FreeTTS</b></td></tr>
-<tr><td bgcolor="#ccccee">Processing Time for 'Alice' text</td><td> XXs</td><td> XX.Xs</td></tr>
+<tr><td bgcolor="#ccccee">Loading Time for 'Alice' text</td><td>
+0.0s</td><td> 2.9s</td></tr>
+<tr><td bgcolor="#ccccee">Processing Time for 'Alice' text</td><td>
+35.7s</td><td> 18.7s</td></tr>
+<tr><td bgcolor="#ccccee">Loading Time for 'Journey'
+text</td><td> 0.0s</td><td> 3.8s</td></tr>
 <tr><td bgcolor="#ccccee">Processing Time for 'Journey'
-text</td><td> YYYYs</td><td> YYYs</td></tr>
+text</td><td> 842.7s</td><td> 212.1s</td></tr>
+<tr><td bgcolor="#ccccee">Time to first Sample
+</td><td> 68ms</td><td> 26ms</td></tr>
 </table>
 
-<p>With a sentence of average length (using the alice test), the time to first sound, disregarding loading times, is about X.XX seconds.
 
 <p>
 <li><a name="why_sound_bad"><b>Why does the diphone synthesizer sound so bad?</b></a></li>
