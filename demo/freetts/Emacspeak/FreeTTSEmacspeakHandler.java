@@ -40,6 +40,10 @@ public class FreeTTSEmacspeakHandler implements Runnable {
     private static final int TTS_SAY_COMMAND = 4;
     private static final int STOP_COMMAND = 5;
     private int lastSpokenCommandType;
+    private String lastQueuedCommand;
+
+    private String stopQuestion = 
+    "Active processes exist; kill them and exit anyway?   yes or no";
 
     private static boolean debug = false;
 
@@ -155,7 +159,7 @@ public class FreeTTSEmacspeakHandler implements Runnable {
     public void run() {
 	try {
 	    String command = "";
-	    while (true) {
+	    while (!socket.isClosed() && socket.isConnected()) {
 		command = reader.readLine();
 		if (command != null) {
 		    command = command.trim();
@@ -164,24 +168,52 @@ public class FreeTTSEmacspeakHandler implements Runnable {
 		    int commandType = getCommandType(command);
 
 		    if (commandType == STOP_COMMAND) {
-
 			speakCommandHandler.removeAll();
-			
-		    } else if (commandType != NOT_HANDLED_COMMAND) {
-
-			String content = textInCurlyBrackets(command).trim();
-			if (content.length() > 0) {
+                    } else if (commandType != NOT_HANDLED_COMMAND) {
+                        String content = textInCurlyBrackets(command).trim();
+                        if (content.length() > 0) {
 			    speak(content);
 			    lastSpokenCommandType = commandType;
 			}
+                        // detect if emacspeak is trying to quit
+                        detectQuitting(commandType, content);
 		    } else {
 			debugPrintln("SPEAK:");
 		    }
 		}
 	    }
+            speakCommandHandler.setDone(true);
+            socket.close();
 	} catch (IOException ioe) {
 	    ioe.printStackTrace();
-	}
+	} finally {
+            debugPrintln("FreeTTSEmacspeakHandler: thread terminated");
+        }
+    }
+
+
+    /**
+     * Detects and handles a possible emacspeak quitting sequence 
+     * of commands, by looking at the given command type and content.
+     * If a quitting sequence is detected, it will close the socket.
+     * Note that this is not the best way to trap a quitting sequence,
+     * but I can't find another way to trap it.
+     *
+     * @param commandType the command type
+     * @param content the contents of the command
+     */
+    private void detectQuitting(int commandType, String content) throws
+    IOException {
+        if (commandType == QUEUE_COMMAND) {
+            lastQueuedCommand = content;
+        } else if (commandType == TTS_SAY_COMMAND) {
+            if (content.equals("no")) {
+                lastQueuedCommand = "";
+            } else if (content.equals("yes") &&
+                  lastQueuedCommand.equals(stopQuestion)) {
+                socket.close();
+            }
+        }
     }
 
 
@@ -242,7 +274,9 @@ class SpeakCommandHandler extends Thread {
 		FreeTTSEmacspeakHandler.debugPrintln
 		    ("SPEAK: \"" + firstCommand + "\"");
 	    }
-	}
+        }
+        FreeTTSEmacspeakHandler.debugPrintln
+            ("SpeakCommandHandler: thread terminated");
     }
 
 
@@ -267,5 +301,15 @@ class SpeakCommandHandler extends Thread {
 	    voice.getAudioPlayer().cancel();
 	    commandList.removeAllElements();
 	}
+    }
+
+
+    /**
+     * Terminates this SpeakCommandHandler thread.
+     *
+     * @param done true to terminate this thread
+     */
+    public synchronized void setDone(boolean done) {
+        this.done = done;
     }
 }
