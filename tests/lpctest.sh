@@ -28,4 +28,12 @@ ${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 
 diff lpctest.res $TOP_DIR/wave/flite1.1.lpcres.txt > lpctest.diff
 
-wc lpctest.diff | awk '{print $1 " lines in lpctest.diff file. See lpctest.res for the LPC residual file."}'
+wc lpctest.diff | awk '
+{
+	if ($1 == 0) {
+	    printf("%s differences in lpctest.diff.  Test PASSED\n", $1);
+	} else {
+	    printf("%s differences in lpctest.diff.  Test FAILED\n", $1);
+	}
+}
+'
