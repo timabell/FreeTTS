@@ -51,6 +51,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
 
+    private int openFailDelayMs;
+    private int totalOpenFailDelayMs;
+
 
     /**
      * Constructs a default JavaClipAudioPlayer 
@@ -58,6 +61,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public JavaClipAudioPlayer() {
 	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
+        openFailDelayMs = Utilities.getInteger
+            ("com.sun.speech.freetts.audio.AudioPlayer.openFailDelayMs",
+             0).intValue();
+        totalOpenFailDelayMs = Utilities.getInteger
+            ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
+             0).intValue();
 	setPaused(false);
     }
 
@@ -273,17 +282,38 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         }
         
         timer.start("clipGeneration");
-        try {
-            DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
-            
-            currentClip = (Clip) AudioSystem.getLine(info);
-            currentClip.addLineListener(lineListener);
-            currentClip.open
-                (currentFormat, outputData, 0, outputData.length);
-            
+        
+        DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
+                
+        boolean opened = false;
+        int totalDelayMs = 0;
+        do {
+            // keep trying to open the clip until the specified
+            // delay is exceeded
+            try {
+                currentClip = (Clip) AudioSystem.getLine(info);
+                currentClip.addLineListener(lineListener);
+                currentClip.open
+                    (currentFormat, outputData, 0, outputData.length);
+                opened = true;
+            } catch (LineUnavailableException lue) {
+                System.err.println("LINE UNAVAILABLE: " + 
+                                   "Format is " + currentFormat);
+                try {
+                    Thread.sleep(openFailDelayMs);
+                    totalDelayMs += openFailDelayMs;
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+            }
+        } while (!opened && totalDelayMs < totalOpenFailDelayMs);
+        
+        if (!opened) {
+            close();
+            ok = false;
+        } else {
             setVolume(currentClip, volume);
-            currentClip.start();
-            
+            currentClip.start();                
             try {
                 // wait for audio to complete
                 while (currentClip != null &&
@@ -294,14 +324,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                 ok = false;
             }
             close();
-            
-        } catch (LineUnavailableException lue) {
-            System.err.println("LINE UNAVAILABLE: " + 
-                               "Format is " + currentFormat);
-            close();
-            ok = false;
         }
-        
+            
         timer.stop("clipGeneration");
         timer.stop("utteranceOutput");
         ok &= !cancelled;
