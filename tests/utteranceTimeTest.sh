@@ -23,7 +23,8 @@ if [ -f utteranceTest.diff ]; then
 fi
 
 java -cp ../lib/freetts.jar com.sun.speech.freetts.FreeTTSTime \
-    -dumpRelations -silent -time $TIME  > $NEW
+    -dumpRelations -silent -time $TIME  > $NEW.t
+sed < $NEW.t > $NEW s///g
 
 rm -f $REF
 cp $2 $REF_TMP

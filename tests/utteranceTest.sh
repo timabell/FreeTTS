@@ -31,8 +31,8 @@ if [ -f $1.diff ]; then
 	rm $1.diff
 fi
 
-java -jar ../lib/freetts.jar -voice kevin -dumpRelations -silent -file $1 > $NEW
-
+java -jar ../lib/freetts.jar -voice kevin -dumpRelations -silent -file $1 > $NEW.t
+sed < $NEW.t > $NEW s///g
 rm -f $REF_TMP
 cp $2 $REF_TMP
 sh testUtt 

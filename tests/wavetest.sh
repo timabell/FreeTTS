@@ -26,8 +26,9 @@ if [ -f wavetest.diff ]; then
 	rm wavetest.diff
 fi
 
-java -jar ../lib/freetts.jar -voice kevin -silent -dumpASCII wavetest.res -file $1
+java -jar ../lib/freetts.jar -voice kevin -silent -dumpASCII wavetest.res.t -file $1
 
+sed < wavetest.res.t > wavetest.res s///g
 diff -b wavetest.res $2 > wavetest.diff
 
 wc wavetest.diff | awk '
