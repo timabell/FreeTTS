@@ -32,7 +32,7 @@ public class EmacspeakServer extends TTSServer {
 	("synthesizerName",
 	 "Unlimited domain FreeTTS Speech Synthesizer from Sun Labs");
     private String modeName = null;
-    private Locale locale = null;
+    private Locale locale = Locale.US;
     private Boolean running = null;
     private Voice[] voices = null;
 

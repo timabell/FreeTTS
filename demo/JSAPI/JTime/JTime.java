@@ -42,7 +42,7 @@ public class JTime {
 	    SynthesizerModeDesc desc = new SynthesizerModeDesc
 		("Limited domain FreeTTS Speech Synthesizer from Sun Labs",
 		 null,
-		 null,
+		 Locale.US,
 		 Boolean.FALSE,         // running?
 		 null);                 // voice
 

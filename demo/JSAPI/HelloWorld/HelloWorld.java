@@ -26,7 +26,7 @@ public class HelloWorld {
 	    SynthesizerModeDesc desc = new SynthesizerModeDesc
 		("Unlimited domain FreeTTS Speech Synthesizer from Sun Labs",
 		 null,
-		 null,
+		 Locale.US,
 		 Boolean.FALSE,         // running?
 		 null);                 // voice
 
