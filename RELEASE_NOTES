@@ -9,6 +9,11 @@
 Change history for FreeTTS.
 --------------------------
 
+March 10, 2005 Release 1.2.1
+    - Add support for metrics important to screen readers
+    - Add drain delay to clip audio player - the lack of
+      it was causing the end of speech to be cut on JDS/Linux
+
 February 06, 2005 Release 1.2 (final)
     - Hang with JDK1.5 (bug 1019337)
     - Added support to build w/o requiring JSAPI
