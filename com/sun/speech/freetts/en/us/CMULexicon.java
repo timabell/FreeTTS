@@ -260,7 +260,9 @@ public class CMULexicon extends LexiconImpl {
      *
      * Where options is any combination of:
      *
-     * -generate_binary
+     * -src path
+     * -dest path
+     * -generate_binary [base_name]
      * -compare
      * -showtimes
      *
@@ -269,22 +271,37 @@ public class CMULexicon extends LexiconImpl {
     public static void main(String[] args) {
 	LexiconImpl lex, lex2;
 	boolean showTimes = false;
+        String srcPath = ".";
+        String destPath = ".";
 	String baseName = "cmulex";
 
 	try {
 	    if (args.length > 0) {
 		BulkTimer.LOAD.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-name") && i < args.length - 1) {
+                    if (args[i].equals("-src")) {
+                        srcPath = args[++i];
+                    } else if (args[i].equals("-dest")) {
+                        destPath = args[++i];
+		    } else if (args[i].equals("-name")
+                               && i < args.length - 1) {
 			baseName = args[++i];
 		    } else if (args[i].equals("-generate_binary")) {
 
+			 System.out.println("Loading " + baseName);
+                         String path = "file:" + srcPath + "/" + baseName;
+                         lex = new CMULexicon(
+                             new URL(path + "_compiled.txt"),
+                             new URL(path + "_addenda.txt"),
+                             new URL(path + "_lts.txt"),
+                             false);
 			 BulkTimer.LOAD.start("load_text");
-			 lex = CMULexicon.getInstance(baseName, false);
+                         lex.load();
 			 BulkTimer.LOAD.stop("load_text");
 
+			 System.out.println("Dumping " + baseName);
 			 BulkTimer.LOAD.start("dump_text");
-			 lex.dumpBinary(baseName);
+			 lex.dumpBinary(destPath + "/" + baseName);
 			 BulkTimer.LOAD.stop("dump_text");
 
 		    } else if (args[i].equals("-compare")) {
@@ -312,6 +329,8 @@ public class CMULexicon extends LexiconImpl {
 		}
 	    } else {
 		System.out.println("Options: ");
+		System.out.println("    -src path");
+		System.out.println("    -dest path");
 		System.out.println("    -compare");
 		System.out.println("    -generate_binary");
 		System.out.println("    -showtimes");

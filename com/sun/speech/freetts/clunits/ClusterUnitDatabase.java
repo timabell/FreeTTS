@@ -728,6 +728,10 @@ public class ClusterUnitDatabase {
      * <b> Options </b>
      * <p>
      *    <ul>
+     *          <li> <code> -src path </code> provides a directory
+     *          path to the source text for the database
+     *          <li> <code> -dest path </code> provides a directory
+     *          for where to place the resulting binaries
      *		<li> <code> -generate_binary [filename]</code> reads
      *		in the text version of the database and generates
      *		the binary version of the database.
@@ -741,15 +745,19 @@ public class ClusterUnitDatabase {
      */
     public static void main(String[] args) {
 	boolean showTimes = false;
+        String srcPath = ".";
+        String destPath = ".";
 
 	try {
 	    if (args.length > 0) {
 		BulkTimer timer = new BulkTimer();
 		timer.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-generate_binary")) {
-
-			 timer.start("load_text");
+                    if (args[i].equals("-src")) {
+                        srcPath = args[++i];
+                    } else if (args[i].equals("-dest")) {
+                        destPath = args[++i];
+                    } else if (args[i].equals("-generate_binary")) {
                          String name = "clunits.txt";
                          if (i + 1 < args.length) {
                              String nameArg = args[++i];
@@ -765,13 +773,17 @@ public class ClusterUnitDatabase {
                              binaryName = name.substring(0, suffixPos) + ".bin";
                          }
 
+			 System.out.println("Loading " + name);
+			 timer.start("load_text");
 			 ClusterUnitDatabase udb = new
 			     ClusterUnitDatabase(
-				new URL("file:./" + name), false);
+				new URL("file:" + srcPath + "/" + name),
+                                false);
 			 timer.stop("load_text");
 
+			 System.out.println("Dumping " + binaryName);
 			 timer.start("dump_binary");
-	    		 udb.dumpBinary(binaryName);
+	    		 udb.dumpBinary(destPath + "/" + binaryName);
 			 timer.stop("dump_binary");
 
 		    } else if (args[i].equals("-compare")) {
@@ -807,6 +819,8 @@ public class ClusterUnitDatabase {
 		}
 	    } else {
 		System.out.println("Options: ");
+		System.out.println("    -src path");
+		System.out.println("    -dest path");
 		System.out.println("    -compare");
 		System.out.println("    -generate_binary");
 		System.out.println("    -showTimes");

@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -756,6 +757,10 @@ public class DiphoneUnitDatabase {
      * <b> Options </b>
      * <p>
      *    <ul>
+     *          <li> <code> -src path </code> provides a directory
+     *          path to the source text for the database
+     *          <li> <code> -dest path </code> provides a directory
+     *          for where to place the resulting binaries
      *		<li> <code> -generate_binary [filename] </code> 
      *		reads in the text
      *		version of the database and generates the binary
@@ -770,13 +775,19 @@ public class DiphoneUnitDatabase {
      */
     public static void main(String[] args) {
 	boolean showTimes = false;
-
+        String srcPath = ".";
+        String destPath = ".";
+        
 	try {
 	    if (args.length > 0) {
 		BulkTimer timer = BulkTimer.LOAD;
 		timer.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-generate_binary")) {
+                    if (args[i].equals("-src")) {
+                        srcPath = args[++i];
+                    } else if (args[i].equals("-dest")) {
+                        destPath = args[++i];
+                    } else if (args[i].equals("-generate_binary")) {
 			 String name = "diphone_units.txt";
 			 if (i + 1 < args.length) {
                              String nameArg = args[++i];
@@ -798,26 +809,29 @@ public class DiphoneUnitDatabase {
 			     indexName = name.substring(0, suffixPos) + ".idx";
 			 }
 
+			 System.out.println("Loading " + name);
 			 timer.start("load_text");
-			 // System.out.println("Loading " + name);
 			 DiphoneUnitDatabase udb = new DiphoneUnitDatabase(
-				new URL("file:./" + name), false);
+				new URL("file:"
+                                        + srcPath + "/" + name), false);
 			 timer.stop("load_text");
 
-			 // System.out.println("Dumping " + binaryName);
+			 System.out.println("Dumping " + binaryName);
 			 timer.start("dump_binary");
-	    		 udb.dumpBinary(binaryName);
+	    		 udb.dumpBinary(destPath + "/" + binaryName);
 			 timer.stop("dump_binary");
 
 			 timer.start("load_binary");
 			 DiphoneUnitDatabase budb = 
 			    new DiphoneUnitDatabase(
-				    new URL("file:./" + binaryName), true);
+				    new URL("file:"
+                                            + destPath + "/" + binaryName),
+                                    true);
 			 timer.stop("load_binary");
 
-			 // System.out.println("Dumping " + indexName);
+			 System.out.println("Dumping " + indexName);
 			 timer.start("dump index");
-	    		 budb.dumpBinaryIndex(indexName);
+	    		 budb.dumpBinaryIndex(destPath + "/" + indexName);
 			 timer.stop("dump index");
 		    } else if (args[i].equals("-compare")) {
 
@@ -851,6 +865,8 @@ public class DiphoneUnitDatabase {
 		}
 	    } else {
 		System.out.println("Options: ");
+		System.out.println("    -src path");
+		System.out.println("    -dest path");
 		System.out.println("    -compare");
 		System.out.println("    -generate_binary");
 		System.out.println("    -showTimes");
@@ -860,5 +876,3 @@ public class DiphoneUnitDatabase {
 	}
     }
 }
-
-    

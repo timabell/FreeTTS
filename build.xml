@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="all" name="FreeTTS">
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Where to find things...                                * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <path id="extra_libs">
+        <fileset dir="lib" includes="**/jsapi.jar"/>
+    </path>
+    <property name="src_dir"		value="."/>
+    <property name="build_dir"		value="bld"/>
+    <property name="classes_dir"	value="${build_dir}/classes"/>
+    <property name="lib_dir"            value="${build_dir}/lib"/>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Builds srcs, voices, lexicons, jars, demos             * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="all"
+	    depends="compile,jars"
+	    description="Build everything">
+	<echo message="Build complete."/>
+    </target>
+
+    <!-- compile everything -->
+    <target name="compile"
+	    depends="compile_src,compile_voices,compile_lexicons"
+            description="Build srcs, voices, and lexicons"/>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Builds just the srcs.                                  * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="compile_src"
+	    description="Build just the srcs">
+	<mkdir dir="${classes_dir}"/>
+	<javac debug="true"
+	       source="1.4"
+	       deprecation="true"
+	       srcdir="${src_dir}"
+	       includes="com/**,de/**"
+	       destdir="${classes_dir}">
+	    <classpath refid="extra_libs"/>
+	</javac>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Generates the binaries for the voices.                 * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="compile_voices" 
+	    depends="kal8_db,kal16_db,time_awb_db"
+	    description="Generate all of the voice binaries">
+    </target>
+
+
+    <!-- kal8 -->
+    <property name="kal8_data" value="cmu_us_kal.txt"/>
+    <property name="kal8_path"
+              value="com/sun/speech/freetts/en/us/cmu_us_kal"/>
+    <target name="check_kal8_db.isUpToDate"
+	    description="Compares timestamps of kal8 ASCII and binary">
+        <uptodate property="kal8_db.isUpToDate"
+		  srcfile="${src_dir}/${kal8_path}/${kal8_data}"
+		  targetfile="${classes_dir}/${kal8_path}/cmu_us_kal.bin"/>
+    </target>
+
+    <target name="kal8_db" 
+	    depends="compile_src,check_kal8_db.isUpToDate" 
+	    unless="kal8_db.isUpToDate"
+            description="Generate kal8 voice binaries">
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${kal8_path}"/>
+            <arg line="-dest ${classes_dir}/${kal8_path}"/>
+            <arg line="-generate_binary ${kal8_data}"/>
+         </java>
+    </target>
+
+    <!-- kal16 -->
+    <property name="kal16_data" value="cmu_us_kal16.txt"/>
+    <property name="kal16_path"
+              value="com/sun/speech/freetts/en/us/cmu_us_kal"/>
+    <target name="check_kal16_db.isUpToDate"
+	    description="Compares timestamps of kal16 ASCII and binary">
+        <uptodate property="kal16_db.isUpToDate"
+		  srcfile="${src_dir}/${kal16_path}/${kal16_data}"
+		  targetfile="${classes_dir}/${kal16_path}/cmu_us_kal16.bin"/>
+    </target>
+
+    <target name="kal16_db" 
+	    depends="compile_src,check_kal16_db.isUpToDate" 
+	    unless="kal16_db.isUpToDate"
+            description="Generate kal16 binaries">
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${kal16_path}"/>
+            <arg line="-dest ${classes_dir}/${kal16_path}"/>
+            <arg line="-generate_binary ${kal16_data}"/>
+         </java>
+    </target>
+
+    <!-- time_awb -->
+    <property name="time_awb_data" value="cmu_time_awb.txt"/>
+    <property name="time_awb_path"          
+              value="com/sun/speech/freetts/en/us/cmu_time_awb"/>
+    <target name="check_time_awb_db.isUpToDate"
+	    description="Compares timestamps of time_awb ASCII and binary">
+        <uptodate 
+	    property="time_awb_db.isUpToDate"
+	    srcfile="${src_dir}/${time_awb_path}/${time_awb_data}"
+	    targetfile="${classes_dir}/${time_awb_path}/cmu_time_awb.bin"/>
+    </target>
+
+    <target name="time_awb_db" 
+	    depends="compile_src,check_time_awb_db.isUpToDate" 
+	    unless="time_awb_db.isUpToDate"
+            description="Generate time_awb binaries">
+        <java classname="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${time_awb_path}"/>
+            <arg line="-dest ${classes_dir}/${time_awb_path}"/>
+            <arg line="-generate_binary ${time_awb_data}"/>
+         </java>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Generate the binaries for the lexicons                 * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="compile_lexicons" 
+	    depends="cmulex_db,cmutimelex_db"
+            description="Generate cmulex and cmutimelex binaries">
+    </target>
+
+    <!-- cmulex -->
+    <property name="cmulex_data" value="cmulex"/>
+    <property name="cmulex_path"          
+              value="com/sun/speech/freetts/en/us"/>
+
+    <!-- The *_{compiled,addenda}.bin files are created at once.
+         So, if any of the *.txt files are newer than one of these
+         files (I chose *_compiled.bin), then recreate the *.bin files.
+    -->
+    <target name="check_cmulex_db.isUpToDate"
+	    description="Compares timestamps of cmulex ASCII and binary">
+        <uptodate property="cmulex_db.isUpToDate"
+	     targetfile=
+                 "${classes_dir}/${cmulex_path}/${cmulex_data}_compiled.bin">
+              <srcfiles dir="${src_dir}/${cmulex_path}" 
+			includes="${cmulex_data}_*.txt"/>
+        </uptodate>
+    </target>
+
+    <target name="cmulex_db" 
+	    depends="compile_src,
+	             check_cmulex_db.isUpToDate,
+	             cmulex_lts_db" 
+	    unless="cmulex_db.isUpToDate"
+	    description="Generate cmulex compiled and addenda binaries">
+        <java classname="com.sun.speech.freetts.en.us.CMULexicon"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${cmulex_path}"/>
+            <arg line="-dest ${classes_dir}/${cmulex_path}"/>
+            <arg line="-name ${cmulex_data}"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
+    <target name="check_cmulex_lts_db.isUpToDate"
+	    description="Compares timestamps of cmulex_lts ASCII and binary">
+        <uptodate 
+	    property="cmulex_lts_db.isUpToDate"
+	    srcfile="${src_dir}/${cmulex_path}/${cmulex_data}_lts.txt"
+	    targetfile="${classes_dir}/${cmulex_path}/${cmulex_data}_lts.bin"/>
+    </target>
+
+    <target name="cmulex_lts_db" 
+	    depends="compile_src,check_cmulex_lts_db.isUpToDate" 
+	    unless="cmulex_lts_db.isUpToDate"
+            description="Generate cmulex lts binary">
+        <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${cmulex_path}"/>
+            <arg line="-dest ${classes_dir}/${cmulex_path}"/>
+            <arg line="-name ${cmulex_data}_lts"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
+    <!-- cmulextime -->
+    <property name="cmutimelex_data" value="cmutimelex"/>
+    <property name="cmutimelex_path"          
+              value="com/sun/speech/freetts/en/us"/>
+
+    <!-- The *_{compiled,addenda}.bin files are created at once.
+         So, if any of the *.txt files are newer than one of these
+         files (I chose *_compiled.bin), then recreate the *.bin files.
+    -->
+    <target name="check_cmutimelex_db.isUpToDate"
+	    description="Compares timestamps of cmulextime ASCII and binary">
+        <uptodate property="cmutimelex_db.isUpToDate"
+	  targetfile=
+           "${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_compiled.bin">
+          <srcfiles dir="${src_dir}/${cmutimelex_path}" 
+		    includes="${cmutimelex_data}_*.txt"/>
+        </uptodate>
+    </target>
+
+    <target name="cmutimelex_db" 
+	    depends="compile_src,
+	             check_cmutimelex_db.isUpToDate,
+	             cmutimelex_lts_db" 
+	    unless="cmutimelex_db.isUpToDate"
+            description="Generate cmutimelex compiled and addenda binaries">
+        <java classname="com.sun.speech.freetts.en.us.CMULexicon"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
+            <arg line="-dest ${classes_dir}/${cmutimelex_path}"/>
+            <arg line="-name ${cmutimelex_data}"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
+    <target 
+        name="check_cmutimelex_lts_db.isUpToDate"
+	description="Compares timestamps of cmulextime_lts ASCII and binary">
+        <uptodate 
+	    property="cmutimelex_lts_db.isUpToDate"
+	    srcfile="${src_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.txt"
+	    targetfile=
+              "${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.bin"/>
+    </target>
+
+    <target name="cmutimelex_lts_db" 
+	    depends="compile_src,check_cmutimelex_lts_db.isUpToDate" 
+	    unless="cmutimelex_lts_db.isUpToDate"
+            description="Generate cmutimelex lts binary">
+        <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
+            <arg line="-dest ${classes_dir}/${cmutimelex_path}"/>
+            <arg line="-name ${cmutimelex_data}_lts"/> 
+            <arg line="-generate_binary"/>
+        </java>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Generates the jar files.                               * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="jars"
+	    depends="freetts_jar,
+	             en_us_jar,
+	             cmulex_jar,
+	             cmutimelex_jar,
+	             cmu_us_kal_jar,
+	             cmu_time_awb_jar"
+	    description="Builds all the jar files"/>
+
+
+    <!-- freetts.jar -->
+    <property name="freetts_jar" value="${lib_dir}/freetts.jar"/>
+
+    <fileset id="freetts_jar_binaries"
+	     dir="${classes_dir}"
+	     excludes="com/sun/speech/freetts/en/**,
+	               test/**,
+		       **/*.bin,
+		       **/*.idx"/>
+
+    <fileset id="freetts_jar_files"
+	     dir="${src_dir}"
+	     includes="com/sun/speech/freetts/internal_voices.txt"/>
+
+    <target name="check_freetts_jar.isUpToDate"
+	    description="Determines if freetts.jar needs to be rebuilt">
+        <uptodate property="freetts_jar.isUpToDate">
+            <srcfiles refid="freetts_jar_binaries"/> 
+            <srcfiles refid="freetts_jar_files"/> 
+            <mapper type="merge" to="${freetts_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="freetts_jar" 
+	    depends="compile_src,check_freetts_jar.isUpToDate"
+	    unless="freetts_jar.isUpToDate"
+	    description="Create ${lib_dir}/freetts.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${freetts_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/freetts.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="freetts_jar_binaries"/>
+            <fileset refid="freetts_jar_files"/>
+        </jar>
+    </target>
+
+
+    <!-- en_us.jar -->
+    <property name="en_us_jar" value="${lib_dir}/en_us.jar"/>
+
+    <fileset id="en_us_jar_binaries"
+	     dir="${classes_dir}"
+	     includes="com/sun/speech/freetts/en/*.class,
+	               com/sun/speech/freetts/en/us/*.class"/>
+
+    <fileset id="en_us_jar_files"
+	     dir="${src_dir}"
+	     includes="com/sun/speech/freetts/en/us/*.txt"
+	     excludes="**/cmu*lex*.txt"/>
+
+    <target name="check_en_us_jar.isUpToDate"
+	    description="Determines if en_us.jar needs to be rebuilt">
+        <uptodate property="en_us_jar.isUpToDate">
+            <srcfiles refid="en_us_jar_binaries"/> 
+            <srcfiles refid="en_us_jar_files"/> 
+            <mapper type="merge" to="${en_us_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="en_us_jar" 
+	    depends="compile_src,check_en_us_jar.isUpToDate"
+	    unless="en_us_jar.isUpToDate"
+	    description="Create ${lib_dir}/en_us.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${en_us_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/en/us/en_us.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="en_us_jar_binaries"/>
+            <fileset refid="en_us_jar_files"/>
+        </jar>
+    </target>
+
+
+    <!-- cmulex.jar -->
+    <property name="cmulex_jar" value="${lib_dir}/cmulex.jar"/>
+
+    <fileset id="cmulex_jar_binaries"
+	     dir="${classes_dir}"
+	     includes="com/sun/speech/freetts/en/us/cmulex_*.bin"/>
+
+    <target name="check_cmulex_jar.isUpToDate"
+	    description="Determines if cmulex.jar needs to be rebuilt">
+        <uptodate property="cmulex_jar.isUpToDate">
+            <srcfiles refid="cmulex_jar_binaries"/> 
+            <mapper type="merge" to="${cmulex_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="cmulex_jar" 
+	    depends="compile_lexicons,check_cmulex_jar.isUpToDate"
+	    unless="cmulex_jar.isUpToDate"
+	    description="Create ${lib_dir}/cmulex.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${cmulex_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmulex.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="cmulex_jar_binaries"/>
+        </jar>
+    </target>
+
+
+    <!-- cmutimelex.jar -->
+    <property name="cmutimelex_jar" value="${lib_dir}/cmutimelex.jar"/>
+
+    <fileset id="cmutimelex_jar_binaries"
+	     dir="${classes_dir}"
+	     includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin"/>
+
+    <target name="check_cmutimelex_jar.isUpToDate"
+	    description="Determines if cmutimelex.jar needs to be rebuilt">
+        <uptodate property="cmutimelex_jar.isUpToDate">
+            <srcfiles refid="cmutimelex_jar_binaries"/> 
+            <mapper type="merge" to="${cmutimelex_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="cmutimelex_jar" 
+	    depends="compile_lexicons,check_cmutimelex_jar.isUpToDate"
+	    unless="cmutimelex_jar.isUpToDate"
+	    description="Create ${lib_dir}/cmutimelex.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${cmutimelex_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmutimelex.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="cmutimelex_jar_binaries"/>
+        </jar>
+    </target>
+
+
+    <!-- cmu_us_kal.jar -->
+    <property name="cmu_us_kal_jar" value="${lib_dir}/cmu_us_kal.jar"/>
+
+    <fileset id="cmu_us_kal_jar_binaries"
+	     dir="${classes_dir}"
+	     includes="com/sun/speech/freetts/en/us/cmu_us_kal/*"/>
+
+    <target name="check_cmu_us_kal_jar.isUpToDate"
+	    description="Determines if cmu_us_kal.jar needs to be rebuilt">
+        <uptodate property="cmu_us_kal_jar.isUpToDate">
+            <srcfiles refid="cmu_us_kal_jar_binaries"/> 
+            <mapper type="merge" to="${cmu_us_kal_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="cmu_us_kal_jar" 
+	    depends="compile_lexicons,check_cmu_us_kal_jar.isUpToDate"
+	    unless="cmu_us_kal_jar.isUpToDate"
+	    description="Create ${lib_dir}/cmu_us_kal.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${cmu_us_kal_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_us_kal/voice.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="cmu_us_kal_jar_binaries"/>
+        </jar>
+    </target>
+
+
+    <!-- cmu_time_awb.jar -->
+    <property name="cmu_time_awb_jar" value="${lib_dir}/cmu_time_awb.jar"/>
+
+    <fileset id="cmu_time_awb_jar_binaries"
+	     dir="${classes_dir}"
+	     includes="com/sun/speech/freetts/en/us/cmu_time_awb/*"/>
+
+    <target name="check_cmu_time_awb_jar.isUpToDate"
+	    description="Determines if cmu_time_awb.jar needs to be rebuilt">
+        <uptodate property="cmu_time_awb_jar.isUpToDate">
+            <srcfiles refid="cmu_time_awb_jar_binaries"/> 
+            <mapper type="merge" to="${cmu_time_awb_jar}"/>
+        </uptodate>
+    </target>
+
+    <target name="cmu_time_awb_jar" 
+	    depends="compile_lexicons,check_cmu_time_awb_jar.isUpToDate"
+	    unless="cmu_time_awb_jar.isUpToDate"
+	    description="Create ${lib_dir}/cmu_time_awb.jar">
+        <mkdir dir="${lib_dir}"/>
+        <jar destfile="${cmu_time_awb_jar}" 
+	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_time_awb/voice.Manifest"
+	     filesonly="true"
+	     compress="true">
+            <fileset refid="cmu_time_awb_jar_binaries"/>
+        </jar>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * Generates the javadoc                                  * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <property name="javadoc_dir"	value="${build_dir}/javadoc"/>
+    <property name="javadoc_desc"	value="FreeTTS 1.2"/>
+    <property name="javadoc_pkgs"	
+	      value="com.sun.speech.engine,
+	             com.sun.speech.engine.synthesis,
+	             com.sun.speech.engine.synthesis.text,
+	             com.sun.speech.freetts,
+	             com.sun.speech.freetts.jsapi,
+	             com.sun.speech.freetts.en,
+	             com.sun.speech.freetts.en.us,
+ 	             com.sun.speech.freetts.audio,
+	             com.sun.speech.freetts.cart,
+	             com.sun.speech.freetts.clunits,
+	             com.sun.speech.freetts.diphone,
+	             com.sun.speech.freetts.lexicon,
+	             com.sun.speech.freetts.relp,
+	             com.sun.speech.freetts.util,
+	             de.dfki.lt.freetts.mbrola,
+	             de.dfki.lt.freetts.en.us"/>
+
+    <target name="javadoc" description="Generate javadoc">
+        <mkdir dir="${javadoc_dir}"/>
+        <javadoc sourcepath="${src_dir}"
+	         source="1.4"
+		 additionalparam="-breakiterator"
+		 destdir="${javadoc_dir}" 
+		 packagenames="${javadoc_pkgs}"
+		 overview="${src_dir}/overview.html"
+		 windowtitle="${javadoc_desc}"
+                 doctitle="${javadoc_desc}"
+                 access="protected">
+	    <classpath refid="extra_libs"/>
+        </javadoc>
+    </target>
+
+    <!-- ********************************************************** --> 
+    <!-- *                                                        * -->
+    <!-- * Deletes all build output and *~ file droppings         * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** --> 
+    <target name="clean" description="Delete all build output">
+	<delete>
+	    <fileset defaultexcludes="no" dir="." includes="**/*~"/>
+	</delete>
+	<delete dir="${build_dir}"/>
+    </target>
+
+</project>

@@ -864,6 +864,8 @@ public class LetterToSoundImpl implements LetterToSound {
     public static void main(String[] args) {
 	LexiconImpl lex, lex2;
 	boolean showTimes = false;
+        String srcPath = ".";
+        String destPath = ".";
 	String name = "cmulex_lts";
 
 	try {
@@ -871,17 +873,26 @@ public class LetterToSoundImpl implements LetterToSound {
 		BulkTimer timer = new BulkTimer();
 		timer.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-name") && i < args.length -1) {
+                    if (args[i].equals("-src")) {
+                        srcPath = args[++i];
+                    } else if (args[i].equals("-dest")) {
+                        destPath = args[++i];
+		    } else if (args[i].equals("-name")
+                               && i < args.length -1) {
 			name = args[++i];
 		    } else if (args[i].equals("-generate_binary")) {
 
+			 System.out.println("Loading " + name);
 			 timer.start("load_text");
 			 LetterToSoundImpl text = new LetterToSoundImpl(
-				new URL("file:./" + name + ".txt"),  false);
+				new URL("file:" + srcPath + "/"
+                                        + name + ".txt"),
+                                false);
 			 timer.stop("load_text");
 
+			 System.out.println("Dumping " + name);
 			 timer.start("dump_binary");
-			 text.dumpBinary(name + ".bin");
+			 text.dumpBinary(destPath + "/" + name + ".bin");
 			 timer.stop("dump_binary");
 
 		    } else if (args[i].equals("-compare")) {
@@ -915,6 +926,8 @@ public class LetterToSoundImpl implements LetterToSound {
 		}
 	    } else {
 		System.out.println("Options: ");
+		System.out.println("    -src path");
+		System.out.println("    -dest path");
 		System.out.println("    -compare");
 		System.out.println("    -generate_binary");
 		System.out.println("    -showTimes");
