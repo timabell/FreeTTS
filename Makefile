@@ -98,6 +98,7 @@ clean::
 	rm -f $(DEPLOY_TARGET)
 	rm -rf $(STAGING_AREA)
 	rm -rf $(DOC_STAGING_AREA)
+	rm -rf $(XP_DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_TARGET) $(DEPLOY_DOCS_TARGET).gz
 
 
@@ -114,6 +115,8 @@ deploy: all jars zips
 	rm -rf  $(STAGING_AREA)/$(API_DIR)
 	tar cf freetts.tar $(STAGING_AREA)
 	gzip freetts.tar
+	rm -rf $(ZIPS)
+	rm -rf $(STAGING_AREA)
 
 deploy_docs:
 	(cd docs; $(MAKE))
@@ -125,6 +128,7 @@ deploy_docs:
 	find $(DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	tar cvf $(DEPLOY_DOCS_TARGET) $(DOC_STAGING_AREA)
 	gzip $(DEPLOY_DOCS_TARGET)
+	rm -rf $(DOC_STAGING_AREA)
 
 deploy_xp_docs:
 	rm -f $(XP_DEPLOY_DOCS_TARGET) $(XP_DEPLOY_DOCS_TARGET).gz
@@ -136,6 +140,7 @@ deploy_xp_docs:
 	find $(XP_DOC_STAGING_AREA) -name CVS -exec rm -rf {} \;
 	tar cvf $(XP_DEPLOY_DOCS_TARGET) $(XP_DOC_STAGING_AREA)
 	gzip $(XP_DEPLOY_DOCS_TARGET)
+	rm -rf $(XP_DOC_STAGING_AREA)
 
 all::
 	$(MAKE) jars
