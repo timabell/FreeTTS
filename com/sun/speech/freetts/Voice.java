@@ -262,7 +262,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    BulkTimer.LOAD.show("loading " + toString() + " for " +
 		    getRunTitle());
 	}
-	loaded = true;
+	setLoaded(true);
     }
    
 
@@ -274,6 +274,16 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public boolean isLoaded() {
 	return loaded;
+    }
+
+    /**
+     * Sets the loaded state
+     *
+     * @param loaded the new loaded state
+     *   otherwise <code>false</code>
+     */
+    protected void setLoaded(boolean loaded) {
+	this.loaded = loaded;
     }
 
     /**
@@ -898,7 +908,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * Shuts down the voice processing.
      */
     public void close() {
-	loaded = false;
+	setLoaded(false);
 	if (!externalOutputQueue) {
 	    outputQueue.post(null);
 	}
