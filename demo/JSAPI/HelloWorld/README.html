@@ -3,7 +3,7 @@
 <!--
 
 /**
- * Copyright 2001 Sun Microsystems, Inc.
+ * Copyright 2001,2003 Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -13,56 +13,58 @@
 -->
 
 <html>
+    <head><title>JSAPI HelloWorld Demo</title></head>
+    <body>
+        <center>
+            <table bgcolor="#FFCC66" width="100%">
+                <tr>
+                    <td align=center width="100%">
+	                <h1>JSAPI HelloWorld Demo</h1>
+                    </td>
+                </tr>
+            </table>
+        </center>
 
-  <head>
-    <title>JSAPI HelloWorld! Demo</title>
-  </head>
+        <p>This demo provides a very simple example of how to use
+        FreeTTS with just the Java Speech API.</p>
 
-  <body bgcolor="#FFFFFF">
+        <h3>Running</h3>
+        <p>To run this demo, type the following command from a command
+        window:</p>
+        <ul>
+            <p><code>java -jar bin/HelloWorld.jar</code></p>
+        </ul>
 
-    <center>
-      <table bgcolor="#FFCC66" width="100%">
-          <tr>
-            <td align=center width="100%">
-	      <h1>JSAPI HelloWorld! Demo</h1>
-            </td>
-          </tr>
-      </table>
-    </center>
+        <p>You will hear:</p>
+        <ul>
+            <p><b>"Hello, world!"</b></p>
+            <p><img src="../../../docs/images/speaker1.gif"> Click 
+            <a href="helloworld.au">AU</a> or 
+            <a href="helloworld.wav">WAV</a> to listen to it.</p>
+	</ul>
 
+        <h3>Specifying a Voice</h3> 
 
-    <pre>
+        <p>By default, this application will use the "kevin16" voice
+        that comes with the lib/cmu_us_kal.jar file.  You can, however,
+        specify a voice by passing the name of a voice as the
+        first (and only) parameter on the command line:</p>
+        <ul>
+            <p><code>java -jar bin/HelloWorld.jar kevin</code>
+            <br><code>java -jar bin/HelloWorld.jar kevin16</code>
+            <br><code>java -Dmbrola.base=/usr/local/mbrola -jar
+            bin/HelloWorld.jar mbrola_us1</code> (*)</p>
+	</ul>
+    
+        <p>(*) You must <a href="../../../mbrola/README.html">setup
+        and install MBROLA</a> before using MBROLA voices.</p>
 
+        <hr>
 
-To run this HelloWorld! demo on a Unix system, type:
-
-   gmake run
-
-If you want to use MBROLA voices, please refer to the 
-<a href="../../../docs/MbrolaSetup.txt">MBROLA Setup Page</a> for MBROLA installation instructions.
-Remember that you must set the <code>MBROLA_DIR</code> environment 
-variable to your MBROLA directory. To use MBROLA voices, type one of:
-
-   gmake runMbrola1
-   gmake runMbrola2
-   gmake runMbrola3
-
-
-To run this demo on a win32 system, type:
-
-$ run HelloWorld
-
-
-
-It should say "Hello world!". <img src="../../../docs/images/speaker1.gif"> Click <a href="helloworld.au">AU</a> or <a href="helloworld.wav">WAV</a> to listen to it.
-
-    </pre>
-
-    <hr>
-
-See the <a href="../../../license.terms">license terms</a> and <a href="../../../acknowledgments.txt">acknowledgments</a>.<br>Copyright 2001 Sun Microsystems, Inc.  All Rights Reserved.  Use is subject to license terms.
-
-  </body>
-  
+        <p>See the <a href="../../../license.terms">license terms</a>
+        and <a href="../../../acknowledgments.txt">acknowledgments</a>.
+        <br>
+        Copyright 2001,2003 Sun Microsystems, Inc.  All Rights
+        Reserved.  Use is subject to license terms.</p>
+    </body>
 </html>
-
