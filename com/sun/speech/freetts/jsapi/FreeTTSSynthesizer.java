@@ -167,6 +167,12 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
         outputHandler.cancelAllItems();
         outputHandler.terminate();
 
+	// Close the audio. This should flush out any queued audio data
+
+	if (audio != null) {
+	    audio.close();
+	}
+
         postEngineDeallocated(states[0], states[1]);
     }
     

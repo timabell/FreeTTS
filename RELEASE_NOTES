@@ -18,6 +18,12 @@ xxxxxxxxx x, 200x Release 1.1.x
       SecurityException and deals with it properly, so that it can be
       called from an applet.
 
+    - Fixed problem in the JSAPI implementation where the audio player
+      was not being closed when the synthesizer was deallocated. This
+      would cause problems for certain types of AudioPlayers such as
+      SingleFileAudioPlayer that require a 'close' before they flush
+      their accumulated wave data.
+
 September 6, 2002 Release 1.1.1
     - Fixed index.html so that it looks for the RELEASE_NOTES in 
       the proper spot.
