@@ -113,7 +113,6 @@ public class CMULexicon extends LexiconImpl {
 	URL addendaURL;
 	URL letterToSoundURL;
 
-	System.out.println("Getting " + basename);
 	LetterToSound letterToSound;
 	Class cls = CMULexicon.class;
 	CMULexicon lexicon;

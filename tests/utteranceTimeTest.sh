@@ -28,5 +28,5 @@ cd $TOP_DIR/bin
 
 cd $CUR_PWD
 rm -f $REF
-cp $TOP_DIR/data/flite_time.v1.0-beta.rel $REF
+cp $TOP_DIR/data/flite_time.v1.1.rel $REF
 ./testTimeUtt
