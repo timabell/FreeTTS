@@ -445,10 +445,6 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    ok = false;
             log("STRANGE: speakable already completed: " +speakable.getText());
 	}
-
-        if (utterance.isLast()) {
-            speakable.completed();
-        }
 	return ok;
     }
 
