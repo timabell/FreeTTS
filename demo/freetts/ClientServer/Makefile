@@ -28,7 +28,8 @@ cclient: client.c
 all:: ${CLASSES} ${STUBS}
 
 runserver: all
-	$(JAVA_CMD) -Dmetrics=false Server
+	$(JAVA_CMD) \
+	-Dmetrics=true Server
 
 # the command line arguments: <server host> <port> <sample rate> <show metrics>
 runcclient: cclient
@@ -37,6 +38,6 @@ runcclient: cclient
 runjclient: all
 	$(JAVA_CMD) \
 	-Ddebug=false \
-	-Dmetrics=false \
+	-Dmetrics=true \
 	-Dserver=localhost \
 	-DsampleRate=16000 Client
