@@ -23,9 +23,10 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
         String base = Utilities.getProperty("mbrola.base", null);
 
         if (base == null || base.trim().length() == 0) {
-            throw new Error
-                ("System property \"mbrola.base\" is undefined. " +
-                 "You might need to set the MBROLA_DIR environment variable.");
+            System.err.println(
+                "System property \"mbrola.base\" is undefined.  "
+                + "Will not use MBROLA voices.");
+            return new Voice[0];
         } else {
 
             CMULexicon lexicon = new CMULexicon("cmulex");
@@ -61,8 +62,24 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
                     // does nothing if the voice is not found 
                 }
             }
-
-            return ((Voice[])validVoices.toArray(new Voice[count]));
+            if (count == 0) {
+                System.err.println(
+                    "\n"
+                    + "Could not validate any MBROLA voices at\n\n"
+                    + "  " + base + "\n");
+                if (base.indexOf('~') != -1) {
+                    System.err.println(
+                        "DO NOT USE ~ as part of the path name\n"
+                        + "to specify the mbrola.base property.");
+                }
+                System.err.println(
+                    "Make sure you FULLY specify the path to\n"
+                    + "the MBROLA directory using the mbrola.base\n"
+                    + "system property.\n");
+                return new Voice[0];
+            } else {
+                return ((Voice[])validVoices.toArray(new Voice[count]));
+            }
         }
     }
 
