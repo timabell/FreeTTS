@@ -9,6 +9,10 @@
 Change history for FreeTTS.
 --------------------------
 
+XXXX,XX, 2004 Release 1.2XXX
+    - Fixed problem in mbrola phonem remapping.
+
+
 June 15, 2004 Release 1.2beta2
     - Added experimental CMUArcticVoice that may (or may not) work
       with the CMU ARCTIC databases.
