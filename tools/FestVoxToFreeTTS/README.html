@@ -173,7 +173,6 @@ FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
         <ul>
             <li><b>Name</b>: The name you want to call this voice.
             For example "kevin", "kevin16", "alan", or "dave".
-            DO NOT PUT ANY SPACES in this name.
 
             <li><b>Gender</b>: The gender of the voice.  Select
             help from the menu for a full listing of genders.
@@ -185,7 +184,8 @@ FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
             describes this voice for others.  
 
             <li><b>Full Name</b>: - The name that will be used to
-            name the voice files and directory.  It must be unique
+            name the voice files and directory.  DON'T USE SPACES.
+	    It must be unique
             to this installation of FreeTTS as well as any other
             copy of FreeTTS you expect to use this voice.  For the
             sake of similarity to other voices, it is highly
@@ -216,10 +216,30 @@ FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
         directory structure
         <code>&lt;FreeTTSdir>/com/sun/speech/freetts/en/us/&lt;voice
         Full Name></code>.  It is recommended to visit this directory
-        and confirm that everything looks correct.  If this is a
+        and confirm that everything looks correct; there should be
+        four files similar to the following:
+        <pre>
+    README                 - Information about the voice
+    sun_time_dtv.txt       - The imported voice data in ASCII format
+    voice.Manifest         - The Manifest file with which to create the jar file
+    DtvVoiceDirectory.java - The VoiceDirectory for this new voice
+        </pre>
+
+        <p>If this is a
         limited domain voice for something other than the cmu time
         domain, then you will likely have to make some changes to make
         it look at the correct lexicon.
+
+        <p>As part of the import process, the FestVoxToFreeTTS.sh
+        script will create the jar file for the voice.  If you wish
+        to create the jar file manually, you can run one of the
+        following commands, depending upon the type of voice you 
+        have imported (substitute the Full Name of the voice you 
+        imported):
+        <pre>
+    ant -Dclunit_voice=sun_time_dtv -find build.xml
+    ant -Ddiphone_voice=sun_us_dtv -find build.xml
+        </pre>
 
         <p>The compiled voice is put in 
         <code>&lt;FreeTTSdir>/lib/&lt;voice Full Name>.jar</code>.
@@ -233,8 +253,15 @@ FV_FULLVOICENAME=$FV_VOICENAME"_"$FV_TYPE
             (general domain)
             <p><code>java -jar bin/JTime.jar myvoicename</code>
             (time domain)
-        </ul> <p>where myvoicename is the name property you assigned
-        to your voice in the "install" phase.
+        </ul> 
+        <p>where myvoicename is the name property you assigned
+        to your voice in the "install" phase.  If you've forgotten
+        the name, you can always retrieve it by executing the jar
+        file for your voice:
+        <ul>
+            <p><code>java -jar lib/&lt;voice Full Name>.jar</code>
+        </ul>
+
 
         <h3>Files in this directory</h3>
         <ul>
