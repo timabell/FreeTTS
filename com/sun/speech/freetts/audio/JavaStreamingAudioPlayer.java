@@ -107,6 +107,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         cancelDelay = Long.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
              0L).longValue();
+        line = null;
 	setPaused(false);
     }
 
@@ -150,7 +151,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * @throws UnsupportedOperationException if the line cannot be opened with
      *     the given format
      */
-    private void openLine(AudioFormat format) {
+    private synchronized void openLine(AudioFormat format) {
 	if (line != null) {
 	    drain();
 	    line.close();
@@ -158,17 +159,18 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 	try {
 	    line = (SourceDataLine) AudioSystem.getLine(info);
-	    line.open(format, AUDIO_BUFFER_SIZE);
-	    setVolume(line, volume);
-	    resetTime();
-	    if (isPaused()) {
-		line.stop();
-	    } else {
-		line.start();
-	    }
-	}   catch(LineUnavailableException lue) {
+            line.open(format, AUDIO_BUFFER_SIZE);
+            setVolume(line, volume);
+            resetTime();
+            if (isPaused() && line.isRunning()) {
+                line.stop();
+            } else {
+                line.start();
+            }
+	} catch (LineUnavailableException lue) {
+            lue.printStackTrace();
 	    throw new UnsupportedOperationException("Can't get line");
-	}   
+	}
     }
 
 
@@ -209,6 +211,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      * we should remove the thread.sleep(). ]]]
      */
     public synchronized void cancel() {
+        debugPrint("cancelling...");
 	cancelled = true;
 	try {
 	    Thread.sleep(cancelDelay);
@@ -222,6 +225,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
             }
             notify();
         }
+        debugPrint("...cancelled");
     }
 
     /**
@@ -326,6 +330,8 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     public void begin(int size) {
         debugPrint("opening Stream...");
         openLine(currentFormat);
+        reset();
+        debugPrint("...Stream opened");
     }
 
     /**
@@ -372,6 +378,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      */
     public boolean drain()  {
         if (line != null) {
+            debugPrint("started draining...");
             if (DRAIN_WORKS_PROPERLY) {
                 if (line.isOpen()) {
                     line.drain();
@@ -384,6 +391,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
                     }
                 }
             }
+            debugPrint("...finished draining");
         }
 	timer.stop("audioOut");
 
@@ -449,7 +457,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 		+ " avail " + line.available() + " bsz " +
 		line.getBufferSize());
 
-	while  (bytesRemaining > 0) {
+	while  (bytesRemaining > 0 && !cancelled) {
 
 	    if (!waitResume()) {
 		return false;
