@@ -760,6 +760,7 @@
     <path id="test_classpath">
         <pathelement location="${lib_dir}/freetts.jar"/>
         <pathelement location="${classes_dir}"/>
+        <pathelement location="${src_dir}"/>
         <pathelement location="${junit.jar}"/>
         <path refid="extra_libs"/>
     </path>
