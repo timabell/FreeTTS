@@ -525,9 +525,26 @@ home directory. This step is required for JSAPI demos and applications.
 <li>Build the FreeTTS engine and the demos with command:
 
 <pre>
-    % gmake all
+    % make all
 </pre>
 
+<p><b>Important:</b> Make sure you are using GNU make.  You can check to see if you are using GNU make by typing the command '<code>make -version</code>'.  If you do not get results similar to the following, then you most likely do not have GNU make:
+
+<pre>
+  GNU Make version 3.79, by Richard Stallman and Roland McGrath.
+  Built for sparc-sun-solaris2.6
+  Copyright (C) 1988, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99
+                                                                                    Free Software Foundation, Inc.
+  This is free software; see the source for copying conditions.
+  There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+  PARTICULAR PURPOSE.
+
+  Report bugs to &lt;bug-make@gnu.org&gt;.
+</pre>
+
+<p><b>Note:</b> On many systems, the GNU make command is also called gmake.
+If this is the case on your system, then use gmake instead of make.
+<p>
 
 <li>The output class files are placed in the 'classes' directory.</li>
 </ol>
@@ -573,7 +590,7 @@ The regression tests also make use of a standard set of UNIX utilities such as
 
 <pre>
      % cd tests
-     % gmake alltests
+     % make alltests
 </pre>
 </li>
 
@@ -581,7 +598,7 @@ The regression tests also make use of a standard set of UNIX utilities such as
 <p>
 <pre>
      % cd tests
-     % gmake tests
+     % make tests
 </pre>
 <p>
 <li>The test output should be self explanatory.</li>
@@ -627,9 +644,9 @@ href="../demo/JSAPI/Emacspeak/README.html"><b>JSAPI/Emacspeak</b></a>
 <li><a href="../demo/freetts/ClientServer/README.html"><b>freetts/ClientServer</b></a> - a low-level (non-JSAPI) socket-based TTS server with sample clients written in the C programming language and the Java programming language.</li>
 </ul>
 
-<p>Typically, unless it is a client/server demo, just typing "gmake run" should run the demo
+<p>Typically, unless it is a client/server demo, just typing 'make run' or 'gmake run' should run the demo
 
-<p><b>Important</b> <i>Be sure to copy the
+<p><b>Important:</b> <i>Be sure to copy the
 '<code>speech.properties</code>' file to your home directory before
 running the demos that use JSAPI 1.0. If you are not sure where to copy this file, try running one of the JSAPI demos. If the demo cannot find the 'speech.properties' file, it will tell you where you should put it.</i></p>
 
