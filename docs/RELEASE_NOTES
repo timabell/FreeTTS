@@ -17,9 +17,14 @@ November  7, 2001 	V0.9  		- Internal Test Release
 
 Non-important changes
 ---------------------
-Sometimes one just needs to make a change for change sake. For
+12/18/01 - Sometimes one just needs to make a change for change sake. For
 instance, I am adding this text so that I can see if the CVS email
 notification is working.  If you want to make a change for change
 sake, you can edit this file too.
+
+12/18/01 - Well, here is yet another change. CVS has not informed me
+of my last change yet. When I sent an email by hand to the mailing
+list, I received it, which makes me think that something is not
+working write at the CVS syncmail level.  Lets try it again.
 
 
