@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- ********************************************************** -->
+<!-- *                                                        * -->
+<!-- * Apache Ant build file used to build FreeTTS.  To build * -->
+<!-- * everything, just type the following:                   * -->
+<!-- *                                                        * -->
+<!-- *     ant                                                * -->
+<!-- *                                                        * -->
+<!-- * For more information:  http://ant.apache.org/          * -->
+<!-- *                                                        * -->
+<!-- ********************************************************** -->
 <project basedir="." default="all" name="FreeTTS">
 
     <!-- ********************************************************** -->
@@ -30,9 +40,19 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="all"
-	    depends="compile,jars,demos"
+	    depends="check_jsapi_jar.isPresent,compile,jars,demos"
 	    description="Build everything">
 	<echo message="Build complete."/>
+    </target>
+
+    <target name="check_jsapi_jar.isPresent">
+        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
+        <fail unless="jsapi_jar.isPresent">
+
+Cannot find lib/jsapi.jar needed to build FreeTTS.  See 
+docs/jsapi_setup.html for information on setting up your 
+environment to use JSAPI.
+        </fail>
     </target>
 
     <!-- compile everything -->
@@ -601,255 +621,13 @@
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
-    <!-- * Builds just the demos (using package names for the     * -->
-    <!-- * demos would have made this easier).                    * -->
+    <!-- * Builds just the demos.                                 * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="demos"
-	    depends="compile_demo_util,
-	             compile_freetts_demos,
-	             compile_jsapi_demos"
-	    description="Compiles and jars the demos"/>
-
-
-    <target name="compile_demo_util"
-	    description="Compiles utilities used by some of the demos">
-	<mkdir dir="${demo_classes_dir}/util"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/util"
-	       destdir="${demo_classes_dir}/util">
-        </javac>
-    </target>
-
-
-    <!-- freetts (non-JSAPI) demos -->
-    <target name="compile_freetts_demos"
-	    depends="compile_freetts_clientserver,
-	             compile_freetts_emacspeak,
-	             compile_freetts_helloworld"
-	    description="Compiles freetts demos that do not use JSAPI"/>
-
-    <target name="compile_freetts_clientserver"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/freetts/ClientServer"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/ClientServer"
-	       destdir="${demo_classes_dir}/freetts/ClientServer">
-	    <classpath>
-		<pathelement location="${freetts_jar}"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-	<mkdir dir="${bin_dir}"/>
-        <jar destfile="${bin_dir}/Client.jar" 
-	     manifest="${src_dir}/demo/freetts/ClientServer/client.Manifest"
-	     basedir="${demo_classes_dir}/freetts/ClientServer"
-	     includes="Client.class"
-	     filesonly="true"
-	     compress="true"/>
-        <jar destfile="${bin_dir}/Server.jar" 
-	     manifest="${src_dir}/demo/freetts/ClientServer/server.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset dir="${demo_classes_dir}/freetts/ClientServer"
-	             excludes="Client.class"/>
-            <fileset dir="${demo_classes_dir}/util"
-	             includes="TTSServer.class"/>
-        </jar>
-    </target>
-
-    <target name="compile_freetts_emacspeak"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/freetts/Emacspeak"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/Emacspeak"
-	       destdir="${demo_classes_dir}/freetts/Emacspeak">
-	    <classpath>
-		<pathelement location="${freetts_jar}"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/FreeTTSEmacspeakServer.jar" 
-	     manifest="${src_dir}/demo/freetts/Emacspeak/Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset dir="${demo_classes_dir}/freetts/Emacspeak"/>
-            <fileset dir="${demo_classes_dir}/util"
-	             includes="EmacspeakProtocolHandler.class,
-		               TTSServer.class"/>
-        </jar>
-    </target>
-
-    <target name="compile_freetts_helloworld"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/freetts/HelloWorld"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/HelloWorld"
-	       destdir="${demo_classes_dir}/freetts/HelloWorld">
-	    <classpath>
-		<pathelement location="${freetts_jar}"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-	<mkdir dir="${bin_dir}"/>
-        <jar destfile="${bin_dir}/FreeTTSHelloWorld.jar" 
-	     manifest="${src_dir}/demo/freetts/HelloWorld/Manifest"
-	     basedir="${demo_classes_dir}/freetts/HelloWorld"
-	     includes="*.class"
-	     filesonly="true"
-	     compress="true"/>
-    </target>
-
-
-    <!-- JSAPI demos -->
-    <target name="compile_jsapi_demos"
-	    depends="compile_jsapi_emacspeak,
-	             compile_jsapi_helloworld,
-	             compile_jsapi_jtime,
-	             compile_jsapi_mixedvoices,
-	             compile_jsapi_player,
-	             compile_jsapi_webstartclock"
-	    description="Compiles freetts demos that use JSAPI"/>
-
-    <target name="compile_jsapi_emacspeak"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/Emacspeak"
-	       destdir="${demo_classes_dir}/JSAPI/Emacspeak">
-	    <classpath>
-		<path refid="extra_libs"/>
-		<pathelement location="${freetts_jar}"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/EmacspeakServer.jar" 
-	     manifest="${src_dir}/demo/JSAPI/Emacspeak/Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
-            <fileset dir="${demo_classes_dir}/util"
-	             includes="EmacspeakProtocolHandler.class,
-		               TTSServer.class"/>
-        </jar>
-    </target>
-
-    <target name="compile_jsapi_helloworld"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/HelloWorld"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/HelloWorld"
-	       destdir="${demo_classes_dir}/JSAPI/HelloWorld">
-	    <classpath>
-		<path refid="extra_libs"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/HelloWorld.jar" 
-	     manifest="${src_dir}/demo/JSAPI/HelloWorld/Manifest"
-	     basedir="${demo_classes_dir}/JSAPI/HelloWorld"
-	     includes="*.class"
-	     filesonly="true"
-	     compress="true"/>
-    </target>
-
-    <target name="compile_jsapi_jtime"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/JTime"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/JTime"
-	       destdir="${demo_classes_dir}/JSAPI/JTime">
-	    <classpath>
-		<path refid="extra_libs"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/JTime.jar" 
-	     manifest="${src_dir}/demo/JSAPI/JTime/Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset dir="${demo_classes_dir}/JSAPI/JTime"/>
-            <fileset dir="${demo_classes_dir}/util"
-	             includes="TimeUtils.class"/>
-        </jar>
-    </target>
-
-    <target name="compile_jsapi_mixedvoices"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/MixedVoices"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/MixedVoices"
-	       destdir="${demo_classes_dir}/JSAPI/MixedVoices">
-	    <classpath>
-		<path refid="extra_libs"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/MixedVoices.jar" 
-	     manifest="${src_dir}/demo/JSAPI/MixedVoices/Manifest"
-	     basedir="${demo_classes_dir}/JSAPI/MixedVoices"
-	     includes="*.class"
-	     filesonly="true"
-	     compress="true"/>
-    </target>
-
-    <target name="compile_jsapi_player"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/Player"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/Player"
-	       destdir="${demo_classes_dir}/JSAPI/Player">
-	    <classpath>
-		<path refid="extra_libs"/>
-		<pathelement location="${freetts_jar}"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/Player.jar" 
-	     manifest="${src_dir}/demo/JSAPI/Player/Manifest"
-	     basedir="${demo_classes_dir}/JSAPI/Player"
-	     includes="*.class"
-	     filesonly="true"
-	     compress="true"/>
-    </target>
-
-    <target name="compile_jsapi_webstartclock"
-	    depends="freetts_jar,compile_demo_util">
-	<mkdir dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/WebStartClock"
-	       destdir="${demo_classes_dir}/JSAPI/WebStartClock">
-	    <classpath>
-		<path refid="extra_libs"/>
-		<pathelement location="${freetts_jar}"/>
-		<pathelement location="${demo_classes_dir}/util"/>
-	    </classpath>
-	</javac>
-        <jar destfile="${bin_dir}/WebStartClock.jar" 
-	     manifest="${src_dir}/demo/JSAPI/WebStartClock/Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
-            <fileset dir="${demo_classes_dir}/util"
-	             includes="TimeUtils.class"/>
-        </jar>
+	    depends="freetts_jar"
+	    description="Compiles and jars the demos">
+        <ant antfile="demo.xml"/>
     </target>
 
 
@@ -898,7 +676,6 @@
     <!-- ********************************************************** --> 
     <!-- *                                                        * -->
     <!-- * Make the packages for deployment.                      * -->
-    <!-- *                                                        * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** --> 
     <fileset id="srcs"
@@ -951,6 +728,7 @@
         <zip destfile="${deploy_dir}/freetts-srcs-${version}.zip">
             <fileset refid="legal"/>
             <fileset dir="." includes="build.xml"/>
+            <fileset dir="." includes="demo.xml"/>
             <fileset refid="srcs"/>
             <fileset refid="demos"/>
             <fileset dir="." includes="speech.properties"/>
@@ -964,13 +742,15 @@
 
     <!-- freetts-bin -->
     <target name="deploy_binaries"
-	    depends="javadoc_zip,jars">
+	    depends="javadoc_zip,all">
         <mkdir dir="${deploy_dir}"/>
         <chmod dir="lib" perm="ugo+x" includes="jsapi.sh"/>
         <zip destfile="${deploy_dir}/freetts-bin-${version}.zip">
             <fileset refid="legal"/>
+            <fileset dir="." includes="demo.xml"/>
             <fileset refid="binaries"/>
             <fileset refid="jsapi_sh"/>
+            <fileset refid="demos"/>
             <fileset dir="." includes="speech.properties"/>
             <fileset dir="." includes="tools/**"/>
             <fileset refid="docs"/>
@@ -990,86 +770,10 @@
 
 
     <!-- webstartclock -->
-    <property name="keystore" value="${webstart_dir}/keystore"/>
-    <property name="keypass" value="freetts"/>
-    <target name="check_keystore.isPresent">
-        <available file="${keystore}" property="keystore.isPresent"/>
-    </target>
-    <target name="genkey" 
-	    depends="check_keystore.isPresent" 
-	    unless="keystore.isPresent">
-	<mkdir dir="${webstart_dir}"/>
-        <genkey alias="freetts"
-		storepass="${keypass}"
-		keypass="${keypass}"
-		keystore="${keystore}">
-            <dname>
-                <param name="CN" value="Sun Labs"/>
-                <param name="OU" value="Sun Microsystems"/>
-                <param name="O"  value="Sun Microsystems"/>
-                <param name="L"  value="Burlington"/>
-                <param name="ST" value="MA"/>
-                <param name="C"  value="US"/>
-            </dname>
-        </genkey>
-    </target>
-
     <target name="deploy_webstartclock"
-	    depends="compile,compile_jsapi_webstartclock,genkey">
-        <copy file="lib/jsapi.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/jsapi.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-        <copy file="${lib_dir}/freetts.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/freetts.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-        <copy file="${lib_dir}/en_us.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/en_us.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-        <copy file="${lib_dir}/cmutimelex.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/cmutimelex.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-        <copy file="${lib_dir}/cmu_time_awb.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/cmu_time_awb.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-        <copy file="${bin_dir}/WebStartClock.jar" todir="${webstart_dir}"/>
-        <signjar jar="${webstart_dir}/WebStartClock.jar"
-		 alias="freetts"
-		 storepass="${keypass}"
-		 keypass="${keypass}"
-		 keystore="${keystore}"/>
-
-	<mkdir dir="${deploy_dir}"/>
-        <tar destfile="${deploy_dir}/WebStartClock.tar">
-	     <tarfileset dir="${webstart_dir}" includes="*.jar"/>
-             <tarfileset dir="${src_dir}/demo/JSAPI/WebStartClock"
-			 includes="clock.jnlp"/>
-        </tar>
-        <echo message="${deploy_dir}/WebStartClock.tar created."/>
-        <echo message=
-            "scp it to the following directory on freetts.sourceforge.net:"/>
-        <echo message=
-            "    /home/groups/f/fr/freetts/htdocs/WebStartClock"/>
-        <echo message="Then ssh to freetts.sourceforge.net and untar it."/>
+	    depends="demos"
+	    description="Signs jars and creates tarball for web start demo">
+        <ant antfile="demo.xml" target="deploy_webstartclock"/>
     </target>
 
 
