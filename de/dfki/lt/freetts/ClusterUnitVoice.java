@@ -1,8 +1,13 @@
-/*
- * Created on Sep 23, 2004
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+/**
+ * Portions Copyright 2004 DFKI GmbH.
+ * Portions Copyright 2001 Sun Microsystems, Inc.
+ * Portions Copyright 1999-2001 Language Technologies Institute, 
+ * Carnegie Mellon University.
+ * All Rights Reserved.  Use is subject to license terms.
+ * 
+ * See the file "license.terms" for information on usage and
+ * redistribution of this file, and for a DISCLAIMER OF ALL 
+ * WARRANTIES.
  */
 package de.dfki.lt.freetts;
 
@@ -22,10 +27,9 @@ import com.sun.speech.freetts.relp.AudioOutput;
 import com.sun.speech.freetts.relp.UnitConcatenator;
 
 /**
- * @author emiliae
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * A simple dummy voice as a starting point for non-US-English
+ * cluster unit voices. All NLP stuff would need to be implemented
+ * in order for this to become a full TTS voice.
  */
 public class ClusterUnitVoice extends Voice {
 
@@ -34,7 +38,7 @@ public class ClusterUnitVoice extends Voice {
             String description, Locale locale, String domain,
             String organization, Lexicon lexicon, URL database) {
 		
-	//TODO: irgendwas mit dem Lexikon
+	//TODO: do something useful with the lexicon
 	super(name, gender, age, description, locale,
                 domain, organization);
 	setRate(150f);
