@@ -23,9 +23,17 @@ include ${TOP}/build/Makefile.config
 
 CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 
-all:: ${CLASSES} ${STUBS}
+DATA_FILES = internal_voices.txt freetts.Manifest
+DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
+
+all:: ${CLASSES} ${STUBS} ${DATA}
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
+	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
+	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.Manifest: %.Manifest
 	@mkdir -p ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 	$(RM) ${CLASS_DEST_DIR}/${PACKAGE_PATH}/$?
 	cp $? ${CLASS_DEST_DIR}/${PACKAGE_PATH}

@@ -291,7 +291,7 @@ en_us.jar:
 
 freetts.jar:
 	(cd classes; \
-	$(JAR) cfm ../lib/$@ $(EN_US_DIR)/en_us.Manifest \
+	$(JAR) cfm ../lib/$@ com/sun/speech/freetts/freetts.Manifest \
 		`find com -type f -print | \
 		egrep -v -f ../build/freetts_exclude_list`\
                 `find de -type f -print | \

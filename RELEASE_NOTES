@@ -9,6 +9,13 @@
 Change history for FreeTTS.
 --------------------------
 
+August 15, 2003 Release 1.2.0-beta
+    - Added support to import voices from FestVox into FreeTTS
+    - Extended voice packaging scheme to simplify management and addition
+      of new voices.
+    - VoiceManager class provices API to access voices.
+    - Dynamic detection of voice jarfiles is supported.
+
 Jun 5, 2003 Release 1.2.0-beta
     - Updated FreeTTS version message
 

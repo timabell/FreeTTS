@@ -371,6 +371,7 @@ public class FreeTTS {
 	System.out.println("    -file file      : speak text from given file");
 	System.out.println("    -lines file     : render lines from a file");
 	System.out.println("    -help           : shows usage information");
+        System.out.println("    -voiceInfo      : print detailed voice info");
         System.out.println("    -metrics        : turn on metrics");
         System.out.println("    -run  name      : sets the name of the run");
         System.out.println("    -silent         : don't say anything");
@@ -509,6 +510,9 @@ public class FreeTTS {
                 i++;
 	    } else if (args[i].equals("-help")) {
 		usage(voices);
+                System.exit(0);
+            } else if (args[i].equals("-voiceInfo")) {
+                System.out.println(VoiceManager.getInstance().getVoiceInfo());
                 System.exit(0);
 	    } else if (args[i].equals("-text")) {
 		freetts.setInputMode(InputMode.TEXT);
