@@ -20,8 +20,8 @@ public class FreeTTSSpeakableImpl implements FreeTTSSpeakable {
     private Document doc;
     private String text;
     private InputStream inputStream;
-    boolean completed = false;
-    boolean cancelled = false;
+    volatile boolean completed = false;
+    volatile boolean cancelled = false;
 
     /**
      * Constructor.
@@ -79,7 +79,7 @@ public class FreeTTSSpeakableImpl implements FreeTTSSpeakable {
      *
      * @return true if it has been processed
      */
-    public boolean isCompleted() {
+    public synchronized boolean isCompleted() {
 	return completed;
     }
 
