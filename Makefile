@@ -13,7 +13,7 @@ TAR = tar
 ZIP = zip
 
 # List any sub directories that need to be built
-SUBDIRS = javax com demo bin tests
+SUBDIRS = javax com demo bin tests docs
 
 # List src dirs that get deployed
 # SRCDIRS = javax com
