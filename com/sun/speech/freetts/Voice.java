@@ -327,7 +327,9 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		outputQueue.post(u);
 		runTimer.stop("..post");
 	    }
-	} catch (Exception e) {
+	}  catch (ProcessException pe) {
+	    System.err.println("Processing Utterance: " + pe);
+	}  catch (Exception e) {
 	    System.err.println("Trouble while processing utterance " + e);
 	    e.printStackTrace();
 	    u.getSpeakable().cancelled();
@@ -426,7 +428,6 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		runProcessor(audioOutput, utterance, timer);
 	    }  catch (ProcessException pe) {
 		ok = false;
-                pe.printStackTrace();
 	    }
 	    if (ok && utterance.isLast()) {
 		audioPlayer.drain();
