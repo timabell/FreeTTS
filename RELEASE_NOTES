@@ -10,6 +10,7 @@ Change history for FreeTTS.
 --------------------------
 
 XXXX,XX, 2004 Release 1.2XXX
+    - Fixed -dump{Multi}Audio problem in freetts app (see bug 986503).
     - Added importing tools specifically for CMU ARCTIC Voices.
     - Fixed problem in mbrola phonem remapping.
     - In the Voice class, removed the call to AudioPlayer.drain() 

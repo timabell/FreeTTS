@@ -72,9 +72,7 @@ public class FreeTTS {
     public void startup() {
 	voice.allocate();
 	if (!getSilentMode()) {
-	    if (!streamingAudio) {
-		audioPlayer = new JavaClipAudioPlayer();
-	    } else if (audioFile != null) {
+	    if (audioFile != null) {
 		AudioFileFormat.Type type = getAudioType(audioFile);
 		if (type != null) {
 		    if (multiAudio) {
@@ -91,6 +89,8 @@ public class FreeTTS {
 				" " + ioe);
 		    }
 		}
+            } else if (!streamingAudio) {
+		audioPlayer = new JavaClipAudioPlayer();
 	    } else {
                 try {
                     audioPlayer = voice.getDefaultAudioPlayer();
