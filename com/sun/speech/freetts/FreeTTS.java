@@ -464,13 +464,11 @@ public class FreeTTS {
         }
 
         if (voice == null) { // default Voice is kevin16
-            voice = voiceManager.getVoice("kevin16");
+            voice = voiceManager.getVoice("kevin");
         }
         FreeTTS freetts = new FreeTTS(voice);
 
-        System.out.println("Using " + voice.toString());
-
-	for (int i = 0; i < args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
 	    if (args[i].equals("-metrics")) {
 		voice.setMetrics(true);
 	    } else if (args[i].equals("-detailedMetrics")) {
