@@ -6,10 +6,14 @@
  * WARRANTIES.
  */
 
+import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
 import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
 import com.sun.speech.freetts.en.us.CMULexicon;
+
+import de.dfki.lt.freetts.en.us.MbrolaVoice;
+import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
 
 import java.net.Socket;
 
@@ -45,6 +49,15 @@ public class FreeTTSEmacspeakServer extends TTSServer {
 	    System.out.println("Creating " + voiceClassName + "...");
 
 	    emacsVoice = (Voice) voiceClass.newInstance();
+
+            if (emacsVoice instanceof MbrolaVoice) {
+                Validator validator = new
+                    MbrolaVoiceValidator((MbrolaVoice) emacsVoice);
+                if (!validator.isValid()) {
+                    throw new IllegalStateException
+                        ("Problem starting MBROLA voice");
+                }
+            }
 
 	    System.out.println("Loading " + voiceClassName + "...");
 
