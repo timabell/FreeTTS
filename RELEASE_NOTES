@@ -53,6 +53,7 @@ Release 1.1.1
       punctuation (i.e., "Frank") not to be synthesized.
     - Fixed the following bug: "From:" or "From" causes the system to
       hang.
+    - Added MBROLA support to all appropriate demos.
 
 
 
