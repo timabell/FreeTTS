@@ -10,6 +10,8 @@ Change history for FreeTTS.
 --------------------------
 
 XXXX,XX, 2005 Release 1.2XXX
+    - Changed state name expansion logic (bug 1101229)
+    - Added pronunciations for British Sterling and "not" sign
     - Modified missing speech.properties message (rfe 1041437 and bug 1041296)
     - Added pronunciations for Linux terms (bug 1006630)
     - Added JUnit to prerequisites list (bug 975557)
