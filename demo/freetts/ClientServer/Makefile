@@ -31,6 +31,30 @@ runserver: all
 	$(JAVA_CMD) \
 	-Dmetrics=true Server
 
+runMbrola1Server: all
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dmetrics=true \
+	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS1 \
+	Server
+
+runMbrola2Server: all
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dmetrics=true \
+	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS2 \
+	Server
+
+runMbrola3Server: all
+	$(JAVA_CMD) \
+	-Ddebug=true \
+	-Dmbrola.base=$(MBROLA_DIR) \
+	-Dmetrics=true \
+	-Dvoice16kClassName=de.dfki.lt.freetts.en.us.MbrolaVoiceUS3 \
+	Server
+
 # the command line arguments: <server host> <port> <sample rate> <show metrics>
 runcclient: cclient
 	./cclient localhost 5555 16000 0

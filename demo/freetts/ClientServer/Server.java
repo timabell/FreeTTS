@@ -9,6 +9,9 @@
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.en.us.CMULexicon;
 
+import de.dfki.lt.freetts.en.us.MbrolaVoice;
+import de.dfki.lt.freetts.en.us.MbrolaVoiceValidator;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
@@ -70,6 +73,13 @@ public class Server extends TTSServer {
 
 	// instantiate the Voice
 	Voice voice = (Voice) voiceClass.newInstance();
+
+        if (voice instanceof MbrolaVoice) {
+            if (!(new MbrolaVoiceValidator((MbrolaVoice) voice)).isValid()) {
+                throw new IllegalStateException
+                    ("Problem starting MBROLA voice");
+            }
+        }
 
 	// sets the lexicon to CMU lexicon
 	voice.setLexicon(new CMULexicon());
