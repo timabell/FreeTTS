@@ -25,6 +25,7 @@ import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
 import com.sun.speech.freetts.audio.MultiFileAudioPlayer;
 import com.sun.speech.freetts.audio.NullAudioPlayer;
 import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
+import com.sun.speech.freetts.audio.RawFileAudioPlayer;
 import javax.sound.sampled.AudioFileFormat.Type;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
@@ -78,9 +79,12 @@ public class FreeTTS {
 		    audioPlayer = new
 			SingleFileAudioPlayer(getBasename(audioFile), type);
 		} else {
-		    System.out.println("Unsupported audio type, file "
-			    + "extension must be one of: ");
-		    dumpAudioTypes();
+		    try {
+			audioPlayer = new RawFileAudioPlayer(audioFile);
+		    } catch (IOException ioe) {
+			System.out.println("Can't open " + audioFile +
+				" " + ioe);
+		    }
 		}
 	    } else {
 		audioPlayer = new JavaClipAudioPlayer();
