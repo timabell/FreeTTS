@@ -397,17 +397,20 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
         
 	log("Processing Utterance: " + u.getString("input_text"));
 	try {
-	    for (int i = 0; i < processors.length; i++) {
-		runProcessor(processors[i], u, runTimer);
-	    }
-	    if (outputQueue == null) {
-                log("To AudioOutput");
-		outputUtterance(u, runTimer);
-	    } else {
-		runTimer.start("..post");
-		outputQueue.post(u);
-		runTimer.stop("..post");
-	    }
+	    for (int i = 0; i < processors.length && 
+                     !u.getSpeakable().isCompleted(); i++) {
+                runProcessor(processors[i], u, runTimer);
+            }
+            if (!u.getSpeakable().isCompleted()) {
+                if (outputQueue == null) {
+                    log("To AudioOutput");
+                    outputUtterance(u, runTimer);
+                } else {
+                    runTimer.start("..post");
+                    outputQueue.post(u);
+                    runTimer.stop("..post");
+                }
+            }
 	}  catch (ProcessException pe) {
 	    System.err.println("Processing Utterance: " + pe);
 	}  catch (Exception e) {
@@ -427,7 +430,6 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	}
 
 	dumpASCII(u);
-
     }
 
 
@@ -507,7 +509,11 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 
 	    // log("   utt: " + utterance.getString("input_text"));
 	    try {
-		runProcessor(audioOutput, utterance, timer);
+                if (!speakable.isCompleted()) {
+                    runProcessor(audioOutput, utterance, timer);
+                } else {
+                    ok = false;
+                }
 	    }  catch (ProcessException pe) {
 		ok = false;
 	    }
