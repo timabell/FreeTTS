@@ -201,7 +201,7 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
                 break;
             }
         }
-        return content;
+        return content.trim();
     }
 
     
