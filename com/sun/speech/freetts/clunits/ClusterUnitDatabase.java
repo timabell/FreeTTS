@@ -861,7 +861,6 @@ public class ClusterUnitDatabase {
 	    this.type = is.readInt();
 	    this.phone = is.readInt();
 	    this.start = is.readInt();
-	    this.start = is.readInt();
 	    this.end = is.readInt();
 	    this.prev = is.readInt();
 	    this.next = is.readInt();
