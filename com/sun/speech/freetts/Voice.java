@@ -67,9 +67,15 @@ import javax.sound.sampled.AudioFormat;
  * voice.speak("I can talk forever without getting tired!");
  * </pre>
  *
+ *
+ * <p>A user can override the AudioPlayer to use by defining the
+ * "com.sun.speech.freetts.voice.defaultAudioPlayer" system property.
+ * The value of this property must be the name of a class that
+ * implements the AudioPlayer interface, and which also has a no-arg
+ * constructor.
+ *
  * @see VoiceManager
  * @see VoiceDirectory
- *
  */
 public abstract class Voice implements UtteranceProcessor, Dumpable {
 

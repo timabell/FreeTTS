@@ -57,11 +57,15 @@ public class SingleFileAudioPlayer implements AudioPlayer {
     }
 
     /**
-     *  Creates a default audio player that sends
-     *  the output to freetts.wav
+     * Creates a default audio player for an AudioFileFormat of type
+     * WAVE.  Reads the "com.sun.speech.freetts.AudioPlayer.baseName"
+     * property for the base filename to use, and will produce a file
+     * of the form &lt;baseName>.wav.  The default value for the
+     * base name is "freetts".
      */
     public SingleFileAudioPlayer() {
-	this(Utilities.getProperty("baseName","freetts"),
+        this(Utilities.getProperty(
+                 "com.sun.speech.freetts.AudioPlayer.baseName", "freetts"),
              AudioFileFormat.Type.WAVE);
     }
 
@@ -133,6 +137,7 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	    AudioInputStream ais = new AudioInputStream(is,
 		    currentFormat, totBytes / currentFormat.getFrameSize());
 	    AudioSystem.write(ais, outputType, file);
+            System.out.println("Wrote synthesized speech to " + baseName);
 	} catch (IOException ioe) {
 	    System.err.println("Can't write audio to " + baseName);
 	} catch (IllegalArgumentException iae) {

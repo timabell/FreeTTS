@@ -46,11 +46,14 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
 
     /**
      * Creates a default audio player for an AudioFileFormat of type
-     * WAVE.  Reads the "baseName" property for the base filename to
-     * use, and will produce files of the form &lt;baseName>1.wav.
+     * WAVE.  Reads the "com.sun.speech.freetts.AudioPlayer.baseName"
+     * property for the base filename to use, and will produce files
+     * of the form &lt;baseName>1.wav.  The default value for the
+     * base name is "freetts".
      */
     public MultiFile8BitAudioPlayer() {
-        this(Utilities.getProperty("baseName","freetts"),
+        this(Utilities.getProperty(
+                 "com.sun.speech.freetts.AudioPlayer.baseName", "freetts"),
              AudioFileFormat.Type.WAVE);
     }
     
@@ -180,6 +183,7 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
 	File file = new File(name);
 	try {
 	    AudioSystem.write(ais, outputType, file);
+            System.out.println("Wrote synthesized speech to " + name);
 	} catch (IOException ioe) {
 	    System.err.println("Can't write audio to " + file);
 	    return false;

@@ -24,20 +24,26 @@ public class RawFileAudioPlayer implements AudioPlayer {
     private AudioFormat audioFormat;
     private float volume;
     private BufferedOutputStream os;
-
+    private String path;
     
     /**
-     * Constructs a RawFileAudioPlayer.  Reads the "rawPath" property
-     * to define where to send the raw audio.
+     * Creates a default audio player for an AudioFileFormat of type
+     * WAVE.  Reads the "com.sun.speech.freetts.AudioPlayer.baseName"
+     * property for the base filename to use, and will produce files
+     * of the form &lt;baseName>.raw.  The default value for the
+     * base name is "freetts".
      */
     public RawFileAudioPlayer() throws IOException {
-        this(Utilities.getProperty("path","freetts.raw"));
+        this(Utilities.getProperty(
+                 "com.sun.speech.freetts.AudioPlayer.baseName", "freetts")
+             + ".raw");
     }
     
     /**
      * Constructs a NullAudioPlayer
      */
     public RawFileAudioPlayer(String path) throws IOException {
+        this.path = path;
 	os = new BufferedOutputStream(new FileOutputStream(path));
     }
     
@@ -101,6 +107,7 @@ public class RawFileAudioPlayer implements AudioPlayer {
         try {
             os.flush();
             os.close();
+            System.out.println("Wrote synthesized speech to " + path);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }

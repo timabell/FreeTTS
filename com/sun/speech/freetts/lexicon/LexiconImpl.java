@@ -28,6 +28,7 @@ import java.nio.channels.FileChannel;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import java.util.LinkedHashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
@@ -62,6 +64,20 @@ import java.util.StringTokenizer;
  * <pre>
  *   -Dcom.sun.speech.freetts.useNewIO=true
  * </pre>
+ *
+ * <p>The implementation also allows users to define their own addenda
+ * that will be used in addition to the system addenda.  If the user
+ * defines their own addenda, it values will be added to the system
+ * addenda, overriding any existing elements in the system addenda.
+ * To define a user addenda, the user needs to set the following
+ * property:
+ *
+ * <pre>
+ *   -Dcom.sun.speeech.freetts.lexicon.userAddenda=&lt;URLToUserAddenda>
+ * </pre>
+ *
+ * Where &lt;URLToUserAddenda> is a URL pointing to an ASCII file
+ * containing addenda entries.
  *
  * <p>[[[TODO: support multiple homographs with the same part of speech.]]] 
  */
@@ -211,7 +227,7 @@ abstract public class LexiconImpl implements Lexicon {
     }
 
     /**
-     * Loads the data for this lexicon.
+     * Loads the data for this lexicon.  If the 
      *
      * @throws IOException if errors occur during loading
      */
@@ -243,6 +259,34 @@ abstract public class LexiconImpl implements Lexicon {
         compiled = createLexicon(compiledIS, binary, 65000);
 	addendaIS.close();
 	compiledIS.close();
+
+        /* Load the user-defined addenda and override any existing
+         * entries in the system addenda.
+         */
+        String userAddenda = Utilities.getProperty(
+            "com.sun.speech.freetts.lexicon.userAddenda", null);
+        if (userAddenda != null) {
+            try {
+                URL userAddendaURL = new URL(userAddenda);
+                InputStream userAddendaIS = Utilities.getInputStream(
+                    userAddendaURL);
+                if (userAddendaIS == null) {
+                    throw new IOException("Can't load user addenda from "
+                                          + userAddenda);
+                }
+                Map tmpAddenda = createLexicon(userAddendaIS, false, 50);
+                userAddendaIS.close();
+                for (Iterator keys = tmpAddenda.keySet().iterator();
+                     keys.hasNext();) {
+                    Object key = keys.next();
+                    addenda.put(key, tmpAddenda.get(key));
+                }
+            } catch (MalformedURLException e) {
+                throw new IOException("User addenda URL is malformed: " +
+                                      userAddenda);
+            }
+        }
+        
 	loaded = true;
 	BulkTimer.LOAD.stop("Lexicon");
 	letterToSound = new LetterToSoundImpl(letterToSoundURL, binary);

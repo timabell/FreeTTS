@@ -10,6 +10,8 @@ Change history for FreeTTS.
 --------------------------
 
 May 10, 2004 Release 1.2
+    - Added com.sun.speech.freetts.lexicon.userAddenda property
+    - Added FreeTTS pronunciation to addenda
     - Fix problem where the space character in the path would cause
       issues with finding voice jars (bug 938225)
     - Added backwards compatibility for Gnome Speech API
