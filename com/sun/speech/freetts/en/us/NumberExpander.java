@@ -529,6 +529,8 @@ public class NumberExpander {
 		    } else if (p1 == 'X') {
 			value += 9;
 			p++;
+		    } else {
+			value += 1;
 		    }
 		} else {
 		    value += 1;
