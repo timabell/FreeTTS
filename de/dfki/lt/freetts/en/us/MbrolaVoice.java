@@ -31,6 +31,9 @@ import java.io.IOException;
  * the MBROLA synthesis.
  */
 public class MbrolaVoice extends CMUVoice {
+
+    private String databaseDirectory; // where the voice database is
+    private String database;          // name of the voice database
         
     /**
      * Creates a simple voice
@@ -40,13 +43,19 @@ public class MbrolaVoice extends CMUVoice {
     }
 
     /**
-     * Creates a simple voice
+     * Creates an MbrolaVoice.
      *
      * @param createLexicon if <code>true</code> automatically load up
-     * the default CMU lexicon; otherwise, don't load it.
+     *    the default CMU lexicon; otherwise, don't load it.
+     * @param databaseDirectory the directory within the MBROLA directory
+     *    where the voice database of this voice is located
+     * @param database the name of the voice database of this voice
      */
-    public MbrolaVoice(boolean createLexicon) {
+    public MbrolaVoice(boolean createLexicon, String databaseDirectory, 
+                       String database) {
 	super(createLexicon);
+        this.databaseDirectory = databaseDirectory;
+        this.database = database;
     }
 
     //[[Providing the Mbrola classes via getUnitSelector() and
@@ -75,7 +84,7 @@ public class MbrolaVoice extends CMUVoice {
      * <code> {mbrolaExecutable} -e -I {mbrolaRenameTable} 
      * {mbrolaVoiceDB} - -.raw </code>
      */
-    protected String getMbrolaCommand(String databaseDir, String database) {
+    protected String getMbrolaCommand() {
         
         String mbrolaBase = System.getProperty("mbrola.base");
 
@@ -83,8 +92,8 @@ public class MbrolaVoice extends CMUVoice {
         String mbrola = mbrolaBase + File.separator + "mbrola";
 
         // Path to the mbrola voice db to be used:
-        String mbrolaVoiceDB = mbrolaBase + File.separator + databaseDir +
-            File.separator + database;
+        String mbrolaVoiceDB = mbrolaBase + File.separator + 
+            databaseDirectory + File.separator + database;
         
         // Path to the segment name conversion file:
         String mbrolaRenameTable = mbrolaBase + File.separator + "us1" +

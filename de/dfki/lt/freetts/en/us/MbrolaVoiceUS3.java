@@ -38,7 +38,7 @@ public class MbrolaVoiceUS3 extends MbrolaVoice {
      * the default CMU lexicon; otherwise, don't load it.
      */
     public MbrolaVoiceUS3(boolean createLexicon) {
-	super(createLexicon);
+	super(createLexicon, "us3", "us3");
 	setRate(150f);
 	setPitch(125F);
 	setPitchRange(12F);
@@ -61,9 +61,7 @@ public class MbrolaVoiceUS3 extends MbrolaVoice {
      *     processor
      */
     protected UtteranceProcessor getUnitConcatenator() throws IOException {
-        String databaseDir = "us3";
-        String databaseName = "us3";
-	return new MbrolaCaller(getMbrolaCommand(databaseDir, databaseName));
+        return new MbrolaCaller(getMbrolaCommand());
     }
 
     /**
