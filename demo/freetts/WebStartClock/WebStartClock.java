@@ -1,6 +1,5 @@
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
-import com.sun.speech.freetts.en.us.CMULexicon;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -19,7 +18,7 @@ public class WebStartClock extends JFrame {
     private int timeFontSize = 24;
 
     private String voiceClassName = 
-    "com.sun.speech.freetts.en.us.CMUClusterUnitVoice";
+    "com.sun.speech.freetts.en.us.CMUTimeAWBVoice";
     private String databaseName = "cmu_awb/cmu_time_awb.bin";
             
     private Voice clockVoice;
@@ -145,7 +144,6 @@ public class WebStartClock extends JFrame {
         try {
             Class voiceClass = Class.forName(voiceClassName);
             clockVoice = (Voice) voiceClass.newInstance();
-            clockVoice.setLexicon(new CMULexicon());
             clockVoice.getFeatures().setString
                 (Voice.DATABASE_NAME, databaseName);
             clockVoice.setAudioPlayer(new JavaClipAudioPlayer());
