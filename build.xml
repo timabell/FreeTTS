@@ -67,7 +67,7 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="compile_voices" 
-	    depends="kal8_db,kal16_db,time_awb_db"
+	    depends="kal8_db,kal16_db,time_awb_db,user_voice_db"
 	    description="Generate all of the voice binaries">
     </target>
 
@@ -154,6 +154,83 @@
 	    <arg line="-src ${src_dir}/${time_awb_path}"/>
             <arg line="-dest ${classes_dir}/${time_awb_path}"/>
             <arg line="-generate_binary ${time_awb_data}"/>
+         </java>
+    </target>
+
+
+    <!-- ********************************************************** -->
+    <!-- *                                                        * -->
+    <!-- * User defined voices (e.g., those created by the        * -->
+    <!-- * FestVoxToFreeTTS tool) can be compiled by running      * -->
+    <!-- * ant with the -D parameter to define either the         * -->
+    <!-- * 'clunit_voice' or 'diphone_voice' property:            * -->
+    <!-- *                                                        * -->
+    <!-- *     -Dclunit_voice=sun_time_wdw                        * -->
+    <!-- *     -Ddiphone_voice=sun_us_wdw                         * -->
+    <!-- *                                                        * -->
+    <!-- ********************************************************** -->
+    <target name="set_user_voice_to_clunit_voice"
+            if="clunit_voice">
+        <property name="user_voice" value="${clunit_voice}"/>
+    </target>
+    <target name="set_user_voice_to_diphone_voice"
+            if="diphone_voice">
+        <property name="user_voice" value="${diphone_voice}"/>
+    </target>
+    <target name="set_user_voice"
+            depends="set_user_voice_to_clunit_voice,
+                     set_user_voice_to_diphone_voice">
+        <property name="user_voice_path" 
+                  value="com/sun/speech/freetts/en/us/${user_voice}"/>
+    </target>
+
+    <target name="check_user_voice_db.isUpToDate"
+            depends="set_user_voice"
+	    description="Compares timestamps of user voice ASCII and binary">
+        <uptodate 
+	    property="user_voice_db.isUpToDate"
+	    srcfile="${src_dir}/${user_voice_path}/${user_voice}.txt"
+	    targetfile="${classes_dir}/${user_voice_path}/${user_voice}.bin"/>
+    </target>
+
+    <target name="user_voice_db"
+	    depends="set_user_voice,clunit_voice_db,diphone_voice_db"
+            if="user_voice"
+            description="Generate user voice binaries"/>
+
+    <target name="clunit_voice_db"
+	    depends="compile_src,check_user_voice_db.isUpToDate" 
+            if="clunit_voice"
+            unless="user_voice_db.isUpToDate"
+            description="Generate user voice binaries">
+        <java classname="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${user_voice_path}"/>
+            <arg line="-dest ${classes_dir}/${user_voice_path}"/>
+            <arg line="-generate_binary ${user_voice}.txt"/>
+         </java>
+    </target>
+
+    <target name="diphone_voice_db"
+	    depends="compile_src,check_user_voice_db.isUpToDate" 
+            if="diphone_voice"
+            unless="user_voice_db.isUpToDate"
+            description="Generate user voice binaries">
+        <java classname="com.sun.speech.freetts.clunits.DiphoneUnitDatabase"
+	      failonerror="true" 
+	      fork="true">
+            <classpath>
+                <path refid="extra_libs"/>
+                <pathelement location="${classes_dir}"/>
+            </classpath>
+	    <arg line="-src ${src_dir}/${user_voice_path}"/>
+            <arg line="-dest ${classes_dir}/${user_voice_path}"/>
+            <arg line="-generate_binary ${user_voice}.txt"/>
          </java>
     </target>
 
@@ -316,7 +393,8 @@
 	             cmulex_jar,
 	             cmutimelex_jar,
 	             cmu_us_kal_jar,
-	             cmu_time_awb_jar"
+	             cmu_time_awb_jar,
+	             user_voice_jar"
 	    description="Builds all the jar files"/>
 
 
@@ -453,6 +531,23 @@
             <fileset
 	        dir="${classes_dir}"
 	        includes="com/sun/speech/freetts/en/us/cmu_time_awb/*"/>
+        </jar>
+    </target>
+
+
+    <!-- user voice -->
+    <target name="user_voice_jar" 
+	    depends="compile_voices"
+            if="user_voice"
+	    description="Create ${lib_dir}/${user_voice}.jar">
+        <mkdir dir="${lib_dir}"/>
+         <jar destfile="${lib_dir}/${user_voice}.jar" 
+	      manifest="${src_dir}/${user_voice_path}/voice.Manifest"
+	      filesonly="true"
+	      compress="true">
+             <fileset
+	         dir="${classes_dir}"
+	         includes="${user_voice_path}/*"/>
         </jar>
     </target>
 

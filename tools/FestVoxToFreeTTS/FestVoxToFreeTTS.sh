@@ -42,6 +42,17 @@ else
     usage
 fi
 
+. $VOICEDIR/etc/voice.defs
+
+if [ "$2" = "compile" ]; then
+    if [ "$FV_TYPE" = "diphone" ]; then
+        ant -Ddiphone_voice=$FV_VOICENAME -find build.xml
+    elif [ "$FV_TYPE" = "ldom" ] || [ "$FV_TYPE" = "clunits" ]; then
+        ant -Dclunit_voice=$FV_VOICENAME -find build.xml
+    fi
+    exit 0
+fi
+
 if [ ! "$ESTDIR" ]; then
     echo "environment variable ESTDIR is unset"
     echo "set it to your local speech tools directory e.g."
@@ -78,7 +89,6 @@ fi
 
 
 # perform conversion
-. $VOICEDIR/etc/voice.defs
 if [ "$2" = "" ]; then
     
     # perform each step individually
@@ -594,26 +604,6 @@ if [ "$2" = "install" ]; then
         | sed "s/%ORGANIZATION%/$VP_ORGANIZATION/g" \
         > "$EN_US_DIR/$VP_FULL_NAME/$VOICEDIRECTORY_CLASS.java"
 
-    # create the Makefile
-    cat "$HELPERDIR/VoiceMakefile.template" \
-        | sed "s/%VOICENAME%/$VP_FULL_NAME/g" \
-        | sed "s/%UNIT_DATABASE_CLASS%/$UNIT_DATABASE_CLASS/g" \
-        | grep -v "$MAKEFILE_EXCLUDE" \
-        > "$EN_US_DIR/$VP_FULL_NAME/Makefile"
-
-
-    # put entry in voices.txt  (Not needed with automatic voice detection -dv)
-    #if ! egrep "^$FULL_VOICEDIRECTORY_CLASS" "$FREETTSDIR/lib/voices.txt" >/dev/null 2>/dev/null; then
-    #    echo "$FULL_VOICEDIRECTORY_CLASS" >> "$FREETTSDIR/lib/voices.txt"
-    #fi
-
     echo "The voice has been successfully installed in"
     echo "$EN_US_DIR/$VP_FULL_NAME/"
-fi
-
-
-if [ "$2" = "compile" ]; then
-    (cd "$FREETTSDIR";
-        make
-    )
 fi

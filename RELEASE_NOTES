@@ -9,6 +9,9 @@
 Change history for FreeTTS.
 --------------------------
 
+September 3, 2003 Release 1.2.0-beta
+    - Modified MBROLA output to work on Solaris and Mac
+
 August 15, 2003 Release 1.2.0-beta
     - Added support to import voices from FestVox into FreeTTS
     - Extended voice packaging scheme to simplify management and addition
