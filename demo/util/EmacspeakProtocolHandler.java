@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 
 /**
@@ -22,7 +23,7 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
     // network related variables
     private Socket socket;
     private BufferedReader reader;
-    private DataOutputStream writer;
+    private OutputStream writer;
 
     // synthesizer related variables
     protected static final String PARENS_STAR_REGEX = "[.]*\\[\\*\\][.]*";
@@ -52,6 +53,8 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
 		reader = new BufferedReader
 		    (new InputStreamReader(socket.getInputStream()));
 		writer = new DataOutputStream(socket.getOutputStream());
+                socket.setKeepAlive(true);
+                // socket.setSoTimeout(5000);
 	    } catch (IOException ioe) {
 		ioe.printStackTrace();
 		throw new Error();
@@ -157,11 +160,10 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
     /**
      * Implements the run() method of Runnable
      */
-    public void run() {
+    public synchronized void run() {
         try {
             String command = "";
-            while (!socket.isClosed() && socket.isConnected() &&
-                   !socket.isInputShutdown() && !socket.isOutputShutdown()) {
+            while (isSocketLive()) {
                 command = reader.readLine();
                 if (command != null) {
                     command = command.trim();
@@ -194,6 +196,50 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
         }
     }
 
+
+    /**
+     * Returns true if the Socket is still alive.
+     *
+     * @return true if the Socket is still alive
+     */
+    private boolean isSocketLive() {
+        return (socket.isBound() &&
+                !socket.isClosed() && socket.isConnected() &&
+                !socket.isInputShutdown() && !socket.isOutputShutdown());
+    }
+
+
+    /**
+     * Read a line of text. A line is considered to be terminated 
+     * by any one of a line feed ('\n'), a carriage return ('\r'),
+     * or a carriage return followed immediately by a linefeed. 
+     *
+     * @return A String containing the contents of the line, 
+     * not including any line-termination
+     * characters, or null if the end of the stream has been reached
+     *
+     * @throws IOException if an I/O error occurs
+     */
+    private String readLine() throws IOException {
+        String command = null;
+        boolean repeat = false;
+        do {
+            try {
+                command = reader.readLine();
+                repeat = false;
+            } catch (SocketTimeoutException ste) {
+                System.out.println("timed out");
+                /*
+                writer.write(-1);
+                writer.flush();
+                */
+                repeat = isSocketLive();
+            }
+        } while (repeat);
+     
+        return command;
+    }
+
     
     /**
      * Detects and handles a possible emacspeak quitting sequence 
@@ -207,8 +253,8 @@ public abstract class EmacspeakProtocolHandler implements Runnable {
      * @param commandType the command type
      * @param content the contents of the command
      */
-    private synchronized void detectQuitting
-    (int commandType, String content) throws IOException {
+    private synchronized void detectQuitting(int commandType, String content)
+        throws IOException {
         if (commandType == QUEUE_COMMAND) {
             lastQueuedCommand = content;
         } else if (commandType == TTS_SAY_COMMAND) {

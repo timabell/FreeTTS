@@ -93,7 +93,7 @@ public class FreeTTSEmacspeakHandler extends EmacspeakProtocolHandler {
                         } catch (InterruptedException ie) {
                             ie.printStackTrace();
                         }
-                    }		
+                    }
                     firstCommand = commandList.remove(0);
                 }
                 if (firstCommand != null) {
