@@ -501,7 +501,7 @@ public class ClusterUnitDatabase {
 		UnitType unitType = new UnitType(name, start, count);
 		unitTypesList.add(unitType);
 	    } else {
-		throw new Error("Unsupported tag " + tag);
+		throw new Error("Unsupported tag " + tag + " in db line `" + line + "'");
 	    }
 	} catch (NoSuchElementException nse) {
 	    throw new Error("Error parsing db " + nse.getMessage());
