@@ -2,7 +2,7 @@
 <!--
 
 /**
- * Copyright (c) 2001 Sun Microsystems, Inc.
+ * Copyright (c) 2001, 2002  Sun Microsystems, Inc.
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
@@ -164,7 +164,7 @@ Repository</a>
 <li><a href="#is_full_jsapi">Does FreeTTS provide full support for the JSAPI 1.0
 specification?</a></li>
 <li><a href="#import_voice_data">How do I import new voice data from Festival or Flite?</a></li>
-<li><a href="#linux_sound">Why do the demos keep crashing when I run on Linux?</a></li>
+<li><a href="#linux_sound">Why do the demos keep crashing or hanging  when I run on Linux?</a></li>
 <li><a href="#no_jsapi">Why do I get a NoClassDefFoundError when I try
 to run a demo?</a></li>
 <li><a href="#old_java">Why do I get an UnsupportedClassVersionError  when I try to run a demo?</a></li>
@@ -533,8 +533,7 @@ home directory. This step is required for JSAPI demos and applications.
 <pre>
   GNU Make version 3.79, by Richard Stallman and Roland McGrath.
   Built for sparc-sun-solaris2.6
-  Copyright (C) 1988, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99
-                                                                                    Free Software Foundation, Inc.
+  Copyright (C) 1988, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99 Free Software Foundation, Inc.
   This is free software; see the source for copying conditions.
   There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
   PARTICULAR PURPOSE.
@@ -872,13 +871,33 @@ in this release of FreeTTS. Future releases may include these tools.
 
 
 <p>
-<li><a name="linux_sound"><b>Why do the demos keep crashing when I run on Linux?</b></a></li>
+<li><a name="linux_sound"><b>Why do the demos keep crashing or hanging when I run on Linux?</b></a></li>
+<p>
+We've noticed a number of issues with the sound support on Linux.
+Certain Linux configurations (particularly, Red Hat Linux with Sound 
+Blaster Live sound cards) do
+not work properly with Java<sup><font size="-1">TM</font></sup> Sound unless the drivers are updated.  See
+these Bug Parade reports for more details: <a
+href="http://developer.java.sun.com/developer/bugParade/bugs/4427864.html">4427864</a>
+and <a
+href="http://developer.java.sun.com/developer/bugParade/bugs/4498848.html">4498848</a>.
+Please vote to get these bugs fixed. We've also noticed that systems
+that use ALSA (Advanced Linux Sound Architecture) seem to work better.
 
 <p>
-Your sound drivers may need updating. Certain Linux configurations
-(particularly, Red Hat Linux with Sound Blaster Live sound cards) do
-not work properly with Java<sup><font size="-1">TM</font></sup> Sound unless the drivers are updated.  See
-these Bug Parade reports for more details: <a href="http://developer.java.sun.com/developer/bugParade/bugs/4427864.html">4427864</a> and <a href="http://developer.java.sun.com/developer/bugParade/bugs/4498848.html">4498848</a>. Please vote to get these bugs fixed.
+In the 1.1 release of FreeTTS we have attempted to work around the Linux
+crash problem.  With this work-around, FreeTTS is quite a bit more
+stable on Linux that in the 1.0 release.  We are still seeing
+infrequent hangs during sound output on Linux. This is very likely
+related to the same bug.
+<p>
+We are in communication with the Java Sound folks and they
+are looking at these issues.  Some alternatives are to send <a
+href="#output_to_file"> output to a file </a>
+and use native tools to playback the data, or run the 
+<a href="../demo/freetts/ClientServer/README.html">ClientServer</a>
+server demo and write some native code to retrieve and play the audio
+data.
 
 
 <p>
@@ -913,7 +932,7 @@ for developments in this area.
 
 <hr>
 See the <a href="../license.terms">license terms</a> and <a href="../acknowledgments.txt">acknowledgments</a>.<br>
-Copyright 2001 Sun Microsystems, Inc. All Rights Reserved. Use is subject to license terms.</li>
+Copyright 2001, 2002 Sun Microsystems, Inc. All Rights Reserved. Use is subject to license terms.</li>
 </ul>
 </body>
 </html>
