@@ -60,12 +60,11 @@ public class CMULexicon extends LexiconImpl {
      * 		binary ; otherwise if <code>false</code> the input
      * 		data are loaded as text.
      *
-     * @throws IOException if problems encountered while reading the data
      */
     public CMULexicon(URL compiledURL,
                        URL addendaURL,
                        URL  letterToSoundURL,
-		       boolean binary) throws IOException {
+		       boolean binary) {
         setLexiconParameters(compiledURL, addendaURL, letterToSoundURL, binary);
     }
 
@@ -73,10 +72,19 @@ public class CMULexicon extends LexiconImpl {
      * Creates the default CMU Lexicon which is a binary lexicon
      */
     public CMULexicon() {
+	this("cmulex");
+    }
+
+    /**
+     * Creates the CMU Lexicon which is a binary lexicon
+     *
+     * @param basename the basename for the lexicon.
+     */
+    public CMULexicon(String basename) {
 	Class cls = CMULexicon.class;
-	URL letterToSoundURL = cls.getResource("cmu6_lts.bin");
-	URL compiledURL = cls.getResource("cmulex_compiled.bin");
-	URL addendaURL = cls.getResource("cmulex_addenda.bin");
+	URL letterToSoundURL = cls.getResource(basename + "_lts.bin");
+	URL compiledURL = cls.getResource(basename + "_compiled.bin");
+	URL addendaURL = cls.getResource(basename + "_addenda.bin");
 	setLexiconParameters(compiledURL, addendaURL, letterToSoundURL, true);
     }
     
@@ -89,24 +97,41 @@ public class CMULexicon extends LexiconImpl {
      */ 
     static public CMULexicon getInstance( boolean useBinaryIO) 
 						throws IOException {
+	return getInstance("cmulex", useBinaryIO);
+    }
+
+    /**
+     * Get the CMULexicon.
+     *
+     * @param useBinaryIO if true use binary IO to load DB
+     *
+     * @throws IOException if problems occurred while reading the data
+     */ 
+    static public CMULexicon getInstance( String basename, boolean useBinaryIO) 
+						throws IOException {
 	URL compiledURL;
 	URL addendaURL;
 	URL letterToSoundURL;
 
+	System.out.println("Getting " + basename);
 	LetterToSound letterToSound;
 	Class cls = CMULexicon.class;
 	CMULexicon lexicon;
 
 	
 	if (useBinaryIO) {
-	    letterToSoundURL = cls.getResource("cmu6_lts.bin");
-	    compiledURL = cls.getResource("cmulex_compiled.bin");
-	    addendaURL = cls.getResource("cmulex_addenda.bin");
+	    letterToSoundURL = cls.getResource(basename + "_lts.bin");
+	    compiledURL = cls.getResource(basename + "_compiled.bin");
+	    addendaURL = cls.getResource(basename + "_addenda.bin");
 	}
 	else {
-	    letterToSoundURL = cls.getResource("cmu6_lts.txt");
-	    compiledURL = cls.getResource("cmulex_compiled.txt");
-	    addendaURL = cls.getResource("cmulex_addenda.txt");
+	    letterToSoundURL = cls.getResource(basename + "_lts.txt");
+	    compiledURL = cls.getResource(basename + "_compiled.txt");
+	    addendaURL = cls.getResource(basename + "_addenda.txt");
+
+	    System.out.println("lts is " + letterToSoundURL);
+	    System.out.println("com is " + compiledURL);
+	    System.out.println("ad is " + addendaURL);
 	}
 	lexicon = new CMULexicon(compiledURL, addendaURL,
 		letterToSoundURL, useBinaryIO);
@@ -253,29 +278,32 @@ public class CMULexicon extends LexiconImpl {
     public static void main(String[] args) {
 	LexiconImpl lex, lex2;
 	boolean showTimes = false;
+	String baseName = "cmulex";
 
 	try {
 	    if (args.length > 0) {
 		BulkTimer.LOAD.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-generate_binary")) {
+		    if (args[i].equals("-name") && i < args.length - 1) {
+			baseName = args[++i];
+		    } else if (args[i].equals("-generate_binary")) {
 
 			 BulkTimer.LOAD.start("load_text");
-			 lex = CMULexicon.getInstance(false);
+			 lex = CMULexicon.getInstance(baseName, false);
 			 BulkTimer.LOAD.stop("load_text");
 
 			 BulkTimer.LOAD.start("dump_text");
-			 lex.dumpBinary("cmulex");
+			 lex.dumpBinary(baseName);
 			 BulkTimer.LOAD.stop("dump_text");
 
 		    } else if (args[i].equals("-compare")) {
 
 			BulkTimer.LOAD.start("load_text");
-			lex = CMULexicon.getInstance(false);
+			lex = CMULexicon.getInstance(baseName, false);
 			BulkTimer.LOAD.stop("load_text");
 
 			BulkTimer.LOAD.start("load_binary");
-			lex2 = CMULexicon.getInstance(true);
+			lex2 = CMULexicon.getInstance(baseName, true);
 			BulkTimer.LOAD.stop("load_binary");
 
 			BulkTimer.LOAD.start("compare");

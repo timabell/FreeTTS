@@ -856,39 +856,40 @@ public class LetterToSoundImpl implements LetterToSound {
 
     /**
      * Translates between text and binary forms of the CMU6 LTS rules.
-     * Expects to have <code>cmu6_lts.txt</code> and/or
-     * <code>cmu6_lts.bin</code> in the current directory.
      */
     public static void main(String[] args) {
 	LexiconImpl lex, lex2;
 	boolean showTimes = false;
+	String name = "cmulex_lts";
 
 	try {
 	    if (args.length > 0) {
 		BulkTimer timer = new BulkTimer();
 		timer.start();
 		for (int i = 0 ; i < args.length; i++) {
-		    if (args[i].equals("-generate_binary")) {
+		    if (args[i].equals("-name") && i < args.length -1) {
+			name = args[++i];
+		    } else if (args[i].equals("-generate_binary")) {
 
 			 timer.start("load_text");
 			 LetterToSoundImpl text = new LetterToSoundImpl(
-				new URL("file:./cmu6_lts.txt"),  false);
+				new URL("file:./" + name + ".txt"),  false);
 			 timer.stop("load_text");
 
 			 timer.start("dump_binary");
-			 text.dumpBinary("cmu6_lts.bin");
+			 text.dumpBinary(name + ".bin");
 			 timer.stop("dump_binary");
 
 		    } else if (args[i].equals("-compare")) {
 
 			timer.start("load_text");
 			 LetterToSoundImpl text = new LetterToSoundImpl(
-				new URL("file:./cmu6_lts.txt"),  false);
+				new URL("file:./" + name + ".txt"),  false);
 			timer.stop("load_text");
 
 			timer.start("load_binary");
 			LetterToSoundImpl binary = new LetterToSoundImpl(
-				new URL("file:./cmu6_lts.bin"),  true);
+				new URL("file:./" + name + ".bin"),  true);
 			timer.stop("load_binary");
 
 			timer.start("compare");

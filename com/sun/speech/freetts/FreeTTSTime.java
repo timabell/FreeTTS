@@ -20,7 +20,7 @@ import java.util.GregorianCalendar;
 
 /**
  * Standalone utility that directly interacts with a
- * CMUClusterUnitVoice.
+ * CMUTimeAWBVoice.
  */
 public class FreeTTSTime extends FreeTTS {
 
@@ -31,7 +31,7 @@ public class FreeTTSTime extends FreeTTS {
      * Class constructor.
      */
     public FreeTTSTime() {
-	super(new com.sun.speech.freetts.en.us.CMUClusterUnitVoice(true));
+	super(new com.sun.speech.freetts.en.us.CMUTimeAWBVoice());
     }
 
 

@@ -27,12 +27,15 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.class}
 DATA_FILES = phrasing_cart.txt durz_cart.txt dur_stat.txt \
 	     int_tone_cart.txt int_accent_cart.txt \
 	     part_of_speech.txt phoneset.txt f0_lr_terms.txt \
-	     cmulex_compiled.txt cmulex_addenda.txt \
-	     cmu6_lts.txt nums_cart.txt 
+	     cmulex_compiled.txt cmulex_addenda.txt cmulex_lts.txt \
+	     cmutime_compiled.txt cmutime_addenda.txt cmutime_lts.txt \
+	      nums_cart.txt 
 
 DATA = ${DATA_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 
-BINARY_FILES = cmulex_compiled.bin cmulex_addenda.bin  cmu6_lts.bin
+BINARY_FILES = cmulex_compiled.bin cmulex_addenda.bin  cmulex_lts.bin \
+		cmutime_compiled.bin cmutime_addenda.bin cmutime_lts.bin 
+
 BINARY = ${BINARY_FILES:%=${CLASS_DEST_DIR}/${PACKAGE_PATH}/%}
 
 ${CLASS_DEST_DIR}/${PACKAGE_PATH}/%.txt: %.txt
@@ -64,10 +67,25 @@ ${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmulex_addenda.bin:	cmulex_addenda.txt
 	$(RM) $@
 	cp cmulex_addenda.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
-${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmu6_lts.bin:	cmu6_lts.txt
-	$(JAVA_CMD) com.sun.speech.freetts.lexicon.LetterToSoundImpl -generate_binary
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutime_addenda.bin: cmutime_addenda.txt
+	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -name cmutime -generate_binary
 	$(RM) $@
-	cp cmu6_lts.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+	cp cmutime_addenda.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutime_compiled.bin: cmutime_compiled.txt
+	$(JAVA_CMD) com.sun.speech.freetts.en.us.CMULexicon -name cmutime -generate_binary
+	$(RM) $@
+	cp cmutime_compiled.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmulex_lts.bin:	cmulex_lts.txt
+	$(JAVA_CMD) com.sun.speech.freetts.lexicon.LetterToSoundImpl -name cmulex_lts -generate_binary
+	$(RM) $@
+	cp cmulex_lts.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
+
+${CLASS_DEST_DIR}/${PACKAGE_PATH}/cmutime_lts.bin:	cmutime_lts.txt
+	$(JAVA_CMD) com.sun.speech.freetts.lexicon.LetterToSoundImpl -name cmutime_lts -generate_binary
+	$(RM) $@
+	cp cmutime_lts.bin ${CLASS_DEST_DIR}/${PACKAGE_PATH}
 
 release_doc:
 	$(JDK)/bin/javadoc -windowtitle "FreeTTS" -d $(DOC_DEST)  $(FILES)
