@@ -8,13 +8,13 @@
 # redistribution of this file, and for a DISCLAIMER OF ALL
 # WARRANTIES.
 
-# [[TODO]]: for now, requires FLITEDIR 
+# [[[TODO: for now, requires FLITEDIR 
 # Alan Black suggested that he will create a scheme builtin quicksort
 # so as to remove the need for the flite_sort dependency.
-# The only program that needs to be converted would be find_sts
+# ]]]
 
 
-#[[TODO]]: confirm bourne compatibility
+#[[[TODO: confirm bourne compatibility]]]
 
 usage() {
     echo "Usage: $0 <voicedir> [lpc | sts | mcep | idx]"
@@ -29,7 +29,7 @@ usage() {
     echo
     echo "The ESTDIR environment variable must point to the directory"
     echo "  containing a compiled version of the Edinbourough Speech Tools."
-    echo "festival must be in your path."
+    echo "festival, java, and javac must be in your path."
     echo
     echo "Running with no second parameter will run the stages in order:"
     echo "  (lpc,sts,mcep,idx)."
@@ -63,8 +63,8 @@ fi
 if [ ! "$FLITEDIR" ]; then
     echo "environment variable FLITEDIR is not set"
     echo "Please set this to point to the base directory of CMU Flite"
-    echo "[[TODO]]: $0 currently relies on a few flite depenecies"
-    echo "[[TODO]]: This should change in the future."
+    echo "[[[TODO: $0 currently relies on a few flite depenecies]]]"
+    echo "[[[TODO: This should change in the future.]]]"
 fi
 
 if [ ! -f $VOICEDIR/etc/voice.defs ]; then
@@ -81,6 +81,12 @@ fi
 
 if ! festival --version; then
     echo "Error: festival not in path."
+    echo
+    usage
+fi
+
+if ! java -version >/dev/null || ! javac -help 2>/dev/null; then
+    echo "Error: java and javac must be in path."
     echo
     usage
 fi
@@ -103,8 +109,8 @@ if [ "$2" = "" ]; then
     echo "Conversion process complete"
 fi
 
-# The scheme files should be in the same directory as this script
-SCHEMEDIR=`dirname $0`
+# The scheme and java files should be in the same directory as this script
+HELPERDIR=`dirname $0`
 
 #This is where some temperary files are generated as well as the final voice
 OUTDIR=$VOICEDIR/FreeTTS
@@ -141,12 +147,18 @@ if [ "$2" = "sts" ]; then
 
    mkdir $VOICEDIR/sts 2>/dev/null
 
+   # compile FindSTS
+   CLASSFILES="FindSTS.class LPC.class STS.class Wave.class Utility.class"
+   (cd $HELPERDIR
+    javac FindSTS.java
+    jar -cf FindSTS.jar -m Manifest.txt $CLASSFILES
+    rm -f $CLASSFILES 2>/dev/null)
+
    for f in $VOICEDIR/lpc/*.lpc; do
       fname=`basename $f .lpc`
       echo $fname STS
-      $FLITEDIR/tools/find_sts $LPC_MIN $LPC_RANGE $f \
+      java -jar $HELPERDIR/FindSTS.jar $LPC_MIN $LPC_RANGE $f \
         $VOICEDIR/wav/$fname.wav $VOICEDIR/sts/$fname.sts
-      #[[TODO]]: Replace Flite dependancy
    done
 fi
 
@@ -200,14 +212,14 @@ idx_non_diphone() {
                         line,p,"CLUNIT_NONE");
             }
         }' | cat > $VOICEDIR/festival/clunits/$FV_VOICENAME.scm
-        # [[TODO]]: flite_sort is a flite binary
+        # [[[TODO: flite_sort is a flite binary]]]
         cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
             $FLITEDIR/tools/flite_sort |
             sed 's/^.* -- //'  >$VOICEDIR/festival/clunits/$FV_VOICENAME.unitordered.scm
         cat $VOICEDIR/festival/clunits/$FV_VOICENAME.scm |
             sed 's/^.* -- //'  >$VOICEDIR/festival/clunits/$FV_VOICENAME.fileordered.scm
         festival --heap 5000000 -b \
-            $SCHEMEDIR/FestVoxClunitsToFreeTTS.scm \
+            $HELPERDIR/FestVoxClunitsToFreeTTS.scm \
             '(dump_clunits "'$FV_VOICENAME'" "'$VOICEDIR'"
             "'$OUTDIR'" "misc.txt" "unittypes.txt" "cart.txt" "units.txt"
             "lpc.txt" "lpc_header.txt" "mcep.txt" "mcep_header.txt"
@@ -226,14 +238,14 @@ idx_non_diphone() {
 
 idx_diphone() {
     echo "Building diphone index"
-    # [[TODO]]: flite_sort is a flite binary
+    # [[[TODO: flite_sort is a flite binary]]]
     sed '1,/EST_Header_End/d' dic/*.est |
     awk '{printf("%s ( %s )\n",$1,$0)}' |
     $FLITEDIR/tools/flite_sort |
     sed 's/^.* (/(/' >dic/diphidx.scm
 
     festival --heap 5000000 -b \
-        $SCHEMEDIR/FestVoxDiphoneToFreeTTS.scm \
+        $HELPERDIR/FestVoxDiphoneToFreeTTS.scm \
         '(dump_diphone "'$FV_VOICENAME'" "'$VOICEDIR'"
         "'$OUTDIR'" "header.txt" "data.txt"
         "'$VOICEDIR'/dic/diphidx.scm")'

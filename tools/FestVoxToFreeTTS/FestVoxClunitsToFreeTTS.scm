@@ -209,9 +209,9 @@
     (format join_weights_file "32768 32768 32768 32768 \n")
 )
 
-; [[TODO]] make more efficient!! O(n), currently
+; [[[TODO:  make more efficient!! O(n), currently O(n^2)
 ; idea: presort list, and do binary search
-; hash table would be best....
+; hash table would be best.... ]]]
 (define (get_id name data)
     (cond
         ((null? data) 65535) ; Not Found
@@ -350,8 +350,8 @@ Ouput this MCEP frame."
         (t (format nil "%f" (caar l)))
 ))
 
-; [[TODO:]] flite/tools/make_cart.scm does not handle lists, therefore
-;               I do not because I don't know what format they might be in
+; [[[TODO: flite/tools/make_cart.scm does not handle lists, therefore
+;               I do not because I don't know what format they might be in.]]]
 (define (print_cart_nodes tree)
     (set! current_node (+ 1 current_node))
     (cond

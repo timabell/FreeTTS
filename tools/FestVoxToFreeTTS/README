@@ -1,12 +1,71 @@
+Copyright 2001 Sun Microsystems, Inc.
+
+See the file "license.terms" for information on usage and redistribution of
+this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 This directory contains the necessary files for converting FestVox voices
 for FreeTTS.
 
+
+--------- Creating a Voice ---------
+
+The voices must first be created by FestVox.  Please refer to the FestVox
+documentation for full information.  (http://festvox.org,
+http://festvox.org/bsv/) Section IV.19 provides a good tutorial on making a US
+Diphone voice, and Section II.5.6 provides a good tutorial on recording a
+cluster unit voice for the limited domain of telling the time.  Section II.5
+provides a good general explaination of creating a limited domain voice in
+general.  If you want to experiment with voice creation and conversion,
+creating a time telling voice is a good place to begin.
+
+In our experience, FestVox and Festival work better under Linux x86 platforms.
+
+
+--------- Importing a FestVox Voice into FreeTTS ---------
+
+FreeTTS follow many of the same steps that Flite
+(http://www.speech.cs.cmu.edu/flite) does for importing voices.  For a more
+detailed description of the process, please read Section 8 of the Flite
+documentation (http://www.speech.cs.cmu.edu/flite/doc/index.html).
+
+To import a voice into FreeTTS, you first need to do the following things:
+1. Compile Festival (http://festvox.org/) as well as the speech tools that
+    come with Festival.  Refer to the Festival documentation for details
+    of setting this up on your system.
+2. You must have Java and a Java Compiler installed on your system.
+    See http://java.sun.com if you do not already have this.
+3. "festival", "java", and "javac" must be in your path.  For example, I used
+    the following command under bash (modify appropriately):
+    "export PATH=$PATH:/usr/java/j2sdk1.4.2/bin:\
+     /home/dv144877/festival/bin/"
+4. You must set the ESTDIR environment variable to point to the speech tools.
+    e.g. "export ESTDIR=/home/dv144877/speech_tools"
+
 To convert a voice, run:
 FestVoxToFreeTTS.sh <voicedir>
+where <voicedir> is the directory the FestVox voice resides in.  FreeTTS will
+create a new directory <voicdir>/FreeTTS/   In that directory is the text
+which contains all the data for the voice (along with a few other unnecessary
+files).  The voice file will have a name like sun_time_dtv.txt
 
-or
-FestVoxToFreeTTS.sh --help
-for more information.
+The various stages of the conversion process can be called directly by passing
+a second argument to FestVoxToFreeTTS.sh such as "sts" or "mcep".  These should
+be used carefully.  More information on these stages can be found in the
+Flite documentation.
+
+See "FestVoxToFreeTTS.sh --help" for more information.
+
+[[[TODO: putting voice data file into FreeTTS.]]]
 
 
-[[TODO]] make README helpful.
+--------- Files in this directory ---------
+
+FestVoxToFreeTTS.sh:  The bash script that performs the conversion process.
+FestVoxClunitsToFreeTTS.scm: Perform the idx stage of the conversion for
+            cluster unit voices.
+FestVoxDiphoneToFreeTTS.scm: Perform the idx stage of the conversion for
+            diphone voices.
+FindSTS.java: Generate the sts file for a given recording.  Used by
+    FestVoxToFreeTTS.sh
+Manifest.txt: Used in compiling FindSTS for generating an executable .jar file.
+README: This file.
