@@ -32,7 +32,7 @@ runserver: all
 
 # the command line arguments: <server host> <port> <sample rate> <show metrics>
 runcclient: cclient
-	./cclient sunlabs.east 5555 16000 0
+	./cclient localhost 5555 16000 0
 
 runjclient: all
 	$(JAVA_CMD) \
