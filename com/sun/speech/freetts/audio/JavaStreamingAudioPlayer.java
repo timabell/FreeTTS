@@ -77,19 +77,16 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private BulkTimer timer = new BulkTimer();
 
     // default format is 8khz
-    private AudioFormat defaultFormat = new AudioFormat
-    (8000f, 16, 1, true, true);
+    private AudioFormat defaultFormat = 
+		new AudioFormat(8000f, 16, 1, true, true);
     private AudioFormat currentFormat = defaultFormat;
 
     private boolean debug = false;
     private boolean firstSample = true;
     private long cancelDelay;
 
-    // These system properties control how to work around the drain bug
-    private final static boolean DRAIN_WORKS_PROPERLY = Boolean.getBoolean
-    ("com.sun.speech.freetts.audio.AudioPlayer.drainWorksProperly");
     private final static long DRAIN_DELAY = Long.getLong
-    ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 5L).longValue();
+      ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay", 150L).longValue();
 
     /**
      * controls the buffering to java audio
@@ -105,7 +102,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	debug = Boolean.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
         cancelDelay = Long.getLong
-            ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
+            ("com.sun.speech.freetts.audio.AudioPlayer.cancelDelay",
              0L).longValue();
         line = null;
 	setPaused(false);
@@ -155,6 +152,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	if (line != null) {
 	    drain();
 	    line.close();
+	    line = null;
 	}
 	DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
 	try {
@@ -201,15 +199,15 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 
 
     /**
-     * Cancels currently playing audio
-     *
-     * [[[ WORKAROUND TODO
-     * The "Thread.sleep(cancelDelay)" is added to fix a problem in the
-     * FreeTTSEmacspeak demo. The problem was that the engine would 
-     * stutter after using it for a while. Adding this sleep() fixed the
-     * problem. If we later find out that this problem no longer exists,
-     * we should remove the thread.sleep(). ]]]
+     * Cancels currently playing audio.
      */
+
+     // [[[ WORKAROUND TODO
+     // The "Thread.sleep(cancelDelay)" is added to fix a problem in the
+     // FreeTTSEmacspeak demo. The problem was that the engine would 
+     // stutter after using it for a while. Adding this sleep() fixed the
+     // problem. If we later find out that this problem no longer exists,
+     // we should remove the thread.sleep(). ]]]
     public synchronized void cancel() {
         debugPrint("cancelling...");
 	cancelled = true;
@@ -251,6 +249,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	done = true;
         if (line != null && line.isOpen()) {
             line.close();
+	    line = null;
             notify();
         }
     }
@@ -360,37 +359,25 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *   the audio was stopped
      *
      *	[[[ WORKAROUND TODO
-     *	we would like to use line.drain here, but it just doesn'
-     *	work right, we end up with stutters and restarts on 
-     *	pause and resume. So we have to rely on this.
-     *	There are a number of Java Bug reports on 'drain'
-     * <p>
-     *	http://search.java.sun.com/Search/java?qt=drain&col=obug&rf=0
-     * <p>
-     *  http://developer.java.sun.com/developer/bugParade/bugs/4421330.html
-     * <p>
-     *	This workaround of course has its own issues. It adds up to
-     *	5ms of latency to the sound output and chews up cycles
-     *	doing nothing. 
-     * 
-     * To disable the work around, set DRAIN_IS_BROKEN to FALSE
+     *   The javax.sound.sampled drain is almost working properly.  On
+     *   linux, there is still a little bit of sound that needs to go
+     *   out, even after drain is called. Thus, the DRAIN_DELAY. We
+     *   wait for a few hundred milliseconds while the data is really
+     *   drained out of the system
      * ]]]
      */
     public boolean drain()  {
         if (line != null) {
             debugPrint("started draining...");
-            if (DRAIN_WORKS_PROPERLY) {
-                if (line.isOpen()) {
-                    line.drain();
-                }
-            } else {
-                while (line.available() != line.getBufferSize()) {
-                    try {
-                        Thread.sleep(DRAIN_DELAY);
-                    } catch (InterruptedException ie) {
-                    }
-                }
-            }
+	    if (line.isOpen()) {
+		line.drain();
+		if (DRAIN_DELAY > 0L) {
+		    try {
+			Thread.sleep(DRAIN_DELAY);
+		    } catch (InterruptedException ie) {
+		    }
+		}
+	    }
             debugPrint("...finished draining");
         }
 	timer.stop("audioOut");
@@ -440,7 +427,6 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
      *       	<code> false </code>if the write was cancelled.
      */
     public boolean write(byte[] bytes, int offset, int size) {
-
         if (line == null) {
             return false;
         }
