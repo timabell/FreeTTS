@@ -40,7 +40,6 @@ WEB_START_CLOCK_FILES = $(WSC_STAGING_AREA)/wsc.jar \
 
 ZIPS = javadoc.zip src.zip tests.zip
 
-TARS = 
 
 API_DIR = docs/api
 
@@ -95,6 +94,7 @@ DOC_STAGING_AREA = ./htdocs
 DEPLOY_DOCS = demo docs license.terms RELEASE_NOTES overview.html README.txt acknowledgments.txt index.html license.terms
 DEPLOY_DOCS_EXCLUDED_FILES = $(DOC_STAGING_AREA)/XXX
 
+TARS =  $(DEPLOY_DOCS_TARGET) $(DEPLOY_TARGET)
 
 ########### EmacsServer deploy macros ########################
 EMACS_SERVER_FILES =  		\
@@ -137,6 +137,7 @@ clean::
 	rm -rf $(STAGING_AREA)
 	rm -rf $(DOC_STAGING_AREA)
 	rm -f $(DEPLOY_DOCS_TARGET) 
+	rm -rf $(WSC_STAGING_AREA)
 
 
 deploy: all jars zips
