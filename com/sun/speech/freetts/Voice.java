@@ -91,7 +91,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
     private BulkTimer threadTimer = new BulkTimer();
 
 
-    private float rate = 150;		// speaking rate in words per minute
+    private float nominalRate = 150;	// nominal speaking rate for this voice
     private float pitch = 100;		// pitch baseline (hertz)
     private float range = 10;		// pitch range (hertz)
     private float pitchShift = 1;	// F0 Shift
@@ -136,7 +136,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	features = new FeatureSetImpl();
 	featureProcessors = new HashMap();
 
-	rate = Float.parseFloat(
+	nominalRate = Float.parseFloat(
 		System.getProperty(PROP_PREFIX + "speakingRate","150"));
 	pitch = Float.parseFloat(
 		System.getProperty(PROP_PREFIX + "pitch","100"));
@@ -970,7 +970,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public void setRate(float wpm) {
 	if (wpm > 0 && wpm < 1000) {
-	    rate = wpm;
+	    setDurationStretch(nominalRate / wpm);
 	}
     }
 
@@ -980,7 +980,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * @return words per minute
      */
     public float getRate() {
-	return rate;
+	return durationStretch * nominalRate;
     }
 
 
