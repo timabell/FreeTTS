@@ -36,9 +36,9 @@ import javax.sound.sampled.LineUnavailableException;
 public class JavaClipAudioPlayer implements AudioPlayer {
     
     private volatile boolean paused;
-    private volatile boolean done = false;
     private volatile boolean cancelled = false;
     private volatile Clip currentClip;
+    private Object clipLock = new Object();
 
     private float volume = 1.0f;  // the current volume
     private boolean debug = false;
@@ -50,7 +50,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private int curIndex = 0;
     private byte[] outputData;
     private LineListener lineListener = new JavaClipLineListener();
-    private long closeDelay;	// workaround for linux sound bug
+
 
     /**
      * Constructs a default JavaClipAudioPlayer 
@@ -58,9 +58,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public JavaClipAudioPlayer() {
 	debug = Utilities.getBoolean
 	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
-	closeDelay = Utilities.getLong
-	    ("com.sun.speech.freetts.audio.AudioPlayer.closeDelay",
-	     150L).longValue();
 	setPaused(false);
     }
 
@@ -85,21 +82,21 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 	return currentFormat;
     }
 
-
-
     /**
      * Pauses audio output.   All audio output is 
      * stopped. Output can be resumed at the
      * current point by calling <code>resume</code>. Output can be
      * aborted by calling <code> cancel </code>
      */
-    public synchronized void pause() {
-	if (!isPaused()) {
+    public void pause() {
+	if (!paused) {
 	    setPaused(true);
-	    Clip clip = currentClip;
-	    if (clip != null) {
-	        clip.stop();
+	    if (currentClip != null) {
+	        currentClip.stop();
 	    }
+            synchronized (this) {
+                notifyAll();
+            }
 	}
     }
 
@@ -108,13 +105,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *
      */
     public synchronized void resume() {
-	if (isPaused()) {
+	if (paused) {
 	    setPaused(false);
-	    Clip clip = currentClip;
-	    if (clip != null) {
-		clip.start();
+	    if (currentClip != null) {
+		currentClip.start();
 	    }
-	    notify();
+	    notifyAll();
 	}
     }
 	
@@ -122,12 +118,16 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Cancels all queued audio. Any 'write' in process will return
      * immediately false.
      */
-    public synchronized void cancel() {
-	cancelled = true;
-	Clip clip = currentClip;
-	if (clip != null) {
-	    clip.close();
-	}
+    public void cancel() {
+        if (currentClip != null) {
+            currentClip.stop();
+            currentClip.close();
+        }
+        synchronized (this) {
+            cancelled = true;
+            paused = false;
+            notifyAll();
+        }
     }
 
     /**
@@ -154,8 +154,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Closes this audio player
      */
     public synchronized void close() {
-	done = true;
-	notify();
+        if (currentClip != null) {
+            currentClip.stop();
+            currentClip.close();
+        }
+        notifyAll();
     }
         
 
@@ -179,9 +182,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 	    volume = 0.0f;
 	}
 	this.volume = volume;
-	Clip clip = currentClip;
-	if (clip != null) {
-	    setVolume(clip, volume);
+	if (currentClip != null) {
+	    setVolume(currentClip, volume);
 	}
     }	      
 
@@ -191,18 +193,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @param state true if we are paused
      */
     private void setPaused(boolean state) {
-	paused = state;
+        paused = state;
     }
 
-    /**
-     * Returns true if we are in pause mode
-     *
-     * @return <code> true </code>if paused; 
-     *		otherwise returns <code>false</code>
-     */
-    private boolean isPaused() {
-	return paused;
-    }
 
     /**
      * Sets the volume on the given clip
@@ -219,8 +212,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 	    volumeControl.setValue(vol * range + volumeControl.getMinimum());
 	}
     }
-
-
 
 
     /**
@@ -251,11 +242,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @param size the size of data between now and the end
      *
      */
-    public void begin(int size) {
-	cancelled = false;
-	timer.start("utteranceOutput");
-	curIndex = 0;
-	outputData = new byte[size];
+    public synchronized void begin(int size) {
+        timer.start("utteranceOutput");
+        cancelled = false;
+        curIndex = 0;
+        outputData = new byte[size];
     }
 
     /**
@@ -266,57 +257,57 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * 		<code>false </code> if the output was cancelled 
      *		or interrupted.
      */
-    public synchronized boolean  end()  {
-	boolean ok = true;
-
-	while (!done && !cancelled && isPaused()) {
-	    try { 
-		wait();
-	    } catch (InterruptedException ie) {
-		return false;
-	    }
-	}
-
-	if (done || cancelled) {
-	    cancelled = false;
-	    return false;
-	}
-
-	timer.start("clipGeneration");
-	try {
-	    DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
-	    Clip clip = (Clip) AudioSystem.getLine(info);
-
-	    clip.addLineListener(lineListener);
-	    clip.open(currentFormat, outputData, 0, outputData.length);
-	    setVolume(clip, volume);
-
-	    if (currentClip != null) {
-		throw new IllegalStateException("clip already set");
-	    }
-	    currentClip = clip;
-	    clip.start();
-
-	    try {
-		while (currentClip != null) {
-		    wait();	// drain does not work 
-		}
-	    } catch (InterruptedException ie) {
-		ok = false;
-	    }
-	} catch (LineUnavailableException lue) {
-	    System.err.println("Line unavailable");
-	    System.err.println("Format is " + currentFormat);
-	    ok = false;
-	}
-
-	timer.stop("clipGeneration");
-	timer.stop("utteranceOutput");
-	ok = !cancelled;
-	cancelled = false;
-	return ok;
+    public synchronized boolean end()  {
+        boolean ok = true;
+        
+        while (paused && !cancelled) {
+            try {
+                wait();
+            } catch (InterruptedException ie) {
+                return false;
+            }
+        }
+        
+        if (cancelled) {
+            return false;
+        }
+        
+        timer.start("clipGeneration");
+        try {
+            DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
+            
+            currentClip = (Clip) AudioSystem.getLine(info);
+            currentClip.addLineListener(lineListener);
+            currentClip.open
+                (currentFormat, outputData, 0, outputData.length);
+            
+            setVolume(currentClip, volume);
+            currentClip.start();
+            
+            try {
+                // wait for audio to complete
+                while (currentClip != null &&
+                       (currentClip.isRunning() || paused) && !cancelled) {
+                    wait();
+                }
+            } catch (InterruptedException ie) {
+                ok = false;
+            }
+            close();
+            
+        } catch (LineUnavailableException lue) {
+            System.err.println("LINE UNAVAILABLE: " + 
+                               "Format is " + currentFormat);
+            close();
+            ok = false;
+        }
+        
+        timer.stop("clipGeneration");
+        timer.stop("utteranceOutput");
+        ok &= !cancelled;
+        return ok;
     }
-
+    
     
     /**
      * Writes the given bytes to the audio stream
@@ -341,14 +332,13 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *       	<code> false </code>if the write was cancelled.
      */
     public boolean write(byte[] bytes, int offset, int size) {
-
-	if (firstSample) {
-	    firstSample = false;
-	    timer.stop("firstAudio");
-	}
-	System.arraycopy(bytes, offset, outputData, curIndex, size);
-	curIndex += size;
-	return true;
+        if (firstSample) {
+            firstSample = false;
+            timer.stop("firstAudio");
+        }
+        System.arraycopy(bytes, offset, outputData, curIndex, size);
+        curIndex += size;
+        return true;
     }
 
 
@@ -393,7 +383,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      */
     private class JavaClipLineListener implements LineListener {
 
-
 	/**
 	 * Implements update() method of LineListener interface. Responds
 	 * to the line events as appropriate.
@@ -405,37 +394,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 		debugPrint("Event  START");
 	    } else if (event.getType().equals(LineEvent.Type.STOP)) {
 		debugPrint("Event  STOP");
-		// A line may be stopped for three reasons:
-		//    the clip has finished playing
-		//    the clip has been paused
-		//    the clip has been cancelled (i.e. closed)
-		// if the clip has stopped because it has finished
-		// playing, then we should close the clip, otherwise leave
-		// it alone
 		synchronized(JavaClipAudioPlayer.this) {
-		    if (!cancelled && !isPaused()) {
-
-	// BUG:
-	// There is a javax.sound bug that causes a crash on linux
-	// it is described here:
-	// http://developer.java.sun.com/developer/bugParade/bugs/4498848.html
-	// The bug seems to be related to synchronization of the close
-	// call on the clip.  If we delay before the close by 
-	// a small amount, the crash is averted.  This is a WORKAROUND
-	// only and should be removed once the javax.sound bug is
-	// fixed.  We get the delay from the property:
-	//
-	// com.sun.speech.freetts.audio.AudioPlayer.closeDelay
-	// 
-	// 
-			try {
-			    if (closeDelay > 0L) {
-				Thread.sleep(closeDelay);
-			    }
-		    	} catch (InterruptedException ie) {
-			}
-			currentClip.close();
-		    }
+                    JavaClipAudioPlayer.this.notifyAll();
 		}
 	    }  else if (event.getType().equals(LineEvent.Type.OPEN)) {
 		debugPrint("Event OPEN");
@@ -445,8 +405,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 		// be waiting on it.
 		debugPrint("EVNT CLOSE");
 		synchronized (JavaClipAudioPlayer.this) {
-		    currentClip = null;
-		    JavaClipAudioPlayer.this.notify();
+                    // currentClip = null;
+                    JavaClipAudioPlayer.this.notifyAll();
 		}
 	    }
 	}
