@@ -335,22 +335,36 @@ Linux and Win32 operating systems.</p>
 implementation of the JSAPI 1.0 specification.  
 The JSAPI 1.0 specification implementation (i.e., the javax.speech.*
 classes) is not available under a BSD-style license.  Instead, we are
-making the binaries available under a separate binary code license.
-This distribution includes a self-extracting shell archive containing
-the <code>jsapi.jar</code>. <br>
+making the binaries available under a separate binary code
+license.</br>
 
 <br> <b>Unix Systems </b> - This distribution includes a 
-self-extracting shell archive containing the jsapi.jar file.  If you are running under
-Linux or the Solaris<sup><font size="-1">TM</font></sup> Operating Environment, (or any
+self-extracting shell archive containing the <code>jsapi.jar</code> file.  
+If you are running under Linux or the 
+Solaris<sup><font size="-1">TM</font></sup> Operating Environment, (or any
 other system that supports <code>sh</code>) follow these instructions:
 <ol>
     <li> Go to the FreeTTS/lib directory
-    <li> Type "sh jsapi.sh" 
-    <li> If the binary license agreement is acceptable, accept it by typing "y". The
-    jsapi.jar file will be unpacked and deposited into the lib directory.
+    <li> Type <code>sh ./jsapi.sh</code> 
+    <li> If the binary license agreement is acceptable, accept it by typing "y". The <code>jsapi.jar</code> file will be unpacked and deposited into the lib directory.
+</ol>
+<br> <b>Win32</b> - This distribution includes an
+installer program containing the <code>jsapi.jar</code> file.  
+If you are running
+on a Win32 Operating system follow these instructions:
+<ol>
+    <li> Go to the FreeTTS/lib directory
+    <li> Type <code> .\jsapi.exe </code>
+    <li> If the binary license agreement is acceptable, accept it by
+    clicking "I Agree". The <code>jsapi.jar</code> file will be 
+    unpacked and deposited into the <code>lib</code> directory.
 </ol>
 
-<br><b> Non-Unix systems</b> - If you are on a system that is not able to unpack
+<!-- Since jdk1.4beta3 only works on windows, linux and solaris, there
+ are currently no 'other' systems -->
+
+<!--
+<br><b> Other Systems</b> - If 
 self-extracting shell archives (Win32,
 Mac) Follow these steps to get an implementation of the JSAPI 1.0 specification:
 <ol>
@@ -392,6 +406,7 @@ directory:
 <pre>
     cp jsutils-1.0/jsapi/lib/jsapi.jar FreeTTS/lib/jsapi.jar
 </pre>
+-->
 
 
 

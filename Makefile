@@ -59,6 +59,9 @@ DEPLOY_FILES =  \
 	    acknowledgments.txt \
 	    Makefile
 
+DEPLOY_TARGET = freetts.tar.gz
+STAGING_AREA = ./FreeTTS
+
 # These files are removed from the binary distribution
 DEPLOY_EXCLUDED_FILES = \
 	$(STAGING_AREA)/docs/*copyright.txt	
@@ -67,8 +70,6 @@ DEPLOY_EXCLUDED_DIRECTORIES = \
 	$(STAGING_AREA)/demo/NuanceClock	\
 	$(STAGING_AREA)/lib/jsapi.jar
 
-DEPLOY_TARGET = freetts.tar.gz
-STAGING_AREA = ./freetts
 
 DEPLOY_DOCS_TARGET = freettsdocs.tar
 DOC_STAGING_AREA = ./htdocs
