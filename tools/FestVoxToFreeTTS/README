@@ -1,0 +1,12 @@
+This directory contains the necessary files for converting FestVox voices
+for FreeTTS.
+
+To convert a voice, run:
+FestVoxToFreeTTS.sh <voicedir>
+
+or
+FestVoxToFreeTTS.sh --help
+for more information.
+
+
+[[TODO]] make README helpful.
