@@ -26,5 +26,5 @@ all:: ${CLASSES} ${STUBS}
 # To use another synthesizer, e.g., ViaVoice, change the System property
 # "synthesizerName".
 
-run: all
+run: 
 	$(JAVA_CMD) -Dport=2222 -DsynthesizerName="Unlimited domain FreeTTS Speech Synthesizer from Sun Labs" EmacspeakServer

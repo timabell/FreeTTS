@@ -12,8 +12,8 @@
 
 # Which JDK is used
 
-ifeq ($(JDK_DIR),)
-JDK_DIR=/lab/speech/java/j2sdk1.4.0
+ifeq ($(JAVA_HOME),)
+JAVA_HOME=/lab/speech/java/j2sdk1.4.0
 endif 
 
 ifeq ($(JUNIT_HOME),)

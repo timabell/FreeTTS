@@ -24,12 +24,12 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 
 all:: ${CLASSES} ${STUBS}
 
-run: all
+run: 
 	$(JAVA_CMD) MixedVoices
 
-runVerbose: all
+runVerbose: 
 	$(JAVA_CMD) MixedVoices -showPropertyChanges
 
-runVeryVerbose: all
+runVeryVerbose: 
 	$(JAVA_CMD) MixedVoices -showPropertyChanges -showEvents
 

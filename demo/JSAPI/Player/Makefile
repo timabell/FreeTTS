@@ -23,13 +23,13 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 
 all:: ${CLASSES} ${STUBS}
 
-run: all
+run: 
 	$(JAVA_CMD) Player
 
-runbig: all
+runbig: 
 	$(JAVA_CMD) Player -fontsize 20
 
-runmonitor: all
+runmonitor: 
 	$(JAVA_CMD) Player -monitor
 
 
@@ -42,7 +42,7 @@ runmonitor: all
 #	"jsmltext:<jsml>Hello JSML</jsml>"\
 #	"jsmlfile:$(PWD)/test1.jsml"\
 
-input: all
+input: 
 	$(JAVA_CMD) Player -monitor -input $(INPUT)
 
 PLAINTEXTS = \
@@ -65,5 +65,5 @@ PLAINTEXTS = \
 	"plaintext:and dedicated to the proposition"\
 	"plaintext:that all men are created equal."
 
-plaintext: all
+plaintext: 
 	$(JAVA_CMD) Player -monitor -input $(PLAINTEXTS)

@@ -22,11 +22,11 @@ if [ -f wavetest.diff ]; then
 fi
 
 FREETTS_CLASSES=$TOP_DIR/classes
-if [ -z "${JDK_DIR}" ] ; then
-    JDK_DIR=/lab/speech/java/j2sdk1.4.0
+if [ -z "${JAVA_HOME}" ] ; then
+    JAVA_HOME=/lab/speech/java/j2sdk1.4.0
 fi
 
-${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
+${JAVA_HOME}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 	-Dcom.sun.speech.freetts.useCommandLine=true \
 	-Dcom.sun.speech.freetts.useStreamAudio=true \
 	-Dcom.sun.speech.freetts.pauseShowUtterance=true \

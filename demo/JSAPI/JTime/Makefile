@@ -23,5 +23,5 @@ CLASSES = ${FILES:%.java=${CLASS_DEST_DIR}/%.class}
 
 all:: ${CLASSES} ${STUBS}
 
-run: all
+run: 
 	$(JAVA_CMD) JTime

@@ -14,8 +14,8 @@ SHELL=sh
 
 # Which JDK is used to build things
 
-ifeq ($(JDK_DIR),)
-    JDK_DIR=c:/jdk1.3
+ifeq ($(JAVA_HOME),)
+    JAVA_HOME=c:/jdk1.3
 endif
 
 ifeq ($(JUNIT_HOME),)

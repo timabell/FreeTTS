@@ -2,4 +2,4 @@
 .*\.idx$
 .*\cmulex.*.txt
 .*\cmu.*.txt
-com/sun/speech/freetts/tests
+tests

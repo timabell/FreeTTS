@@ -18,11 +18,11 @@ if [ -f lpctest.diff ]; then
 fi
 
 FREETTS_CLASSES=$TOP_DIR/classes
-if [ -z "${JDK_DIR}" ] ; then
-    JDK_DIR=/lab/speech/java/j2sdk1.4.0
+if [ -z "${JAVA_HOME}" ] ; then
+    JAVA_HOME=/lab/speech/java/j2sdk1.4.0
 fi
 
-${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
+${JAVA_HOME}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 	-Dcom.sun.speech.freetts.outputLPC=true \
 	com.sun.speech.freetts.FreeTTS -silent -file $TOP_DIR/wave/08-01-01.wave.text | grep -v "^#" > lpctest.res
 

@@ -22,11 +22,11 @@ if [ -f wavetest.diff ]; then
 fi
 
 FREETTS_CLASSES=$TOP_DIR/classes:$TOP_DIR/lib/CommandInterpreter.jar
-if [ -z "${JDK_DIR}" ] ; then
-    JDK_DIR=/lab/speech/java/j2sdk1.4.0
+if [ -z "${JAVA_HOME}" ] ; then
+    JAVA_HOME=/lab/speech/java/j2sdk1.4.0
 fi
 
-${JDK_DIR}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
+${JAVA_HOME}/bin/java -Xms64m -ea -cp $FREETTS_CLASSES \
 	com.sun.speech.freetts.FreeTTS -silent -dumpWave $PWD/wavetest.res -file $TOP_DIR/wave/08-01-01.wave.text
 
 diff wavetest.res ../data/flite1.1_float.first.wave.txt > wavetest.diff

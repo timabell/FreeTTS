@@ -25,7 +25,7 @@ TESTSDIRS = wave data bin tests
 #	lib/cmuawb.jar lib/jsapi.jar 
 
 JARS = lib/freetts.jar lib/cmulex.jar lib/cmukal8.jar lib/cmukal16.jar \
-	lib/cmuawb.jar lib/cmutimelex.jar
+	lib/cmuawb.jar lib/cmutimelex.jar lib/demo.jar
 
 ZIPS = javadoc.zip src.zip tests.zip
 
