@@ -166,8 +166,10 @@ public class TokenToWords implements UtteranceProcessor {
 	{ "Ga", "", "georgia"  },
 	{ "HI", "ambiguous", "hawaii"  },
 	{ "Hi", "ambiguous", "hawaii"  },
-	{ "IA", "", "indiana"  },
-	{ "Ia", "ambiguous", "indiana"  },
+	{ "IA", "", "iowa"  },
+	{ "Ia", "ambiguous", "iowa"  },
+	{ "IN", "ambiguous", "indiana"  },
+	{ "In", "ambiguous", "indiana"  },
 	{ "Ind", "ambiguous", "indiana"  },
 	{ "ID", "ambiguous", "idaho"  },
 	{ "IL", "ambiguous", "illinois"  },
@@ -976,46 +978,56 @@ public class TokenToWords implements UtteranceProcessor {
      */
     private boolean isStateName(String tokenVal) {
         String[] state = (String[]) usStatesHash.get(tokenVal);
-	if (state != null) {
-	    boolean doIt = false;
+        if (state != null) {
+            boolean expandState = false;
 
             // check to see if the state initials are ambiguous
             // in the English language
-	    if (state[1].equals("ambiguous")) {
-		String pName = (String) tokenItem.findFeature("p.name");
-		String nName = (String) tokenItem.findFeature("n.name");
-                // System.out.println("pName = " + pName);
-                // System.out.println("nName = " + nName);
-		int nNameLength = nName.length();
-		FeatureSet featureSet = tokenItem.getFeatures();
-
+            if (state[1].equals("ambiguous")) {
+                String previous = (String) tokenItem.findFeature("p.name");
+                String next = (String) tokenItem.findFeature("n.name");
+                
+                // System.out.println("previous = " + previous);
+                // System.out.println("next = " + next);
+                
+                int nextLength = next.length();
+                FeatureSet featureSet = tokenItem.getFeatures();
+                
                 // check if the previous word starts with a capital letter,
                 // is at least 3 letters long, and is an alphabet sequence
-		if ((isUppercaseLetter(pName.charAt(0))
-		     && pName.length() > 2
-		     && matches(alphabetPattern, pName)) &&
-		    (isLowercaseLetter(nName.charAt(0))
-		     || tokenItem.getNext() == null
-		     || featureSet.getString("punc").equals(".")
-		     || ((nNameLength == 5 || nNameLength == 10) &&
-			 matches(digitsPattern, nName)))) {
-		    doIt = true;
-		} else {
-		    doIt = false;
-		}
-	    } else {
-		doIt = true;
-	    }
-	    if (doIt) {
-		for (int j = 2; j < state.length; j++) {
-		    if (state[j] != null) {
-			wordRelation.addWord(state[j]);
-		    }
-		}
-		return true;
-	    }
-	}
-	return false;
+                boolean previousIsCity =
+                    (isUppercaseLetter(previous.charAt(0))
+                     && previous.length() > 2
+                     && matches(alphabetPattern, previous));
+                
+                // check if next token starts with a lower case, or
+                // this is the end of sentence, or if next token
+                // is a period (".") or a zip code (5 or 10 digits).
+                boolean nextIsGood =
+                    (isLowercaseLetter(next.charAt(0))
+                     || tokenItem.getNext() == null
+                     || featureSet.getString("punc").equals(".")
+                     || ((nextLength == 5 || nextLength == 10) &&
+                         matches(digitsPattern, next)));
+                
+                if (previousIsCity && nextIsGood) {
+                    expandState = true;
+                } else {
+                    expandState = false;
+                }
+            } else {
+                expandState = true;
+            }
+            if (expandState) {
+                for (int j = 2; j < state.length; j++) {
+                    if (state[j] != null) {
+                        wordRelation.addWord(state[j]);
+                    }
+                }
+                return true;
+            }
+        }
+        return false;
     }
 	
 		   
