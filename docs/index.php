@@ -836,7 +836,7 @@ version of the java runtime. To verify this type:
 </pre>
 
 You should see something like: java version "1.4.0-beta3". If you see
-something older that this, such as <code> java version "1.2.2" <code>
+something older that this, such as <code> java version "1.2.2" </code>
 then you are indeed running with an older version of the java runtime.
 See <a href="#prerequisites">Prerequisites for building and running
 FreeTTS</a>
