@@ -352,7 +352,7 @@ public class VoiceManager {
         // check in same directory as freetts.jar
         try {
             String baseDirectory = getBaseDirectory();
-            if (!baseDirector.equals("")) {  // not called from a jar
+            if (!baseDirectory.equals("")) {  // not called from a jar
                 voiceJarURLs.addVector(getVoiceJarURLsFromDir(baseDirectory));
             }
         } catch (FileNotFoundException e) {
