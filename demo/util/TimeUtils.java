@@ -23,7 +23,7 @@ public class TimeUtils {
 
         mm = min % 5;
 
-        if ((mm == 0) || (mm == 4)) {
+        if (mm == 0) {
             return "exactly";
         } else if (mm == 1) {
             return "just after";
