@@ -385,7 +385,7 @@ public class TokenToWords implements UtteranceProcessor {
 	FeatureSet tokenFeatures = tokenItem.getFeatures();
 	String itemName = tokenFeatures.getString("name");
 	int tokenLength = tokenVal.length();
-		
+
 	if (tokenFeatures.isPresent("phones")) {
 	    wordRelation.addWord(tokenVal);
 
@@ -986,7 +986,7 @@ public class TokenToWords implements UtteranceProcessor {
             if (state[1].equals("ambiguous")) {
                 String previous = (String) tokenItem.findFeature("p.name");
                 String next = (String) tokenItem.findFeature("n.name");
-                
+
                 // System.out.println("previous = " + previous);
                 // System.out.println("next = " + next);
                 
@@ -994,11 +994,13 @@ public class TokenToWords implements UtteranceProcessor {
                 FeatureSet featureSet = tokenItem.getFeatures();
                 
                 // check if the previous word starts with a capital letter,
-                // is at least 3 letters long, and is an alphabet sequence
+                // is at least 3 letters long, is an alphabet sequence,
+                // and has a comma.
                 boolean previousIsCity =
                     (isUppercaseLetter(previous.charAt(0))
                      && previous.length() > 2
-                     && matches(alphabetPattern, previous));
+                     && matches(alphabetPattern, previous)
+                     && tokenItem.findFeature("p.punc").equals(","));
                 
                 // check if next token starts with a lower case, or
                 // this is the end of sentence, or if next token
