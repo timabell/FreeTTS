@@ -630,11 +630,13 @@ class VoiceManager {
     public String toString() {
         String voiceString = "";
         for (int i = 0; i < voices.length; i++) {
-            if (i != 0 && voices.length > 1) {
-                voiceString += ", ";
-            }
-            if ((i+1) == voices.length) {
-                voiceString += "or ";
+            if (voices.length > 1) {
+                if (i != 0) {
+                    voiceString += ", ";
+                }
+                if ((i+1) == voices.length) {
+                    voiceString += "or ";
+                }
             }
             voiceString += voices[i];
         }
