@@ -330,9 +330,9 @@ public class FreeTTSEngineCentral implements EngineCentral {
 
 	// if a mode has no voices, we ignore it
 
-	// if (desc.getVoices().length > 0) {
-        descriptors.add(desc);
-	// }
+	if (desc.getVoices().length > 0) {
+            descriptors.add(desc);
+	}
     }
 
 
