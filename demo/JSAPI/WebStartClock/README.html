@@ -53,7 +53,7 @@
 
 	<li><b><font color="ff0000">IMPORTANT:</font> Edit the file clock.jnlp</b>. <br>Change the <code>"&lt;jnlp codebase=\"...\"&gt;"</code> tag to point to the absolute URL of this directory, e.g., <code>codebase="http://www.yourwebsite.com/FreeTTS/demo/freetts/WebStartClock"</code>. Unfortunately, the codebase attribute currently cannot be relative. For more information, refer to the <a href="http://java.sun.com/products/javawebstart/faq.html#50">Java Web Start FAQ</a>. Moreover, if you use file URLs (e.g., "file:/home/usr1/..."), it might not work properly on differently platforms. So we encourage you to use HTTP URLs. <p>
 
-	<li><b>Build wsc.jar</b>. <br>Type <code>"gmake wsc.jar"</code> in this directory. This will:
+	<li><b>Build wsc.jar</b>. <br>Type <code>"gmake jars"</code> in this directory. This will:
 	  <ol>
 	      <li>Create the <code>wsc.jar</code> JAR file
 	      <li>Copy the <code>jsapi.jar</code> JAR file to this directory
