@@ -10,6 +10,7 @@ Change history for FreeTTS.
 --------------------------
 
 February 06, 2005 Release 1.2 (final)
+    - Hang with JDK1.5 (bug 1019337)
     - Added support to build w/o requiring JSAPI
     - Only build tests on demand (more freedom from JUnit)
     - Added build targets to create standalone emacspeak app
@@ -17,13 +18,13 @@ February 06, 2005 Release 1.2 (final)
     - Added speaking rate change support to emacspeak demo
     - Allowed emacspeak text to omit '{' and '}' if text has no spaces
     - Changed state name expansion logic (bug 1101229)
-    - Added pronunciations for British Sterling and "not" sign
+    - Added pronunciations for British Sterling and "not" sign (bug 1100888)
     - Modified missing speech.properties message (rfe 1041437 and bug 1041296)
     - Added pronunciations for Linux terms (bug 1006630)
     - Added JUnit to prerequisites list (bug 975557)
     - Fixed -dump{Multi}Audio problem in freetts app (bug 986503).
     - Added importing tools specifically for CMU ARCTIC Voices.
-    - Fixed problem in mbrola phonem remapping.
+    - Fixed problem in mbrola phonem remapping (bug 1013781)
     - In the Voice class, removed the call to AudioPlayer.drain() 
       if the audio is cancelled, since it will block until the next audio
       is available.

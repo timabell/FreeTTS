@@ -8,10 +8,11 @@ improvements over the 1.2 beta2 release:
     - Improvements to the emacspeak server demo
     - Performance improvements for time-to-first-sample and cancel
     - Improvements to the state name expansion logic (bug 1101229)
-    - Pronunciations for British Sterling and "not" sign
+    - Pronunciations for British Sterling and "not" sign (bug 1100888)
     - New pronunciations for Linux terms (bug 1006630)
     - Clarifications to speech.properties message (rfe 1041437 and bug 1041296)
     - Fix for -dump{Multi}Audio problem in freetts app (bug 986503).
+    - Elimination of hang with JDK1.5 (bug 1019337)
     - Tools specifically for importing CMU ARCTIC Voices.
     - Fix for MBROLA phoneme remapping (bug 1013781).
     - Rudimentary internationalization to FestVox import.
