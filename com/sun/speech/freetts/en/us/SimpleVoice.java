@@ -86,14 +86,10 @@ public class SimpleVoice extends Voice {
 
     // overrides Voice.loader
 
-    protected void loader() {
-        try {
-            setupFeatureSet();
-            setupUtteranceProcessors();
-            setupFeatureProcessors();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    protected void loader() throws IOException {
+	setupFeatureSet();
+	setupUtteranceProcessors();
+	setupFeatureProcessors();
     }
 
 

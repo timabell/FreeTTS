@@ -52,6 +52,9 @@ public class DiphoneUnitSelector implements UtteranceProcessor {
      *
      */
     public DiphoneUnitSelector(URL url) throws IOException {
+	if (url == null) {
+	    throw new IOException("Can't load unit database");
+	}
 	boolean binary = url.getPath().endsWith(".bin");
 	diphoneDatabase = new DiphoneUnitDatabase(url, binary);
     }

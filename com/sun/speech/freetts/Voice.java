@@ -246,19 +246,23 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	    try {
 		lexicon.load();
 	    } catch (IOException ioe) {
-		error("Can't load voice");
+		error("Can't load voice " + ioe);
 	    }
 	}
 
 	try {
 	    audioOutput = getAudioOutput();
 	} catch (IOException ioe) {
-	    error("Can't load audio output handler for voice");
+	    error("Can't load audio output handler for voice " + ioe);
 	}
 	if (outputQueue == null) {
 	    outputQueue = createOutputThread();
 	}
-	loader();
+	try {
+	    loader();
+	} catch (IOException ioe) {
+	    error("Can't load voice " + ioe);
+	}
 	BulkTimer.LOAD.stop();
 	if (isMetrics()) {
 	    BulkTimer.LOAD.show("loading " + toString() + " for " +
@@ -366,7 +370,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		    lpcResult.dumpWave(waveDumpFile);
 		}
 	    } catch (IOException ioe) {
-		error("Can't dump file to " + waveDumpFile);
+		error("Can't dump file to " + waveDumpFile + " " + ioe);
 	    }
 	}
     }
@@ -394,6 +398,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 		} while (utterance != null);
 	    }
 	};
+	t.setDaemon(true);
 	t.start();
 	return queue;
     }
@@ -572,7 +577,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      * Loads voice specific data. Subclasses of voice should
      * implement this to perform class specific loading.
      */
-    protected abstract void loader();
+    protected abstract void loader() throws IOException;
 
     /**
      * tokenizes the given the queue item.

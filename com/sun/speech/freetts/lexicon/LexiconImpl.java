@@ -217,8 +217,25 @@ abstract public class LexiconImpl implements Lexicon {
      */
     public void load() throws IOException {
 	BulkTimer.LOAD.start("Lexicon");
+
+	if (compiledURL == null) {
+	    throw new IOException("Can't load lexicon");
+	}
+
+	if (addendaURL == null) {
+	    throw new IOException("Can't load lexicon addenda " );
+	}
+
 	InputStream compiledIS = Utilities.getInputStream(compiledURL);
+
+	if (compiledIS == null) {
+	    throw new IOException("Can't load lexicon from " + compiledURL);
+	}
 	InputStream addendaIS = Utilities.getInputStream(addendaURL);
+	if (addendaIS == null) {
+	    throw new IOException("Can't load lexicon addenda from " 
+		    + addendaURL);
+	}
 
 	// [[[TODO: what is the best way to derive the estimated sizes?]]]
         //

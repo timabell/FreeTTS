@@ -32,3 +32,4 @@ MSDOS = false
 PATH_SEP = /
 CSEP = :
 AWK=nawk
+AWK=awk

@@ -55,6 +55,9 @@ public class ClusterUnitSelector implements UtteranceProcessor {
      *
      */
     public ClusterUnitSelector(URL url) throws IOException {
+	if (url == null) {
+	    throw new IOException("Can't load cluster unit database");
+	}
 	boolean binary = url.getPath().endsWith(".bin");
 	clunitDB = new ClusterUnitDatabase(url, binary);
     }

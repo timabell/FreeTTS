@@ -77,14 +77,10 @@ public abstract class CMUVoice extends Voice {
      * Called by <code> Voice </code>  during loading, derived voices
      * should override this to provide customized loading.
      */
-    protected void loader() {
-        try {
-            setupFeatureSet();
-            setupUtteranceProcessors();
-            setupFeatureProcessors();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    protected void loader() throws IOException {
+	setupFeatureSet();
+	setupUtteranceProcessors();
+	setupFeatureProcessors();
     }
 
     /**
