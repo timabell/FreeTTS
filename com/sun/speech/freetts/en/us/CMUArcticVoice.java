@@ -55,7 +55,7 @@ public class CMUArcticVoice extends CMUClusterUnitVoice {
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    protected UtteranceProcessor getUnitSelector() throws IOException {
+    public UtteranceProcessor getUnitSelector() throws IOException {
 	return new CMUArcticUnitSelector(getDatabase());
     }
 }
