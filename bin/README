@@ -1,0 +1,80 @@
+
+This directory contains a number of scripts that are used to collect
+benchmarks for FreeTTS. They are described here.
+
+Script: 'benchmark"
+
+    Collects a standard set of benchmarks and places the results in the
+    benchmarks directory.
+
+Script: 'collectMetrics'
+     Collects benchmarks for a number of input sizes and voices
+   
+Script 'dukesays'
+     Generates a wave dump for a standard utterance
+     
+Script 'extract"
+    Used by test scripts to compare two sets of utterance output to
+    see if the outputs are identical
+
+Script 'freetts"
+    Frontend program for FreeTTS (Client mode)
+
+Script 'freetts.bat'
+   Win32 batch file frontend program for FreeTTS
+
+Script 'freettsServer'
+    Frontend program for FreeTTS (Server mode)
+
+Script 'jarfreetts'
+    Frontend program for FreeTTS. Runs FreeTTS from JAR files instead
+    of from classes.
+
+Script 'jj'
+    Runs the 'journey.txt' client side benchmark
+
+Script 'jjs'
+    Runs the 'journey.txt' server side benchmark
+
+Script 'jl'
+   Lowlevel script for collecting time to first sample data with the server
+   VM.
+
+Script 'jlc'
+   Lowlevel script for collecting time to first sample data with the client
+   VM.
+
+Script 'jm'
+   Runs the 'alice' benchmark using the client VM
+
+Script 'jm2'
+   Runs the 'alice' benchmark with the client VM, also allows tweaking of
+   other VM parameters such as heap size.
+
+Script 'jms'
+   Runs the 'alice' benchmark with the client VM, also allows tweaking of
+   other VM parameters such as heap size.
+
+Script 'jms2
+   Runs the 'alice' benchmark with the serer VM, also allows tweaking of
+   other VM parameters such as heap size.
+
+Script 'jprof2'
+   Runs FreeTTS under the Java profiler. Collects profile information
+   in log.txt. Also prints out heap summary information.
+
+Script 'jt'
+   Generates a wave and relation dump for a standard cluster unit
+   utterance.
+
+Script 'jtime'
+   Frontend for the FreeTTS talking clock program (using the client
+   VM)
+
+Script 'jtimeServer'
+   Frontend for the FreeTTS talking clock program (using the server
+   VM)
+
+Script 'lines'
+   Collects time to first sample information for inputs of various
+   sizes (client and server VM).
