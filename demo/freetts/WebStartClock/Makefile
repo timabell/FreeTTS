@@ -29,7 +29,8 @@ WEBSTARTCLOCK_EXCLUDES = \
 	$(WSC_STAGING_AREA)/Player*.class \
 	$(WSC_STAGING_AREA)/tests/ \
 	$(WSC_STAGING_AREA)/com/sun/speech/engine/ \
-	$(WSC_STAGING_AREA)/com/sun/speech/freetts/en/us/cmu_kal/
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/en/us/cmu_kal/ \
+	$(WSC_STAGING_AREA)/com/sun/speech/freetts/en/us/cmu_awb/cmu_awb_time.txt
 
 
 ##########################################################################
