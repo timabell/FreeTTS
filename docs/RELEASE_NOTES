@@ -31,4 +31,8 @@ working write at the CVS syncmail level.  Lets try it again.
 12/18/01 - I am still not receiving updates, this time I've set the
 CVSROOT/config/PreservePermissions flag to yes.
 
+12/18/01 - The problem was that my mail filter was sending all the
+notifications to junk. I've readjusted that. Hopefully things will
+work now.
+
 
