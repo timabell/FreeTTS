@@ -19,7 +19,10 @@ XXXX,XX, 2004 Release 1.2XXX
       threads are not notified when a queue item is cancelled.
     - Made the JavaStreamingAudioPlayer.cancel() method unsynchronized
       so that audio output can be stopped immediately.
-
+    - Added rudimentary internationalization to Festvox import.
+      This imports international (non-US-English) cluster unit voices,
+      but obviously still lacks a lexicon and other NLP components for
+      new languages.
 
 June 15, 2004 Release 1.2beta2
     - Added experimental CMUArcticVoice that may (or may not) work
