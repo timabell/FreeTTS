@@ -8,6 +8,8 @@
 
 Change history for FreeTTS.
 --------------------------
+January  10, 2002 V1.1.	  - Incorporated PitchShift code into the
+			    ContourGenerator. All tests still pass.
 January   8, 2002 V1.0.5  - Fixed Locale.US problem in JSAPI demos.
 January   8, 2002 V1.0.4  - Fixed speech.properties path message in demos.
 			  - Added SourceForge news to docs front page.

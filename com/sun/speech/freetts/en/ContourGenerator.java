@@ -1,4 +1,4 @@
-/**
+In//**
  * Portions Copyright 2001 Sun Microsystems, Inc.
  * Portions Copyright 1999-2001 Language Technologies Institute, 
  * Carnegie Mellon University.
@@ -50,11 +50,15 @@ public class ContourGenerator implements UtteranceProcessor {
     private final static PathExtractor vowelMidPath =
         new PathExtractorImpl("R:Segment.p.end",
                               true);
+    private final static PathExtractor localF0Shift =
+        new PathExtractorImpl(
+	    "R:SylStructure.parent.R:Token.parent.local_f0_shift", true);
+    private final static PathExtractor localF0Range =
+        new PathExtractorImpl(
+	    "R:SylStructure.parent.R:Token.parent.local_f0_range", true);
 
     private final float modelMean;
     private final float modelStddev;
-    private float mean;
-    private float stddev;
     private  F0ModelTerm[] terms = { null };
 
     /**
@@ -98,11 +102,17 @@ public class ContourGenerator implements UtteranceProcessor {
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
 	float lend = 0.0f;
+	float mean;
+	float stddev;
+	float localMean;
+	float localStddev;
+	Object tval;
 
 	assert utterance.getRelation(Relation.SYLLABLE_STRUCTURE) != null;
 	assert utterance.getRelation(Relation.SYLLABLE) != null;
 	assert utterance.getRelation(Relation.TARGET) == null;
 	mean = utterance.getVoice().getPitch();
+	mean *= utterance.getVoice().getPitchShift();
 	stddev = utterance.getVoice().getPitchRange();
 
 	Relation target = utterance.createRelation(Relation.TARGET);
@@ -110,25 +120,44 @@ public class ContourGenerator implements UtteranceProcessor {
                  utterance.getRelation(Relation.SYLLABLE).getHead();
 		syllable != null;
 		syllable = syllable.getNext()) {
+
 	   if (syllable.getItemAs(Relation.SYLLABLE_STRUCTURE).hasDaughters()) {
+
+	        tval = localF0Shift.findFeature(syllable);
+		localMean  = Float.parseFloat(tval.toString());
+
+		if (localMean == 0.0) {
+		    localMean = mean;
+		} else {
+		    localMean *= mean;
+		}
+
+	        tval = localF0Range.findFeature(syllable);
+		localStddev  = Float.parseFloat(tval.toString());
+
+		if (localStddev == 0.0) {
+		    localStddev = stddev;
+		}
+
 	        Interceptor interceptor = applyLrModel(syllable);
 		if (isPostBreak(syllable)) {
-		    lend = mapF0(interceptor.start);
+		    lend = mapF0(interceptor.start, localMean, localStddev);
 		}
 
 		Float val = (Float) endPath.findFeature(syllable);
 		// assert val != null;
 		// don't mind null ptr exception
 		addTargetPoint(target, val.floatValue(), 
-			mapF0((interceptor.start + lend) / 2.0f));
+			mapF0((interceptor.start + lend) / 2.0f,
+			    localMean, localStddev));
 		addTargetPoint(target, vowelMid(syllable),
-			mapF0(interceptor.mid));
-		lend = mapF0(interceptor.end);
+			mapF0(interceptor.mid, localMean, localStddev));
+		lend = mapF0(interceptor.end, localMean, localStddev);
 		if (isPreBreak(syllable)) {
 		    Float eval = (Float) lastDaughterEndPath.findFeature(
 			    syllable);
 		    addTargetPoint(target, eval.floatValue(),
-			    mapF0(interceptor.end));
+			    mapF0(interceptor.end, localMean, localStddev));
 		}
 	    }
 	}
@@ -281,7 +310,7 @@ public class ContourGenerator implements UtteranceProcessor {
      *
      * @return the mapped value
      */
-    private final float mapF0(float val) {
+    private final float mapF0(float val, float mean, float stddev) {
 	return ((((val - modelMean)/ modelStddev) * stddev) + mean);
     }
 
