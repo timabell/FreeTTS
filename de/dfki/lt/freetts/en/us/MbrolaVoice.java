@@ -50,15 +50,28 @@ public class MbrolaVoice extends CMUVoice {
      * @param databaseDirectory the directory within the MBROLA directory
      *    where the voice database of this voice is located
      * @param database the name of the voice database of this voice
+     * @param rate the rate of the voice
+     * @param pitch the pitch of the voice
+     * @param range the range of the voice
+     * @param name the name of the voice
+     * @param gender the gender of the voice
+     * @param age the age of the voice
+     * @param description a human-readable string providing a
+     * description that can be displayed for the users.
+     * @param locale the locale of the voice
+     * @param domain the domain of this voice.  For example,
+     * @param organization the organization which created the voice
      */
-    //TODO
     public MbrolaVoice(boolean createLexicon, String databaseDirectory, 
-            String database, float rate, float pitch, float pitchrate,
-            String name, Gender gender, Age age,
-            String description, Locale locale, String domain,
-            String organization) {
+                       String database, float rate, float pitch, float range,
+                       String name, Gender gender, Age age,
+                       String description, Locale locale, String domain,
+                       String organization) {
 	super(createLexicon, name, gender, age, description, locale,
-                domain, organization);
+              domain, organization);
+        setRate(rate);
+        setPitch(pitch);
+        setPitchRange(range);
         this.databaseDirectory = databaseDirectory;
         this.database = database;
     }
