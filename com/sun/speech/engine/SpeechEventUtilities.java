@@ -13,6 +13,7 @@ import java.awt.AWTEvent;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.Component;
+import java.security.AccessControlException;
 
 /**
  * Utilities to help with dispatch JSAPI 1.0 events on the event
@@ -72,28 +73,39 @@ public class SpeechEventUtilities {
             return true;
         }
  
-        ThreadGroup rootGroup;
-        ThreadGroup parent;
-        ThreadGroup g = Thread.currentThread().getThreadGroup();
-        rootGroup = g;
-        parent = rootGroup.getParent();
-        while (parent != null) {
-            rootGroup = parent;
-            parent = parent.getParent();
-        }
+	try {
+	    ThreadGroup rootGroup;
+	    ThreadGroup parent;
+	    ThreadGroup g = Thread.currentThread().getThreadGroup();
+	    rootGroup = g;
+	    parent = rootGroup.getParent();
+	    while (parent != null) {
+		rootGroup = parent;
+		parent = parent.getParent();
+	    }
 
-        int activeCount = rootGroup.activeCount();
-        Thread[] threads = new Thread[activeCount];
-        rootGroup.enumerate(threads,true);
-        for (int i = 0; i < threads.length; i++) {
-	    if (threads[i] != null) {
-		String name = threads[i].getName();
-		if (name.startsWith("AWT-EventQueue")) {
-		    awtRunning = true;
-		    return true;
+	    int activeCount = rootGroup.activeCount();
+	    Thread[] threads = new Thread[activeCount];
+	    rootGroup.enumerate(threads,true);
+	    for (int i = 0; i < threads.length; i++) {
+		if (threads[i] != null) {
+		    String name = threads[i].getName();
+		    if (name.startsWith("AWT-EventQueue")) {
+			awtRunning = true;
+			return true;
+		    }
 		}
 	    }
-        }
+	} catch (AccessControlException ace) {
+	    // if we receive an access control exception then
+	    // it is likely that we are running in an applet
+	    // in which case AWT is running. 
+	    // I'm not sure if this is always true, perhaps
+	    // there is another way to tell if we are running in an
+	    // applet.
+
+	    return true;
+	}
 
         return false;        
     }
