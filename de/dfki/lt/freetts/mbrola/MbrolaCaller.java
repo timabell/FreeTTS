@@ -23,6 +23,7 @@ import java.io.*;
 public class MbrolaCaller implements UtteranceProcessor {
 
     private String cmd;
+    private long closeDelay = 0l;
 
     /**
      * Create an Mbrola caller which will call an external MBROLA binary
@@ -32,6 +33,9 @@ public class MbrolaCaller implements UtteranceProcessor {
      */
     public MbrolaCaller(String cmd) {
         this.cmd = cmd;
+	closeDelay = Long.getLong
+	    ("de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay",
+	     100L).longValue();
     }
 
     /**
@@ -70,6 +74,27 @@ public class MbrolaCaller implements UtteranceProcessor {
             segment = segment.getNext();
         }
         toMbrola.flush();
+
+	// BUG:
+	// There is a  bug that causes the final 'close' on a stream
+	// going to a sub-process to not be seen by the sub-process on
+	// occasion. This seems to occur mainly when the close occurs
+	// very soon after the creation and writing of data to the
+	// sub-process.  This delay can help work around the problem
+	// If we delay before the close by 
+	// a small amount (100ms), the hang is averted.  This is a WORKAROUND
+	// only and should be removed once the bug in the 'exec' is
+	//  fixed.  We get the delay from the property:
+	//
+	// de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay,
+	// 
+
+	if (closeDelay > 0l) {
+	    try {
+		Thread.sleep(closeDelay);
+	    } catch (InterruptedException ie) {
+	    }
+	}
         toMbrola.close();
 
         // remember the BufferedInputStream in the utterance:
