@@ -27,7 +27,7 @@
     <property name="lib_dir"            value="lib"/>
     <property name="bin_dir"            value="bin"/>
     <property name="webstart_bld_dir"	value="${build_dir}/webstart"/>
-    <ptoprtyy name="webstart_dir"	value="demo/JSAPI/WebStartClock"/>
+    <property name="webstart_dir"	value="demo/JSAPI/WebStartClock"/>
     <property name="deploy_dir"		value="deploy"/>
 
 
