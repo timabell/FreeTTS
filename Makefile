@@ -101,6 +101,8 @@ EMACS_SERVER_FILES =  		\
 EMACS_SERVER_EXCLUDES =  				\
 	    $(STAGING_AREA)/demo/JSAPI 			\
 	    $(STAGING_AREA)/demo/NuanceClock		\
+	    $(STAGING_AREA)/demo/freetts/ClientServer	\
+	    $(STAGING_AREA)/demo/freetts/HelloWorld	\
 	    $(STAGING_AREA)/com/sun/speech/engine 	\
 	    $(STAGING_AREA)/com/sun/speech/freetts/jsapi \
 	    $(STAGING_AREA)/com/sun/speech/freetts/clunits \
