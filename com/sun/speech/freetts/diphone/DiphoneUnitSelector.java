@@ -60,6 +60,14 @@ public class DiphoneUnitSelector implements UtteranceProcessor {
     }
     
     /**
+     * Get the sample info for the underlying database.
+     * @return the sample info object
+     */
+    public SampleInfo getSampleInfo() {
+        return diphoneDatabase.getSampleInfo();
+    }
+    
+    /**
      * Generates the Unit Relation from the Segment Relation.
      *
      * @param  utterance  the utterance to generate the Unit Relation

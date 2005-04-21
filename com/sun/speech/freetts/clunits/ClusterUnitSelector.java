@@ -86,6 +86,14 @@ public class ClusterUnitSelector implements UtteranceProcessor {
     }
     
     /**
+     * Get the sample info for the underlying database.
+     * @return the sample info object
+     */
+    public SampleInfo getSampleInfo() {
+        return clunitDB.getSampleInfo();
+    }
+    
+    /**
      * Generates the Unit Relation from the Segment Relation.
      * <br><b>Implementation note:</b><br>
      *    Populates the segment relation with segment names of the form:
