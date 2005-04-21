@@ -59,7 +59,7 @@ public class DiphonePitchmarkGenerator implements UtteranceProcessor {
 	}
 	
 	float pos, lpos = 0, f0, m = 0;
-	final float lf0 = 120;
+	float lf0 = utterance.getVoice().getPitch();
 	
 	double time = 0;
 	int pitchMarks = 0;  // how many pitch marks
@@ -73,15 +73,20 @@ public class DiphonePitchmarkGenerator implements UtteranceProcessor {
 	    FeatureSet featureSet = targetItem.getFeatures();
 	    pos = featureSet.getFloat("pos");
 	    f0 = featureSet.getFloat("f0");
+        //System.err.println("Target pos="+pos+", f0="+f0);
 	    if (time == pos) {
+            lf0 = f0;
 		continue;
 	    }
 	    m = (f0-lf0)/pos;
+        //System.err.println("m=("+f0+"-"+lf0+")/"+pos+"="+m);
 	    for (; time < pos; pitchMarks++) {
 		time += 1/(lf0 + (time * m));
+        //System.err.println("f("+time+")="+((lf0+(time*m))));
 		// save the time value in a list
 		timesList.add((int) (time * sampleInfo.getSampleRate()));
 	    }
+        lf0 = f0;
 	}
 	lpcResult = new LPCResult();
 	// resize the number of frames to the number of pitchmarks
