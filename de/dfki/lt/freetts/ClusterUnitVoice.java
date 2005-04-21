@@ -30,6 +30,7 @@ import com.sun.speech.freetts.en.us.CMULexicon;
 import com.sun.speech.freetts.en.us.FeatureProcessors;
 import com.sun.speech.freetts.lexicon.Lexicon;
 import com.sun.speech.freetts.relp.AudioOutput;
+import com.sun.speech.freetts.relp.SampleInfo;
 import com.sun.speech.freetts.relp.UnitConcatenator;
 import com.sun.speech.freetts.util.BulkTimer;
 import com.sun.speech.freetts.util.Utilities;
@@ -46,6 +47,7 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 	protected URL database;
 	protected URL phonesetURL;
 	protected URL partOfSpeechURL;
+    protected ClusterUnitSelector unitSelector;
 	private ClusterUnitNamer unitNamer;
 	public ClusterUnitVoice(String name, Gender gender, Age age,
 			String description, Locale locale, String domain,
@@ -86,8 +88,21 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 		this.unitNamer = unitNamer;
 		this.phonesetURL = phonesetURL;
 		this.partOfSpeechURL = partOfSpeechURL;
+        try {
+            unitSelector = new ClusterUnitSelector(getDatabase(), unitNamer);
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
 	}
-	
+
+    /**
+     * Get the sample info for the underlying database.
+     * @return the sample info object
+     */
+    public SampleInfo getSampleInfo() {
+        return unitSelector.getSampleInfo();
+    }
+
 	public Tokenizer getTokenizer() {
 		return null;
 	}
@@ -123,7 +138,7 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
 	 *     processor
 	 */
 	public UtteranceProcessor getUnitSelector() throws IOException {
-	return new ClusterUnitSelector(getDatabase(), unitNamer);
+	return unitSelector;
     }
     
     /**
@@ -153,6 +168,7 @@ public class ClusterUnitVoice extends Voice implements ConcatenativeVoice {
     public UtteranceProcessor getUnitConcatenator() throws IOException {
 	return new UnitConcatenator();
     }
+
     protected void setupFeatureProcessors() throws IOException {
         if(phonesetURL != null){
     		       phoneSet  = new PhoneSetImpl(phonesetURL);
