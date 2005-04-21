@@ -256,11 +256,11 @@ public class DiphoneUnitDatabase {
 		int midPoint = mid - start;
 
 		if (numChannels <= 0) {
-		    throw new Error("Bad number of channels " + numChannels);
+		    throw new Error("For diphone '"+name+"': Bad number of channels " + numChannels);
 		}
 
 		if (numSamples <= 0) {
-		    throw new Error("Bad number of samples " + numSamples);
+		    throw new Error("For diphone '"+name+"': Bad number of samples " + numSamples);
 		}
 
 		Sample[] samples = new Sample[numSamples];
