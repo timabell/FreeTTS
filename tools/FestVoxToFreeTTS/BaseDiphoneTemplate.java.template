@@ -1,0 +1,49 @@
+package %PATH%.%VOICENAME%;
+
+import de.dfki.lt.freetts.DiphoneVoice;
+import com.sun.speech.freetts.VoiceDirectory;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.Gender;
+import com.sun.speech.freetts.Age;
+import java.util.Locale;
+import java.net.URL;
+
+
+/**
+ * This voice directory provides a diphone voice imported
+ * from FestVox.
+ * This is designed to be a base-class handeling non-Us-English voices,
+ * the voice provided here is not a full TTS-voice.
+ */
+public class %CLASSNAME% extends VoiceDirectory {
+    /**
+     * Gets the voices provided by this voice.
+     *
+     * @return an array of new Voice instances
+     */
+    public Voice[] getVoices() {
+
+	//if there is no phoneset.txt, this is null
+	URL phoneset = this.getClass().getResource("phoneset.txt");
+
+        // Change voice properties here
+        Voice voice = new DiphoneVoice("%NAME%",
+                Gender.%GENDER%, Age.%AGE%, "%DESCRIPTION%",
+                new Locale("%LOCALE%"), "%DOMAIN%", "%ORGANIZATION%",
+                null,this.getClass().getResource("%VOICENAME%.bin"), 
+		phoneset, null);
+        voice.setRate(150f);
+        voice.setPitch(200F);
+        voice.setPitchRange(12F);
+
+        Voice[] voices = {voice};
+        return voices;
+    }
+
+    /**
+     * Print out information about this voice jarfile.
+     */
+    public static void main(String[] args) {
+        System.out.println((new %CLASSNAME%()).toString());
+    }
+}
