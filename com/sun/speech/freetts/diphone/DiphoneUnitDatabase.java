@@ -142,10 +142,14 @@ public class DiphoneUnitDatabase {
      * @throws IOException if there is trouble opening the DB
      */
     public DiphoneUnitDatabase(URL url, boolean isBinary) throws IOException {
-
-	if (!useIndexing || useCache) {
+        // MS, 22.04.2005: Commented out the "if" clause:
+        // indexing is applied only when useNewIO is turned on and
+        // data is read from a FileInputStream. This is not true when useing
+        // the default settings but setting
+        // com.sun.speech.freetts.diphone.UnitDatabase.cacheType=demand
+        //if (!useIndexing || useCache) {
 	    diphoneMap = new LinkedHashMap();
-	}
+	    //}
 	InputStream is = Utilities.getInputStream(url);
 
 	indexName = getIndexName(url.toString());
@@ -247,7 +251,12 @@ public class DiphoneUnitDatabase {
 		lpcRange  = Float.parseFloat(tokenizer.nextToken());
 	    } else if (tag.equals("LPC_RANGE")) {
 		lpcRange  = Float.parseFloat(tokenizer.nextToken());
-	    } else if (tag.equals("DIPHONE")) {
+	    } else if (tag.equals("ALIAS")) {
+            String name = tokenizer.nextToken();
+            String origName = tokenizer.nextToken();
+            AliasDiphone diphone = new AliasDiphone(name, origName);
+            add(diphone);
+        } else if (tag.equals("DIPHONE")) {
 		String name = tokenizer.nextToken();
 		int start  = Integer.parseInt(tokenizer.nextToken());
 		int mid = Integer.parseInt(tokenizer.nextToken());
@@ -289,6 +298,22 @@ public class DiphoneUnitDatabase {
      * @param diphone the diphone to add.
      */
     private void add(Diphone diphone) {
+        assert diphoneMap != null;
+        if (diphone instanceof AliasDiphone) {
+            AliasDiphone adiph = (AliasDiphone) diphone;
+            Diphone original = (Diphone) 
+                diphoneMap.get(adiph.getOriginalName());
+            if (original != null) {
+                adiph.setOriginalDiphone(original);
+            } else {
+                // No original was found for this alias
+                // -- complain, and ignore
+                Utilities.debug("For diphone alias "
+                        +adiph.getName()+", could not find original "
+                        +adiph.getOriginalName());
+                return;
+            }
+        }
 	diphoneMap.put(diphone.getName(), diphone);
 	if (defaultDiphone == null) {
 	    defaultDiphone = diphone;
@@ -306,6 +331,7 @@ public class DiphoneUnitDatabase {
 	Diphone diphone = null;
 
 	if (useIndexing) {
+        assert useNewIO;
 	    diphone = getFromCache(unitName);
 	    if (diphone == null) {
 		int index = getIndex(unitName);
@@ -314,7 +340,24 @@ public class DiphoneUnitDatabase {
 		    try {
 			diphone = Diphone.loadBinary(mbb);
 			if (diphone != null) {
-			    putIntoCache(unitName, diphone);
+                // If diphone is an alias, must also get the original
+                if (diphone instanceof AliasDiphone) {
+                    AliasDiphone adiph = (AliasDiphone) diphone;
+                    Diphone original = getUnit(adiph.getOriginalName());
+                    if (original != null) {
+                        adiph.setOriginalDiphone(original);
+                        putIntoCache(unitName, adiph);
+                    } else {
+                        // No original was found for this alias
+                        // -- complain, and ignore
+                        Utilities.debug("For diphone alias "
+                                +adiph.getName()+", could not find original "
+                                +adiph.getOriginalName());
+                        diphone = null;
+                    }
+                } else { // a normal diphone
+                    putIntoCache(unitName, diphone);
+                }
 			}
 		    } catch (IOException ioe) {
 			System.err.println("Can't load diphone " +
@@ -590,6 +633,7 @@ public class DiphoneUnitDatabase {
 		loadMappedBinary(fis);
 	    }
 	} else {
+        useIndexing = false; // just to make this clear
 	    DataInputStream dis = new DataInputStream(
 		    new BufferedInputStream(is));
 	    loadBinary(dis);

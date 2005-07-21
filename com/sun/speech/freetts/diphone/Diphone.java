@@ -23,8 +23,9 @@ import java.io.DataOutputStream;
  * together. This class is immutable.
  */
 public class Diphone {
-    private final static int MAGIC = 0xFACE0FF; 
-    private final static int NAME_LENGTH = 8; 
+    protected final static int MAGIC = 0xFACE0FF;
+    protected final static int ALIAS_MAGIC = 0xBABAF00;
+    protected final static int NAME_LENGTH = 8; 
     private String name;
     private int midPoint;
     private Sample[] samples;
@@ -53,6 +54,19 @@ public class Diphone {
 	}
     }
 
+    /**
+     * Constructor to be used only by subclasses who do not use the
+     * variables except for the name
+     * @param name the name of the diphone 
+     */
+    protected Diphone(String name)
+    {
+        this.name = name;
+        this.midPoint = 0;
+        this.samples = null;
+        this.unitSizePart1 = 0;
+        this.unitSizePart2 = 0;
+    }
 
     /**
      * Returns the samples associated with this diphone.
@@ -248,7 +262,25 @@ public class Diphone {
 	int numSamples;
 	Sample[] samples;
 
-	if (bb.getInt() != MAGIC) {
+	int magic = bb.getInt();
+    if (magic == ALIAS_MAGIC) {
+        for (int i = 0; i < NAME_LENGTH; i++) {
+            char c = bb.getChar();
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+        }
+        String name = sb.toString().trim();
+        sb.setLength(0);
+        for (int i = 0; i < NAME_LENGTH; i++) {
+            char c = bb.getChar();
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+        }
+        String origName = sb.toString().trim();
+        return new AliasDiphone(name, origName);
+    } else if (magic != MAGIC) {
 	    throw new Error("Bad magic number in diphone");
 	}
 
@@ -284,7 +316,25 @@ public class Diphone {
 	int numSamples;
 	Sample[] samples;
 
-	if (dis.readInt() != MAGIC) {
+    int magic = dis.readInt(); 
+    if (magic == ALIAS_MAGIC) {
+        for (int i = 0; i < NAME_LENGTH; i++) {
+            char c = dis.readChar();
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+        }
+        String name = sb.toString().trim();
+        sb.setLength(0);
+        for (int i = 0; i < NAME_LENGTH; i++) {
+            char c = dis.readChar();
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+        }
+        String origName = sb.toString().trim();
+        return new AliasDiphone(name, origName);
+    } else if (magic != MAGIC) {
 	    throw new Error("Bad magic number in diphone");
 	}
 
