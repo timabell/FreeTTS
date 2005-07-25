@@ -9,6 +9,9 @@
 Change history for FreeTTS.
 --------------------------
 
+Month, Day, Year Release x.y:
+    - Fixed "Class-Path" issue in manifest created by FestVoxToFreeTTS.
+
 March 10, 2005 Release 1.2.1
     - Add support for metrics important to screen readers
     - Add drain delay to clip audio player - the lack of
