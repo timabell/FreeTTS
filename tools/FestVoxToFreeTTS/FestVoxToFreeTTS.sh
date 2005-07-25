@@ -629,7 +629,7 @@ if [ "$2" = "install" ]; then
     echo "Main-Class: $FULL_VOICEDIRECTORY_CLASS" > "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     echo "FreeTTSVoiceDefinition: true" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     if [ "$VP_LOCALE" = "en_US" ]; then
-	echo "ClassPath: cmulex.jar" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
+	echo "Class-Path: cmulex.jar" >> "$VOICETARGETDIR/$VP_FULL_NAME/voice.Manifest"
     fi
     if [ "$FV_TYPE" = "diphone" ]; then
 	if [ "$VP_LOCALE" = "en_US" ]; then
