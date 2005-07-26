@@ -10,7 +10,21 @@ Change history for FreeTTS.
 --------------------------
 
 Month, Day, Year Release x.y:
+    - Introduced an AliasDiphone class as a subclass of Diphone, which
+      has a name and an original diphone; most API calls are just
+      forwarded to the original diphone. (Marc Schroeder)
+    - In text db files, introduced a new type of line, "ALIAS new
+      old", where "old" is the name of an existing diphone (must have
+      been defined higher-up in the text db file using the traditional
+      "DIPHONE...." mechanism), and "new" is the new name under which
+      the diphone is to be known additionally.
+      DiphoneUnitDatabase.parseAndAdd () has been adapted accordingly.
+      (Marc Schroeder)
+    - In binary db files, introduced a new magic code identifying an
+      alias diphone entry. Diphone.loadBinary() has been adapted
+      accordingly. (Marc Schroeder)
     - Fixed "Class-Path" issue in manifest created by FestVoxToFreeTTS.
+      (Willie Walker)
 
 March 10, 2005 Release 1.2.1
     - Add support for metrics important to screen readers
