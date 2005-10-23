@@ -49,6 +49,14 @@ public class MbrolaCaller implements UtteranceProcessor {
      *         processing of the utterance
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
+        // Go through Segment relation and print values into Mbrola
+	Relation segmentRelation = utterance.getRelation(Relation.SEGMENT);
+        Item segment = segmentRelation.getHead();
+
+	if (segment == null) {
+	    return;
+	}
+
         // Open Mbrola
         Process process;
         try {
@@ -59,10 +67,6 @@ public class MbrolaCaller implements UtteranceProcessor {
         PrintWriter toMbrola = new PrintWriter(process.getOutputStream());
         BufferedInputStream fromMbrola =
             new BufferedInputStream(process.getInputStream());
-
-        // Go through Segment relation and print values into Mbrola
-	Relation segmentRelation = utterance.getRelation(Relation.SEGMENT);
-        Item segment = segmentRelation.getHead();
 
         while (segment != null) {
             String name = segment.getFeatures().getString("name");
