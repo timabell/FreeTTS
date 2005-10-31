@@ -692,13 +692,10 @@ public class ClusterUnitDatabase {
         String currentLine = null;
         // Skip EST header:
         while ((currentLine = in.readLine()) != null) {
-            System.out.println("Discarding line: " + currentLine);
             if (currentLine.startsWith("EST_Header_End")) break;
         }
         while ((currentLine = in.readLine()) != null) {
-            System.out.print("line: " + currentLine);
             String[] tokens = currentLine.split(" ");
-            System.out.println(": "+tokens.length+" tokens");
             String name = tokens[0];
             int index = getUnitIndexName(name);
             try {
