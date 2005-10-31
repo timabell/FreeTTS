@@ -9,18 +9,24 @@
  * WARRANTIES.
  */
 package com.sun.speech.freetts.clunits;
-
-
+import java.util.HashMap; 
 import java.util.List;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 import java.net.URL;
 import java.io.IOException;
+import java.io.BufferedReader; 
+import java.io.File; 
+import java.io.FileReader; 
+import java.io.FileNotFoundException; 
+
 
 import com.sun.speech.freetts.relp.Sample;
 import com.sun.speech.freetts.relp.SampleInfo;
 import com.sun.speech.freetts.relp.SampleSet;
 import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.cart.CART;
+import com.sun.speech.freetts.clunits.ClusterUnitDatabase.UnitOriginInfo;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Relation;
@@ -83,8 +89,10 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	boolean binary = url.getPath().endsWith(".bin");
 	clunitDB = new ClusterUnitDatabase(url, binary);
 	this.unitNamer = unitNamer; 
+
     }
     
+
     /**
      * Get the sample info for the underlying database.
      * @return the sample info object
@@ -130,7 +138,7 @@ public class ClusterUnitSelector implements UtteranceProcessor {
     	utterance.setObject("sts_list", clunitDB.getSts());
 
 	vd = new Viterbi(segs, clunitDB);
-
+	
 	for (Item s = segs.getHead(); s != null; s = s.getNext()) {
 	    setUnitName(s);
 	}
@@ -198,10 +206,19 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    unitFeatureSet.setInt("target_end", 
 		(int) (s.getFeatures().getFloat("end") 
 		       * clunitDB.getSampleInfo().getSampleRate()));
+	
+	    // Associate debug info about unit origin if available:
+        UnitOriginInfo unitOrigin = clunitDB.getUnitOriginInfo(unitEntry);
+	    if (unitOrigin != null) {
+	        unitFeatureSet.setString("origin", unitOrigin.originFile);
+	        unitFeatureSet.setFloat("origin_start", unitOrigin.originStart);
+            unitFeatureSet.setFloat("origin_end", unitOrigin.originEnd);
+        }
+        
 	}
     }
-
-
+ 
+    
     /**
      * Sets the cluster unit name given the segment.
      *

@@ -325,7 +325,7 @@ jsapi.exe from the lib directory.
          </java>
        	 <copy todir="${classes_dir}/${user_voice_path}"
                failonerror="false">
-             <fileset dir="${src_dir}/${user_voice_path}" includes="phoneset.txt"/>
+             <fileset dir="${src_dir}/${user_voice_path}" includes="phoneset.txt ${user_voice}.debug"/>
 	 </copy>
     </target>
 

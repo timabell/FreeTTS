@@ -23,9 +23,11 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.MappedByteBuffer;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.DataOutputStream;
@@ -61,6 +63,8 @@ public class ClusterUnitDatabase {
     private UnitType[] unitTypes;
     private SampleSet sts;
     private SampleSet mcep;
+    
+    private UnitOriginInfo[] unitOrigins; // for debugging
 
     private int continuityWeight;
     private int optimalCoupling;
@@ -97,6 +101,16 @@ public class ClusterUnitDatabase {
 	    loadText(is);
 	}
 	is.close();
+    // Attempt to load debug info from a .debug resource.
+    // This will silently fail if no debug info is available.
+    String urlString = url.toExternalForm();
+    URL debugURL = new URL(urlString.substring(0, urlString.lastIndexOf(".")) + ".debug");
+    try {
+        InputStream debugInfoStream = Utilities.getInputStream(debugURL);
+        loadUnitOrigins(debugInfoStream);
+    } catch (IOException ioe) {
+        // Silently ignore if you cannot load the debug info
+    }
 	BulkTimer.LOAD.stop("ClusterUnitDatabase");
     }
 
@@ -321,6 +335,21 @@ public class ClusterUnitDatabase {
 	return units[which];
     }
 
+    /**
+     * Looks up the origin info for the unit with the given index.
+     *
+     * @param index the index of the unit to look for
+     *
+     * @return the origin info for the unit, or null if none is available 
+     */
+    UnitOriginInfo getUnitOriginInfo(int which) {
+        if (unitOrigins != null)
+            return unitOrigins[which];
+        else
+            return null;
+    }
+
+    
     /**
      * Returns the name of this UnitDatabase.
      *
@@ -645,6 +674,43 @@ public class ClusterUnitDatabase {
 	    }
 	}
     }
+    
+    /**
+     * Load debug info about the origin of units from the given input stream.
+     * The file format is identical to that of the Festvox .catalogue files.
+     * This is useful when creating and debugging new voices: For a selected
+     * unit, you can find out which unit from which original sound file
+     * was used.
+     * @param is the input stream from which to read the debug info.
+     * @throws IOException if a read problem occurs.
+     */
+    private void loadUnitOrigins(InputStream is)  throws IOException
+    {
+        unitOrigins = new UnitOriginInfo[units.length];
+        BufferedReader in = new BufferedReader(new InputStreamReader(is));
+        
+        String currentLine = null;
+        // Skip EST header:
+        while ((currentLine = in.readLine()) != null) {
+            System.out.println("Discarding line: " + currentLine);
+            if (currentLine.startsWith("EST_Header_End")) break;
+        }
+        while ((currentLine = in.readLine()) != null) {
+            System.out.print("line: " + currentLine);
+            String[] tokens = currentLine.split(" ");
+            System.out.println(": "+tokens.length+" tokens");
+            String name = tokens[0];
+            int index = getUnitIndexName(name);
+            try {
+                unitOrigins[index] = new UnitOriginInfo();
+                unitOrigins[index].originFile = tokens[1];
+                unitOrigins[index].originStart = Float.valueOf(tokens[2]).floatValue();
+                unitOrigins[index].originEnd = Float.valueOf(tokens[4]).floatValue();
+            } catch (NumberFormatException nfe) {}
+        }
+        in.close();
+    }
+
 
     /**
      * Dumps a binary form of the database.
@@ -919,6 +985,15 @@ public class ClusterUnitDatabase {
 	    os.writeInt(prev);
 	    os.writeInt(next);
 	}
+    }
+    
+    /**
+     * Represents debug information about the origin of a unit.
+     */
+    class UnitOriginInfo {
+        String originFile;
+        float originStart;
+        float originEnd;
     }
 
     /**
