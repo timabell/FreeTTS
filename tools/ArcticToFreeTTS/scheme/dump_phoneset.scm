@@ -32,4 +32,6 @@
 	(phone_lines    (car (cdr (car (cddr phoneset))))))
     (while phone_lines
 	   (dump_phone_line feature_schema (car phone_lines))
-	   (set! phone_lines (cdr phone_lines)))))
+	   (set! phone_lines (cdr phone_lines)))
+    (format t "silence symbol %s\n" (car (cadr (car (PhoneSet.description '(silences))))))
+))
