@@ -35,6 +35,7 @@ import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.FeatureSetImpl;
 import com.sun.speech.freetts.PathExtractor;
 import com.sun.speech.freetts.PathExtractorImpl;
+import com.sun.speech.freetts.Voice;
 
 import de.dfki.lt.freetts.ClusterUnitNamer;
 
@@ -234,8 +235,12 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 
 	String segName = seg.getFeatures().getString("name");
 
-	if (segName.equals("pau")) {
-	    cname = "pau_" + seg.findFeature("p.name");
+    Voice voice = seg.getUtterance().getVoice();
+    String silenceSymbol = voice.getPhoneFeature("silence", "symbol");
+    if (silenceSymbol == null)
+        silenceSymbol = "pau";
+	if (segName.equals(silenceSymbol)) {
+	    cname = silenceSymbol + "_" + seg.findFeature("p.name");
 	} else {
 	    // remove single quotes from name
 	    String dname = ((String) DNAME.findFeature(seg)).toLowerCase();
