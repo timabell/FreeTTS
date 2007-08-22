@@ -1,0 +1,82 @@
+<!-- 
+ - RTP demo for FreeTTS.
+ -
+ - Copyright (C) 2007 JVoiceXML group - http://jvoicexml.sourceforge.net
+ -
+ - See the file "license.terms" for information on usage and
+ - redistribution of this file, and for a DISCLAIMER OF ALL 
+ - WARRANTIES.
+ -->
+<project name="FreeTTS RTPServer" default="all" basedir=".">
+	<description>
+		This file builds and runs the demo of the RTP Server for
+		FreeTTS.
+	</description>
+
+	<!-- allow the user to override setting in an own propertiesfile. -->
+	<!-- Use the same properties file as in the main project.         -->
+	<property file="rtp.properties" />
+
+	<property name="src" value="src" />
+	<property name="build" value="../bld/rtp" />
+	<property name="config" value="config"/>
+	
+	<property name="optimize" value="off" />
+	<property name="debug" value="on" />
+
+	<!-- third party libraries -->
+
+	<!-- JMF library -->
+	<property name="jmf.dir" value="PUT JMFHOME PATH HERE" />
+
+	<fileset dir="${jmf.dir}/lib" id="jmf.lib">
+		<include name="**/*.jar" />
+	</fileset>
+
+	<!-- the used class path -->
+	<path id="build.classpath">
+		<fileset refid="jmf.lib" />
+		<fileset dir="../lib">
+			<include name="freetts.jar" />
+		</fileset>
+	</path>
+
+	<path id="run.classpath">
+		<path refid="build.classpath" />
+		<pathelement path="${build}" />
+		<pathelement path="${config}" />
+	</path>
+
+	<target name="-init">
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="clean"
+		description="Remove all compiled and ditsribution files">
+		<delete dir="${build}" />
+	</target>
+
+	<target name="compile" depends="-init"
+		description="Compile the JAVA sources">
+		<echo
+			message="compiling with debug=${debug}, optimize=${optimize}" />
+		<javac destdir="${build}" optimize="${optimize}"
+			debug="${debug}" deprecation="on" encoding="iso-8859-1">
+			<src path="${src}" />
+			<include name="**/*.java" />
+			<classpath refid="build.classpath" />
+			<compilerarg value="-Xlint:unchecked" />
+		</javac>
+	</target>
+
+	<target name="run" description="Run the RTP demo" depends="compile">
+		<java classname="org.jvoicexml.rtp.freetts.demo.RtpDemo"
+			fork="true">
+			<classpath>
+				<path refid="run.classpath" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="all" depends="run" description="create binaries" />
+</project>
