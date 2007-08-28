@@ -27,7 +27,7 @@ import javax.media.protocol.SourceStream;
  * @author Dirk Schnelle
  */
 public final class FreeTTSPullSourceStream implements PullSourceStream {
-    /** No controls aloowed. */
+    /** No controls allowed. */
     private static final Object[] EMPTY_OBJECT_ARRAY = {};
 
     /** The input stream to read data from. */

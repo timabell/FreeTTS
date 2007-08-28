@@ -69,8 +69,8 @@
 		</javac>
 	</target>
 
-	<target name="run" description="Run the RTP demo" depends="compile">
-		<java classname="org.jvoicexml.rtp.freetts.demo.RtpDemo"
+	<target name="runClient" description="Run the RTP client demo" depends="compile">
+		<java classname="org.jvoicexml.rtp.freetts.demo.RtpClientDemo"
 			fork="true">
 			<classpath>
 				<path refid="run.classpath" />
@@ -78,5 +78,14 @@
 		</java>
 	</target>
 
-	<target name="all" depends="run" description="create binaries" />
+	<target name="runServer" description="Run the RTP server demo" depends="compile">
+		<java classname="org.jvoicexml.rtp.freetts.demo.RtpServerDemo"
+			fork="true">
+			<classpath>
+				<path refid="run.classpath" />
+			</classpath>
+		</java>
+	</target>
+
+	<target name="all" depends="compile" description="create binaries" />
 </project>

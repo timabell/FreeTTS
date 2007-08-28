@@ -1,12 +1,13 @@
-package org.jvoicexml.rtp.freetts.demo;
-
 /**
- * Copyright 2003 Sun Microsystems, Inc.
+ * Copyright 2007 JVoiceXML group
  * 
  * See the file "license.terms" for information on usage and
  * redistribution of this file, and for a DISCLAIMER OF ALL 
  * WARRANTIES.
  */
+
+package org.jvoicexml.rtp.freetts.demo;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 
@@ -22,10 +23,10 @@ import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
- * Simple program to demonstrate the RTP player.
+ * Simple program to use FreeTTS as an RTP data source.
  * @author Dirk Schnelle
  */
-public class RtpDemo {
+public class RtpServerDemo {
 
     /**
      * Example of how to list all the known voices.
@@ -41,6 +42,10 @@ public class RtpDemo {
         }
     }
 
+    /**
+     * Starts the program
+     * @param args none expected
+     */
     public static void main(String[] args) {
 
         listAllVoices();
