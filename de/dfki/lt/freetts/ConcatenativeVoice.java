@@ -28,7 +28,7 @@ public interface ConcatenativeVoice
      *
      * @return a url to the database
      */
-    public URL getDatabase();
+    URL getDatabase();
     
     /**
      * Returns the pitch mark generator to be used by this voice.
@@ -38,7 +38,7 @@ public interface ConcatenativeVoice
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    public UtteranceProcessor getPitchmarkGenerator() throws IOException;
+    UtteranceProcessor getPitchmarkGenerator() throws IOException;
 
     /**
      * Returns the unit concatenator to be used by this voice.
@@ -48,7 +48,7 @@ public interface ConcatenativeVoice
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    public UtteranceProcessor getUnitConcatenator() throws IOException;
+    UtteranceProcessor getUnitConcatenator() throws IOException;
 
     /**
      * Returns the unit selector to be used by this voice.
@@ -58,5 +58,5 @@ public interface ConcatenativeVoice
      * @throws IOException if an IO error occurs while getting
      *     processor
      */
-    public UtteranceProcessor getUnitSelector() throws IOException;
+    UtteranceProcessor getUnitSelector() throws IOException;
 }

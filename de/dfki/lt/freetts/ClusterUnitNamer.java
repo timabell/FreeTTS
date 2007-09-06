@@ -19,6 +19,6 @@ public interface ClusterUnitNamer {
      *
      * @param seg the segment item that gets the name
      */
-    public void setUnitName(Item seg);
+    void setUnitName(Item seg);
 
 }
