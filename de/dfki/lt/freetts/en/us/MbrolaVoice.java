@@ -10,28 +10,21 @@
 
 package de.dfki.lt.freetts.en.us;
 
-import com.sun.speech.freetts.util.Utilities;
 import java.io.File;
-import java.net.URL;
-
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.en.us.CMUVoice;
-import com.sun.speech.freetts.en.us.CMULexicon;
-
-import de.dfki.lt.freetts.mbrola.ParametersToMbrolaConverter;
-import de.dfki.lt.freetts.mbrola.MbrolaCaller;
-import de.dfki.lt.freetts.mbrola.MbrolaAudioOutput;
-
 import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
 
 import com.sun.speech.freetts.Age;
 import com.sun.speech.freetts.Gender;
-import java.util.Locale;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.en.us.CMULexicon;
+import com.sun.speech.freetts.en.us.CMUVoice;
+import com.sun.speech.freetts.util.Utilities;
+
+import de.dfki.lt.freetts.mbrola.MbrolaAudioOutput;
+import de.dfki.lt.freetts.mbrola.MbrolaCaller;
+import de.dfki.lt.freetts.mbrola.ParametersToMbrolaConverter;
 
 /**
  * Defines an unlimited-domain diphone synthesis based voice using
@@ -138,7 +131,15 @@ public class MbrolaVoice extends CMUVoice {
      * @return the absolute file name of the MBROLA binary
      */
     public String getMbrolaBinary() {
-        return getMbrolaBase() + File.separator + "mbrola";
+        // In windows environments, executables typically end with exe, so
+        // we add this suffix if we are running under windows.
+        StringBuffer executable = new StringBuffer();
+        executable.append("mbrola");
+        String os = System.getProperty("os.name");
+        if (os.indexOf("Windows") >= 0) {
+            executable.append(".exe");
+        }
+        return getMbrolaBase() + File.separator + executable.toString();
     }
 
     /**
