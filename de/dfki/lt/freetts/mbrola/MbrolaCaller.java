@@ -37,13 +37,13 @@ public class MbrolaCaller implements UtteranceProcessor {
      */
     public MbrolaCaller(String[] cmd) {
         this.cmd = cmd;
-	closeDelay = Utilities.getLong
-	    ("de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay",
-	     100L).longValue();
+        closeDelay = Utilities.getLong
+	        ("de.dfki.lt.freetts.mbrola.MbrolaCaller.closeDelay",
+	                100L).longValue();
     }
 
     /**
-     * Call external MBROLA binary to synthesise the utterance.
+     * Call external MBROLA binary to synthesize the utterance.
      *
      * @param  utterance  the utterance to process
      *
@@ -137,7 +137,7 @@ public class MbrolaCaller implements UtteranceProcessor {
         }
 
         if (totalSize == 0) {
-            throw new Error("No audio data read");
+            throw new ProcessException("No audio data read");
         }
 
         utterance.setObject("mbrolaAudio", audioData);
