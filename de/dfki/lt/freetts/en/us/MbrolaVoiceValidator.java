@@ -66,7 +66,7 @@ public class MbrolaVoiceValidator implements Validator {
     /**
      * Returns the name of this validator.
      *
-     * @return the name of this Validator
+     * @return the name of this validator
      */
     public String toString() {
         return (mbrolaVoice.toString() + "Validator");
