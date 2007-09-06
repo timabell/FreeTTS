@@ -7,23 +7,21 @@
  */
 package com.sun.speech.engine.synthesis;
 
-import java.util.Enumeration;
-import java.util.Vector;
-import java.net.URL;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Enumeration;
 
 import javax.speech.SpeechEvent;
-
-import javax.speech.synthesis.Speakable;
-import javax.speech.synthesis.SpeakableListener;
-import javax.speech.synthesis.SpeakableEvent;
-import javax.speech.synthesis.SynthesizerQueueItem;
 import javax.speech.synthesis.JSMLException;
+import javax.speech.synthesis.Speakable;
+import javax.speech.synthesis.SpeakableEvent;
+import javax.speech.synthesis.SpeakableListener;
+import javax.speech.synthesis.SynthesizerQueueItem;
 
 import org.w3c.dom.Document;
 
-import com.sun.speech.engine.SpeechEventUtilities;
 import com.sun.speech.engine.SpeechEventDispatcher;
+import com.sun.speech.engine.SpeechEventUtilities;
 
 /**
  * Extends the JSAPI 1.0 <code>SynthesizerQueueItem</code> with handling
@@ -280,10 +278,10 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     public void postSpeakableCancelled() {
 	boolean shouldPost;
 
-    // The JSAPI docs say that once a cancelled event is sent, no
-    // others will be. This makes sure that a cancelled will never be
+    // The JSAPI docs say that once a canceled event is sent, no
+    // others will be. This makes sure that a canceled will never be
     // sent twice. This deals with the race that can occur when an
-    // item that is playing is cancelled.
+    // item that is playing is canceled.
 
 	synchronized(this) {
 	    shouldPost = !done;
@@ -310,11 +308,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableCancelled(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.speakableCancelled(event);
             }
         }
@@ -334,10 +333,10 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     public void postSpeakableEnded() {
 	boolean shouldPost;
 
-    // The JSAPI docs say that once a cancelled event is sent, no
-    // others will be. This makes sure that a cancelled will never be
+    // The JSAPI docs say that once a canceled event is sent, no
+    // others will be. This makes sure that a canceled will never be
     // sent twice. This deals with the race that can occur when an
-    // item that is playing is cancelled.
+    // item that is playing is canceled.
 	synchronized(this) {
 	    shouldPost = !done;
             done = true;
@@ -363,11 +362,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableEnded(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.speakableEnded(event);
             }
         }
@@ -403,11 +403,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakablePaused(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.speakablePaused(event);
             }
         }
@@ -443,11 +444,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableResumed(event);
         }
         
-        Enumeration E;
+        Enumeration enumeration;
 	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.speakableResumed(event);
             }
         }
@@ -483,11 +485,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableStarted(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.speakableStarted(event);
             }
         }
@@ -523,11 +526,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.topOfQueue(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.topOfQueue(event);
             }
         }
@@ -564,11 +568,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.wordStarted(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+        Enumeration enumeration;
+        if (synth.speakableListeners != null) {
+            enumeration = synth.speakableListeners.elements();
+            while (enumeration.hasMoreElements()) {
+                SpeakableListener sl =
+                    (SpeakableListener) enumeration.nextElement();
                 sl.wordStarted(event);
             }
         }
