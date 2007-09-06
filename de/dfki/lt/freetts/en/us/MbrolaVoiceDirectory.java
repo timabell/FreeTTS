@@ -1,17 +1,15 @@
 package de.dfki.lt.freetts.en.us;
 
-import com.sun.speech.freetts.en.us.CMULexicon;
-import com.sun.speech.freetts.VoiceDirectory;
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.Gender;
-import com.sun.speech.freetts.Age;
-
-import com.sun.speech.freetts.util.Utilities;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.Gender;
 import com.sun.speech.freetts.ValidationException;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.VoiceDirectory;
+import com.sun.speech.freetts.en.us.CMULexicon;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Provides access to MBROLA voices.
@@ -51,7 +49,7 @@ public class MbrolaVoiceDirectory extends VoiceDirectory {
 
             Voice[] voices = {mbrola1, mbrola2, mbrola3};
             
-            ArrayList validVoices = new ArrayList();
+            List validVoices = new java.util.ArrayList();
             int count = 0;
 
             for (int i = 0; i < voices.length; i++) {

@@ -32,10 +32,6 @@ import com.sun.speech.freetts.lexicon.Lexicon;
 import com.sun.speech.freetts.relp.AudioOutput;
 import com.sun.speech.freetts.relp.SampleInfo;
 import com.sun.speech.freetts.relp.UnitConcatenator;
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-
-import de.dfki.lt.freetts.de.GermanLexicon;
 
 /**
  * A simple dummy voice as a starting point for non-US-English

@@ -9,13 +9,11 @@
 
 package de.dfki.lt.freetts.mbrola;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Item;
-
-import java.io.*;
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
 
 /**
  * Utterance processor converting phoneme timing and f0-time targets
@@ -45,7 +43,7 @@ public class ParametersToMbrolaConverter implements UtteranceProcessor {
 	if (targetRelation != null) target = targetRelation.getHead();
         float prevEnd = 0f;
         while (segment != null) {
-            String name = segment.getFeatures().getString("name");
+            // String name = segment.getFeatures().getString("name");
             // Accumulated duration of all segments in the utterance,
             // in seconds:
             float end = segment.getFeatures().getFloat("end");

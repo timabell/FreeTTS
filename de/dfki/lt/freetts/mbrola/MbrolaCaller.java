@@ -9,15 +9,17 @@
 
 package de.dfki.lt.freetts.mbrola;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.util.Utilities;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
-import java.io.*;
-import java.util.*;
+import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Calls external MBROLA binary to synthesise the utterance.
@@ -113,7 +115,7 @@ public class MbrolaCaller implements UtteranceProcessor {
         // In order to avoid resizing a large array, we save the audio data
         // in the chunks in which we read it.
 
-        List audioData = new ArrayList();
+        List audioData = new java.util.ArrayList();
         int totalSize = 0;
         int nrRead = -1; // -1 means end of file
 

@@ -8,21 +8,19 @@
  */
 package de.dfki.lt.freetts.mbrola;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.ProcessException;
-
-import com.sun.speech.freetts.audio.AudioPlayer;
-import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
+import java.nio.ByteOrder;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.sound.sampled.AudioFormat;
 
-import java.nio.ByteOrder;
-import java.util.*;
-import java.io.*;
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
- * Supports generating audio output from an MBROLA-synthesised utterance. This
+ * Supports generating audio output from an MBROLA-synthesized utterance. This
  * is an utterance processor. The primary method, <code> processUtterance
  * </code> takes an utterance containing an open BufferedInputStream, from
  * which to read raw audio data provided by the external MBROLA binary. The

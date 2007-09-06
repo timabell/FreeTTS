@@ -7,30 +7,28 @@
  */
 package com.sun.speech.engine.synthesis;
 
-import java.net.URL;
-import java.net.MalformedURLException;
 import java.io.IOException;
-import java.util.Vector;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.speech.EngineListener;
 import javax.speech.EngineStateError;
 import javax.speech.SpeechEvent;
-import javax.speech.SpeechError;
-
 import javax.speech.synthesis.JSMLException;
-import javax.speech.synthesis.Synthesizer;
-import javax.speech.synthesis.SynthesizerListener;
-import javax.speech.synthesis.SynthesizerEvent;
-import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Speakable;
 import javax.speech.synthesis.SpeakableListener;
+import javax.speech.synthesis.Synthesizer;
+import javax.speech.synthesis.SynthesizerEvent;
+import javax.speech.synthesis.SynthesizerListener;
+import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.speech.synthesis.SynthesizerProperties;
 
 import com.sun.speech.engine.BaseEngine;
 import com.sun.speech.engine.BaseEngineProperties;
-import com.sun.speech.engine.SpeechEventUtilities;
 import com.sun.speech.engine.SpeechEventDispatcher;
+import com.sun.speech.engine.SpeechEventUtilities;
 
 /**
  * Supports the JSAPI 1.0 <code>Synthesizer</code> interface that
