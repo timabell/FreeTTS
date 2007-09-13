@@ -7,26 +7,20 @@
  */
 package com.sun.speech.freetts.jsapi;
 
-import java.net.URL;
-import java.util.Vector;
+import java.beans.PropertyVetoException;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.beans.PropertyVetoException;
+import java.util.Vector;
 
-import javax.speech.Engine;
 import javax.speech.EngineException;
 import javax.speech.EngineStateError;
-import javax.speech.synthesis.Speakable;
-import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.SynthesizerProperties;
 
+import com.sun.speech.engine.BaseEngineProperties;
 import com.sun.speech.engine.synthesis.BaseSynthesizer;
 import com.sun.speech.engine.synthesis.BaseSynthesizerProperties;
 import com.sun.speech.engine.synthesis.BaseSynthesizerQueueItem;
-import com.sun.speech.engine.BaseEngine;
 import com.sun.speech.engine.synthesis.BaseVoice;
-import com.sun.speech.engine.BaseEngineProperties;
 import com.sun.speech.freetts.OutputQueue;
 import com.sun.speech.freetts.audio.AudioPlayer;
 

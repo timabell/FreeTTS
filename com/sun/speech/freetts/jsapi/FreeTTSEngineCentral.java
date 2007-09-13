@@ -7,21 +7,12 @@
  */
 package com.sun.speech.freetts.jsapi;
 
-import javax.speech.EngineCentral;
-import javax.speech.EngineModeDesc;
-import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.EngineList;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Vector;
-import java.util.Iterator;
-import java.util.Properties;
-import java.util.StringTokenizer;
 import java.util.Locale;
-import java.io.InputStream;
-import java.io.IOException;
+import java.util.Vector;
 
+import javax.speech.EngineCentral;
+import javax.speech.EngineList;
+import javax.speech.EngineModeDesc;
 
 import com.sun.speech.freetts.ValidationException;
 
