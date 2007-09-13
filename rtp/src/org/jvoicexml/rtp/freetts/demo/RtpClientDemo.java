@@ -10,6 +10,7 @@ package org.jvoicexml.rtp.freetts.demo;
 
 import java.io.IOException;
 
+import javax.media.ControllerClosedEvent;
 import javax.media.ControllerErrorEvent;
 import javax.media.ControllerEvent;
 import javax.media.ControllerListener;
@@ -20,9 +21,10 @@ import javax.media.RealizeCompleteEvent;
 
 /**
  * Simple program to play back an RTP audio stream.
+ * 
  * @author Dirk Schnelle
  */
-public class RtpClientDemo implements ControllerListener{
+public class RtpClientDemo implements ControllerListener {
     public void controllerUpdate(ControllerEvent control) {
         Player player = (Player) control.getSourceController();
         // If player wasn't created successfully from controller, return
@@ -32,23 +34,31 @@ public class RtpClientDemo implements ControllerListener{
         }
 
         if (control instanceof RealizeCompleteEvent) {
-            System.out.println("Starting player");
+            System.out.println("Starting player...");
             player.start();
+        }
+
+        if (control instanceof ControllerClosedEvent) {
+            System.err.println("controller closed");
+            System.exit(0);
         }
 
         if (control instanceof ControllerErrorEvent) {
             System.out.println("Error in ControllerErrorEvent: " + control);
             player.removeControllerListener(this);
+            System.exit(0);
         }
     }
 
     /**
      * Starts the program
-     * @param args none expected
+     * 
+     * @param args
+     *            none expected
      */
     public static void main(String[] args) {
         RtpClientDemo client = new RtpClientDemo();
-        
+
         MediaLocator loc = new MediaLocator("rtp://127.0.0.1:49150/audio/1");
         Player player;
         try {
@@ -61,8 +71,9 @@ public class RtpClientDemo implements ControllerListener{
             return;
         }
         player.addControllerListener(client);
+
         player.realize();
+
         System.out.println("waiting for data...");
     }
-
 }

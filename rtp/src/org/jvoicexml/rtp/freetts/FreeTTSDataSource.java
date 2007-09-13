@@ -25,15 +25,27 @@ import javax.media.protocol.PullSourceStream;
 public final class FreeTTSDataSource extends PullDataSource {
     /** The one and only source stream. */
     private FreeTTSPullSourceStream stream;
-    
+
     /**
      * Constructs a new object.
      */
     public FreeTTSDataSource() {
         stream = new FreeTTSPullSourceStream();
     }
-    
-    
+
+    public void waitCompleted() {
+        stream.waitEndOfStream();
+
+        // Wait some more time before terminating.
+        // TODO replace this by a solution that uses the amount of data being
+        // played back.
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @return the completed
      */

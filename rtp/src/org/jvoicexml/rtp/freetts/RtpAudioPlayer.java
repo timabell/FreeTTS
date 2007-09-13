@@ -41,6 +41,9 @@ public final class RtpAudioPlayer implements AudioPlayer {
     /** Buffer to capture the FreeTTS output. */
     private ByteArrayOutputStream out;
     
+    /** Number of received bytes. */
+    private int numBytes = 0;
+    
     /**
      * Constructs a new object.
      */
@@ -54,7 +57,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
      * {@inheritDoc}
      */
     public void begin(final int num) {
-        out = new ByteArrayOutputStream(num);
+        out = new ByteArrayOutputStream();
     }
 
     /**
@@ -84,8 +87,8 @@ public final class RtpAudioPlayer implements AudioPlayer {
         byte[] bytes = out.toByteArray();
         ByteArrayInputStream in = new ByteArrayInputStream(bytes);
         
-        AudioInputStream ais = new AudioInputStream(in,
-                currentFormat, bytes.length / currentFormat.getFrameSize());
+        final AudioInputStream ais = new AudioInputStream(in,
+                currentFormat, numBytes / currentFormat.getFrameSize());
 
         out = new ByteArrayOutputStream();
         try {
@@ -93,7 +96,7 @@ public final class RtpAudioPlayer implements AudioPlayer {
         } catch (IOException e) {
             return false;
         }
-        byte[] waveBytes = out.toByteArray();
+        final byte[] waveBytes = out.toByteArray();
         in = new ByteArrayInputStream(waveBytes);
         stream.setInstream(in);
         
@@ -181,8 +184,9 @@ public final class RtpAudioPlayer implements AudioPlayer {
     /**
      * {@inheritDoc}
      */
-    public boolean write(final byte[] bytes, final int start, final int offset) {
-        out.write(bytes, start, offset);
+    public boolean write(final byte[] bytes, final int offset, final int length) {
+        out.write(bytes, offset, length);
+        numBytes += length;
         return true;
     }
 }

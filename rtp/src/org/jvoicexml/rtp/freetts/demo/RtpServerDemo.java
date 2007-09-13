@@ -104,20 +104,9 @@ public class RtpServerDemo {
         }
 
         // Wait until all data is being delivered.
-        while (!ds.isCompleted()) {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        // Delay a bit before we disconnect. This is quick and dirty.
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        ds.waitCompleted();
+        ds.disconnect();
+        
         /*
          * Clean up and leave.
          */

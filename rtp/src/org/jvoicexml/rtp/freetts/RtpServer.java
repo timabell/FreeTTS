@@ -46,6 +46,9 @@ public class RtpServer {
     /** The local IP address. */
     private SessionAddress localAddress;
 
+    /** Waiting utility for processor events. */
+    private ProcessorStateWaiter waiter;
+    
     /**
      * Constructs a new object taking a free random port and this computer
      * as the local address. 
@@ -71,6 +74,8 @@ public class RtpServer {
         InetAddress localIp = InetAddress.getLocalHost();
         localAddress = new SessionAddress(localIp, localPort);
         rtpManager.initialize(localAddress);
+        
+        waiter = new ProcessorStateWaiter();
     }
 
     /**
@@ -110,12 +115,12 @@ public class RtpServer {
             MediaException {
         Processor proc = Manager.createProcessor(sendStreamSource);
         proc.configure();
-        waitForState(proc, Processor.Configured);
+        waiter.waitForState(proc, Processor.Configured);
         proc.setContentDescriptor(new ContentDescriptor(
                 ContentDescriptor.RAW_RTP));
         proc.start();
         proc.getTrackControls()[0].setFormat(FORMAT_ULAR_RTP);
-        waitForState(proc, Player.Started);
+        waiter.waitForState(proc, Player.Started);
         sendStream = rtpManager.createSendStream(proc.getDataOutput(), 0);
     }
 
@@ -139,27 +144,8 @@ public class RtpServer {
      * Dispose.
      */
     public void dispose() {
+        sendStream.close();
         rtpManager.removeTargets("Disconnected!");
         rtpManager.dispose();
-    }
-
-    /**
-     * Delays until the processor reaches the specified state.
-     * @param processor the processor
-     * @param state the state to reach.
-     */
-    public static void waitForState(Processor processor, int state) {
-        while (true) {
-            int actState = processor.getState();
-            if (state == actState) {
-                return;
-            }
-
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }
