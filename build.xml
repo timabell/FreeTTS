@@ -21,7 +21,7 @@
     <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar"/>
     </path>
-    <property name="src_dir"		value="."/>
+    <property name="src_dir"		value="src"/>
     <property name="build_dir"		value="bld"/>
     <property name="classes_dir"	value="${build_dir}/classes"/>
     <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
@@ -934,7 +934,7 @@ jsapi.exe from the lib directory.
     <target name="demos"
 	    depends="freetts_jar"
 	    description="Compiles and jars the demos">
-        <ant antfile="demo.xml"/>
+        <ant antfile="demo.xml" inheritall="false"/>
     </target>
 
 
