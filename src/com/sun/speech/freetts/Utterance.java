@@ -10,13 +10,13 @@
  */
 package com.sun.speech.freetts;
 
-import com.sun.speech.freetts.util.SegmentRelationUtils;
 import java.io.PrintWriter;
-import java.util.List;
-import java.util.Iterator;
-import java.util.Vector;
 import java.io.Serializable;
-import java.util.StringTokenizer;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import com.sun.speech.freetts.util.SegmentRelationUtils;
 
 /**
  * Holds all the data for an utterance to be spoken.

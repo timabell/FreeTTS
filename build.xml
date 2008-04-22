@@ -17,20 +17,20 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="version"		value="1.2"/>
+    <property name="version" value="1.2" />
     <path id="libs">
-        <fileset dir="lib" includes="**/jsapi.jar"/>
+        <fileset dir="lib" includes="**/jsapi.jar" />
     </path>
-    <property name="src_dir"		value="src"/>
-    <property name="build_dir"		value="bld"/>
-    <property name="classes_dir"	value="${build_dir}/classes"/>
-    <property name="demo_classes_dir"	value="${build_dir}/demo_classes"/>
-    <property name="lib_dir"            value="lib"/>
-    <property name="mbrola_dir"         value="mbrola"/>
-    <property name="bin_dir"            value="bin"/>
-    <property name="javadoc_dir"	value="javadoc"/>
-    <property name="webstart_dir"	value="${build_dir}/webstart"/>
-    <property name="deploy_dir"		value="deploy"/>
+    <property name="src_dir" value="src" />
+    <property name="build_dir" value="bld" />
+    <property name="classes_dir" value="${build_dir}/classes" />
+    <property name="demo_classes_dir" value="${build_dir}/demo_classes" />
+    <property name="lib_dir" value="lib" />
+    <property name="mbrola_dir" value="mbrola" />
+    <property name="bin_dir" value="bin" />
+    <property name="javadoc_dir" value="javadoc" />
+    <property name="webstart_dir" value="${build_dir}/webstart" />
+    <property name="deploy_dir" value="deploy" />
 
 
     <!-- ********************************************************** -->
@@ -44,23 +44,20 @@
     <!-- * patternset refid.                                      * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <patternset id="all_files" 
-                includes="com/**,de/**"/>
+    <patternset id="all_files" includes="com/**,de/**" />
 
-    <patternset id="no_jsapi" 
+    <patternset id="no_jsapi"
                 includes="com/**,de/**"
-	        excludes="com/sun/speech/engine/**,
-		          com/sun/speech/freetts/jsapi/**"/>
-             
+                excludes="com/sun/speech/engine/**,
+		          com/sun/speech/freetts/jsapi/**" />
+
     <target name="set_patternset_to_compile">
-        <condition property="patternset_to_compile"
-                   value="all_files">
-            <available file="lib/jsapi.jar"/>
+        <condition property="patternset_to_compile" value="all_files">
+            <available file="lib/jsapi.jar" />
         </condition>
-        <condition property="patternset_to_compile"
-                   value="no_jsapi">
+        <condition property="patternset_to_compile" value="no_jsapi">
             <not>
-                <available file="lib/jsapi.jar"/>
+                <available file="lib/jsapi.jar" />
             </not>
         </condition>
     </target>
@@ -69,7 +66,7 @@
     <!-- *                                                        * -->
     <!-- * Handle JSAPI:                                          * -->
     <!-- *                                                        * -->
-    <!-- *    1) If a jsapi.jar file can be found, use it and     * --> 
+    <!-- *    1) If a jsapi.jar file can be found, use it and     * -->
     <!-- *       compile all the sources.                         * -->
     <!-- *                                                        * -->
     <!-- *    2) If a jsapi.jar file cannot be found, issue a     * -->
@@ -78,11 +75,10 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="check_jsapi_jar.isPresent">
-        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
+        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent" />
     </target>
 
-    <target name="issue_jsapi_warning"
-            unless="jsapi_jar.isPresent">
+    <target name="issue_jsapi_warning" unless="jsapi_jar.isPresent">
         <echo>
 Cannot find lib/jsapi.jar needed to build Java Speech API
 (JSAPI) support for FreeTTS.  Will not build any sources
@@ -95,7 +91,7 @@ jsapi.exe from the lib directory.
     <target name="handle_jsapi"
             depends="check_jsapi_jar.isPresent,
                      issue_jsapi_warning,
-                     set_patternset_to_compile"/>
+                     set_patternset_to_compile" />
 
 
     <!-- ********************************************************** -->
@@ -104,16 +100,16 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="all"
-	    depends="compile,jars,demos"
-	    description="Build everything">
-	<echo message="Build complete."/>
+            depends="compile,jars,demos"
+            description="Build everything">
+        <echo message="Build complete." />
     </target>
 
 
     <!-- compile everything -->
     <target name="compile"
-	    depends="compile_src,compile_voices,compile_lexicons"
-            description="Build srcs, voices, and lexicons"/>
+            depends="compile_src,compile_voices,compile_lexicons"
+            description="Build srcs, voices, and lexicons" />
 
 
     <!-- ********************************************************** -->
@@ -122,20 +118,20 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="compile_src"
-	    depends="check_jsapi_jar.isPresent,
+            depends="check_jsapi_jar.isPresent,
 	             issue_jsapi_warning,
 	             set_patternset_to_compile"
-	    description="Build just the srcs">
-	<mkdir dir="${classes_dir}"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}"
-	       excludes="tests/**"
-	       destdir="${classes_dir}">
-            <patternset refid="${patternset_to_compile}"/>
-	    <classpath refid="libs"/>
-	</javac>
+            description="Build just the srcs">
+        <mkdir dir="${classes_dir}" />
+        <javac debug="true"
+               source="1.4"
+               deprecation="true"
+               srcdir="${src_dir}"
+               excludes="tests/**"
+               destdir="${classes_dir}">
+            <patternset refid="${patternset_to_compile}" />
+            <classpath refid="libs" />
+        </javac>
     </target>
 
 
@@ -145,17 +141,17 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="compile_tests"
-	    depends="compile"
-	    description="Build just the tests">
-	<mkdir dir="${classes_dir}"/>
-	<javac debug="true"
-	       source="1.4"
-	       deprecation="true"
-	       srcdir="${src_dir}"
-	       includes="tests/**"
-	       destdir="${classes_dir}">
-	    <classpath refid="libs"/>
-	</javac>
+            depends="compile"
+            description="Build just the tests">
+        <mkdir dir="${classes_dir}" />
+        <javac debug="true"
+               source="1.4"
+               deprecation="true"
+               srcdir="${src_dir}"
+               includes="tests/**"
+               destdir="${classes_dir}">
+            <classpath refid="libs" />
+        </javac>
     </target>
 
 
@@ -164,95 +160,94 @@ jsapi.exe from the lib directory.
     <!-- * Generates the binaries for the voices.                 * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="compile_voices" 
-	    depends="kal8_db,kal16_db,time_awb_db,user_voice_db"
-	    description="Generate all of the voice binaries">
+    <target name="compile_voices"
+            depends="kal8_db,kal16_db,time_awb_db,user_voice_db"
+            description="Generate all of the voice binaries">
     </target>
 
 
     <!-- kal8 -->
-    <property name="kal8_data" value="cmu_us_kal.txt"/>
+    <property name="kal8_data" value="cmu_us_kal.txt" />
     <property name="kal8_path"
-              value="com/sun/speech/freetts/en/us/cmu_us_kal"/>
+              value="com/sun/speech/freetts/en/us/cmu_us_kal" />
     <target name="check_kal8_db.isUpToDate"
-	    description="Compares timestamps of kal8 ASCII and binary">
+            description="Compares timestamps of kal8 ASCII and binary">
         <uptodate property="kal8_db.isUpToDate"
-		  srcfile="${src_dir}/${kal8_path}/${kal8_data}"
-		  targetfile="${classes_dir}/${kal8_path}/cmu_us_kal.bin"/>
+                  srcfile="${src_dir}/${kal8_path}/${kal8_data}"
+                  targetfile="${classes_dir}/${kal8_path}/cmu_us_kal.bin" />
     </target>
 
-    <target name="kal8_db" 
-	    depends="compile_src,check_kal8_db.isUpToDate" 
-	    unless="kal8_db.isUpToDate"
+    <target name="kal8_db"
+            depends="compile_src,check_kal8_db.isUpToDate"
+            unless="kal8_db.isUpToDate"
             description="Generate kal8 voice binaries">
-        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
-	      failonerror="true" 
-	      fork="true">
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${kal8_path}"/>
-            <arg line="-dest ${classes_dir}/${kal8_path}"/>
-            <arg line="-generate_binary ${kal8_data}"/>
-         </java>
+            <arg line="-src ${src_dir}/${kal8_path}" />
+            <arg line="-dest ${classes_dir}/${kal8_path}" />
+            <arg line="-generate_binary ${kal8_data}" />
+        </java>
     </target>
 
     <!-- kal16 -->
-    <property name="kal16_data" value="cmu_us_kal16.txt"/>
+    <property name="kal16_data" value="cmu_us_kal16.txt" />
     <property name="kal16_path"
-              value="com/sun/speech/freetts/en/us/cmu_us_kal"/>
+              value="com/sun/speech/freetts/en/us/cmu_us_kal" />
     <target name="check_kal16_db.isUpToDate"
-	    description="Compares timestamps of kal16 ASCII and binary">
+            description="Compares timestamps of kal16 ASCII and binary">
         <uptodate property="kal16_db.isUpToDate"
-		  srcfile="${src_dir}/${kal16_path}/${kal16_data}"
-		  targetfile="${classes_dir}/${kal16_path}/cmu_us_kal16.bin"/>
+                  srcfile="${src_dir}/${kal16_path}/${kal16_data}"
+                  targetfile="${classes_dir}/${kal16_path}/cmu_us_kal16.bin" />
     </target>
 
-    <target name="kal16_db" 
-	    depends="compile_src,check_kal16_db.isUpToDate" 
-	    unless="kal16_db.isUpToDate"
+    <target name="kal16_db"
+            depends="compile_src,check_kal16_db.isUpToDate"
+            unless="kal16_db.isUpToDate"
             description="Generate kal16 binaries">
-        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
-	      failonerror="true" 
-	      fork="true">
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${kal16_path}"/>
-            <arg line="-dest ${classes_dir}/${kal16_path}"/>
-            <arg line="-generate_binary ${kal16_data}"/>
-         </java>
+            <arg line="-src ${src_dir}/${kal16_path}" />
+            <arg line="-dest ${classes_dir}/${kal16_path}" />
+            <arg line="-generate_binary ${kal16_data}" />
+        </java>
     </target>
 
     <!-- time_awb -->
-    <property name="time_awb_data" value="cmu_time_awb.txt"/>
-    <property name="time_awb_path"          
-              value="com/sun/speech/freetts/en/us/cmu_time_awb"/>
+    <property name="time_awb_data" value="cmu_time_awb.txt" />
+    <property name="time_awb_path"
+              value="com/sun/speech/freetts/en/us/cmu_time_awb" />
     <target name="check_time_awb_db.isUpToDate"
-	    description="Compares timestamps of time_awb ASCII and binary">
-        <uptodate 
-	    property="time_awb_db.isUpToDate"
-	    srcfile="${src_dir}/${time_awb_path}/${time_awb_data}"
-	    targetfile="${classes_dir}/${time_awb_path}/cmu_time_awb.bin"/>
+            description="Compares timestamps of time_awb ASCII and binary">
+        <uptodate property="time_awb_db.isUpToDate"
+                  srcfile="${src_dir}/${time_awb_path}/${time_awb_data}"
+                  targetfile="${classes_dir}/${time_awb_path}/cmu_time_awb.bin" />
     </target>
 
-    <target name="time_awb_db" 
-	    depends="compile_src,check_time_awb_db.isUpToDate" 
-	    unless="time_awb_db.isUpToDate"
+    <target name="time_awb_db"
+            depends="compile_src,check_time_awb_db.isUpToDate"
+            unless="time_awb_db.isUpToDate"
             description="Generate time_awb binaries">
         <java classname="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${time_awb_path}"/>
-            <arg line="-dest ${classes_dir}/${time_awb_path}"/>
-            <arg line="-generate_binary ${time_awb_data}"/>
-         </java>
+            <arg line="-src ${src_dir}/${time_awb_path}" />
+            <arg line="-dest ${classes_dir}/${time_awb_path}" />
+            <arg line="-generate_binary ${time_awb_data}" />
+        </java>
     </target>
 
 
@@ -274,77 +269,74 @@ jsapi.exe from the lib directory.
     <!-- *     -Duser_voice_base_path=de/dfki/lt/freetts/de       * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="set_user_voice_to_clunit_voice"
-            if="clunit_voice">
-        <property name="user_voice" value="${clunit_voice}"/>
+    <target name="set_user_voice_to_clunit_voice" if="clunit_voice">
+        <property name="user_voice" value="${clunit_voice}" />
     </target>
-    <target name="set_user_voice_to_diphone_voice"
-            if="diphone_voice">
-        <property name="user_voice" value="${diphone_voice}"/>
+    <target name="set_user_voice_to_diphone_voice" if="diphone_voice">
+        <property name="user_voice" value="${diphone_voice}" />
     </target>
     <target name="set_user_voice"
             depends="set_user_voice_to_clunit_voice,
                      set_user_voice_to_diphone_voice">
         <property name="user_voice_base_path"
-                  value="com/sun/speech/freetts/en/us"/>
-        <property name="user_voice_path" 
-                  value="${user_voice_base_path}/${user_voice}"/>
+                  value="com/sun/speech/freetts/en/us" />
+        <property name="user_voice_path"
+                  value="${user_voice_base_path}/${user_voice}" />
     </target>
 
     <target name="check_user_voice_db.isUpToDate"
             depends="set_user_voice"
-	    description="Compares timestamps of user voice ASCII and binary">
-        <uptodate 
-	    property="user_voice_db.isUpToDate"
-	    srcfile="${src_dir}/${user_voice_path}/${user_voice}.txt"
-	    targetfile="${classes_dir}/${user_voice_path}/${user_voice}.bin"/>
+            description="Compares timestamps of user voice ASCII and binary">
+        <uptodate property="user_voice_db.isUpToDate"
+                  srcfile="${src_dir}/${user_voice_path}/${user_voice}.txt"
+                  targetfile="${classes_dir}/${user_voice_path}/${user_voice}.bin" />
     </target>
 
     <target name="user_voice_db"
-	    depends="set_user_voice,
+            depends="set_user_voice,
 	             clunit_voice_db,
                      diphone_voice_db"
             if="user_voice"
-            description="Generate user voice binaries"/>
+            description="Generate user voice binaries" />
 
     <target name="clunit_voice_db"
-	    depends="compile_src,check_user_voice_db.isUpToDate" 
+            depends="compile_src,check_user_voice_db.isUpToDate"
             if="clunit_voice"
             unless="user_voice_db.isUpToDate"
             description="Generate user voice binaries">
         <java classname="com.sun.speech.freetts.clunits.ClusterUnitDatabase"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${user_voice_path}"/>
-            <arg line="-dest ${classes_dir}/${user_voice_path}"/>
-            <arg line="-generate_binary ${user_voice}.txt"/>
-         </java>
-       	 <copy todir="${classes_dir}/${user_voice_path}"
-               failonerror="false">
-             <fileset dir="${src_dir}/${user_voice_path}" includes="phoneset.txt ${user_voice}.debug"/>
-	 </copy>
+            <arg line="-src ${src_dir}/${user_voice_path}" />
+            <arg line="-dest ${classes_dir}/${user_voice_path}" />
+            <arg line="-generate_binary ${user_voice}.txt" />
+        </java>
+        <copy todir="${classes_dir}/${user_voice_path}" failonerror="false">
+            <fileset dir="${src_dir}/${user_voice_path}"
+                     includes="phoneset.txt ${user_voice}.debug" />
+        </copy>
     </target>
 
     <target name="diphone_voice_db"
-	    depends="compile_src,check_user_voice_db.isUpToDate" 
+            depends="compile_src,check_user_voice_db.isUpToDate"
             if="diphone_voice"
             unless="user_voice_db.isUpToDate"
             description="Generate user voice binaries">
-        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase" 
-	      failonerror="true" 
-	      fork="true">
+        <java classname="com.sun.speech.freetts.diphone.DiphoneUnitDatabase"
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${user_voice_path}"/>
-            <arg line="-dest ${classes_dir}/${user_voice_path}"/>
-            <arg line="-generate_binary ${user_voice}.txt"/>
-         </java>
+            <arg line="-src ${src_dir}/${user_voice_path}" />
+            <arg line="-dest ${classes_dir}/${user_voice_path}" />
+            <arg line="-generate_binary ${user_voice}.txt" />
+        </java>
     </target>
 
 
@@ -353,210 +345,199 @@ jsapi.exe from the lib directory.
     <!-- * Generate the binaries for the lexicons                 * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="compile_lexicons" 
-	    depends="cmulex_db,cmudict04_db,cmutimelex_db"
+    <target name="compile_lexicons"
+            depends="cmulex_db,cmudict04_db,cmutimelex_db"
             description="Generate cmulex, cmudict04, and cmutimelex binaries">
     </target>
 
     <!-- cmulex -->
-    <property name="cmulex_data" value="cmulex"/>
-    <property name="cmulex_path"          
-              value="com/sun/speech/freetts/en/us"/>
+    <property name="cmulex_data" value="cmulex" />
+    <property name="cmulex_path" value="com/sun/speech/freetts/en/us" />
 
     <!-- The *_{compiled,addenda}.bin files are created at once.
          So, if any of the *.txt files are newer than one of these
          files (I chose *_compiled.bin), then recreate the *.bin files.
     -->
     <target name="check_cmulex_db.isUpToDate"
-	    description="Compares timestamps of cmulex ASCII and binary">
+            description="Compares timestamps of cmulex ASCII and binary">
         <uptodate property="cmulex_db.isUpToDate"
-	     targetfile=
-                 "${classes_dir}/${cmulex_path}/${cmulex_data}_compiled.bin">
-              <srcfiles dir="${src_dir}/${cmulex_path}" 
-			includes="${cmulex_data}_*.txt"/>
+                  targetfile="${classes_dir}/${cmulex_path}/${cmulex_data}_compiled.bin">
+            <srcfiles dir="${src_dir}/${cmulex_path}"
+                      includes="${cmulex_data}_*.txt" />
         </uptodate>
     </target>
 
-    <target name="cmulex_db" 
-	    depends="compile_src,
+    <target name="cmulex_db"
+            depends="compile_src,
 	             check_cmulex_db.isUpToDate,
-	             cmulex_lts_db" 
-	    unless="cmulex_db.isUpToDate"
-	    description="Generate cmulex compiled and addenda binaries">
+	             cmulex_lts_db"
+            unless="cmulex_db.isUpToDate"
+            description="Generate cmulex compiled and addenda binaries">
         <java classname="com.sun.speech.freetts.en.us.CMULexicon"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmulex_path}"/>
-            <arg line="-dest ${classes_dir}/${cmulex_path}"/>
-            <arg line="-name ${cmulex_data}"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmulex_path}" />
+            <arg line="-dest ${classes_dir}/${cmulex_path}" />
+            <arg line="-name ${cmulex_data}" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
     <target name="check_cmulex_lts_db.isUpToDate"
-	    description="Compares timestamps of cmulex_lts ASCII and binary">
-        <uptodate 
-	    property="cmulex_lts_db.isUpToDate"
-	    srcfile="${src_dir}/${cmulex_path}/${cmulex_data}_lts.txt"
-	    targetfile="${classes_dir}/${cmulex_path}/${cmulex_data}_lts.bin"/>
+            description="Compares timestamps of cmulex_lts ASCII and binary">
+        <uptodate property="cmulex_lts_db.isUpToDate"
+                  srcfile="${src_dir}/${cmulex_path}/${cmulex_data}_lts.txt"
+                  targetfile="${classes_dir}/${cmulex_path}/${cmulex_data}_lts.bin" />
     </target>
 
-    <target name="cmulex_lts_db" 
-	    depends="compile_src,check_cmulex_lts_db.isUpToDate" 
-	    unless="cmulex_lts_db.isUpToDate"
+    <target name="cmulex_lts_db"
+            depends="compile_src,check_cmulex_lts_db.isUpToDate"
+            unless="cmulex_lts_db.isUpToDate"
             description="Generate cmulex lts binary">
         <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmulex_path}"/>
-            <arg line="-dest ${classes_dir}/${cmulex_path}"/>
-            <arg line="-name ${cmulex_data}_lts"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmulex_path}" />
+            <arg line="-dest ${classes_dir}/${cmulex_path}" />
+            <arg line="-name ${cmulex_data}_lts" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
     <!-- cmudict04 -->
-    <property name="cmudict04_data" value="cmudict04"/>
-    <property name="cmudict04_path"          
-              value="com/sun/speech/freetts/en/us"/>
+    <property name="cmudict04_data" value="cmudict04" />
+    <property name="cmudict04_path" value="com/sun/speech/freetts/en/us" />
 
     <!-- The *_{compiled,addenda}.bin files are created at once.
          So, if any of the *.txt files are newer than one of these
          files (I chose *_compiled.bin), then recreate the *.bin files.
     -->
     <target name="check_cmudict04_db.isUpToDate"
-	    description="Compares timestamps of cmudict04 ASCII and binary">
+            description="Compares timestamps of cmudict04 ASCII and binary">
         <uptodate property="cmudict04_db.isUpToDate"
-	     targetfile=
-                 "${classes_dir}/${cmudict04_path}/${cmudict04_data}_compiled.bin">
-              <srcfiles dir="${src_dir}/${cmudict04_path}" 
-			includes="${cmudict04_data}_*.txt"/>
+                  targetfile="${classes_dir}/${cmudict04_path}/${cmudict04_data}_compiled.bin">
+            <srcfiles dir="${src_dir}/${cmudict04_path}"
+                      includes="${cmudict04_data}_*.txt" />
         </uptodate>
     </target>
 
-    <target name="cmudict04_db" 
-	    depends="compile_src,
+    <target name="cmudict04_db"
+            depends="compile_src,
 	             check_cmudict04_db.isUpToDate,
-	             cmudict04_lts_db" 
-	    unless="cmudict04_db.isUpToDate"
-	    description="Generate cmudict04 compiled and addenda binaries">
+	             cmudict04_lts_db"
+            unless="cmudict04_db.isUpToDate"
+            description="Generate cmudict04 compiled and addenda binaries">
         <java classname="com.sun.speech.freetts.en.us.CMULexicon"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmudict04_path}"/>
-            <arg line="-dest ${classes_dir}/${cmudict04_path}"/>
-            <arg line="-name ${cmudict04_data}"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmudict04_path}" />
+            <arg line="-dest ${classes_dir}/${cmudict04_path}" />
+            <arg line="-name ${cmudict04_data}" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
     <target name="check_cmudict04_lts_db.isUpToDate"
-	    description="Compares timestamps of cmudict04_lts ASCII and binary">
-        <uptodate 
-	    property="cmudict04_lts_db.isUpToDate"
-	    srcfile="${src_dir}/${cmudict04_path}/${cmudict04_data}_lts.txt"
-	    targetfile="${classes_dir}/${cmudict04_path}/${cmudict04_data}_lts.bin"/>
+            description="Compares timestamps of cmudict04_lts ASCII and binary">
+        <uptodate property="cmudict04_lts_db.isUpToDate"
+                  srcfile="${src_dir}/${cmudict04_path}/${cmudict04_data}_lts.txt"
+                  targetfile="${classes_dir}/${cmudict04_path}/${cmudict04_data}_lts.bin" />
     </target>
 
-    <target name="cmudict04_lts_db" 
-	    depends="compile_src,check_cmudict04_lts_db.isUpToDate" 
-	    unless="cmudict04_lts_db.isUpToDate"
+    <target name="cmudict04_lts_db"
+            depends="compile_src,check_cmudict04_lts_db.isUpToDate"
+            unless="cmudict04_lts_db.isUpToDate"
             description="Generate cmudict04 lts binary">
         <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmudict04_path}"/>
-            <arg line="-dest ${classes_dir}/${cmudict04_path}"/>
-            <arg line="-name ${cmudict04_data}_lts"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmudict04_path}" />
+            <arg line="-dest ${classes_dir}/${cmudict04_path}" />
+            <arg line="-name ${cmudict04_data}_lts" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
     <!-- cmulextime -->
-    <property name="cmutimelex_data" value="cmutimelex"/>
-    <property name="cmutimelex_path"          
-              value="com/sun/speech/freetts/en/us"/>
+    <property name="cmutimelex_data" value="cmutimelex" />
+    <property name="cmutimelex_path" value="com/sun/speech/freetts/en/us" />
 
     <!-- The *_{compiled,addenda}.bin files are created at once.
          So, if any of the *.txt files are newer than one of these
          files (I chose *_compiled.bin), then recreate the *.bin files.
     -->
     <target name="check_cmutimelex_db.isUpToDate"
-	    description="Compares timestamps of cmulextime ASCII and binary">
+            description="Compares timestamps of cmulextime ASCII and binary">
         <uptodate property="cmutimelex_db.isUpToDate"
-	  targetfile=
-           "${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_compiled.bin">
-          <srcfiles dir="${src_dir}/${cmutimelex_path}" 
-		    includes="${cmutimelex_data}_*.txt"/>
+                  targetfile="${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_compiled.bin">
+            <srcfiles dir="${src_dir}/${cmutimelex_path}"
+                      includes="${cmutimelex_data}_*.txt" />
         </uptodate>
     </target>
 
-    <target name="cmutimelex_db" 
-	    depends="compile_src,
+    <target name="cmutimelex_db"
+            depends="compile_src,
 	             check_cmutimelex_db.isUpToDate,
-	             cmutimelex_lts_db" 
-	    unless="cmutimelex_db.isUpToDate"
+	             cmutimelex_lts_db"
+            unless="cmutimelex_db.isUpToDate"
             description="Generate cmutimelex compiled and addenda binaries">
         <java classname="com.sun.speech.freetts.en.us.CMULexicon"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
-            <arg line="-dest ${classes_dir}/${cmutimelex_path}"/>
-            <arg line="-name ${cmutimelex_data}"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmutimelex_path}" />
+            <arg line="-dest ${classes_dir}/${cmutimelex_path}" />
+            <arg line="-name ${cmutimelex_data}" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
-    <target 
-        name="check_cmutimelex_lts_db.isUpToDate"
-	description="Compares timestamps of cmulextime_lts ASCII and binary">
-        <uptodate 
-	    property="cmutimelex_lts_db.isUpToDate"
-	    srcfile="${src_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.txt"
-	    targetfile=
-              "${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.bin"/>
+    <target name="check_cmutimelex_lts_db.isUpToDate"
+            description="Compares timestamps of cmulextime_lts ASCII and binary">
+        <uptodate property="cmutimelex_lts_db.isUpToDate"
+                  srcfile="${src_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.txt"
+                  targetfile="${classes_dir}/${cmutimelex_path}/${cmutimelex_data}_lts.bin" />
     </target>
 
-    <target name="cmutimelex_lts_db" 
-	    depends="compile_src,check_cmutimelex_lts_db.isUpToDate" 
-	    unless="cmutimelex_lts_db.isUpToDate"
+    <target name="cmutimelex_lts_db"
+            depends="compile_src,check_cmutimelex_lts_db.isUpToDate"
+            unless="cmutimelex_lts_db.isUpToDate"
             description="Generate cmutimelex lts binary">
         <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${cmutimelex_path}"/>
-            <arg line="-dest ${classes_dir}/${cmutimelex_path}"/>
-            <arg line="-name ${cmutimelex_data}_lts"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${cmutimelex_path}" />
+            <arg line="-dest ${classes_dir}/${cmutimelex_path}" />
+            <arg line="-name ${cmutimelex_data}_lts" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
@@ -564,68 +545,65 @@ jsapi.exe from the lib directory.
     <!-- German dummy lexicon -->
     <!-- As this is only a dummy at the moment, it is not added -->
     <!-- to the general compile_lexicons targert -->
-    <property name="germanlex_data" value="germanlex"/>
-    <property name="germanlex_path"          
-              value="de/dfki/lt/freetts/de"/>
+    <property name="germanlex_data" value="germanlex" />
+    <property name="germanlex_path" value="de/dfki/lt/freetts/de" />
 
     <!-- The *_{compiled,addenda}.bin files are created at once.
          So, if any of the *.txt files are newer than one of these
          files (I chose *_compiled.bin), then recreate the *.bin files.
     -->
     <target name="check_germanlex_db.isUpToDate"
-	    description="Compares timestamps of ASCII and binary">
+            description="Compares timestamps of ASCII and binary">
         <uptodate property="germanlex_db.isUpToDate"
-	     targetfile=
-                 "${classes_dir}/${germanlex_path}/${germanlex_data}_compiled.bin">
-              <srcfiles dir="${src_dir}/${germanlex_path}" 
-			includes="${germanlex_data}_*.txt"/>
+                  targetfile="${classes_dir}/${germanlex_path}/${germanlex_data}_compiled.bin">
+            <srcfiles dir="${src_dir}/${germanlex_path}"
+                      includes="${germanlex_data}_*.txt" />
         </uptodate>
     </target>
 
-    <target name="germanlex_db" 
-	    depends="compile_src,
+    <target name="germanlex_db"
+            depends="compile_src,
 	             check_germanlex_db.isUpToDate,
-	             germanlex_lts_db" 
-	    unless="germanlex_db.isUpToDate"
-	    description="Generate compiled and addenda binaries">
+	             germanlex_lts_db"
+            unless="germanlex_db.isUpToDate"
+            description="Generate compiled and addenda binaries">
         <java classname="de.dfki.lt.freetts.de.GermanLexicon"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${germanlex_path}"/>
-            <arg line="-dest ${classes_dir}/${germanlex_path}"/>
-            <arg line="-name ${germanlex_data}"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${germanlex_path}" />
+            <arg line="-dest ${classes_dir}/${germanlex_path}" />
+            <arg line="-name ${germanlex_data}" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
 
     <target name="check_germanlex_lts_db.isUpToDate"
-	    description="Compares timestamps of germanlex_lts ASCII and binary">
-        <uptodate 
-	    property="germanlex_lts_db.isUpToDate"
-	    srcfile="${src_dir}/${germanlex_path}/${germanlex_data}_lts.txt"
-	    targetfile="${classes_dir}/${germanlex_path}/${germanlex_data}_lts.bin"/>
+            description="Compares timestamps of germanlex_lts ASCII and binary">
+        <uptodate property="germanlex_lts_db.isUpToDate"
+                  srcfile="${src_dir}/${germanlex_path}/${germanlex_data}_lts.txt"
+                  targetfile="${classes_dir}/${germanlex_path}/${germanlex_data}_lts.bin" />
     </target>
 
-    <target name="germanlex_lts_db" 
-	    depends="compile_src,check_germanlex_lts_db.isUpToDate" 
-	    unless="germanlex_lts_db.isUpToDate"
+    <target name="germanlex_lts_db"
+            depends="compile_src,check_germanlex_lts_db.isUpToDate"
+            unless="germanlex_lts_db.isUpToDate"
             description="Generate germanlex lts binary">
         <java classname="com.sun.speech.freetts.lexicon.LetterToSoundImpl"
-	      failonerror="true" 
-	      fork="true">
+              failonerror="true"
+              fork="true">
             <classpath>
-                <path refid="libs"/>
-                <pathelement location="${classes_dir}"/>
+                <path refid="libs" />
+                <pathelement location="${classes_dir}" />
             </classpath>
-	    <arg line="-src ${src_dir}/${germanlex_path}"/>
-            <arg line="-dest ${classes_dir}/${germanlex_path}"/>
-            <arg line="-name ${germanlex_data}_lts"/> 
-            <arg line="-generate_binary"/>
+            <arg line="-src ${src_dir}/${germanlex_path}" />
+            <arg line="-dest ${classes_dir}/${germanlex_path}" />
+            <arg line="-name ${germanlex_data}_lts" />
+            <arg line="-generate_binary" />
         </java>
     </target>
 
@@ -636,7 +614,7 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="jars"
-	    depends="freetts_jar,
+            depends="freetts_jar,
 	             mbrola_jar,
 	             en_us_jar,
 	             cmulex_jar,
@@ -646,149 +624,169 @@ jsapi.exe from the lib directory.
 	             cmu_time_awb_jar,
 	             arctic_voice_jar,
 	             user_voice_jar"
-	    description="Builds all the jar files"/>
-
+            description="Builds all the jar files" />
 
     <!-- freetts.jar -->
-    <property name="freetts_jar" value="${lib_dir}/freetts.jar"/>
+    <property name="freetts__jsapi10_jar"
+              value="${lib_dir}/freetts-jsapi10.jar" />
+    <property name="freetts_jar" value="${lib_dir}/freetts.jar" />
 
-    <target name="freetts_jar" 
-	    depends="compile_src"
-	    description="Create ${lib_dir}/freetts.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${freetts_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/freetts.Manifest"
-	     compress="true">
-            <fileset 
-                dir="${classes_dir}"
-	        excludes="com/sun/speech/freetts/en/**,
-		          de/dfki/lt/freetts/en/**,
-		          de/dfki/lt/freetts/de/**,
-		          de/dfki/lt/freetts/mbrola/**,
-		          tests/**,
-		          **/*.bin,
-		          **/*.idx"/>
-            <fileset
-	        dir="${src_dir}"
-	        includes="com/sun/speech/freetts/internal_voices.txt"/>
+    <target name="-freetts_jsapi10_jar" depends="compile_src">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${freetts__jsapi10_jar}" compress="true">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 layer" />
+                </section>
+            </manifest>
+            <fileset dir="${classes_dir}">
+                <include name="com/sun/speech/engine/**"/>
+                <include name="com/sun/speech/freetts/jsapi/**"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="freetts_jar"
+            depends="-freetts_jsapi10_jar,compile_src"
+            description="Create ${lib_dir}/freetts.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${freetts_jar}" compress="true">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class"
+                      value="com.sun.speech.freetts.FreeTTS" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS core library" />
+                </section>
+            </manifest>
+            <fileset dir="${classes_dir}">
+                <include name="com/sun/speech/freetts/**"/>
+                <exclude name="com/sun/speech/freetts/en/**"/>
+                <exclude name="com/sun/speech/freetts/jsapi/**"/>
+                <include name="de/dfki/lt/freetts/**"/>
+                <exclude name="de/dfki/lt/freetts/en/**"/>
+                <exclude name="de/dfki/lt/freetts/de/**"/>
+                <exclude name="de/dfki/lt/mbrola/**"/>
+                <exclude name="tests/**"/>
+                <exclude name="**/*.bin"/>
+                <exclude name="**/*.idx"/>
+            </fileset>
+            <fileset dir="${src_dir}">
+                <include name="com/sun/speech/freetts/internal_voices.txt"/>
+            </fileset>
         </jar>
     </target>
 
 
     <!-- mbrola.jar -->
-    <property name="mbrola_jar" value="${mbrola_dir}/mbrola.jar"/>
+    <property name="mbrola_jar" value="${mbrola_dir}/mbrola.jar" />
 
-    <target name="mbrola_jar" 
-	    depends="compile_src"
-	    description="Create ${mbrola_dir}/mbrola.jar">
-        <mkdir dir="${mbrola_dir}"/>
-        <jar destfile="${mbrola_jar}" 
-	     manifest="${src_dir}/de/dfki/lt/freetts/en/us/Manifest"
-	     compress="true">
-            <fileset 
-                dir="${classes_dir}"
-		includes="de/dfki/lt/freetts/mbrola/**,
-                          de/dfki/lt/freetts/en/us//**"/>
+    <target name="mbrola_jar"
+            depends="compile_src"
+            description="Create ${mbrola_dir}/mbrola.jar">
+        <mkdir dir="${mbrola_dir}" />
+        <jar destfile="${mbrola_jar}"
+             manifest="${src_dir}/de/dfki/lt/freetts/en/us/Manifest"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="de/dfki/lt/freetts/mbrola/**,
+                          de/dfki/lt/freetts/en/us//**" />
         </jar>
     </target>
 
 
     <!-- en_us.jar -->
-    <property name="en_us_jar" value="${lib_dir}/en_us.jar"/>
+    <property name="en_us_jar" value="${lib_dir}/en_us.jar" />
 
-    <target name="en_us_jar" 
-	    depends="compile_src"
-	    description="Create ${lib_dir}/en_us.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${en_us_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/en_us.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/*.class,
-	                  com/sun/speech/freetts/en/us/*.class"/>
-            <fileset
-	        dir="${src_dir}"
-	        includes="com/sun/speech/freetts/en/us/*.txt"
-	        excludes="**/cmu*lex*.txt"/>
+    <target name="en_us_jar"
+            depends="compile_src"
+            description="Create ${lib_dir}/en_us.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${en_us_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/en_us.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/*.class,
+	                  com/sun/speech/freetts/en/us/*.class" />
+            <fileset dir="${src_dir}"
+                     includes="com/sun/speech/freetts/en/us/*.txt"
+                     excludes="**/cmu*lex*.txt" />
         </jar>
     </target>
 
     <!-- de.jar -->
     <!-- As this is only a dummy at the moment, it is not added -->
     <!-- to the general jars target -->
-    <property name="de_jar" value="${lib_dir}/de.jar"/>
+    <property name="de_jar" value="${lib_dir}/de.jar" />
 
-    <target name="de_jar" 
-	    depends="compile_src"
-	    description="Create ${lib_dir}/de.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${de_jar}" 
-	     manifest="${src_dir}/de/dfki/lt/freetts/de/de.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="de/dfki/lt/freetts/de/*.class"/>
-            <fileset
-	        dir="${src_dir}"
-	        includes="de/dfki/lt/freetts/de/*.txt"
-	        excludes="**/*lex*.txt"/>
+    <target name="de_jar"
+            depends="compile_src"
+            description="Create ${lib_dir}/de.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${de_jar}"
+             manifest="${src_dir}/de/dfki/lt/freetts/de/de.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="de/dfki/lt/freetts/de/*.class" />
+            <fileset dir="${src_dir}"
+                     includes="de/dfki/lt/freetts/de/*.txt"
+                     excludes="**/*lex*.txt" />
         </jar>
     </target>
 
 
     <!-- cmulex.jar -->
-    <property name="cmulex_jar" value="${lib_dir}/cmulex.jar"/>
+    <property name="cmulex_jar" value="${lib_dir}/cmulex.jar" />
 
-    <target name="cmulex_jar" 
-	    depends="compile_lexicons"
-	    description="Create ${lib_dir}/cmulex.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${cmulex_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmulex.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/cmulex_*.bin"/>
+    <target name="cmulex_jar"
+            depends="compile_lexicons"
+            description="Create ${lib_dir}/cmulex.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${cmulex_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/cmulex.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/cmulex_*.bin" />
         </jar>
     </target>
 
 
     <!-- cmudict04.jar -->
-    <property name="cmudict04_jar" value="${lib_dir}/cmudict04.jar"/>
+    <property name="cmudict04_jar" value="${lib_dir}/cmudict04.jar" />
 
-    <target name="cmudict04_jar" 
-	    depends="compile_lexicons"
-	    description="Create ${lib_dir}/cmudict04.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${cmudict04_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmudict04.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/cmudict04_*.bin"/>
+    <target name="cmudict04_jar"
+            depends="compile_lexicons"
+            description="Create ${lib_dir}/cmudict04.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${cmudict04_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/cmudict04.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/cmudict04_*.bin" />
         </jar>
     </target>
 
 
     <!-- cmutimelex.jar -->
-    <property name="cmutimelex_jar" value="${lib_dir}/cmutimelex.jar"/>
+    <property name="cmutimelex_jar" value="${lib_dir}/cmutimelex.jar" />
 
-    <target name="cmutimelex_jar" 
-	    depends="compile_lexicons"
-	    description="Create ${lib_dir}/cmutimelex.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${cmutimelex_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmutimelex.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin"/>
+    <target name="cmutimelex_jar"
+            depends="compile_lexicons"
+            description="Create ${lib_dir}/cmutimelex.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${cmutimelex_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/cmutimelex.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/cmutimelex_*.bin" />
 
         </jar>
     </target>
@@ -797,91 +795,84 @@ jsapi.exe from the lib directory.
     <!-- germanlex.jar -->
     <!-- As this is only a dummy at the moment, it is not added -->
     <!-- to the general jars target -->
-    <property name="germanlex_jar" value="${lib_dir}/germanlex.jar"/>
+    <property name="germanlex_jar" value="${lib_dir}/germanlex.jar" />
 
-    <target name="germanlex_jar" 
-	    depends="germanlex_db"
-	    description="Create ${lib_dir}/germanlex.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${germanlex_jar}" 
-	     manifest="${src_dir}/de/dfki/lt/freetts/de/germanlex.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="de/dfki/lt/freetts/de/germanlex_*.bin"/>
+    <target name="germanlex_jar"
+            depends="germanlex_db"
+            description="Create ${lib_dir}/germanlex.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${germanlex_jar}"
+             manifest="${src_dir}/de/dfki/lt/freetts/de/germanlex.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="de/dfki/lt/freetts/de/germanlex_*.bin" />
         </jar>
     </target>
 
 
     <!-- cmu_us_kal.jar -->
-    <property name="cmu_us_kal_jar" value="${lib_dir}/cmu_us_kal.jar"/>
+    <property name="cmu_us_kal_jar" value="${lib_dir}/cmu_us_kal.jar" />
 
-    <target name="cmu_us_kal_jar" 
-	    depends="compile_voices"
-	    description="Create ${lib_dir}/cmu_us_kal.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${cmu_us_kal_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_us_kal/voice.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/cmu_us_kal/*"/>
+    <target name="cmu_us_kal_jar"
+            depends="compile_voices"
+            description="Create ${lib_dir}/cmu_us_kal.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${cmu_us_kal_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_us_kal/voice.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/cmu_us_kal/*" />
         </jar>
     </target>
 
 
     <!-- cmu_time_awb.jar -->
-    <property name="cmu_time_awb_jar" value="${lib_dir}/cmu_time_awb.jar"/>
+    <property name="cmu_time_awb_jar" value="${lib_dir}/cmu_time_awb.jar" />
 
-    <target name="cmu_time_awb_jar" 
-	    depends="compile_voices"
-	    description="Create ${lib_dir}/cmu_time_awb.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${cmu_time_awb_jar}" 
-	     manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_time_awb/voice.Manifest"
-	     filesonly="true"
-	     compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/cmu_time_awb/*"/>
+    <target name="cmu_time_awb_jar"
+            depends="compile_voices"
+            description="Create ${lib_dir}/cmu_time_awb.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${cmu_time_awb_jar}"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/cmu_time_awb/voice.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/cmu_time_awb/*" />
         </jar>
     </target>
 
 
     <!-- arctic voice -->
-    <target name="arctic_voice_jar" 
-	    depends="compile"
+    <target name="arctic_voice_jar"
+            depends="compile"
             if="arctic_voice"
-	    description="Create ${lib_dir}/${arctic_voice}.jar">
-        <mkdir dir="${lib_dir}"/>
-        <jar destfile="${lib_dir}/${arctic_voice}.jar" 
-	    manifest="${src_dir}/com/sun/speech/freetts/en/us/${arctic_voice}/voice.Manifest"
-	    filesonly="true"
-	    compress="true">
-            <fileset
-	        dir="${classes_dir}"
-	        includes="com/sun/speech/freetts/en/us/${arctic_voice}/*"/>
-            <fileset
-	        dir="${src_dir}"
-	        includes="com/sun/speech/freetts/en/us/${arctic_voice}/*.txt"/>
+            description="Create ${lib_dir}/${arctic_voice}.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${lib_dir}/${arctic_voice}.jar"
+             manifest="${src_dir}/com/sun/speech/freetts/en/us/${arctic_voice}/voice.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}"
+                     includes="com/sun/speech/freetts/en/us/${arctic_voice}/*" />
+            <fileset dir="${src_dir}"
+                     includes="com/sun/speech/freetts/en/us/${arctic_voice}/*.txt" />
         </jar>
     </target>
 
     <!-- user voice -->
-    <target name="user_voice_jar" 
-	    depends="compile_voices"
+    <target name="user_voice_jar"
+            depends="compile_voices"
             if="user_voice"
-	    description="Create ${lib_dir}/${user_voice}.jar">
-        <mkdir dir="${lib_dir}"/>
-         <jar destfile="${lib_dir}/${user_voice}.jar" 
-	      manifest="${src_dir}/${user_voice_path}/voice.Manifest"
-	      filesonly="true"
-	      compress="true">
-             <fileset
-	         dir="${classes_dir}"
-	         includes="${user_voice_path}/*"/>
+            description="Create ${lib_dir}/${user_voice}.jar">
+        <mkdir dir="${lib_dir}" />
+        <jar destfile="${lib_dir}/${user_voice}.jar"
+             manifest="${src_dir}/${user_voice_path}/voice.Manifest"
+             filesonly="true"
+             compress="true">
+            <fileset dir="${classes_dir}" includes="${user_voice_path}/*" />
         </jar>
     </target>
 
@@ -891,9 +882,9 @@ jsapi.exe from the lib directory.
     <!-- * Generates the javadoc                                  * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="javadoc_desc"	value="FreeTTS 1.2"/>
-    <property name="javadoc_pkgs"	
-	      value="com.sun.speech.engine,
+    <property name="javadoc_desc" value="FreeTTS 1.2" />
+    <property name="javadoc_pkgs"
+              value="com.sun.speech.engine,
 	             com.sun.speech.engine.synthesis,
 	             com.sun.speech.engine.synthesis.text,
 	             com.sun.speech.freetts,
@@ -908,20 +899,20 @@ jsapi.exe from the lib directory.
 	             com.sun.speech.freetts.relp,
 	             com.sun.speech.freetts.util,
 	             de.dfki.lt.freetts.mbrola,
-	             de.dfki.lt.freetts.en.us"/>
+	             de.dfki.lt.freetts.en.us" />
 
     <target name="javadoc" description="Generate javadoc">
-        <mkdir dir="${javadoc_dir}"/>
+        <mkdir dir="${javadoc_dir}" />
         <javadoc sourcepath="${src_dir}"
-	         source="1.4"
-		 additionalparam="-breakiterator"
-		 destdir="${javadoc_dir}" 
-		 packagenames="${javadoc_pkgs}"
-		 overview="${src_dir}/overview.html"
-		 windowtitle="${javadoc_desc}"
+                 source="1.4"
+                 additionalparam="-breakiterator"
+                 destdir="${javadoc_dir}"
+                 packagenames="${javadoc_pkgs}"
+                 overview="${src_dir}/overview.html"
+                 windowtitle="${javadoc_desc}"
                  doctitle="${javadoc_desc}"
                  access="protected">
-	    <classpath refid="libs"/>
+            <classpath refid="libs" />
         </javadoc>
     </target>
 
@@ -932,9 +923,9 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="demos"
-	    depends="freetts_jar"
-	    description="Compiles and jars the demos">
-        <ant antfile="demo.xml" inheritall="false"/>
+            depends="freetts_jar"
+            description="Compiles and jars the demos">
+        <ant antfile="demo.xml" inheritall="false" />
     </target>
 
 
@@ -943,15 +934,12 @@ jsapi.exe from the lib directory.
     <!-- * Convenience for emacspeak-server.                      * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="emacspeak-server"
-	    depends="compile,jars"
-	    description="">
-        <ant antfile="demo.xml"
-	     target="emacspeak-server"/>
+    <target name="emacspeak-server" depends="compile,jars" description="">
+        <ant antfile="demo.xml" target="emacspeak-server" />
     </target>
 
 
-    <!-- ********************************************************** --> 
+    <!-- ********************************************************** -->
     <!-- *                                                        * -->
     <!-- * Runs the unit tests.                                   * -->
     <!-- *                                                        * -->
@@ -961,25 +949,21 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- *    -Dtestcase=<fully qualified classname>              * -->
     <!-- *                                                        * -->
-    <!-- ********************************************************** --> 
+    <!-- ********************************************************** -->
     <path id="test_classpath">
-        <pathelement location="${lib_dir}/freetts.jar"/>
-        <pathelement location="${classes_dir}"/>
-        <pathelement location="${src_dir}"/>
-        <pathelement location="${junit.jar}"/>
-        <path refid="libs"/>
+        <pathelement location="${lib_dir}/freetts.jar" />
+        <pathelement location="${classes_dir}" />
+        <pathelement location="${src_dir}" />
+        <pathelement location="${junit.jar}" />
+        <path refid="libs" />
     </path>
     <target name="junit" depends="jars">
-        <junit dir="tests"
-	       fork="yes"
-	       printsummary="false" 
-	       haltonfailure="true">
-            <classpath refid="test_classpath"/>
-            <formatter type="plain" usefile="false"/>
-            <test name="${testcase}" if="testcase"/>
+        <junit dir="tests" fork="yes" printsummary="false" haltonfailure="true">
+            <classpath refid="test_classpath" />
+            <formatter type="plain" usefile="false" />
+            <test name="${testcase}" if="testcase" />
             <batchtest unless="testcase">
-                <fileset dir="${classes_dir}"
-			 includes="tests/AllTests.class"/>
+                <fileset dir="${classes_dir}" includes="tests/AllTests.class" />
             </batchtest>
         </junit>
     </target>
@@ -993,94 +977,83 @@ jsapi.exe from the lib directory.
     </target>
     -->
 
-    <!-- ********************************************************** --> 
+    <!-- ********************************************************** -->
     <!-- *                                                        * -->
     <!-- * Make the packages for deployment.                      * -->
     <!-- *                                                        * -->
-    <!-- ********************************************************** --> 
-    <fileset id="srcs"
-	     dir="${src_dir}"
-	     includes="com/**,de/**"/>
+    <!-- ********************************************************** -->
+    <fileset id="srcs" dir="${src_dir}" includes="com/**,de/**" />
 
     <fileset id="legal"
-	     dir="${src_dir}"
-	     includes="acknowledgments.txt,
-	               license.terms"/>
+             dir="${src_dir}"
+             includes="acknowledgments.txt,
+	               license.terms" />
 
     <fileset id="docs"
-	     dir="."
-	     includes="index.html,overview.html,README.txt,RELEASE_NOTES,
+             dir="."
+             includes="index.html,overview.html,README.txt,RELEASE_NOTES,
                        ANNOUNCE.txt,
                        docs/**,mbrola/*.html,
                        javadoc/**"
-             excludes="docs/*.awk"/>
+             excludes="docs/*.awk" />
 
-    <fileset id="demos"
-	     dir="${src_dir}"
-	     includes="demo/**"/>
+    <fileset id="demos" dir="${src_dir}" includes="demo/**" />
 
-    <fileset id="tools"
-	     dir="${src_dir}"
-	     includes="tools/**"/>
+    <fileset id="tools" dir="${src_dir}" includes="tools/**" />
 
-    <fileset id="tests"
-	     dir="."
-	     includes="tests/**"/>
+    <fileset id="tests" dir="." includes="tests/**" />
 
     <fileset id="binaries"
-	     dir="."
-	     includes="lib/*.jar,bin/*.jar,mbrola/*.jar"
-             excludes="lib/jsapi.jar"/>
+             dir="."
+             includes="lib/*.jar,bin/*.jar,mbrola/*.jar"
+             excludes="lib/jsapi.jar" />
 
     <fileset id="jsapi_sh"
-	     dir="."
-	     includes="lib/jsapi.sh,lib/jsapi.exe,lib/README.txt"/>
+             dir="."
+             includes="lib/jsapi.sh,lib/jsapi.exe,lib/README.txt" />
 
     <target name="deploy"
-	    depends="deploy_init,
+            depends="deploy_init,
 	             deploy_src,
 	             deploy_bin,
 	             deploy_tst,
 	             deploy_webstartclock"
-	    description="Creates *.zip files for deployment"/>
+            description="Creates *.zip files for deployment" />
 
     <target name="deploy_init"
             description="Copies files to the deploy staging directory."
-	    depends="all,javadoc">
-	<mkdir dir="${deploy_dir}/freetts-${version}"/>
-	<copy todir="${deploy_dir}/freetts-${version}"
-	      includeEmptyDirs="false">
-             <fileset dir="." 
-		      includes="build.xml,
+            depends="all,javadoc">
+        <mkdir dir="${deploy_dir}/freetts-${version}" />
+        <copy todir="${deploy_dir}/freetts-${version}" includeEmptyDirs="false">
+            <fileset dir="."
+                     includes="build.xml,
 		                demo.xml,
                                 speech.properties,
-		                lib/voices.txt"/>
-	     <fileset refid="srcs"/>
-	     <fileset refid="legal"/>
-	     <fileset refid="docs"/>
-	     <fileset refid="demos"/>
-	     <fileset refid="tools"/>
-	     <fileset refid="tests"/>
-	     <fileset refid="binaries"/>
-	     <fileset refid="jsapi_sh"/>
-	</copy>
+		                lib/voices.txt" />
+            <fileset refid="srcs" />
+            <fileset refid="legal" />
+            <fileset refid="docs" />
+            <fileset refid="demos" />
+            <fileset refid="tools" />
+            <fileset refid="tests" />
+            <fileset refid="binaries" />
+            <fileset refid="jsapi_sh" />
+        </copy>
     </target>
 
     <!-- freetts-srcs -->
-    <target name="deploy_src"
-	    depends="deploy_init">
+    <target name="deploy_src" depends="deploy_init">
         <jar destfile="${deploy_dir}/freetts-${version}-src.zip"
              basedir="${deploy_dir}"
              filesonly="true"
              compress="true"
              includes="freetts-${version}/**"
-             excludes="**/*.jar,**/tests/**"/>
+             excludes="**/*.jar,**/tests/**" />
     </target>
 
 
     <!-- freetts-bin -->
-    <target name="deploy_bin"
-	    depends="deploy_init">
+    <target name="deploy_bin" depends="deploy_init">
         <jar destfile="${deploy_dir}/freetts-${version}-bin.zip"
              basedir="${deploy_dir}"
              filesonly="true"
@@ -1090,7 +1063,7 @@ jsapi.exe from the lib directory.
 	               freetts-${version}/overview.html,
                        **/tests/**,
                        freetts-${version}/de/**,
-                       freetts-${version}/com/**"/>
+                       freetts-${version}/com/**" />
     </target>
 
 
@@ -1102,15 +1075,15 @@ jsapi.exe from the lib directory.
              compress="true"
              includes="freetts-${version}/acknowledgments.txt,
                        freetts-${version}/license.terms,
-                       freetts-${version}/tests/**"/>
+                       freetts-${version}/tests/**" />
     </target>
 
 
     <!-- webstartclock -->
     <target name="deploy_webstartclock"
-	    depends="demos"
-	    description="Signs jars and creates tarball for web start demo">
-        <ant antfile="demo.xml" target="deploy_webstartclock"/>
+            depends="demos"
+            description="Signs jars and creates tarball for web start demo">
+        <ant antfile="demo.xml" target="deploy_webstartclock" />
     </target>
 
 
@@ -1121,14 +1094,14 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="freetts_only_tarball"
-	    depends="set_patternset_to_compile"
+            depends="set_patternset_to_compile"
             description="Create a tarball of sources free of JSAPI dependencies.">
-	<delete dir="${deploy_dir}/freetts-only-${version}"/>
-	<mkdir dir="${deploy_dir}/freetts-only-${version}"/>
-	<copy todir="${deploy_dir}/freetts-only-${version}"
-	      includeEmptyDirs="false">
-             <fileset dir="." 
-                      includes="build.xml,
+        <delete dir="${deploy_dir}/freetts-only-${version}" />
+        <mkdir dir="${deploy_dir}/freetts-only-${version}" />
+        <copy todir="${deploy_dir}/freetts-only-${version}"
+              includeEmptyDirs="false">
+            <fileset dir="."
+                     includes="build.xml,
                                 demo.xml,
 		                overview.html,
                                 ANNOUNCE.txt,
@@ -1141,55 +1114,57 @@ jsapi.exe from the lib directory.
                                 mbrola/*.html,
                                 demo/**,
                                 tools/**"
-                      excludes="demo/JSAPI/**,
-                                docs/*.awk"/>
-             <fileset dir=".">
-                 <patternset refid="${patternset_to_compile}"/>
-             </fileset>
-	</copy>
-	<copy file="docs/emacspeak_index.html"
-              tofile="${deploy_dir}/freetts-only-${version}/index.html"/>
+                     excludes="demo/JSAPI/**,
+                                docs/*.awk" />
+            <fileset dir=".">
+                <patternset refid="${patternset_to_compile}" />
+            </fileset>
+        </copy>
+        <copy file="docs/emacspeak_index.html"
+              tofile="${deploy_dir}/freetts-only-${version}/index.html" />
         <tar destfile="${deploy_dir}/freetts-only-${version}.tar.gz"
-	     basedir="${deploy_dir}"
-	     includes="freetts-only-${version}/**"
-	     compression="gzip"/>
+             basedir="${deploy_dir}"
+             includes="freetts-only-${version}/**"
+             compression="gzip" />
     </target>
 
-    <!-- ********************************************************** --> 
+    <!-- ********************************************************** -->
     <!-- *                                                        * -->
     <!-- * Deletes all build output and *~ file droppings         * -->
     <!-- *                                                        * -->
-    <!-- ********************************************************** --> 
+    <!-- ********************************************************** -->
     <target name="clean" description="Delete all build output">
-	<delete quiet="true" includeEmptyDirs="true">
-	    <fileset defaultexcludes="no" dir="." includes="**/*~"/>
-	    <fileset defaultexcludes="no" dir="lib" 
-		     includes="**/*.jar"
-		     excludes="**/jsapi.jar"/>
-	    <fileset defaultexcludes="no" dir="mbrola" 
-		     includes="**/mbrola.jar"/>
-	</delete>
-	<delete dir="${bin_dir}"/>
-	<delete dir="${build_dir}"/>
-	<delete dir="${javadoc_dir}"/>
-	<delete dir="${deploy_dir}"/>
+        <delete quiet="true" includeEmptyDirs="true">
+            <fileset defaultexcludes="no" dir="." includes="**/*~" />
+            <fileset defaultexcludes="no"
+                     dir="lib"
+                     includes="**/*.jar"
+                     excludes="**/jsapi.jar" />
+            <fileset defaultexcludes="no"
+                     dir="mbrola"
+                     includes="**/mbrola.jar" />
+        </delete>
+        <delete dir="${bin_dir}" />
+        <delete dir="${build_dir}" />
+        <delete dir="${javadoc_dir}" />
+        <delete dir="${deploy_dir}" />
     </target>
 
-    <target name="debug" 
-	    depends="all" 
-	    if="netbeans.home"
-	    description="Debug Project">
+    <target name="debug"
+            depends="all"
+            if="netbeans.home"
+            description="Debug Project">
         <java fork="true" classname="FreeTTSHelloWorld">
-            <jvmarg value="-Xdebug"/>
-            <jvmarg value="-Xnoagent"/>
-            <jvmarg value="-Djava.compiler=none"/>
-            <jvmarg value="-Dfreetts.voices=com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory"/>
-            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y"/>
+            <jvmarg value="-Xdebug" />
+            <jvmarg value="-Xnoagent" />
+            <jvmarg value="-Djava.compiler=none" />
+            <jvmarg value="-Dfreetts.voices=com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory" />
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y" />
             <classpath>
-                <pathelement path="${src_dir}"/>
-                <pathelement path="bld/demo_classes/freetts/HelloWorld"/>
-                <pathelement path="${classes_dir}"/>
-                <pathelement location="lib/jsapi.jar"/>
+                <pathelement path="${src_dir}" />
+                <pathelement path="bld/demo_classes/freetts/HelloWorld" />
+                <pathelement path="${classes_dir}" />
+                <pathelement location="lib/jsapi.jar" />
             </classpath>
         </java>
     </target>

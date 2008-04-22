@@ -43,7 +43,7 @@
     <!-- *       not depend upon jsapi.jar.                       * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="check_jsapi_jar.isPresent">
+    <target name="-check_jsapi_jar.isPresent">
         <available file="lib/jsapi.jar" property="jsapi_jar.isPresent"/>
     </target>
 
@@ -179,7 +179,7 @@ jsapi.exe from the lib directory.
 
     <!-- JSAPI demos -->
     <target name="compile_jsapi_demos"
-	    depends="check_jsapi_jar.isPresent,
+	    depends="-check_jsapi_jar.isPresent,
 	             issue_jsapi_warning,
 	             compile_jsapi_emacspeak,
 	             compile_jsapi_helloworld,
@@ -206,13 +206,22 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/EmacspeakServer.jar" 
-	     manifest="${src_dir}/demo/JSAPI/Emacspeak/Manifest"
 	     filesonly="true"
 	     compress="true">
             <fileset dir="${demo_classes_dir}/JSAPI/Emacspeak"/>
             <fileset dir="${demo_classes_dir}/util"
 	             includes="EmacspeakProtocolHandler.class,
 		               TTSServer.class"/>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="EmacspeakServer" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="Emacsspeak server" />
+                </section>
+            </manifest>
         </jar>
     </target>
 
@@ -231,11 +240,21 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/HelloWorld.jar" 
-	     manifest="${src_dir}/demo/JSAPI/HelloWorld/Manifest"
 	     basedir="${demo_classes_dir}/JSAPI/HelloWorld"
 	     includes="*.class"
 	     filesonly="true"
-	     compress="true"/>
+	     compress="true">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="HelloWorld" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 hello world demo" />
+                </section>
+            </manifest>
+         </jar>
     </target>
 
     <target name="compile_jsapi_jtime"
@@ -254,12 +273,21 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/JTime.jar" 
-	     manifest="${src_dir}/demo/JSAPI/JTime/Manifest"
 	     filesonly="true"
 	     compress="true">
             <fileset dir="${demo_classes_dir}/JSAPI/JTime"/>
             <fileset dir="${demo_classes_dir}/util"
 	             includes="TimeUtils.class"/>
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="JTime" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 JTime demo" />
+                </section>
+            </manifest>
         </jar>
     </target>
 
@@ -278,11 +306,21 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/MixedVoices.jar" 
-	     manifest="${src_dir}/demo/JSAPI/MixedVoices/Manifest"
 	     basedir="${demo_classes_dir}/JSAPI/MixedVoices"
 	     includes="*.class"
 	     filesonly="true"
-	     compress="true"/>
+	     compress="true">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="MixedVoices" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 mixed voices demo" />
+                </section>
+            </manifest>
+        </jar>
     </target>
 
     <target name="compile_jsapi_player"
@@ -300,11 +338,21 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/Player.jar" 
-	     manifest="${src_dir}/demo/JSAPI/Player/Manifest"
 	     basedir="${demo_classes_dir}/JSAPI/Player"
 	     includes="*.class"
 	     filesonly="true"
-	     compress="true"/>
+	     compress="true">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="Player" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 player demo" />
+                </section>
+            </manifest>
+       </jar>
     </target>
 
     <target name="compile_jsapi_webstartclock"
@@ -323,12 +371,22 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/WebStartClock.jar" 
-	     manifest="${src_dir}/demo/JSAPI/WebStartClock/Manifest"
 	     filesonly="true"
 	     compress="true">
             <fileset dir="${demo_classes_dir}/JSAPI/WebStartClock"/>
             <fileset dir="${demo_classes_dir}/util"
 	             includes="TimeUtils.class"/>
+               
+            <manifest>
+                <attribute name="Built-By" value="${user.name}" />
+                <attribute name="Main-Class" value="JSAPIClock" />
+                <attribute name="Class-Path"
+                    value="../lib/freetts.jar ../lib/freetts-jsapi10.jar ../lib/jsapi.jar" />
+                <section name="common">
+                  <attribute name="Implementation-Title"
+                      value="FreeTTS JSAPI 1.0 webstart clock demo" />
+                </section>
+            </manifest>
         </jar>
     </target>
 
