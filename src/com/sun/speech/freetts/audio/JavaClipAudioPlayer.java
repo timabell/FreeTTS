@@ -7,17 +7,17 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
+
+import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Provides an implementation of <code>AudioPlayer</code> that creates
@@ -288,12 +288,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     }
 
     /**
-     *  Marks the end a set of data. Audio data for a single utterance should
-     *  be grouped between begin/end pairs.
-     *
-     *  @return <code>true</code> if the audio was output properly, 
-     * 		<code>false </code> if the output was cancelled 
-     *		or interrupted.
+     * Marks the end a set of data. Audio data for a single utterance should be
+     * grouped between begin/end pairs.
+     * 
+     * @return <code>true</code> if the audio was output properly,
+     *         <code>false </code> if the output was canceled or interrupted.
      */
     public synchronized boolean end()  {
         boolean ok = true;
@@ -388,7 +387,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @param size the size into the buffer
      *
      * @return <code>true</code> if the write completed successfully, 
-     *       	<code> false </code>if the write was cancelled.
+     *       	<code> false </code>if the write was canceled.
      */
     public boolean write(byte[] bytes, int offset, int size) {
         if (firstSample) {
