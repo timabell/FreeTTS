@@ -8,23 +8,20 @@
 package com.sun.speech.freetts;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.FileInputStream;
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;
-
+import java.net.JarURLConnection;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.net.MalformedURLException;
-import java.net.JarURLConnection;
-import java.util.jar.Attributes;
-import java.util.jar.Attributes.Name;
-
 import java.net.URLStreamHandlerFactory;
+import java.util.jar.Attributes;
 
 /**
  * Provides access to voices for all of FreeTTS.  There is only one
@@ -439,7 +436,7 @@ public class VoiceManager {
                 //System.out.println("TEST: checking url " + files[i].getName());
                 if (files[i].isFile() && (!files[i].isHidden()) &&
                         files[i].getName().endsWith(".jar")) {
-                    URL jarURL = files[i].toURL();
+                    URL jarURL = files[i].toURI().toURL();
                     jarURL = new URL("jar", "",
                             "file:"+ jarURL.getPath() + "!/");
                     //System.out.println("TEST: reading url " + jarURL);
