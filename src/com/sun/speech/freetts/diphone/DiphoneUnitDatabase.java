@@ -9,40 +9,35 @@
  * WARRANTIES.
  */
 package com.sun.speech.freetts.diphone;
-import com.sun.speech.freetts.relp.Sample;
-import com.sun.speech.freetts.relp.SampleInfo;
-
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-import com.sun.speech.freetts.Unit;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-import java.net.MalformedURLException;
+import java.lang.ref.Reference;
+import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.sun.speech.freetts.relp.Sample;
+import com.sun.speech.freetts.relp.SampleInfo;
+import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Represents and manages the unit data for all diphones.  The diphone
@@ -98,6 +93,9 @@ import java.lang.ref.WeakReference;
  * cost.  
  */
 public class DiphoneUnitDatabase {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(DiphoneUnitDatabase.class.getName());
 
     private String name;
     private int sampleRate;
@@ -308,9 +306,11 @@ public class DiphoneUnitDatabase {
             } else {
                 // No original was found for this alias
                 // -- complain, and ignore
-                Utilities.debug("For diphone alias "
+                if (LOGGER.isLoggable(Level.FINER)) {
+                    LOGGER.finer("For diphone alias "
                         +adiph.getName()+", could not find original "
                         +adiph.getOriginalName());
+                }
                 return;
             }
         }
@@ -350,9 +350,11 @@ public class DiphoneUnitDatabase {
                     } else {
                         // No original was found for this alias
                         // -- complain, and ignore
-                        Utilities.debug("For diphone alias "
+                        if (LOGGER.isLoggable(Level.FINER)) {
+                            LOGGER.finer("For diphone alias "
                                 +adiph.getName()+", could not find original "
                                 +adiph.getOriginalName());
+                        }
                         diphone = null;
                     }
                 } else { // a normal diphone

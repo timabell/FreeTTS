@@ -14,6 +14,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -487,7 +491,10 @@ public class FreeTTSTime extends FreeTTS {
         }
 
         if (setVerbose) {
-            voice.setVerbose(true);
+            Handler handler = new ConsoleHandler();
+            handler.setLevel(Level.ALL);
+            Logger.getLogger("com.sun").addHandler(handler);
+            Logger.getLogger("com.sun").setLevel(Level.ALL);
         }
 
         if (setDumpUtterance) {

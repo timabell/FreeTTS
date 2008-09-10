@@ -53,7 +53,6 @@ public class UnitConcatenator implements UtteranceProcessor {
 	int pmI = 0, targetResidualPosition = 0, nearestPM, 
 	    unitPart, targetStart = 0, targetEnd, residualSize, numberFrames;
 	Relation unitRelation = utterance.getRelation(Relation.UNIT);
-	boolean debug = false;
 
 	SampleInfo sampleInfo;
 	

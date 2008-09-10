@@ -7,6 +7,9 @@
  */
 package com.sun.speech.freetts.audio;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -27,21 +30,17 @@ import com.sun.speech.freetts.util.Utilities;
  * layer until an entire utterance has been processed, this player has
  * higher latency (50 msecs for a typical 4 second utterance).
  *
- * The system property:
- * <code>
-	com.sun.speech.freetts.audio.AudioPlayer.debug;
- * </code> if set to <code>true</code> will cause this
- * class to emit debugging information (useful to a developer).
  */
 public class JavaClipAudioPlayer implements AudioPlayer {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(JavaClipAudioPlayer.class.getName());
     
     private volatile boolean paused;
     private volatile boolean cancelled = false;
     private volatile Clip currentClip;
-    private Object clipLock = new Object();
 
     private float volume = 1.0f;  // the current volume
-    private boolean debug = false;
     private boolean audioMetrics = false;
     private BulkTimer timer = new BulkTimer();
     private AudioFormat defaultFormat = // default format is 8khz
@@ -62,8 +61,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Constructs a default JavaClipAudioPlayer 
      */
     public JavaClipAudioPlayer() {
-	debug = Utilities.getBoolean
-	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
         drainDelay = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.drainDelay",
              150L).longValue();
@@ -419,8 +416,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * audio player.
      */
     private void debugPrint(String msg) {
-	if (debug) {
-	    System.out.println(toString() + ": " + msg);
+	if (LOGGER.isLoggable(Level.FINE)) {
+	    LOGGER.fine(toString() + ": " + msg);
 	}
     }
 

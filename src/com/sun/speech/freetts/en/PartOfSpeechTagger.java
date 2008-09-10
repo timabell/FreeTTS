@@ -10,9 +10,12 @@
  */
 package com.sun.speech.freetts.en;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
 
 
 /**
@@ -20,6 +23,9 @@ import com.sun.speech.freetts.ProcessException;
  * Currently this does nothing.
  */
 public class PartOfSpeechTagger implements UtteranceProcessor {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(PartOfSpeechTagger.class.getName());
 
     /**
      * Constructs a PartOfSpeechTagger
@@ -37,7 +43,9 @@ public class PartOfSpeechTagger implements UtteranceProcessor {
      *         processing of the utterance
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
-        utterance.getVoice().log("PartOfSpeechTagger does nothing!");
+        if (LOGGER.isLoggable(Level.FINE)) {
+            LOGGER.fine("PartOfSpeechTagger does nothing!");
+        }
     }
 
     /**

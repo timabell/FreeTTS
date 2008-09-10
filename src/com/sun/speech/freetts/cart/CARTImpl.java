@@ -10,22 +10,22 @@
  */
 package com.sun.speech.freetts.cart;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.ByteBuffer;
+import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.PathExtractor;
 import com.sun.speech.freetts.PathExtractorImpl;
 import com.sun.speech.freetts.util.Utilities;
-
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.DataInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.StringTokenizer;
 
 /**
  * Implementation of a Classification and Regression Tree (CART) that is
@@ -81,6 +81,9 @@ import java.util.StringTokenizer;
  * value of the node is the interpretation result.
  */
 public class CARTImpl implements CART {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(CARTImpl.class.getName());
     /**
      * Entry in file represents the total number of nodes in the
      * file.  This should be at the top of the file.  The format
@@ -243,7 +246,6 @@ public class CARTImpl implements CART {
         if (type.equals(LEAF) || type.equals(NODE)) {
             cart[curNode] = getNode(type, tokenizer, curNode);
 	    cart[curNode].setCreationLine(line);
-            //System.out.println("Added: " + cart[numNodes].toString());
             curNode++;
         } else if (type.equals(TOTAL)) {
             cart = new Node[Integer.parseInt(tokenizer.nextToken())];
@@ -334,14 +336,13 @@ public class CARTImpl implements CART {
         Node node = cart[nodeIndex];
         DecisionNode decision;
 
-	// System.out.println(" ---- start cart on " + item);
         while (!(cart[nodeIndex] instanceof LeafNode)) {
             decision = (DecisionNode) cart[nodeIndex];
 	    nodeIndex = decision.getNextNode(item);
-
-	    // Utilities.debug(decision.toString());
         }
-        Utilities.debug("LEAF " + cart[nodeIndex].getValue());
+        if (LOGGER.isLoggable(Level.FINER)) {
+            LOGGER.finer("LEAF " + cart[nodeIndex].getValue());
+        }
         return ((LeafNode) cart[nodeIndex]).getValue();
     }
 
@@ -567,7 +568,9 @@ public class CARTImpl implements CART {
 		ret = qfalse;
 	    }
 
-	    Utilities.debug(trace(val, yes, ret));
+	    if (LOGGER.isLoggable(Level.FINER)) {
+	        LOGGER.finer(trace(val, yes, ret));
+	    }
 
 	    return ret;
         }

@@ -10,12 +10,15 @@
  */
 package com.sun.speech.freetts.relp;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.relp.LPCResult;
-import com.sun.speech.freetts.audio.AudioPlayer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.sound.sampled.AudioFormat;
+
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.audio.AudioPlayer;
 
 /**
  * Supports generating audio output from an utterance. This is an
@@ -26,6 +29,10 @@ import javax.sound.sampled.AudioFormat;
  * @see LPCResult
  */
 public class AudioOutput implements UtteranceProcessor {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(AudioOutput.class.getName());
+
     private final static AudioFormat AUDIO_8KHZ =
 	new AudioFormat(8000.0f, 16, 1, true, true);
     private final static AudioFormat AUDIO_16KHZ =
@@ -51,8 +58,10 @@ public class AudioOutput implements UtteranceProcessor {
 	audioPlayer.setAudioFormat(getAudioFormat(sampleInfo));
 	audioPlayer.setVolume(utterance.getVoice().getVolume());
 
-	utterance.getVoice().log("=== " +
+	if (LOGGER.isLoggable(Level.FINE)) {
+	    LOGGER.fine("=== " +
 		utterance.getString("input_text"));
+	}
 	if (!lpcResult.playWave(audioPlayer, utterance)) {
 	    throw new ProcessException("Output Cancelled");
 	}

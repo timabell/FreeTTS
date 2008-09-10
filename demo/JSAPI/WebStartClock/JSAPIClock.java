@@ -72,7 +72,7 @@ public class JSAPIClock extends Clock {
     public static void main(String args[]) {
         Clock frame = new JSAPIClock();
         frame.pack();
-        frame.show();
+        frame.setVisible(true);
         frame.createSynthesizer();
         frame.startClock();
     }

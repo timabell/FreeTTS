@@ -10,13 +10,14 @@
  */
 package com.sun.speech.freetts.cart;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-
-import java.util.Iterator;
 
 /**
  * Creates a <code>Relation.PHRASE</code> relation, grouping
@@ -26,6 +27,10 @@ import java.util.Iterator;
  * @see Relation#WORD
  */
 public class Phraser implements UtteranceProcessor {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(UtteranceProcessor.class.getName());
+
     /**
      * The CART used for this Phrasing UtteranceProcessor.  It is
      * passed into the constructor.
@@ -65,7 +70,10 @@ public class Phraser implements UtteranceProcessor {
             }
             p.addDaughter(w);
             String results = (String) cart.interpret(w);
-            //System.out.println("word: " + w + ", results: " + results);
+            
+            if (LOGGER.isLoggable(Level.FINER)) {
+                LOGGER.finer("word: " + w + ", results: " + results);
+            }
             if (results.equals("BB")) {
                 p = null;
             }

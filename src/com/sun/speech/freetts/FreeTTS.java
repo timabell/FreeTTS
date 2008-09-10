@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioSystem;
@@ -32,6 +36,10 @@ import com.sun.speech.freetts.audio.SingleFileAudioPlayer;
  * Standalone utility that directly interacts with a CMUDiphoneVoice.
  */
 public class FreeTTS {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(FreeTTS.class.getName());
+
     /** Version number. */
     public final static String VERSION = "FreeTTS 1.2 February 06, 2005";
     private Voice voice;
@@ -214,7 +222,8 @@ public class FreeTTS {
             }
             reader.close();
         } catch (IOException ioe) {
-            voice.error("can't read " + path);
+            LOGGER.severe("can't read " + path);
+            throw new Error(ioe);
         }
         voice.endBatch();
 
@@ -477,7 +486,10 @@ public class FreeTTS {
             } else if (args[i].equals("-streaming")) {
                 freetts.setStreamingAudio(true);
             } else if (args[i].equals("-verbose")) {
-                voice.setVerbose(true);
+                Handler handler = new ConsoleHandler();
+                handler.setLevel(Level.ALL);
+                Logger.getLogger("com.sun").addHandler(handler);
+                Logger.getLogger("com.sun").setLevel(Level.ALL);
             } else if (args[i].equals("-dumpUtterance")) {
                 voice.setDumpUtterance(true);
             } else if (args[i].equals("-dumpAudioTypes")) {

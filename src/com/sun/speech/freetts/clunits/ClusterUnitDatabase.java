@@ -10,39 +10,34 @@
  */
 package com.sun.speech.freetts.clunits;
 
-import com.sun.speech.freetts.cart.CART;
-import com.sun.speech.freetts.cart.CARTImpl;
-import com.sun.speech.freetts.util.Utilities;
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.relp.SampleSet;
-import com.sun.speech.freetts.relp.Sample;
-import com.sun.speech.freetts.relp.SampleInfo;
-
-import java.io.BufferedInputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.MappedByteBuffer;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.File;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.DataOutputStream;
-import java.io.DataInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
-import java.util.List;
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
+
+import com.sun.speech.freetts.cart.CART;
+import com.sun.speech.freetts.cart.CARTImpl;
+import com.sun.speech.freetts.relp.SampleInfo;
+import com.sun.speech.freetts.relp.SampleSet;
+import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -57,6 +52,7 @@ import java.util.Iterator;
  *
  */
 public class ClusterUnitDatabase {
+
     final  static int CLUNIT_NONE = 65535;
 
     private DatabaseClusterUnit[] units;

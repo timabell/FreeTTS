@@ -11,6 +11,7 @@ import java.beans.PropertyVetoException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import javax.speech.EngineException;
 import javax.speech.EngineStateError;
@@ -29,6 +30,10 @@ import com.sun.speech.freetts.audio.AudioPlayer;
  * FreeTTS speech synthesis system.
  */
 public class FreeTTSSynthesizer extends BaseSynthesizer {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(FreeTTSSynthesizer.class.getName());
+
     /**
      * Reference to output thread.
      */
@@ -108,12 +113,6 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
     private boolean setCurrentVoice(FreeTTSVoice voice) 
             throws EngineException {
 
-	/*
-	System.out.print("Old Voice " +(curVoice == null ?
-		    "???" : curVoice.getName()));
-	System.out.println(" New Voice " +(voice == null ?
-		    "???" : voice.getName()));
-	*/
 	com.sun.speech.freetts.Voice freettsVoice = voice.getVoice();
 	boolean ok = false;
 
@@ -642,7 +641,7 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
                         queue.wait();
                     }
                     catch (InterruptedException e) {
-			error("Unexpected interrupt");
+			LOGGER.severe("Unexpected interrupt");
                         // Ignore interrupts and we'll loop around
                     }
                 }
@@ -698,23 +697,5 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
 	    com.sun.speech.freetts.Voice voice = curVoice.getVoice();
 	    voice.speak(item);
         }
-
-	/**
-	 * Output an error message
-	 *
-	 * @param s the message to output
-	 */
-	private void error(String s) {
-	    System.out.println("Error: " + s);
-	}
-
-	/**
-	 * Output a trace message
-	 *
-	 * @param s the message to output
-	 */
-	private void trace(String s) {
-	    System.out.println("Trace: " + s);
-	}
     }
 }

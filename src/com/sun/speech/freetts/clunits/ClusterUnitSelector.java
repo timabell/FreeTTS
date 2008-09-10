@@ -9,33 +9,26 @@
  * WARRANTIES.
  */
 package com.sun.speech.freetts.clunits;
-import java.util.HashMap; 
-import java.util.List;
-import java.util.Iterator;
-import java.util.StringTokenizer;
-import java.net.URL;
 import java.io.IOException;
-import java.io.BufferedReader; 
-import java.io.File; 
-import java.io.FileReader; 
-import java.io.FileNotFoundException; 
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-
+import com.sun.speech.freetts.FeatureSet;
+import com.sun.speech.freetts.FeatureSetImpl;
+import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.PathExtractor;
+import com.sun.speech.freetts.PathExtractorImpl;
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.cart.CART;
+import com.sun.speech.freetts.clunits.ClusterUnitDatabase.UnitOriginInfo;
 import com.sun.speech.freetts.relp.Sample;
 import com.sun.speech.freetts.relp.SampleInfo;
 import com.sun.speech.freetts.relp.SampleSet;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.cart.CART;
-import com.sun.speech.freetts.clunits.ClusterUnitDatabase.UnitOriginInfo;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.FeatureSetImpl;
-import com.sun.speech.freetts.PathExtractor;
-import com.sun.speech.freetts.PathExtractorImpl;
-import com.sun.speech.freetts.Voice;
 
 import de.dfki.lt.freetts.ClusterUnitNamer;
 
@@ -46,8 +39,10 @@ import de.dfki.lt.freetts.ClusterUnitNamer;
  *
  */
 public class ClusterUnitSelector implements UtteranceProcessor {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(ClusterUnitSelector.class.getName());
 
-    final static boolean DEBUG = false;
     private final static PathExtractor DNAME = new PathExtractorImpl(
 	    "R:SylStructure.parent.parent.name", true);
     private ClusterUnitDatabase clunitDB;
@@ -151,7 +146,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
     // Now associate the candidate units in the best path 
     // with the items in the segment relation.
 	if (!vd.result("selected_unit")) {
-	    utterance.getVoice().error("clunits: can't find path");
+	    LOGGER.severe("clunits: can't find path");
+	    throw new Error();
 	}
 
     // If optimal coupling was used, the join points must now be copied
@@ -198,8 +194,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
         unitFeatureSet.setInt("instance", unitEntry - clunitDB.getUnitIndex(clunitName, 0));
 	    } // add the rest of these things for debugging.
 
-	    if (DEBUG) {
-		debug(" sr " + clunitDB.getSampleInfo().getSampleRate() + " " +
+	    if (LOGGER.isLoggable(Level.FINE)) {
+		LOGGER.fine(" sr " + clunitDB.getSampleInfo().getSampleRate() + " " +
 		    s.getFeatures().getFloat("end") + " " +
 		    (int) (s.getFeatures().getFloat("end") * 
 			   clunitDB.getSampleInfo().getSampleRate()));
@@ -342,8 +338,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		}
 	    }
 
-	    if (DEBUG) {
-		debug("num states " + numStates);
+	    if (LOGGER.isLoggable(Level.FINE)) {
+		LOGGER.fine("num states " + numStates);
 	    }
 
 	    if (numStates == 0) {    	// its a  general beam search
@@ -394,8 +390,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    for (ViterbiPoint p = timeline; p.next != null; p = p.next) {
             // The candidates for the current item:
 		p.cands = getCandidate(p.item);
-		if (DEBUG) {
-		    debug("decode " + p.cands);
+		if (LOGGER.isLoggable(Level.FINE)) {
+		    LOGGER.fine("decode " + p.cands);
 		}
 		if (numStates != 0) {
 		    if (numStates == -1) {
@@ -574,8 +570,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		p.setInt(clunitDB.getUnitIndex(unitType,  clist[i]));
 		all = p;
 		// this is OK
-		if (DEBUG) {
-		    debug("    gc adding " + clist[i]);
+		if (LOGGER.isLoggable(Level.FINE)) {
+		    LOGGER.fine("    gc adding " + clist[i]);
 		}
 	    }
 
@@ -592,15 +588,15 @@ public class ClusterUnitSelector implements UtteranceProcessor {
             // Get the candidates for the preceding (segment) item
 		ViterbiCandidate lc = (ViterbiCandidate) (item.
 		    getPrevious().getFeatures().getObject("clunit_cands"));
-		if (DEBUG) {
-		    debug("      lc " + lc);
+		if (LOGGER.isLoggable(Level.FINE)) {
+		    LOGGER.fine("      lc " + lc);
 		}
 		for (int e = 0; lc != null && 
 			(e < clunitDB.getExtendSelections());
 			lc = lc.next) {
 		    int nu = clunitDB.getNextUnit(lc.ival);
-		    if (DEBUG) {
-			debug("      e: " + e + " nu: " + nu);
+		    if (LOGGER.isLoggable(Level.FINE)) {
+			LOGGER.fine("      e: " + e + " nu: " + nu);
 		    }
 		    if (nu == ClusterUnitDatabase.CLUNIT_NONE) {
 			continue;
@@ -608,8 +604,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		    
             // Look through the list of candidates for the current item:
 		    for (gt = all; gt != null; gt = gt.next) {
-			if (DEBUG) {
-			    debug("       gt " + gt.ival + " nu " + nu);
+			if (LOGGER.isLoggable(Level.FINE)) {
+			    LOGGER.fine("       gt " + gt.ival + " nu " + nu);
 			}
 			if (nu == gt.ival) {
                 // The unit following one of the candidates for the preceding
@@ -618,8 +614,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 			}
 		    }
 
-		    if (DEBUG) {
-			debug("nu " + clunitDB.getUnit(nu).getName() + " all " +
+		    if (LOGGER.isLoggable(Level.FINE)) {
+			LOGGER.fine("nu " + clunitDB.getUnit(nu).getName() + " all " +
 			      clunitDB.getUnit(all.ival).getName() +
 			      " " + all.ival);
 		    }
@@ -729,8 +725,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    t = lastPoint;
 
 	    if (numStates != 0) {
-		if (DEBUG) {
-		    debug("fbp ns " + numStates + " t " 
+		if (LOGGER.isLoggable(Level.FINE)) {
+		    LOGGER.fine("fbp ns " + numStates + " t " 
 			    + t.numStates + " best " + best);
 		}
         // All paths end in lastPoint, and take into account
@@ -881,8 +877,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	 */
 	public int getFrameDistance(int a, int b, int[] joinWeights,int order) {
 
-	    if (DEBUG) {
-		debug(" gfd  a " + a   + " b " + b + " or " + order);
+	    if (LOGGER.isLoggable(Level.FINE)) {
+		LOGGER.fine(" gfd  a " + a   + " b " + b + " or " + order);
 	    }
 	    int r, i;
 	    short[] bv = clunitDB.getMcep().getSample(b).getFrameData();
@@ -929,8 +925,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	 * @param size the size of the path array
 	 */
 	public void initPathArray(int size) {
-	    if (DEBUG) {
-		debug("init_path_array: " + size);
+	    if (LOGGER.isLoggable(Level.FINE)) {
+		LOGGER.fine("init_path_array: " + size);
 	    }
 	    numStates = size;
 	    statePaths = new ViterbiPath[size];
@@ -952,8 +948,8 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 		    				i++, cc = cc.next) {
 		cc.pos = i;
 	    }
-	    if (DEBUG) {
-		debug("init_dynamic_ path_array: " + i);
+	    if (LOGGER.isLoggable(Level.FINE)) {
+		LOGGER.fine("init_dynamic_ path_array: " + i);
 	    }
 	    initPathArray(i);
 	}
@@ -1071,17 +1067,6 @@ public class ClusterUnitSelector implements UtteranceProcessor {
 	    return "ViterbiPath score " + score + " state " + state;
 	}
     }
-
-    /**
-     * Prints debug messages.
-     * 
-     * @param s the debug message
-     */
-    static void debug(String s) {
-	if (DEBUG) {
-	    System.out.println("cludebug: " + s);
-	}
-    }
 }
 
 
@@ -1099,8 +1084,6 @@ class Cost {
  * A Cluster Unit.
  */
 class ClusterUnit implements com.sun.speech.freetts.Unit {
-
-    private final static boolean DEBUG = false;
 
     private ClusterUnitDatabase db;
     private String name;
@@ -1198,17 +1181,6 @@ class ClusterUnit implements com.sun.speech.freetts.Unit {
      * Dumps this unit.
      */
     public void dump()  {
-    }
-
-    /**
-     * Prints debugging statements.
-     *
-     * @param s the debugging message
-     */
-    private void debug(String s) {
-	if (DEBUG) {
-	    System.out.println("Clunit debug: " + s);
-	}
     }
 }
 
