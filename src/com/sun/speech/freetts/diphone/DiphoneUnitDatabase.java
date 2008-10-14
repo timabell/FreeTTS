@@ -274,7 +274,6 @@ public class DiphoneUnitDatabase {
 
 		for (int i = 0; i < samples.length; i++) {
 		    samples[i] = new Sample(reader, numChannels);
-		    assert samples[i].getFrameData().length == numChannels;
 		}
 		Diphone diphone = new Diphone(name, samples, midPoint);
 		add(diphone);
@@ -296,7 +295,6 @@ public class DiphoneUnitDatabase {
      * @param diphone the diphone to add.
      */
     private void add(Diphone diphone) {
-        assert diphoneMap != null;
         if (diphone instanceof AliasDiphone) {
             AliasDiphone adiph = (AliasDiphone) diphone;
             Diphone original = (Diphone) 
@@ -331,7 +329,6 @@ public class DiphoneUnitDatabase {
 	Diphone diphone = null;
 
 	if (useIndexing) {
-        assert useNewIO;
 	    diphone = getFromCache(unitName);
 	    if (diphone == null) {
 		int index = getIndex(unitName);

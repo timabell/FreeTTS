@@ -268,7 +268,6 @@ abstract public class LexiconImpl implements Lexicon {
         loadedCompiledLexicons.put(compiledURL, newCompiled);
     	compiledIS.close();
 	}
-	assert loadedCompiledLexicons.containsKey(compiledURL);
 	compiled = Collections.unmodifiableMap((Map)loadedCompiledLexicons.get(compiledURL));
 
 	InputStream addendaIS = Utilities.getInputStream(addendaURL);

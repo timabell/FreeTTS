@@ -66,7 +66,6 @@ public class WordRelation {
      */
     public void addWord(String word) {
 	Item tokenItem = tokenToWords.getTokenItem();
-	assert (tokenItem != null);
 	Item wordItem = tokenItem.createDaughter();
 	FeatureSet featureSet = wordItem.getFeatures();
 	featureSet.setString("name", word);

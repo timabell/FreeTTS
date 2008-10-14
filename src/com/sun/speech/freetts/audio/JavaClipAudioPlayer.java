@@ -20,6 +20,7 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Timer;
 import com.sun.speech.freetts.util.Utilities;
 
 /**
@@ -341,7 +342,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 	    if (audioMetrics && firstPlay) {
 		firstPlay = false;
 		timer.stop("firstPlay");
-		timer.getTimer("firstPlay").showTimesShortTitle("");
+		timer.getTimer("firstPlay");
+        Timer.showTimesShortTitle("");
 		timer.getTimer("firstPlay").showTimesShort(0);
 	    }
             currentClip.start();                

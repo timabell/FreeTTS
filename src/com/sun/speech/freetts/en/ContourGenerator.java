@@ -108,9 +108,6 @@ public class ContourGenerator implements UtteranceProcessor {
 	float localStddev;
 	Object tval;
 
-	assert utterance.getRelation(Relation.SYLLABLE_STRUCTURE) != null;
-	assert utterance.getRelation(Relation.SYLLABLE) != null;
-	assert utterance.getRelation(Relation.TARGET) == null;
 	mean = utterance.getVoice().getPitch();
 	mean *= utterance.getVoice().getPitchShift();
 	stddev = utterance.getVoice().getPitchRange();

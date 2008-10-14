@@ -104,8 +104,6 @@ public class Segmenter implements UtteranceProcessor {
 		phones = lex.getPhones(word.toString(), null);
 	    }
 
-	    assert phones != null;
-
 	    for (int j = 0; j < phones.length; j++) {
 		if (sylItem == null) {
 		    sylItem = syl.appendItem();
@@ -129,11 +127,6 @@ public class Segmenter implements UtteranceProcessor {
 		}
 	    }
 	}
-
-	assert utterance.getRelation(Relation.WORD) != null;
-	assert utterance.getRelation(Relation.SYLLABLE) != null;
-	assert utterance.getRelation(Relation.SYLLABLE_STRUCTURE) != null;
-	assert utterance.getRelation(Relation.SEGMENT) != null;
     }
 
     /**

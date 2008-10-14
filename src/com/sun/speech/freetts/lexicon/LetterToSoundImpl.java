@@ -544,7 +544,6 @@ public class LetterToSoundImpl implements LetterToSound {
 	    if (startIndex == null) {
 		continue;
 	    }
-            assert (startIndex != null);
             stateIndex = startIndex.intValue();
             currentState = getState(stateIndex);
             while (!(currentState instanceof FinalState)) {
