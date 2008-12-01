@@ -10,21 +10,17 @@
  */
 package com.sun.speech.freetts.diphone;
 
-import com.sun.speech.freetts.diphone.Diphone;
-import com.sun.speech.freetts.relp.Sample;
-import com.sun.speech.freetts.relp.SampleInfo;
+import java.io.IOException;
+import java.net.URL;
 
 import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.relp.LPCResult;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.ProcessException;
-import java.util.List;
-import java.util.Iterator;
-import java.net.URL;
-import java.io.IOException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.relp.Sample;
+import com.sun.speech.freetts.relp.SampleInfo;
 
 
 /**
@@ -103,7 +99,6 @@ public class DiphoneUnitSelector implements UtteranceProcessor {
 	Item unitItem0, unitItem1;
 		
 	String diphoneName;
-	Diphone diphone;
 			
 	Relation unitRelation = utterance.createRelation(Relation.UNIT);
 	Relation segmentRelation = utterance.getRelation(Relation.SEGMENT);

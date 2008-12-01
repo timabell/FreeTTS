@@ -10,24 +10,18 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import com.sun.speech.freetts.en.us.USEnglish;
-import com.sun.speech.freetts.util.Utilities;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
+
 import com.sun.speech.freetts.FeatureProcessor;
 import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.PartOfSpeech;
 import com.sun.speech.freetts.PathExtractor;
 import com.sun.speech.freetts.PathExtractorImpl;
 import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Voice;
-import java.io.PrintWriter;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.Set;
 
 
 

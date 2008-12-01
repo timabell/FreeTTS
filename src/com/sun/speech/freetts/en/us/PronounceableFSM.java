@@ -15,19 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.StringTokenizer;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Implements a finite state machine that checks if a given string

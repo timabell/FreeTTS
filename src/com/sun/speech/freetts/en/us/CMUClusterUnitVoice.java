@@ -10,24 +10,18 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.clunits.ClusterUnitSelector;
-import com.sun.speech.freetts.clunits.ClusterUnitDatabase;
-import com.sun.speech.freetts.clunits.ClusterUnitPitchmarkGenerator;
-import com.sun.speech.freetts.relp.UnitConcatenator;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Locale;
 
 import com.sun.speech.freetts.Age;
 import com.sun.speech.freetts.Gender;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.clunits.ClusterUnitPitchmarkGenerator;
+import com.sun.speech.freetts.clunits.ClusterUnitSelector;
+import com.sun.speech.freetts.relp.UnitConcatenator;
 
 import de.dfki.lt.freetts.ConcatenativeVoice;
-
-import java.util.Locale;
-
-import java.net.URL;
 
 /**
  * Defines voice that does cluster unit selection.

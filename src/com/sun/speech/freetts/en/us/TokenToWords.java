@@ -10,18 +10,12 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import java.io.*;
 import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.FeatureSetImpl;
 import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.PathExtractor;
-import com.sun.speech.freetts.PathExtractorImpl;
 import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Utterance;
@@ -306,7 +300,6 @@ public class TokenToWords implements UtteranceProcessor {
 		("TokenToWords: Token relation does not exist");
 	}
 	
-	Item wordItem;
 	wordRelation = WordRelation.createWordRelation(utterance, this);
 	
 	for (tokenItem = tokenRelation.getHead();

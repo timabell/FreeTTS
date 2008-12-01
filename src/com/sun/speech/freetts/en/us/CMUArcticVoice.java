@@ -1,18 +1,13 @@
 package com.sun.speech.freetts.en.us;
 
 import java.io.IOException;
-
-import java.util.Locale;
-
 import java.net.URL;
+import java.util.Locale;
 
 import com.sun.speech.freetts.Age;
 import com.sun.speech.freetts.Gender;
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.PathExtractor;
-import com.sun.speech.freetts.PathExtractorImpl;
-
 import com.sun.speech.freetts.clunits.ClusterUnitSelector;
 
 import de.dfki.lt.freetts.ClusterUnitNamer;

@@ -13,8 +13,6 @@ package com.sun.speech.freetts.en.us;
 import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.util.Utilities;
-import java.util.List;
-import java.util.LinkedList;
 
 /**
  * Expands Strings containing digits characters into

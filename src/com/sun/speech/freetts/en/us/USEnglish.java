@@ -10,14 +10,13 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import java.util.regex.*;
 
 
 /**
  * Provides the definitions for US English whitespace, punctuations,
  * prepunctuation, and postpunctuation symbols. It also contains a set of
  * Regular Expressions for the US English language.
- * With regular expressions, it specifies what are whitespaces,
+ * With regular expressions, it specifies what are whitespace,
  * letters in the alphabet, uppercase and lowercase letters, alphanumeric
  * characters, identifiers, integers, doubles, digits, and 'comma and int'. 
  *

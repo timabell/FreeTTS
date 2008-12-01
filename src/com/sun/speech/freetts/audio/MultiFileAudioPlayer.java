@@ -7,21 +7,16 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFileFormat.Type;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.LineUnavailableException;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.IOException;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Streams audio to multiple files, one per utterance. 
@@ -29,7 +24,6 @@ import java.io.IOException;
  *
  */
 public class MultiFileAudioPlayer implements AudioPlayer {
-    private boolean debug = false;
     private AudioFormat currentFormat = null;
     private int fileCount = 0;
     private String baseName;
@@ -60,9 +54,6 @@ public class MultiFileAudioPlayer implements AudioPlayer {
     public MultiFileAudioPlayer(String baseName, AudioFileFormat.Type type) {
 	this.baseName = baseName;
 	this.outputType = type;
-
-	debug = Utilities.getBoolean
-	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
     }
 
     /**
@@ -268,17 +259,6 @@ public class MultiFileAudioPlayer implements AudioPlayer {
 	return "FileAudioPlayer";
     }
 
-
-    /**
-     * Outputs a debug message if debugging is turned on
-     *
-     * @param msg the message to output
-     */
-    private void debugPrint(String msg) {
-	if (debug) {
-	    System.out.println(toString() + ": " + msg);
-	}
-    }
 
     /**
      * Shows metrics for this audio player

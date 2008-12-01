@@ -58,7 +58,7 @@ public class DiphonePitchmarkGenerator implements UtteranceProcessor {
 		("DiphonePitchmarkGenerator: SampleInfo does not exist");
 	}
 	
-	float pos, lpos = 0, f0, m = 0;
+	float pos, f0, m = 0;
 	float lf0 = utterance.getVoice().getPitch();
 	
 	double time = 0;

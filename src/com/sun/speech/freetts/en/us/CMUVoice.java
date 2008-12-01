@@ -10,53 +10,38 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import com.sun.speech.freetts.Voice;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-import com.sun.speech.freetts.Tokenizer;
-import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.PhoneDurations;
-import com.sun.speech.freetts.PhoneDurationsImpl;
-import com.sun.speech.freetts.PartOfSpeech;
-import com.sun.speech.freetts.PartOfSpeechImpl;
-import com.sun.speech.freetts.PhoneSet;
-import com.sun.speech.freetts.PhoneSetImpl;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Segmenter;
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-
-import com.sun.speech.freetts.cart.CARTImpl;
-import com.sun.speech.freetts.cart.Phraser;
-import com.sun.speech.freetts.cart.Intonator;
-import com.sun.speech.freetts.cart.Durator;
-
-import com.sun.speech.freetts.en.us.PrefixFSM;
-import com.sun.speech.freetts.en.us.PronounceableFSM;
-import com.sun.speech.freetts.en.us.SuffixFSM;
-import com.sun.speech.freetts.en.us.TokenToWords;
-import com.sun.speech.freetts.en.PartOfSpeechTagger;
-import com.sun.speech.freetts.en.PauseGenerator;
-import com.sun.speech.freetts.en.ContourGenerator;
-
-import com.sun.speech.freetts.relp.AudioOutput;
-
-import com.sun.speech.freetts.Age;
-import com.sun.speech.freetts.Gender;
+import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
-import java.util.List;
-import java.io.IOException;
+import com.sun.speech.freetts.Age;
+import com.sun.speech.freetts.FeatureSet;
+import com.sun.speech.freetts.Gender;
+import com.sun.speech.freetts.PartOfSpeech;
+import com.sun.speech.freetts.PartOfSpeechImpl;
+import com.sun.speech.freetts.PhoneDurations;
+import com.sun.speech.freetts.PhoneDurationsImpl;
+import com.sun.speech.freetts.PhoneSet;
+import com.sun.speech.freetts.PhoneSetImpl;
+import com.sun.speech.freetts.Segmenter;
+import com.sun.speech.freetts.Tokenizer;
+import com.sun.speech.freetts.UtteranceProcessor;
+import com.sun.speech.freetts.Voice;
+import com.sun.speech.freetts.cart.CARTImpl;
+import com.sun.speech.freetts.cart.Durator;
+import com.sun.speech.freetts.cart.Intonator;
+import com.sun.speech.freetts.cart.Phraser;
+import com.sun.speech.freetts.en.ContourGenerator;
+import com.sun.speech.freetts.en.PartOfSpeechTagger;
+import com.sun.speech.freetts.en.PauseGenerator;
+import com.sun.speech.freetts.relp.AudioOutput;
+import com.sun.speech.freetts.util.BulkTimer;
 
 /**
  * Provides generic support for a CMU Voice
  */
 public abstract class CMUVoice extends Voice {
     private PhoneSet phoneSet;
-    private boolean useBinaryIO =
-	Utilities.getProperty("com.sun.speech.freetts.useBinaryIO",
-		"true").equals("true");
 
     /**
      * Creates a simple voice

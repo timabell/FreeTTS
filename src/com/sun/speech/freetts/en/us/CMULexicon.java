@@ -10,19 +10,13 @@
  */
 package com.sun.speech.freetts.en.us;
 
-import java.util.List;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.FileInputStream;
-
 import java.net.URL;
-
-import com.sun.speech.freetts.lexicon.LetterToSound;
-import com.sun.speech.freetts.lexicon.LexiconImpl;
-import com.sun.speech.freetts.util.BulkTimer;
+import java.util.List;
 
 import com.sun.speech.freetts.VoiceManager;
+import com.sun.speech.freetts.lexicon.LexiconImpl;
+import com.sun.speech.freetts.util.BulkTimer;
 
 /**
  * Provides a CMU lexicon-specific implementation of a Lexicon that is
