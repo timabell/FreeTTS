@@ -27,7 +27,7 @@ public interface LetterToSound {
      *
      * @return the list of phones for word or <code>null</code>
      */
-    public String[] getPhones(String word, String partOfSpeech);
+    String[] getPhones(String word, String partOfSpeech);
 }
 
 

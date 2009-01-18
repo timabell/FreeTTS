@@ -10,16 +10,14 @@
  */
 package com.sun.speech.freetts.lexicon;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,8 +42,8 @@ import com.sun.speech.freetts.util.Utilities;
  * point into the state machine).
  *
  * <p>The state machine consists of a huge array, with most entries
- * containing a decision and the indeces of two other entries. The
- * first of these two indeces represents where to go if the decision
+ * containing a decision and the indices of two other entries. The
+ * first of these two indices represents where to go if the decision
  * is true, and the second represents where to go if the decision is
  * false. All entries that do not contain a decision are final
  * entries, and these contain a phone. 
