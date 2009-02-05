@@ -148,7 +148,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         }
 	if (audioMetrics) {
 	    timer.stop("audioCancel");
-	    timer.getTimer("audioCancel").showTimesShortTitle("");
+	    Timer.showTimesShortTitle("");
 	    timer.getTimer("audioCancel").showTimesShort(0);
 	}
     }
@@ -393,7 +393,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             firstSample = false;
             timer.stop("firstAudio");
 	    if (audioMetrics) {
-		timer.getTimer("firstAudio").showTimesShortTitle("");
+		Timer.showTimesShortTitle("");
 		timer.getTimer("firstAudio").showTimesShort(0);
 	    }
         }

@@ -236,20 +236,6 @@ public class MultiFileAudioPlayer implements AudioPlayer {
 	return true;
     }
 
-
-    /**
-     * Waits for resume. If this audio player
-     * is paused waits for the player to be resumed.
-     * Returns if resumed, cancelled or shutdown.
-     *
-     * @return true if the output has been resumed, false if the
-     *     output has been cancelled or shutdown.
-     */
-    private synchronized boolean waitResume() {
-	return true;
-    }
-
-
     /**
      * Returns the name of this audioplayer
      *

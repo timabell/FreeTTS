@@ -7,12 +7,10 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.Utterance;
+import javax.sound.sampled.AudioFormat;
+
 import com.sun.speech.freetts.util.BulkTimer;
 import com.sun.speech.freetts.util.Utilities;
-import java.io.OutputStream;
-import java.io.IOException;
-import javax.sound.sampled.AudioFormat;
 
 
 /**

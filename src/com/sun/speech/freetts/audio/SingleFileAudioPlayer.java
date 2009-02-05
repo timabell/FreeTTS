@@ -7,22 +7,19 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFileFormat.Type;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.LineUnavailableException;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.SequenceInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.util.Vector;
-import java.util.Enumeration;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Streams audio to a file. 
@@ -30,7 +27,6 @@ import java.util.Enumeration;
  *
  */
 public class SingleFileAudioPlayer implements AudioPlayer {
-    private boolean debug = false;
     private AudioFormat currentFormat = null;
     private String baseName;
     private byte[] outputData;
@@ -51,8 +47,6 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	this.baseName = baseName + "." + type.getExtension();
 	this.outputType = type;
 
-	debug = Utilities.getBoolean
-	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
 	outputList = new Vector();
     }
 
@@ -253,20 +247,6 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	return true;
     }
 
-
-    /**
-     * Waits for resume. If this audio player
-     * is paused waits for the player to be resumed.
-     * Returns if resumed, cancelled or shutdown.
-     *
-     * @return true if the output has been resumed, false if the
-     *     output has been cancelled or shutdown.
-     */
-    private synchronized boolean waitResume() {
-	return true;
-    }
-
-
     /**
      * Returns the name of this audioplayer
      *
@@ -274,18 +254,6 @@ public class SingleFileAudioPlayer implements AudioPlayer {
      */
     public String toString() {
 	return "FileAudioPlayer";
-    }
-
-
-    /**
-     * Outputs a debug message if debugging is turned on
-     *
-     * @param msg the message to output
-     */
-    private void debugPrint(String msg) {
-	if (debug) {
-	    System.out.println(toString() + ": " + msg);
-	}
     }
 
     /**

@@ -47,7 +47,7 @@ public interface AudioPlayer {
      *
      * @param format the audio format
      */
-    public void setAudioFormat(AudioFormat format) ;
+    void setAudioFormat(AudioFormat format) ;
 
     /**
      * Retrieves the audio format for this player
@@ -55,25 +55,25 @@ public interface AudioPlayer {
      * @return the current audio format
      *
      */
-    public AudioFormat getAudioFormat();
+    AudioFormat getAudioFormat();
 
     /**
      * Pauses all audio output on this player. Play can be resumed
      * with a call to resume
      */
-    public void pause();
+    void pause();
 
     /**
      * Resumes audio output on this player
      */
-    public void resume();
+    void resume();
 
     /**
      * Prepares for another batch of output. Larger groups of output
      * (such as all output associated with a single FreeTTSSpeakable)
      * should be grouped between a reset/drain pair.
      */
-    public void reset();
+    void reset();
 
     /**
      * Waits for all queued audio to be played
@@ -81,7 +81,7 @@ public interface AudioPlayer {
      * @return <code>true</code> if the audio played to completion;
      *     otherwise <code> false </code> if the audio was stopped
      */
-    public boolean drain(); 
+    boolean drain(); 
 
 
     /**
@@ -91,7 +91,7 @@ public interface AudioPlayer {
      * @param size the size of data in bytes to be output before
      *    <code>end</code> is called.
      */
-    public void begin(int size); 
+    void begin(int size); 
 
     /**
      *  Signals the end of a set of data. Audio data for a single 
@@ -102,7 +102,7 @@ public interface AudioPlayer {
      *		or interrupted.
      *
      */
-    public boolean end(); 
+    boolean end(); 
     
     
     /**
@@ -110,13 +110,13 @@ public interface AudioPlayer {
      * reset will return false.
      *
      */
-    public void cancel();
+    void cancel();
 
     
     /**
      * Waits for all audio playback to stop, and closes this AudioPlayer.
      */
-    public void close();
+    void close();
 
 
     /**
@@ -126,7 +126,7 @@ public interface AudioPlayer {
      *
      * @return the current volume (between 0 and 1)
      */
-    public float getVolume();
+    float getVolume();
 
     /**
      * Sets the current volume. The volume is specified as a number
@@ -135,7 +135,7 @@ public interface AudioPlayer {
      *
      * @param volume the new volume (between 0 and 1)
      */
-    public void setVolume(float volume);
+    void setVolume(float volume);
 
 
     /**
@@ -143,19 +143,19 @@ public interface AudioPlayer {
      *
      * @return the amount of audio in milliseconds
      */
-    public long getTime(); 
+    long getTime(); 
 
 
     /**
      * Resets the audio clock
      */
-    public void resetTime();
+    void resetTime();
 
 
     /**
      * Starts the first sample timer
      */
-    public void startFirstSampleTimer();
+    void startFirstSampleTimer();
     
     /**
      * Writes the given bytes to the audio stream
@@ -165,7 +165,7 @@ public interface AudioPlayer {
      * @return <code>true</code> of the write completed successfully, 
      *       	<code> false </code>if the write was cancelled.
      */
-    public boolean write(byte[] audioData);
+    boolean write(byte[] audioData);
 
     /**
      * Writes the given bytes to the audio stream
@@ -177,12 +177,12 @@ public interface AudioPlayer {
      * @return <code>true</code> of the write completed successfully, 
      *       	<code> false </code>if the write was cancelled.
      */
-    public boolean write(byte[] audioData, int offset, int size);
+    boolean write(byte[] audioData, int offset, int size);
 
     /**
      * Shows metrics for this audio player
      */
-    public void showMetrics();
+    void showMetrics();
 }
 
 

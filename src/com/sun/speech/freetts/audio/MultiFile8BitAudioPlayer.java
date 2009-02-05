@@ -7,21 +7,16 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.util.BulkTimer;
-import com.sun.speech.freetts.util.Utilities;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFileFormat.Type;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.LineUnavailableException;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.IOException;
+
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Streams audio to multiple files as 8-bit samples, one per utterance. 
@@ -30,9 +25,6 @@ import java.io.IOException;
  * them.
  */
 public class MultiFile8BitAudioPlayer implements AudioPlayer {
-
-    private boolean debug = false;
-    
     // 8-bit unsigned little-endian mono audio
     private AudioFormat currentFormat = new AudioFormat
     (8000, 8, 1, false, false);
@@ -68,9 +60,6 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
                                     AudioFileFormat.Type type) {
 	this.baseName = baseName;
 	this.outputType = type;
-
-	debug = Utilities.getBoolean
-	    ("com.sun.speech.freetts.audio.AudioPlayer.debug");
     }
 
 
@@ -274,20 +263,6 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
     }
 
 
-
-    /**
-     * Waits for resume. If this audio player
-     * is paused waits for the player to be resumed.
-     * Returns if resumed, cancelled or shutdown.
-     *
-     * @return true if the output has been resumed, false if the
-     *     output has been cancelled or shutdown.
-     */
-    private synchronized boolean waitResume() {
-	return true;
-    }
-
-
     /**
      * Returns the name of this audioplayer
      *
@@ -295,18 +270,6 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
      */
     public String toString() {
 	return "MultiFile8BitAudioPlayer";
-    }
-
-
-    /**
-     * Outputs a debug message if debugging is turned on
-     *
-     * @param msg the message to output
-     */
-    private void debugPrint(String msg) {
-	if (debug) {
-	    System.out.println(toString() + ": " + msg);
-	}
     }
 
     /**

@@ -17,6 +17,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Timer;
 import com.sun.speech.freetts.util.Utilities;
 
 /**
@@ -297,7 +298,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 
 	if (audioMetrics) {
 	    timer.stop("audioCancel");
-	    timer.getTimer("audioCancel").showTimesShortTitle("");
+	    Timer.showTimesShortTitle("");
 	    timer.getTimer("audioCancel").showTimesShort(0);
 	}
 
@@ -518,7 +519,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
 	    firstSample = false;
 	    timer.stop("firstAudio");
 	    if (audioMetrics) {
-		timer.getTimer("firstAudio").showTimesShortTitle("");
+		Timer.showTimesShortTitle("");
 		timer.getTimer("firstAudio").showTimesShort(0);
 	    }
 	}
