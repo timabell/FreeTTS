@@ -7,6 +7,7 @@
  */
 package com.sun.speech.freetts.audio;
 
+import java.io.ByteArrayOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,8 +51,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private boolean firstSample = true;
     private boolean firstPlay = true;
     private int curIndex = 0;
-    private byte[] outputData;
-    private LineListener lineListener = new JavaClipLineListener();
+    private final ByteArrayOutputStream outputData;
+    private final LineListener lineListener;
 
     private long drainDelay;
     private long openFailDelayMs;
@@ -71,9 +72,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         totalOpenFailDelayMs = Utilities.getLong
             ("com.sun.speech.freetts.audio.AudioPlayer.totalOpenFailDelayMs",
              0).longValue();
-	audioMetrics = Utilities.getBoolean
-	    ("com.sun.speech.freetts.audio.AudioPlayer.showAudioMetrics");
-	setPaused(false);
+        audioMetrics = Utilities.getBoolean(
+                "com.sun.speech.freetts.audio.AudioPlayer.showAudioMetrics");
+        setPaused(false);
+        outputData = new ByteArrayOutputStream();
+        lineListener = new JavaClipLineListener();
     }
 
     /**
@@ -85,7 +88,14 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *     the given format
      */
     public synchronized void setAudioFormat(AudioFormat format) {
-	currentFormat = format;
+        if (currentFormat.equals(format)) {
+            return;
+        }
+        currentFormat = format;
+        // Force the clip to be recreated if the format changed.
+        if (currentClip != null) {
+            currentClip = null;
+        }
     }
 
     /**
@@ -159,7 +169,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * should be grouped between a reset/drain pair.
      */
     public synchronized void reset() {
-	timer.start("speakableOut");
+        timer.start("speakableOut");
     }
 
     /**
@@ -169,8 +179,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *       	<code> false </code>if the write was cancelled.
      */
     public boolean drain()  {
-	timer.stop("speakableOut");
-	return true;
+        timer.stop("speakableOut");
+        return true;
     }
 
     /**
@@ -186,13 +196,13 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      */
     public synchronized void close() {
         if (currentClip != null) {
-	    currentClip.drain();
-	    if (drainDelay > 0L) {
-		try {
-		    Thread.sleep(drainDelay);
-		} catch (InterruptedException e) {
-		}
-	    }
+            currentClip.drain();
+            if (drainDelay > 0L) {
+                try {
+                    Thread.sleep(drainDelay);
+                } catch (InterruptedException e) {
+                }
+            }
             currentClip.close();
         }
         notifyAll();
@@ -203,7 +213,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @return the current volume (between 0 and 1)
      */
     public float getVolume() {
-	return volume;
+        return volume;
     }	      
 
     /**
@@ -211,18 +221,17 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @param volume  the current volume (between 0 and 1)
      */
     public void setVolume(float volume) {
-	if (volume > 1.0f) {
-	    volume = 1.0f;
-	}
-	if (volume < 0.0f) {
-	    volume = 0.0f;
-	}
-	this.volume = volume;
-	if (currentClip != null) {
-	    setVolume(currentClip, volume);
-	}
-    }	      
-
+        if (volume > 1.0f) {
+            volume = 1.0f;
+        }
+        if (volume < 0.0f) {
+            volume = 0.0f;
+        }
+        this.volume = volume;
+        if (currentClip != null) {
+            setVolume(currentClip, volume);
+        }
+    }
 
     /**
      * Sets pause mode
@@ -240,13 +249,13 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @param vol the volume (range 0 to 1)
      */
     private void setVolume(Clip clip, float vol) {
-	if (clip.isControlSupported (FloatControl.Type.MASTER_GAIN)) {
-	    FloatControl volumeControl = 
-		(FloatControl) clip.getControl (FloatControl.Type.MASTER_GAIN);
-	    float range = volumeControl.getMaximum() -
-			  volumeControl.getMinimum();
-	    volumeControl.setValue(vol * range + volumeControl.getMinimum());
-	}
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            FloatControl volumeControl = 
+                (FloatControl) clip.getControl (FloatControl.Type.MASTER_GAIN);
+            float range = volumeControl.getMaximum() -
+            volumeControl.getMinimum();
+            volumeControl.setValue(vol * range + volumeControl.getMinimum());
+        }
     }
 
 
@@ -282,7 +291,22 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         timer.start("utteranceOutput");
         cancelled = false;
         curIndex = 0;
-        outputData = new byte[size];
+        outputData.reset();
+    }
+
+    /**
+     * Lazy instantiation of the clip.
+     * @return the clip to use.
+     * @throws LineUnavailableException
+     *         if the target line is not available.
+     */
+    private Clip getClip() throws LineUnavailableException {
+        if (currentClip == null) {
+            DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
+            currentClip = (Clip) AudioSystem.getLine(info);
+            currentClip.addLineListener(lineListener);
+        }
+        return currentClip;
     }
 
     /**
@@ -292,7 +316,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * @return <code>true</code> if the audio was output properly,
      *         <code>false </code> if the output was canceled or interrupted.
      */
-    public synchronized boolean end()  {
+    public synchronized boolean end() {
         boolean ok = true;
         
         while (paused && !cancelled) {
@@ -309,18 +333,16 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         
         timer.start("clipGeneration");
         
-        DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
-                
         boolean opened = false;
         long totalDelayMs = 0;
         do {
             // keep trying to open the clip until the specified
             // delay is exceeded
             try {
-                currentClip = (Clip) AudioSystem.getLine(info);
-                currentClip.addLineListener(lineListener);
+                currentClip = getClip();
+                byte[] out = outputData.toByteArray();
                 currentClip.open
-                    (currentFormat, outputData, 0, outputData.length);
+                    (currentFormat, out, 0, out.length);
                 opened = true;
             } catch (LineUnavailableException lue) {
                 System.err.println("LINE UNAVAILABLE: " + 
@@ -339,14 +361,14 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             ok = false;
         } else {
             setVolume(currentClip, volume);
-	    if (audioMetrics && firstPlay) {
-		firstPlay = false;
-		timer.stop("firstPlay");
-		timer.getTimer("firstPlay");
-        Timer.showTimesShortTitle("");
-		timer.getTimer("firstPlay").showTimesShort(0);
-	    }
-            currentClip.start();                
+            if (audioMetrics && firstPlay) {
+                firstPlay = false;
+                timer.stop("firstPlay");
+                timer.getTimer("firstPlay");
+                Timer.showTimesShortTitle("");
+                timer.getTimer("firstPlay").showTimesShort(0);
+            }
+            currentClip.start();
             try {
                 // wait for audio to complete
                 while (currentClip != null &&
@@ -392,12 +414,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         if (firstSample) {
             firstSample = false;
             timer.stop("firstAudio");
-	    if (audioMetrics) {
-		Timer.showTimesShortTitle("");
-		timer.getTimer("firstAudio").showTimesShort(0);
-	    }
+            if (audioMetrics) {
+                Timer.showTimesShortTitle("");
+                timer.getTimer("firstAudio").showTimesShort(0);
+            }
         }
-        System.arraycopy(bytes, offset, outputData, curIndex, size);
+        outputData.write(bytes, offset, size);
         curIndex += size;
         return true;
     }
@@ -414,16 +436,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 
 
     /**
-     * Outputs the given msg if debugging is enabled for this
-     * audio player.
-     */
-    private void debugPrint(String msg) {
-	if (LOGGER.isLoggable(Level.FINE)) {
-	    LOGGER.fine(toString() + ": " + msg);
-	}
-    }
-
-    /**
      * Shows metrics for this audio player
      */
     public void showMetrics() {
@@ -434,12 +446,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Starts the first sample timer
      */
     public void startFirstSampleTimer() {
-	timer.start("firstAudio");
-	firstSample = true;
-	if (audioMetrics) {
-	    timer.start("firstPlay");
-	    firstPlay = true;
-	}
+        timer.start("firstAudio");
+        firstSample = true;
+        if (audioMetrics) {
+            timer.start("firstPlay");
+            firstPlay = true;
+        }
     }
 
 
@@ -447,33 +459,40 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * Provides a LineListener for this clas.
      */
     private class JavaClipLineListener implements LineListener {
-
 	/**
-	 * Implements update() method of LineListener interface. Responds
-	 * to the line events as appropriate.
-	 *
-	 * @param event the LineEvent to handle
-	 */
-	public void update(LineEvent event) {
-	    if (event.getType().equals(LineEvent.Type.START)) {
-		debugPrint("Event  START");
-	    } else if (event.getType().equals(LineEvent.Type.STOP)) {
-		debugPrint("Event  STOP");
-		synchronized(JavaClipAudioPlayer.this) {
+         * Implements update() method of LineListener interface. Responds to the
+         * line events as appropriate.
+         * 
+         * @param event
+         *            the LineEvent to handle
+         */
+        public void update(LineEvent event) {
+            if (event.getType().equals(LineEvent.Type.START)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(toString() + ": EVENT START");
+                }
+            } else if (event.getType().equals(LineEvent.Type.STOP)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(toString() + ": EVENT STOP");
+                }
+                synchronized (JavaClipAudioPlayer.this) {
                     JavaClipAudioPlayer.this.notifyAll();
-		}
-	    }  else if (event.getType().equals(LineEvent.Type.OPEN)) {
-		debugPrint("Event OPEN");
-	    }  else if (event.getType().equals(LineEvent.Type.CLOSE)) {
-		// When a clip is closed we no longer need it, so 
-		// set currentClip to null and notify anyone who may
-		// be waiting on it.
-		debugPrint("EVNT CLOSE");
-		synchronized (JavaClipAudioPlayer.this) {
-                    // currentClip = null;
+                }
+            } else if (event.getType().equals(LineEvent.Type.OPEN)) {
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(toString() + ": EVENT OPEN");
+                }
+            } else if (event.getType().equals(LineEvent.Type.CLOSE)) {
+                // When a clip is closed we no longer need it, so
+                // set currentClip to null and notify anyone who may
+                // be waiting on it.
+                if (LOGGER.isLoggable(Level.FINE)) {
+                    LOGGER.fine(toString() + ": EVENT CLOSE");
+                }
+                synchronized (JavaClipAudioPlayer.this) {
                     JavaClipAudioPlayer.this.notifyAll();
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 }
