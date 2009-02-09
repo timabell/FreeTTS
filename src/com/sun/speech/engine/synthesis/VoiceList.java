@@ -7,10 +7,11 @@
  */
 package com.sun.speech.engine.synthesis;
 
+import java.util.List;
 import java.util.Vector;
 
-import javax.speech.synthesis.Voice; 
-import javax.speech.synthesis.SynthesizerModeDesc; 
+import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.speech.synthesis.Voice;
 
 /**
  * Maintains a list of JSAPI 1.0 <code>Voices</code>.
@@ -20,13 +21,13 @@ public class VoiceList {
     /**
      * The list of <code>Voices</code>.
      */
-    protected Vector voiceList = new Vector();
+    protected final List voiceList;
     
     /**
      * Class constructor.
      */
     public VoiceList() {
-        voiceList = new Vector();
+        voiceList = new java.util.ArrayList();
     }
     
     /**
@@ -57,7 +58,7 @@ public class VoiceList {
      */
     public void addVoice(BaseVoice voice) {
         if (!voiceList.contains(voice)) {
-            voiceList.addElement(voice);
+            voiceList.add(voice);
         }
     }
 
@@ -69,7 +70,7 @@ public class VoiceList {
      * @see #addVoice
      */
     public void removeVoice(BaseVoice voice) {
-        voiceList.removeElement(voice);
+        voiceList.remove(voice);
     }
 
     /**
@@ -83,7 +84,7 @@ public class VoiceList {
      */
     public BaseVoice getVoiceById(String id) {
         for (int i = 0; i < voiceList.size(); i++) {
-            BaseVoice bv = (BaseVoice)(voiceList.elementAt(i));
+            BaseVoice bv = (BaseVoice)(voiceList.get(i));
             if (bv.getId().equals(id)) {
                 return bv;
             }
@@ -117,7 +118,7 @@ public class VoiceList {
         int count = 0;
         
         for (int i=0; i<voiceList.size(); i++) {
-            BaseVoice bv = (BaseVoice)(voiceList.elementAt(i));
+            BaseVoice bv = (BaseVoice)(voiceList.get(i));
             if (bv.match(voice)) {
                 if (variant <= 0) {
                     return bv.getId();
@@ -135,7 +136,7 @@ public class VoiceList {
         variant = (variant - 1) % count;
         
         // Return the selected voice id.
-        BaseVoice bv = (BaseVoice)(voiceList.elementAt(indexes[variant]));
+        BaseVoice bv = (BaseVoice)(voiceList.get(indexes[variant]));
         return bv.getId();
     }    
 
@@ -155,7 +156,6 @@ public class VoiceList {
      * @see Voice
      */
     public String getVoiceId(String name, int gender, int age, int variant) {
-        Voice v;
         String id;
         
         // Is there a match by voice name?  If yes, return it.

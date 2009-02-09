@@ -7,16 +7,14 @@
  */
 package com.sun.speech.engine.synthesis;
 
-import java.awt.Component;import java.awt.event.*;
-
-import javax.swing.JOptionPane;
-
-import java.util.Vector;
+import java.awt.Component;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.speech.Central;
 import javax.speech.EngineList;
 import javax.speech.synthesis.SynthesizerModeDesc;
+import javax.swing.JOptionPane;
 
 /**
  * GUI that displays a list of <code>Synthesizer</code> names in a
@@ -39,22 +37,22 @@ public class SynthesizerSelector {
     static public SynthesizerModeDesc getSynthesizerModeDesc(
         Component component,
 	String appName) {
-	Vector synths = new Vector();
-	Vector synthNames = new Vector();
+	List synths = new java.util.ArrayList();
+	List synthNames = new java.util.ArrayList();
 	EngineList list = Central.availableSynthesizers(null); 
 	Enumeration e = list.elements();
 	while (e.hasMoreElements()) {
-            synths.addElement(((SynthesizerModeDesc) e.nextElement()));
-            synthNames.addElement(
+            synths.add(((SynthesizerModeDesc) e.nextElement()));
+            synthNames.add(
                 ((SynthesizerModeDesc)
-                 synths.elementAt(synths.size() - 1)).getEngineName());
+                 synths.get(synths.size() - 1)).getEngineName());
         }
 	Object[] synthNamesArray = synthNames.toArray();
 
         if (synths.size() == 0) {
             return null;
         } else if (synths.size() == 1) {
-            return (SynthesizerModeDesc) synths.elementAt(0);
+            return (SynthesizerModeDesc) synths.get(0);
         }
         
 	String synthName = (String)JOptionPane.showInputDialog(
@@ -70,6 +68,6 @@ public class SynthesizerSelector {
 	if (index == -1) {
 	    return null;
 	}
-        return (SynthesizerModeDesc) synths.elementAt(index);
+        return (SynthesizerModeDesc) synths.get(index);
     }
 }
