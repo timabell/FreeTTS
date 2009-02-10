@@ -12,9 +12,9 @@ package com.sun.speech.freetts;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import com.sun.speech.freetts.util.SegmentRelationUtils;
 
@@ -34,7 +34,7 @@ public class Utterance implements FeatureSet, Serializable {
     private Voice voice;
     private FeatureSetImpl features;
     private FeatureSetImpl relations;
-    private Vector listeners = null;
+    private final Collection listeners;
     private boolean first;	// first in a connected series
     private boolean last;	// last in a connected series
     private FreeTTSSpeakable speakable;
@@ -46,7 +46,7 @@ public class Utterance implements FeatureSet, Serializable {
      */
     public Utterance(Voice voice) {
 	this.voice = voice;
-	listeners = new Vector();
+	listeners = new java.util.ArrayList();
 	features = new FeatureSetImpl();
 	relations = new FeatureSetImpl();
     }

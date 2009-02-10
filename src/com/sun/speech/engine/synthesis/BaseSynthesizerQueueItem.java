@@ -9,7 +9,7 @@ package com.sun.speech.engine.synthesis;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.speech.SpeechEvent;
 import javax.speech.synthesis.JSMLException;
@@ -254,11 +254,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.markerReached(event);
         }
         
-        Enumeration E;
-	if (synth.speakableListeners != null) {
-            E = synth.speakableListeners.elements();
-            while (E.hasMoreElements()) {
-                SpeakableListener sl = (SpeakableListener) E.nextElement();
+
+        if (synth.speakableListeners != null) {
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.markerReached(event);
             }
         }
@@ -308,12 +308,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableCancelled(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.speakableCancelled(event);
             }
         }
@@ -362,12 +361,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableEnded(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.speakableEnded(event);
             }
         }
@@ -403,12 +401,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakablePaused(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.speakablePaused(event);
             }
         }
@@ -444,12 +441,12 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableResumed(event);
         }
         
-        Enumeration enumeration;
-	if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
+
+        if (synth.speakableListeners != null) {
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
                 SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+                    (SpeakableListener) iterator.next();
                 sl.speakableResumed(event);
             }
         }
@@ -485,12 +482,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.speakableStarted(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.speakableStarted(event);
             }
         }
@@ -526,12 +522,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.topOfQueue(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.topOfQueue(event);
             }
         }
@@ -568,12 +563,11 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
             listener.wordStarted(event);
         }
         
-        Enumeration enumeration;
+
         if (synth.speakableListeners != null) {
-            enumeration = synth.speakableListeners.elements();
-            while (enumeration.hasMoreElements()) {
-                SpeakableListener sl =
-                    (SpeakableListener) enumeration.nextElement();
+            Iterator iterator = synth.speakableListeners.iterator();
+            while (iterator.hasNext()) {
+                SpeakableListener sl = (SpeakableListener) iterator.next();
                 sl.wordStarted(event);
             }
         }

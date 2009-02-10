@@ -8,7 +8,6 @@
 package com.sun.speech.engine.synthesis;
 
 import java.util.List;
-import java.util.Vector;
 
 import javax.speech.synthesis.SynthesizerModeDesc;
 import javax.speech.synthesis.Voice;
@@ -38,7 +37,7 @@ public class VoiceList {
      * @param desc the <code>SynthesizerModeDesc</code> to get voices from
      */
     public VoiceList(SynthesizerModeDesc desc) {
-        voiceList = new Vector();
+        voiceList = new java.util.ArrayList();
         
         Voice[] v = desc.getVoices();
         

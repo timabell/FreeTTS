@@ -7,16 +7,15 @@
  */
 package com.sun.speech.engine;
 
-import javax.speech.SpeechEvent;
-import javax.speech.EngineProperties;
-import javax.speech.SpeechError;
-
-import java.util.EventObject;
-import java.util.Enumeration;
-import java.util.Vector;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.EventObject;
+import java.util.Iterator;
+
+import javax.speech.EngineProperties;
+import javax.speech.SpeechError;
+import javax.speech.SpeechEvent;
 
 /**
  * Supports the JSAPI 1.0 <code>EngineProperties</code>
@@ -29,13 +28,13 @@ public abstract class BaseEngineProperties
      * List of <code>PropertyChangeListeners</code> registered for
      * <code>PropertyChangeEvents</code> on this object.
      */
-    protected Vector propertyChangeListeners;
+    protected Collection propertyChangeListeners;
 
     /**
      * Class constructor.
      */
     protected BaseEngineProperties() {
-        propertyChangeListeners = new Vector();
+        propertyChangeListeners = new java.util.ArrayList();
     }
 
     /**
@@ -65,7 +64,7 @@ public abstract class BaseEngineProperties
      */
     public void addPropertyChangeListener(PropertyChangeListener listener) {
         if (!propertyChangeListeners.contains(listener)) {
-            propertyChangeListeners.addElement(listener);
+            propertyChangeListeners.add(listener);
         }
     }
 
@@ -76,7 +75,7 @@ public abstract class BaseEngineProperties
      * @param listener the <code>PropertyChangeListener</code> to remove
      */
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        propertyChangeListeners.removeElement(listener);
+        propertyChangeListeners.remove(listener);
     }
 
     /**
@@ -193,10 +192,10 @@ public abstract class BaseEngineProperties
         if (propertyChangeListeners == null) {
             return;
         }
-        Enumeration E = propertyChangeListeners.elements();
-        while (E.hasMoreElements()) {
+        Iterator iterator = propertyChangeListeners.iterator();
+        while (iterator.hasNext()) {
             PropertyChangeListener pl =
-                (PropertyChangeListener) E.nextElement();
+                (PropertyChangeListener) iterator.next();
             pl.propertyChange(event);
         }
     }
