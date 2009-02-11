@@ -10,11 +10,9 @@
  */
 package com.sun.speech.freetts;
 
-import com.sun.speech.freetts.util.Utilities;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.PrintWriter;
+
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Represents an ordered set of <code>Items</code> and their associated

@@ -13,14 +13,13 @@ package com.sun.speech.freetts;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.BufferedReader;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * Standalone utility that tells the time.
@@ -360,11 +359,10 @@ public class FreeTTSTime extends FreeTTS {
      * Tells the current time.
      */
     public void speakNow() {
-	long now = System.currentTimeMillis();
-	Calendar cal = new GregorianCalendar();
-	int hour = cal.get(Calendar.HOUR_OF_DAY);
-	int min = cal.get(Calendar.MINUTE);
-	timeToSpeech(hour, min);
+        Calendar cal = new GregorianCalendar();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int min = cal.get(Calendar.MINUTE);
+        timeToSpeech(hour, min);
     }
 
     /**

@@ -10,16 +10,14 @@
  */
 package com.sun.speech.freetts;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-
-import java.util.StringTokenizer;
-import java.util.NoSuchElementException;
-import java.util.Map;
-import java.util.HashMap;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * Implementation of a <code>PartOfSpeech</code> that reads the info

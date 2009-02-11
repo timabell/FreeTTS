@@ -44,7 +44,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
 
     private float volume = 1.0f;  // the current volume
     private boolean audioMetrics = false;
-    private BulkTimer timer = new BulkTimer();
+    private final BulkTimer timer = new BulkTimer();
     private AudioFormat defaultFormat = // default format is 8khz
 	new AudioFormat(8000f, 16, 1, true, true);
     private AudioFormat currentFormat = defaultFormat;
@@ -88,7 +88,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *     the given format
      */
     public synchronized void setAudioFormat(AudioFormat format) {
-        if (currentFormat.equals(format)) {
+        if (currentFormat.matches(format)) {
             return;
         }
         currentFormat = format;
@@ -114,11 +114,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * aborted by calling <code> cancel </code>
      */
     public void pause() {
-	if (!paused) {
-	    setPaused(true);
-	    if (currentClip != null) {
-	        currentClip.stop();
-	    }
+        if (!paused) {
+            setPaused(true);
+            if (currentClip != null) {
+                currentClip.stop();
+            }
             synchronized (this) {
                 notifyAll();
             }
@@ -130,13 +130,13 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *
      */
     public synchronized void resume() {
-	if (paused) {
-	    setPaused(false);
-	    if (currentClip != null) {
-		currentClip.start();
-	    }
-	    notifyAll();
-	}
+        if (paused) {
+            setPaused(false);
+            if (currentClip != null) {
+                currentClip.start();
+            }
+            notifyAll();
+        }
     }
 	
     /**
@@ -144,9 +144,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      * immediately false.
      */
     public void cancel() {
-	if (audioMetrics) {
-	    timer.start("audioCancel");
-	}
+        if (audioMetrics) {
+            timer.start("audioCancel");
+        }
         if (currentClip != null) {
             currentClip.stop();
             currentClip.close();
@@ -156,11 +156,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             paused = false;
             notifyAll();
         }
-	if (audioMetrics) {
-	    timer.stop("audioCancel");
-	    Timer.showTimesShortTitle("");
-	    timer.getTimer("audioCancel").showTimesShort(0);
-	}
+        if (audioMetrics) {
+            timer.stop("audioCancel");
+            Timer.showTimesShortTitle("");
+            timer.getTimer("audioCancel").showTimesShort(0);
+        }
     }
 
     /**
@@ -302,6 +302,9 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      */
     private Clip getClip() throws LineUnavailableException {
         if (currentClip == null) {
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("creating new clip");
+            }
             DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
             currentClip = (Clip) AudioSystem.getLine(info);
             currentClip.addLineListener(lineListener);
@@ -341,8 +344,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
             try {
                 currentClip = getClip();
                 byte[] out = outputData.toByteArray();
-                currentClip.open
-                    (currentFormat, out, 0, out.length);
+                currentClip.open(currentFormat, out, 0, out.length);
                 opened = true;
             } catch (LineUnavailableException lue) {
                 System.err.println("LINE UNAVAILABLE: " + 
@@ -397,7 +399,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
      *       	<code> false </code>if the write was cancelled.
      */
     public boolean write(byte[] audioData) {
-	return write(audioData, 0, audioData.length);
+        return write(audioData, 0, audioData.length);
     }
     
     /**

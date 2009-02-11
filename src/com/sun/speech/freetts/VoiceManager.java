@@ -34,10 +34,9 @@ import java.util.jar.Attributes;
  */
 public class VoiceManager {
 
-    private static final VoiceManager INSTANCE = new VoiceManager();
+    private static final VoiceManager INSTANCE;
 
-    private static final String pathSeparator = System
-            .getProperty("path.separator");
+    private static final String PATH_SEPARATOR ;
 
     /**
      * we only want one class loader, otherwise the static information for
@@ -46,6 +45,8 @@ public class VoiceManager {
     private static final DynamicClassLoader classLoader;
 
     static {
+        PATH_SEPARATOR = System.getProperty("path.separator");
+        INSTANCE = new VoiceManager();
         final ClassLoader parent = VoiceManager.class.getClassLoader();
         classLoader = new DynamicClassLoader(new URL[0], parent);
     }
@@ -54,7 +55,6 @@ public class VoiceManager {
      * Do not allow creation from outside.
      */
     private VoiceManager() {
-        // do nothing
     }
 
     /**
@@ -162,21 +162,25 @@ public class VoiceManager {
             // Get list of voice jars
             UniqueVector pathURLs = getVoiceJarURLs();
             voiceDirectoryNames
-                    .addVector(getVoiceDirectoryNamesFromJarURLs(pathURLs));
-
+            .addVector(getVoiceDirectoryNamesFromJarURLs(pathURLs));
 
             // Get dependencies
             // Copy of vector made because vector may be modified by
             // each call to getDependencyURLs
-            URL[] voiceJarURLs = (URL[]) pathURLs.toArray(new URL[pathURLs
-                    .size()]);
+            URL[] voiceJarURLs = (URL[]) pathURLs.toArray(
+                    new URL[pathURLs.size()]);
             for (int i = 0; i < voiceJarURLs.length; i++) {
                 getDependencyURLs(voiceJarURLs[i], pathURLs);
             }
 
-            // Extend class path
-            for (int i = 0; i < pathURLs.size(); i++) {
-                classLoader.addUniqueURL((URL) pathURLs.get(i));
+            // If the voice jars have already been added to the classpath
+            // we avoid to add them a second time.
+            boolean noexpansion = Boolean.getBoolean("freetts.nocpexpansion");
+            if (!noexpansion) {
+                // Extend class path
+                for (int i = 0; i < pathURLs.size(); i++) {
+                    classLoader.addUniqueURL((URL) pathURLs.get(i));
+                }
             }
 
             // Create an instance of each voice directory
@@ -384,7 +388,7 @@ public class VoiceManager {
         // search voicespath
         String voicesPath = System.getProperty("freetts.voicespath", "");
         if (!voicesPath.equals("")) {
-            String[] dirNames = voicesPath.split(pathSeparator);
+            String[] dirNames = voicesPath.split(PATH_SEPARATOR);
             for (int i = 0; i < dirNames.length; i++) {
                 try {
                     voiceJarURLs.addVector(getVoiceJarURLsFromDir(dirNames[i]));

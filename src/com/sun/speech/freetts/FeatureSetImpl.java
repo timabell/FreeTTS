@@ -10,29 +10,29 @@
  */
 package com.sun.speech.freetts;
 
-import com.sun.speech.freetts.util.Utilities;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.List;
+import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.io.PrintWriter;
-import java.text.DecimalFormat;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Implementation of the FeatureSet interface.
  */
 public class FeatureSetImpl implements FeatureSet {
-    private Map featureMap;
+    private final Map featureMap;
     static DecimalFormat formatter;
 
     /**
      * Creates a new empty feature set
      */
     public FeatureSetImpl() {
-	featureMap = new LinkedHashMap();
+        featureMap = new LinkedHashMap();
     }
 
     /**
@@ -64,11 +64,11 @@ public class FeatureSetImpl implements FeatureSet {
      * @return the value associated with the name or null if the value
      *   is not found
      *
-     * @throws ClassCastException if theassociated value is not a
+     * @throws ClassCastException if the associated value is not a
      *   String
      */
     public String getString(String name) {
-	return (String) getObject(name);
+        return (String) getObject(name);
     }
 
     /**
@@ -82,7 +82,7 @@ public class FeatureSetImpl implements FeatureSet {
      * @throws ClassCastException if the associated value is not an int.
      */
     public int getInt(String name) {
-	return ((Integer) getObject(name)).intValue();
+        return ((Integer) getObject(name)).intValue();
     }
 
     /**

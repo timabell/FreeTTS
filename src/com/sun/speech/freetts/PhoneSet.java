@@ -10,10 +10,6 @@
  */
 package com.sun.speech.freetts;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Maintains a list of phones with various features for those phones.

@@ -10,11 +10,8 @@
  */
 package com.sun.speech.freetts;
 
-import java.util.List;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.StringTokenizer;
 import java.io.PrintWriter;
+import java.util.StringTokenizer;
 
 /**
  * Represents a node in a Relation. Items can have shared contents but 
