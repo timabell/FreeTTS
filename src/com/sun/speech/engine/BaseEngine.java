@@ -8,7 +8,6 @@
 package com.sun.speech.engine;
 
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.speech.AudioException;

@@ -11,16 +11,14 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.Enumeration;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-
-import javax.speech.Engine;
-import javax.speech.EngineListener;
 import javax.speech.EngineEvent;
+import javax.speech.EngineListener;
 import javax.speech.synthesis.Synthesizer;
-import javax.speech.synthesis.SynthesizerListener;
 import javax.speech.synthesis.SynthesizerEvent;
+import javax.speech.synthesis.SynthesizerListener;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.sun.speech.engine.EngineMonitor;
 

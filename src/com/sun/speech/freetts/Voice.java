@@ -1164,10 +1164,6 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 	return waveDumpFile;
     }
 
-    private void traceStack() {
-	new Throwable().printStackTrace();
-    }
-
     /**
      * Sets the audio player associated with this voice. The caller is
      * responsible for closing this player.

@@ -184,7 +184,6 @@ public class Timer {
      */
     public void showTimesShort(long overall) {
 	double avgTime  = 0.0;
-	double totTime = sum / 1000.0;
 	double overallPercent = 0;
 
 	/*

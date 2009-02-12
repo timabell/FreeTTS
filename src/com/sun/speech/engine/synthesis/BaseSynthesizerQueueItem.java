@@ -147,9 +147,9 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
 
 
     /**
-     * determines if this queue item has been cancelled
+     * determines if this queue item has been canceled
      * 
-     * @return <code> true </code> if this item has been cancelled; 
+     * @return <code> true </code> if this item has been canceled; 
      *   otherwise <code> false </code>
      */
     protected synchronized boolean isCancelled() {
@@ -170,7 +170,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
      * wait for this queue item to be completed
      *
      * @return true if the item was completed successfully, false if
-     * the item was cancelled or an error occurred.
+     * the item was canceled or an error occurred.
      */
     public synchronized boolean waitCompleted() {
 	while  (!isCompleted()) {
@@ -186,7 +186,7 @@ public class BaseSynthesizerQueueItem extends SynthesizerQueueItem
     }
 
     /**
-     * indicate that this item has been cancelled
+     * indicate that this item has been canceled
      */
     public synchronized void cancelled() {
 	postSpeakableCancelled();

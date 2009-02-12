@@ -12,7 +12,6 @@ package com.sun.speech.freetts;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +33,6 @@ public class Utterance implements FeatureSet, Serializable {
     private Voice voice;
     private FeatureSetImpl features;
     private FeatureSetImpl relations;
-    private final Collection listeners;
     private boolean first;	// first in a connected series
     private boolean last;	// last in a connected series
     private FreeTTSSpeakable speakable;
@@ -46,7 +44,6 @@ public class Utterance implements FeatureSet, Serializable {
      */
     public Utterance(Voice voice) {
 	this.voice = voice;
-	listeners = new java.util.ArrayList();
 	features = new FeatureSetImpl();
 	relations = new FeatureSetImpl();
     }
@@ -217,7 +214,7 @@ public class Utterance implements FeatureSet, Serializable {
      * @return the value associated with the name or null if the value
      *   is not found
      *
-     * @throws ClassCastException if theassociated value is not a
+     * @throws ClassCastException if the associated value is not a
      *   String
      */
     public String getString(String name) {
@@ -419,25 +416,6 @@ public class Utterance implements FeatureSet, Serializable {
 	return duration;
     }
 
-    /**
-     * Sets the token list for this utterance. Note that this could be
-     * optimized by turning the token list directly into the token
-     * relation. 
-     *
-     * <p>[[[ TODO: future optimization, turn this into a token
-     *    relation directly ]]]
-     *
-     * @param tokenList the tokenList
-     */
-    /*
-    private void setTokenList(List tokenList) {
-	StringBuffer sb = new StringBuffer();
-	for (Iterator i = tokenList.iterator(); i.hasNext(); ) {
-	    sb.append(i.next().toString());
-	}
-	setString("input_text", sb.toString());
-    }
-    */
 
     /**
      * Sets the input text for this utterance

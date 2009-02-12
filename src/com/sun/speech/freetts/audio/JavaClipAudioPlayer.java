@@ -306,8 +306,14 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                 LOGGER.fine("creating new clip");
             }
             DataLine.Info info = new DataLine.Info(Clip.class, currentFormat);
-            currentClip = (Clip) AudioSystem.getLine(info);
-            currentClip.addLineListener(lineListener);
+            try {
+                currentClip = (Clip) AudioSystem.getLine(info);
+                currentClip.addLineListener(lineListener);
+            } catch (SecurityException e) {
+                throw new LineUnavailableException(e.getLocalizedMessage());
+            } catch (IllegalArgumentException e) {
+                throw new LineUnavailableException(e.getLocalizedMessage());
+            }
         }
         return currentClip;
     }

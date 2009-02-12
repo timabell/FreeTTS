@@ -616,9 +616,6 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
          */
         public void run() {
             FreeTTSSynthesizerQueueItem item;
-            int currentCommand;
-            boolean queueEmptied;
-            
             while (!done) {
                 item = getQueueItem();
 		if (item != null) {

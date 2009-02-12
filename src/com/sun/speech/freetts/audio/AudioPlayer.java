@@ -98,7 +98,7 @@ public interface AudioPlayer {
      *  utterance should be groupd between <code> begin/end </code> pairs.
      *
      *  @return <code>true</code> if the audio was output properly, 
-     *		<code> false</code> if the output was cancelled 
+     *		<code> false</code> if the output was canceled 
      *		or interrupted.
      *
      */
