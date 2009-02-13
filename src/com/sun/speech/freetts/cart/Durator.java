@@ -10,19 +10,15 @@
  */
 package com.sun.speech.freetts.cart;
 
-import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.PathExtractor;
+import com.sun.speech.freetts.PathExtractorImpl;
 import com.sun.speech.freetts.PhoneDuration;
 import com.sun.speech.freetts.PhoneDurations;
-import com.sun.speech.freetts.PathExtractorImpl;
-import com.sun.speech.freetts.PathExtractor;
-
-import java.util.Iterator;
+import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
 
 /**
  * Determines duration timing for
@@ -40,19 +36,19 @@ public class Durator implements UtteranceProcessor {
      * The nominal speaking rate in words per minute.  Set in the
      * constructor.
      */
-    private float meanRate;
+    private final float meanRate;
     
     /**
      * The CART used for this duration UtteranceProcessor.  It is
      * passed into the constructor.
      */
-    protected CART cart;
+    protected final CART cart;
 
     /**
      * The PhoneDurations used for this duration UtteranceProcessor.
      * It is passed into the constructor.
      */
-    protected PhoneDurations durations;
+    protected final PhoneDurations durations;
 
 
     private static final PathExtractor DURATION_STRETCH_PATH  =
@@ -89,7 +85,7 @@ public class Durator implements UtteranceProcessor {
      *         processing of the utterance
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
-        float durStretch;        
+        float durStretch;
         PhoneDuration durStat;
         float durationStretch = utterance.getVoice().getDurationStretch();
         float zdur;

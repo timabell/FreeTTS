@@ -7,11 +7,14 @@
  */
 package com.sun.speech.freetts.audio;
 
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
@@ -42,16 +45,21 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private volatile boolean cancelled = false;
     private volatile Clip currentClip;
 
-    private float volume = 1.0f;  // the current volume
+    /** The current volume. */
+    private float volume = 1.0f; 
     private boolean audioMetrics = false;
     private final BulkTimer timer = new BulkTimer();
-    private AudioFormat defaultFormat = // default format is 8khz
+    /** Defaul format is 8kHz. */
+    private AudioFormat defaultFormat = 
 	new AudioFormat(8000f, 16, 1, true, true);
     private AudioFormat currentFormat = defaultFormat;
     private boolean firstSample = true;
     private boolean firstPlay = true;
     private int curIndex = 0;
-    private final ByteArrayOutputStream outputData;
+    /** Data buffer to write the pure audio data to. */
+    private final PipedOutputStream outputData;
+    /** Audio input stream that is used to play back the audio. */
+    private AudioInputStream audioInput;
     private final LineListener lineListener;
 
     private long drainDelay;
@@ -75,7 +83,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         audioMetrics = Utilities.getBoolean(
                 "com.sun.speech.freetts.audio.AudioPlayer.showAudioMetrics");
         setPaused(false);
-        outputData = new ByteArrayOutputStream();
+        outputData = new PipedOutputStream();
         lineListener = new JavaClipLineListener();
     }
 
@@ -291,7 +299,59 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         timer.start("utteranceOutput");
         cancelled = false;
         curIndex = 0;
-        outputData.reset();
+        PipedInputStream in;
+        try {
+            in = new PipedInputStream(outputData);
+            audioInput = new AudioInputStream(in, currentFormat, size);
+        } catch (IOException e) {
+            LOGGER.warning(e.getLocalizedMessage());
+        }
+        while (paused && !cancelled) {
+            try {
+                wait();
+            } catch (InterruptedException ie) {
+                return;
+            }
+        }
+
+        timer.start("clipGeneration");
+        
+        boolean opened = false;
+        long totalDelayMs = 0;
+        do {
+            // keep trying to open the clip until the specified
+            // delay is exceeded
+            try {
+                currentClip = getClip();
+                currentClip.open(audioInput);
+                opened = true;
+            } catch (LineUnavailableException lue) {
+                System.err.println("LINE UNAVAILABLE: " + 
+                                   "Format is " + currentFormat);
+                try {
+                    Thread.sleep(openFailDelayMs);
+                    totalDelayMs += openFailDelayMs;
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+            } catch (IOException e) {
+                LOGGER.warning(e.getLocalizedMessage());
+            }
+        } while (!opened && totalDelayMs < totalOpenFailDelayMs);
+        
+        if (!opened) {
+            close();
+        } else {
+            setVolume(currentClip, volume);
+            if (audioMetrics && firstPlay) {
+                firstPlay = false;
+                timer.stop("firstPlay");
+                timer.getTimer("firstPlay");
+                Timer.showTimesShortTitle("");
+                timer.getTimer("firstPlay").showTimesShort(0);
+            }
+            currentClip.start();
+        }
     }
 
     /**
@@ -328,43 +388,11 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     public synchronized boolean end() {
         boolean ok = true;
         
-        while (paused && !cancelled) {
-            try {
-                wait();
-            } catch (InterruptedException ie) {
-                return false;
-            }
-        }
-        
         if (cancelled) {
             return false;
         }
         
-        timer.start("clipGeneration");
-        
-        boolean opened = false;
-        long totalDelayMs = 0;
-        do {
-            // keep trying to open the clip until the specified
-            // delay is exceeded
-            try {
-                currentClip = getClip();
-                byte[] out = outputData.toByteArray();
-                currentClip.open(currentFormat, out, 0, out.length);
-                opened = true;
-            } catch (LineUnavailableException lue) {
-                System.err.println("LINE UNAVAILABLE: " + 
-                                   "Format is " + currentFormat);
-                try {
-                    Thread.sleep(openFailDelayMs);
-                    totalDelayMs += openFailDelayMs;
-                } catch (InterruptedException ie) {
-                    ie.printStackTrace();
-                }
-            }
-        } while (!opened && totalDelayMs < totalOpenFailDelayMs);
-        
-        if (!opened) {
+        if ((currentClip == null) || !currentClip.isOpen()) {
             close();
             ok = false;
         } else {
@@ -376,7 +404,6 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                 Timer.showTimesShortTitle("");
                 timer.getTimer("firstPlay").showTimesShort(0);
             }
-            currentClip.start();
             try {
                 // wait for audio to complete
                 while (currentClip != null &&
@@ -427,7 +454,12 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                 timer.getTimer("firstAudio").showTimesShort(0);
             }
         }
-        outputData.write(bytes, offset, size);
+        try {
+            outputData.write(bytes, offset, size);
+        } catch (IOException e) {
+            LOGGER.warning(e.getLocalizedMessage());
+            return false;
+        }
         curIndex += size;
         return true;
     }

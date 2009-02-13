@@ -35,7 +35,7 @@ public class Phraser implements UtteranceProcessor {
      * The CART used for this Phrasing UtteranceProcessor.  It is
      * passed into the constructor.
      */
-    protected CART cart;
+    protected final CART cart;
     
     /**
      * Creates a new Phrasing UtteranceProcessor with the given

@@ -435,7 +435,6 @@ public class LPCResult {
 	
 	double multiplier = (double) getLPCRange() / 65535.0;
 	int s = 0;
-	boolean firstPlay = true;
 
 	// for each frame in the LPC result
 	for (int r = 0, i = 0; i < numberOfFrames; i++) {
@@ -501,7 +500,6 @@ public class LPCResult {
 	
 	double multiplier = (double) getLPCRange() / 65535.0;
 	int s = 0;
-	boolean firstPlay = true;
 
 	// for each frame in the LPC result
 	player.begin(numberSamples);

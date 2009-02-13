@@ -21,8 +21,11 @@ import java.io.IOException;
  */
 public class Utilities {
 
-    // Unconstructable.
-    private Utilities() {}
+    /**
+     * Avoid construction.
+     */
+    private Utilities() {
+    }
 
     /**
      * Returns a string with the given number of

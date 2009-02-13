@@ -11,27 +11,21 @@
 package com.sun.speech.freetts.relp;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.util.StringTokenizer;
-import java.util.NoSuchElementException;
-
-import java.nio.channels.WritableByteChannel;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.ShortBuffer;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * A single short term sample containing Residual Excited Linear Predictive
  * (RELP) frame and residual voice data.  
  */
 public class Sample {
-    private short[] frameData;
-    private byte[]  residualData;
-    private int residualSize;
+    private final short[] frameData;
+    private final byte[]  residualData;
+    private final int residualSize;
     
 
     /**
@@ -43,6 +37,7 @@ public class Sample {
     public Sample(short[] frameData, byte[] residualData) {
 	this.frameData = frameData;
 	this.residualData = residualData;
+	this.residualSize = 0;
     }
 
     /**

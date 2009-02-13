@@ -11,12 +11,10 @@
 package com.sun.speech.freetts.cart;
 
 import com.sun.speech.freetts.Item;
+import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.ProcessException;
-
-import java.util.Iterator;
 
 /**
  * Annotates the <code>Relation.SYLLABLE</code> relations of an
