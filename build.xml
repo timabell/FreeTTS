@@ -908,7 +908,7 @@ jsapi.exe from the lib directory.
                  additionalparam="-breakiterator"
                  destdir="${javadoc_dir}"
                  packagenames="${javadoc_pkgs}"
-                 overview="${src_dir}/overview.html"
+                 overview="overview.html"
                  windowtitle="${javadoc_desc}"
                  doctitle="${javadoc_desc}"
                  access="protected">
