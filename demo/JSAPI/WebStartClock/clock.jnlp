@@ -15,6 +15,7 @@
   <jar href="WebStartClock.jar"/>
   <jar href="jsapi.jar"/>
   <jar href="freetts.jar"/>
+  <jar href="freetts-jsapi10.jar"/>
   <jar href="en_us.jar"/>
   <jar href="cmutimelex.jar"/>
   <jar href="cmu_time_awb.jar"/>
