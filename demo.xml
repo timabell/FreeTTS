@@ -438,7 +438,15 @@ jsapi.exe from the lib directory.
 		 storepass="${keypass}"
 		 keypass="${keypass}"
 		 keystore="${keystore}"/>
-	<copy file="${webstart_bld_dir}/freetts.jar" todir="${webstart_dir}"/>
+        <copy file="${webstart_bld_dir}/freetts.jar" todir="${webstart_dir}"/>
+
+        <copy file="${lib_dir}/freetts-jsapi10.jar" todir="${webstart_bld_dir}"/>
+        <signjar jar="${webstart_bld_dir}/freetts-jsapi10.jar"
+          alias="freetts"
+          storepass="${keypass}"
+          keypass="${keypass}"
+          keystore="${keystore}"/>
+        <copy file="${webstart_bld_dir}/freetts-jsapi10.jar" todir="${webstart_dir}"/>
 
         <copy file="${lib_dir}/en_us.jar" todir="${webstart_bld_dir}"/>
         <signjar jar="${webstart_bld_dir}/en_us.jar"
