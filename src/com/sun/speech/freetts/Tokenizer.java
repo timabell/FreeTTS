@@ -10,7 +10,6 @@
  */
 package com.sun.speech.freetts;
 
-import java.util.List;
 import java.io.Reader;
 
 /**
@@ -22,14 +21,14 @@ public interface Tokenizer {
      *
      * @param textToTokenize  the text to tokenize
      */
-    public void setInputText(String textToTokenize);
+    void setInputText(String textToTokenize);
 
     /**
      * Sets the input reader.
      *
      * @param  reader the input source
      */
-    public void setInputReader(Reader reader);
+    void setInputReader(Reader reader);
     
     
     /**
@@ -37,7 +36,7 @@ public interface Tokenizer {
      *
      * @return  the next token if it exists; otherwise null
      */
-    public Token getNextToken();
+    Token getNextToken();
 
 
     /**
@@ -45,14 +44,14 @@ public interface Tokenizer {
      *
      * @return true if there are more tokens; otherwise false
      */
-    public boolean hasMoreTokens();
+    boolean hasMoreTokens();
 
     /**
      * Returns true if there were errors while reading tokens.
      *
      * @return true if there were errors; otherwise false
      */
-    public boolean hasErrors();
+    boolean hasErrors();
 
     /**
      * If hasErrors returns true, returns a description of the error
@@ -60,7 +59,7 @@ public interface Tokenizer {
      *
      * @return a description of the last error that occurred
      */
-    public String getErrorDescription();
+    String getErrorDescription();
 
     /**
      * Sets the whitespace symbols of this Tokenizer to the given
@@ -68,7 +67,7 @@ public interface Tokenizer {
      * 
      * @param symbols the whitespace symbols
      */
-    public void setWhitespaceSymbols(String symbols);
+    void setWhitespaceSymbols(String symbols);
 
     /**
      * Sets the single character symbols of this Tokenizer to the given
@@ -76,7 +75,7 @@ public interface Tokenizer {
      *
      * @param symbols the single character symbols
      */
-    public void setSingleCharSymbols(String symbols);
+    void setSingleCharSymbols(String symbols);
 
     /**
      * Sets the prepunctuation symbols of this Tokenizer to the given
@@ -84,7 +83,7 @@ public interface Tokenizer {
      *
      * @param symbols the prepunctuation symbols
      */
-    public void setPrepunctuationSymbols(String symbols);
+    void setPrepunctuationSymbols(String symbols);
 
     /**
      * Sets the postpunctuation symbols of this Tokenizer to the given
@@ -92,12 +91,12 @@ public interface Tokenizer {
      *
      * @param symbols the postpunctuation symbols
      */
-    public void setPostpunctuationSymbols(String symbols);
+    void setPostpunctuationSymbols(String symbols);
 
     /**
      * Determines if the current token should start a new sentence.
      *
      * @return true if a new sentence should be started
      */
-    public boolean isBreak();
+    boolean isBreak();
 }

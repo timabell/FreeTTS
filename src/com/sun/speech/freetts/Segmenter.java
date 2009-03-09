@@ -10,19 +10,10 @@
  */
 package com.sun.speech.freetts;
 
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.FeatureSet;
-import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.Relation;
-import com.sun.speech.freetts.ProcessException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.sun.speech.freetts.lexicon.Lexicon;
-
-import java.util.List;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Iterator;
 
 /**
  * Annotates an utterance with <code>Relation.SYLLABLE</code>,

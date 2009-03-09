@@ -41,7 +41,7 @@ public class FreeTTS {
         Logger.getLogger(FreeTTS.class.getName());
 
     /** Version number. */
-    public final static String VERSION = "FreeTTS 1.2 February 06, 2005";
+    public final static String VERSION = "FreeTTS 1.2.2";
     private Voice voice;
     private static AudioPlayer audioPlayer = null;
     private boolean silent = false;

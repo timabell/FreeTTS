@@ -333,7 +333,6 @@ public class CARTImpl implements CART {
      */
     public Object interpret(Item item) {
         int nodeIndex = 0;
-        Node node = cart[nodeIndex];
         DecisionNode decision;
 
         while (!(cart[nodeIndex] instanceof LeafNode)) {

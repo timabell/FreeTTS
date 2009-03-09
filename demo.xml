@@ -82,7 +82,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/util"
+	       srcdir="demo/util"
 	       destdir="${demo_classes_dir}/util">
 	    <classpath>
 		<path refid="libs"/>
@@ -104,7 +104,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/ClientServer"
+	       srcdir="demo/freetts/ClientServer"
 	       destdir="${demo_classes_dir}/freetts/ClientServer">
 	    <classpath>
 		<path refid="libs"/>
@@ -113,13 +113,13 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/Client.jar" 
-	     manifest="${src_dir}/demo/freetts/ClientServer/client.Manifest"
+	     manifest="demo/freetts/ClientServer/client.Manifest"
 	     basedir="${demo_classes_dir}/freetts/ClientServer"
 	     includes="Client.class"
 	     filesonly="true"
 	     compress="true"/>
         <jar destfile="${bin_dir}/Server.jar" 
-	     manifest="${src_dir}/demo/freetts/ClientServer/server.Manifest"
+	     manifest="demo/freetts/ClientServer/server.Manifest"
 	     filesonly="true"
 	     compress="true">
             <fileset dir="${demo_classes_dir}/freetts/ClientServer"
@@ -135,7 +135,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/Emacspeak"
+	       srcdir="demo/freetts/Emacspeak"
 	       destdir="${demo_classes_dir}/freetts/Emacspeak">
 	    <classpath>
 		<path refid="libs"/>
@@ -144,7 +144,7 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/FreeTTSEmacspeakServer.jar" 
-	     manifest="${src_dir}/demo/freetts/Emacspeak/Manifest"
+	     manifest="demo/freetts/Emacspeak/Manifest"
 	     filesonly="true"
 	     compress="true">
             <fileset dir="${demo_classes_dir}/freetts/Emacspeak"/>
@@ -160,7 +160,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/freetts/HelloWorld"
+	       srcdir="demo/freetts/HelloWorld"
 	       destdir="${demo_classes_dir}/freetts/HelloWorld">
 	    <classpath>
 		<path refid="libs"/>
@@ -169,7 +169,7 @@ jsapi.exe from the lib directory.
 	</javac>
 	<mkdir dir="${bin_dir}"/>
         <jar destfile="${bin_dir}/FreeTTSHelloWorld.jar" 
-	     manifest="${src_dir}/demo/freetts/HelloWorld/Manifest"
+	     manifest="demo/freetts/HelloWorld/Manifest"
 	     basedir="${demo_classes_dir}/freetts/HelloWorld"
 	     includes="*.class"
 	     filesonly="true"
@@ -196,7 +196,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/Emacspeak"
+	       srcdir="demo/JSAPI/Emacspeak"
 	       destdir="${demo_classes_dir}/JSAPI/Emacspeak">
 	    <classpath>
 		<path refid="libs"/>
@@ -232,7 +232,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/HelloWorld"
+	       srcdir="demo/JSAPI/HelloWorld"
 	       destdir="${demo_classes_dir}/JSAPI/HelloWorld">
 	    <classpath>
 		<path refid="libs"/>
@@ -264,7 +264,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/JTime"
+	       srcdir="demo/JSAPI/JTime"
 	       destdir="${demo_classes_dir}/JSAPI/JTime">
 	    <classpath>
 		<path refid="libs"/>
@@ -298,7 +298,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/MixedVoices"
+	       srcdir="demo/JSAPI/MixedVoices"
 	       destdir="${demo_classes_dir}/JSAPI/MixedVoices">
 	    <classpath>
 		<path refid="libs"/>
@@ -330,7 +330,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/Player"
+	       srcdir="demo/JSAPI/Player"
 	       destdir="${demo_classes_dir}/JSAPI/Player">
 	    <classpath>
 		<path refid="libs"/>
@@ -362,7 +362,7 @@ jsapi.exe from the lib directory.
 	<javac debug="true"
 	       source="1.4"
 	       deprecation="true"
-	       srcdir="${src_dir}/demo/JSAPI/WebStartClock"
+	       srcdir="demo/JSAPI/WebStartClock"
 	       destdir="${demo_classes_dir}/JSAPI/WebStartClock">
 	    <classpath>
 		<path refid="libs"/>
@@ -478,7 +478,7 @@ jsapi.exe from the lib directory.
 	<mkdir dir="${deploy_dir}"/>
         <tar destfile="${deploy_dir}/WebStartClock.tar">
 	     <tarfileset dir="${webstart_bld_dir}" includes="*.jar"/>
-             <tarfileset dir="${src_dir}/demo/JSAPI/WebStartClock"
+             <tarfileset dir="demo/JSAPI/WebStartClock"
 			 includes="clock.jnlp"/>
         </tar>
         <echo message="${deploy_dir}/WebStartClock.tar created."/>

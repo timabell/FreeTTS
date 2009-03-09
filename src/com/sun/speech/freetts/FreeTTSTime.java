@@ -371,10 +371,6 @@ public class FreeTTSTime extends FreeTTS {
     public static void main(String[] args) {
 
 	String time = null; // default is interactive mode
-	String dumpFile = null;
-	String protocol = null;
-	
-	boolean timeTest = false;
 	int iterations = 1;
 	int delay = 0;
 
@@ -418,7 +414,6 @@ public class FreeTTSTime extends FreeTTS {
 		iterations = Integer.MAX_VALUE;
 		delay = 300;
 	    } else if (args[i].equals("-timeTest")) {
-		timeTest = true;
 		iterations = 100;
 	    } else if (args[i].equals("-dumpAudio")) {
 		if (++i < args.length) {
@@ -439,7 +434,6 @@ public class FreeTTSTime extends FreeTTS {
 		}
 	    } else if (args[i].equals("-dumpASCII")) {
 		if (++i < args.length) {
-		    dumpFile  = args[i];
 		    waveDumpFile = args[i];
 		} else {
 		    usage();

@@ -9,7 +9,7 @@
 Change history for FreeTTS.
 --------------------------
 
-Month, Day, Year Release x.y:
+March, 9, 2009 Release 1.2.2:
     - Introduced an AliasDiphone class as a subclass of Diphone, which
       has a name and an original diphone; most API calls are just
       forwarded to the original diphone. (Marc Schroeder)
@@ -25,7 +25,15 @@ Month, Day, Year Release x.y:
       accordingly. (Marc Schroeder)
     - Fixed "Class-Path" issue in manifest created by FestVoxToFreeTTS.
       (Willie Walker)
-
+    - Fixed internal class loader problems (Dirk Schnelle-Walka)
+    - using java logging library instead of system.out.println
+    - separation into a core jar and a jsapi1.0 dependent jar
+      (Dirk Schnelle-Walka)
+    - Bugfixes in JavaClipAudioPlayer ((Dirk Schnelle-Walka):
+      Catching runtime exceptions if the line is not available
+      writing directly to the output line instead of buffering the data
+    - some code cleanup (Dirk Schnelle-Walka)
+    
 March 10, 2005 Release 1.2.1
     - Add support for metrics important to screen readers
     - Add drain delay to clip audio player - the lack of
