@@ -17,7 +17,7 @@
     <!-- * Where to find things...                                * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <property name="version" value="1.2" />
+    <property name="version" value="1.2.2" />
     <path id="libs">
         <fileset dir="lib" includes="**/jsapi.jar" />
     </path>
@@ -997,9 +997,9 @@ jsapi.exe from the lib directory.
                        javadoc/**"
              excludes="docs/*.awk" />
 
-    <fileset id="demos" dir="${src_dir}" includes="demo/**" />
+    <fileset id="demos" dir="." includes="demo/**" />
 
-    <fileset id="tools" dir="${src_dir}" includes="tools/**" />
+    <fileset id="tools" dir="." includes="tools/**" />
 
     <fileset id="tests" dir="." includes="tests/**" />
 
@@ -1028,7 +1028,7 @@ jsapi.exe from the lib directory.
             <fileset dir="."
                      includes="build.xml,
 		                demo.xml,
-                                speech.properties,
+                        speech.properties,
 		                lib/voices.txt" />
             <fileset refid="srcs" />
             <fileset refid="legal" />
