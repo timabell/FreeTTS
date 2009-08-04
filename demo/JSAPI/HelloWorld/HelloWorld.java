@@ -7,14 +7,11 @@
  */
 import java.io.File;
 import java.util.Locale;
-import java.util.Vector;
 
 import javax.speech.Central;
-import javax.speech.Engine;
 import javax.speech.EngineList;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.SynthesizerProperties;
 import javax.speech.synthesis.Voice;
 
 /**

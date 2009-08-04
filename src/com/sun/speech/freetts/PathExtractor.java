@@ -24,7 +24,7 @@ public interface PathExtractor {
      *
      * @return the item associated with the path or null
      */
-    public Item findItem(Item item);
+    Item findItem(Item item);
 
     /**
      * Finds the feature associated with this object.
@@ -34,7 +34,7 @@ public interface PathExtractor {
      * @return the feature associated or "0"  if the
      *   feature was not found
      */
-    public Object findFeature(Item item);
+    Object findFeature(Item item);
 
 
     // TODO: add these to the interface should we support binary

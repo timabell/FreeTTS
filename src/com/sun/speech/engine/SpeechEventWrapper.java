@@ -7,8 +7,9 @@
  */
 package com.sun.speech.engine;
 
-import javax.speech.SpeechEvent;
 import java.util.EventObject;
+
+import javax.speech.SpeechEvent;
 
 /**
  * Wraps an arbitrary event object (from <code>EventObject</code>)
@@ -20,6 +21,7 @@ import java.util.EventObject;
  * @see SpeechEventUtilities
  * @see EventObject
  */
+@SuppressWarnings("serial")
 public class SpeechEventWrapper extends SpeechEvent {
     /**
      * Use an id that won't be confused with JSAPI event ids.

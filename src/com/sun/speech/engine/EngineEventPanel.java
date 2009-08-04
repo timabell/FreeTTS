@@ -9,20 +9,20 @@ package com.sun.speech.engine;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 /**
  * Simple GUI for monitoring events of an <code>Engine</code>.  Used
  * for debugging and testing purposes.
  */
+@SuppressWarnings("serial")
 public class EngineEventPanel extends JPanel {
     /**
      * The area where engine events are posted.

@@ -161,8 +161,8 @@ public class VoiceManager {
 
             // Get list of voice jars
             UniqueVector pathURLs = getVoiceJarURLs();
-            voiceDirectoryNames
-            .addVector(getVoiceDirectoryNamesFromJarURLs(pathURLs));
+            voiceDirectoryNames.addVector(
+                    getVoiceDirectoryNamesFromJarURLs(pathURLs));
 
             // Get dependencies
             // Copy of vector made because vector may be modified by

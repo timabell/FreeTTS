@@ -22,7 +22,7 @@ public interface PartOfSpeech {
      *
      * @return an implementation dependent part of speech for the word
      */
-    public String getPartOfSpeech(String word);
+    String getPartOfSpeech(String word);
 }
 
 

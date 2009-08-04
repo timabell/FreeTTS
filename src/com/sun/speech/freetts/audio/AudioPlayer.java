@@ -184,5 +184,3 @@ public interface AudioPlayer {
      */
     void showMetrics();
 }
-
-

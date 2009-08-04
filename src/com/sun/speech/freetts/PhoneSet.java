@@ -19,44 +19,44 @@ public interface PhoneSet  {
     /**
      * Vowel or consonant:  + = vowel, - = consonant.
      */
-    public final static String VC = "vc";  
+    String VC = "vc";  
 
     /**
      * Vowel length:  s = short, l = long, d = dipthong, a = schwa.
      */
-    public final static String VLNG = "vlng";  
+    String VLNG = "vlng";  
 
     /**
      * Vowel height:  1 = high,  2 = mid,  3 = low.
      */
-    public final static String VHEIGHT = "vheight";  
+    String VHEIGHT = "vheight";  
 
     /**
      * Vowel frontness:  1 = front, 2 = mid, 3 = back.
      */
-    public final static String VFRONT = "vfront";  
+    String VFRONT = "vfront";  
 
     /**
      * Lip rounding:  + = on, - = off.
      */
-    public final static String VRND = "vrnd";  
+    String VRND = "vrnd";  
 
     /**
      * Consonant type:  s = stop, f = fricative,  a = affricative,
      * n = nasal, l = liquid.
      */
-    public final static String CTYPE = "ctype";  
+    String CTYPE = "ctype";  
 
     /**
      * Consonant cplace:  l = labial, a = alveolar, p = palatal,
      * b = labio_dental, d = dental, v = velar
      */
-    public final static String CPLACE = "cplace";  
+    String CPLACE = "cplace";  
 
     /**
      * Consonant voicing:  + = on, - = off
      */
-    public final static String CVOX = "cvox";  
+    String CVOX = "cvox";  
 
     /**
      * Given a phoneme and a feature name, return the feature.
@@ -66,5 +66,5 @@ public interface PhoneSet  {
      *
      * @return the feature with the given name
      */
-    public String getPhoneFeature(String phone, String featureName);
+    String getPhoneFeature(String phone, String featureName);
 }

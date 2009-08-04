@@ -27,5 +27,5 @@ public interface PhoneDurations {
      *
      * @return the duration information for the phone
      */
-    public PhoneDuration getPhoneDuration(String phone);
+    PhoneDuration getPhoneDuration(String phone);
 }

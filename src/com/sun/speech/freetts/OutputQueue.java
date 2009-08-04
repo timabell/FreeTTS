@@ -11,6 +11,7 @@
 package com.sun.speech.freetts;
 
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Manages a process queue for utterances. Utterances that are
@@ -19,7 +20,7 @@ import java.util.LinkedList;
  * pend method.
  */
 public class OutputQueue {
-    private LinkedList list = new LinkedList();
+    private List<Utterance> list = new LinkedList<Utterance>();
     private int size;
     private final static int DEFAULT_SIZE = 5;
     private volatile boolean closed = false;
@@ -99,7 +100,7 @@ public class OutputQueue {
 		return null;
 	    }
 	}
-	utterance = (Utterance) list.removeFirst();
+	utterance = list.remove(0);
 	notify();
 	return utterance;
     }

@@ -7,7 +7,6 @@
  */
 import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
-import com.sun.speech.freetts.audio.JavaClipAudioPlayer;
 
 /**
  * Simple program to demonstrate the use of the FreeTTS speech

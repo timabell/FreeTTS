@@ -8,7 +8,6 @@
 package com.sun.speech.engine;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
@@ -44,7 +43,7 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * List of <code>EngineListeners</code> registered for
      * <code>EngineEvents</code> on this <code>Engine</code>.
      */
-    protected Collection      engineListeners;
+    protected Collection<EngineListener> engineListeners;
 
     /**
      * The <code>AudioManager</code> for this <code>Engine</code>.
@@ -82,7 +81,7 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      */
     public BaseEngine(EngineModeDesc desc) {
         engineModeDesc = desc;
-        engineListeners = new java.util.ArrayList();
+        engineListeners = new java.util.ArrayList<EngineListener>();
         engineState = DEALLOCATED;
         engineStateLock = new Object();
         engineProperties = createEngineProperties();
@@ -449,12 +448,10 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * @see #dispatchSpeechEvent
      */
     public void fireEngineAllocated(EngineEvent event) {
-	if (engineListeners == null) {
-	    return;
-	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        if (engineListeners == null) {
+            return;
+        }
+        for (EngineListener el : engineListeners) {
             el.engineAllocated(event);
         }
     }
@@ -495,16 +492,14 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * @see #dispatchSpeechEvent
      */
     public void fireEngineAllocatingResources(EngineEvent event) {
-	if (engineListeners == null) {
-	    return;
-	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        if (engineListeners == null) {
+            return;
+        }
+        for (EngineListener el : engineListeners) {
             el.engineAllocatingResources(event);
         }
     }
-    
+
     /**
      * Utility function that generates an
      * <code>ENGINE_DEALLOCATED</code> event and posts it
@@ -539,16 +534,14 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * @see #dispatchSpeechEvent
      */
     public void fireEngineDeallocated(EngineEvent event) {
-	if (engineListeners == null) {
-	    return;
-	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        if (engineListeners == null) {
+            return;
+        }
+        for (EngineListener el : engineListeners) {
             el.engineDeallocated(event);
         }
     }
-    
+
     /**
      * Utility function that generates
      * <code>ENGINE_DEALLOCATING_RESOURCES</code> event and
@@ -584,16 +577,14 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * @see #dispatchSpeechEvent
      */
     public void fireEngineDeallocatingResources(EngineEvent event) {
-	if (engineListeners == null) {
-	    return;
-	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        if (engineListeners == null) {
+            return;
+        }
+        for (EngineListener el : engineListeners) {
             el.engineDeallocatingResources(event);
         }
     }
-    
+
     /**
      * Utility function that generates an
      * <code>ENGINE_PAUSED</code> event and posts it
@@ -631,9 +622,7 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
 	if (engineListeners == null) {
 	    return;
 	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        for (EngineListener el : engineListeners) {
             el.enginePaused(event);
         }
     }
@@ -671,12 +660,10 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * @see #dispatchSpeechEvent
      */
     public void fireEngineResumed(EngineEvent event) {
-	if (engineListeners == null) {
-	    return;
-	}
-        Iterator iterator = engineListeners.iterator();
-        while (iterator.hasNext()) {
-            EngineListener el = (EngineListener) iterator.next();
+        if (engineListeners == null) {
+            return;
+        }
+        for (EngineListener el : engineListeners) {
             el.engineResumed(event);
         }
     }

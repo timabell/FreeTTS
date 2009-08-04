@@ -51,7 +51,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     private final BulkTimer timer = new BulkTimer();
     /** Default format is 8kHz. */
     private AudioFormat defaultFormat = 
-	new AudioFormat(8000f, 16, 1, true, true);
+    	new AudioFormat(8000f, 16, 1, true, true);
     private AudioFormat currentFormat = defaultFormat;
     private boolean firstSample = true;
     private boolean firstPlay = true;

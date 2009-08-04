@@ -14,7 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -38,7 +38,7 @@ public class PhoneDurationsImpl implements PhoneDurations {
     /**
      * The set of PhoneDuration instances indexed by phone.
      */
-    private HashMap phoneDurations;
+    private Map<String, PhoneDuration> phoneDurations;
     
     /**
      * Creates a new PhoneDurationsImpl by reading from the given URL.
@@ -51,7 +51,7 @@ public class PhoneDurationsImpl implements PhoneDurations {
         BufferedReader reader;
         String line;
 
-	phoneDurations = new HashMap();
+	phoneDurations = new java.util.HashMap<String, PhoneDuration>();
 	reader = new BufferedReader(new
 		InputStreamReader(url.openStream()));
 	line = reader.readLine();
@@ -73,8 +73,8 @@ public class PhoneDurationsImpl implements PhoneDurations {
     private void parseAndAdd(String line) {
         StringTokenizer tokenizer = new StringTokenizer(line," ");
         String phone = tokenizer.nextToken();
-        float mean = Float.parseFloat(tokenizer.nextToken());        
-        float stddev = Float.parseFloat(tokenizer.nextToken());        
+        float mean = Float.parseFloat(tokenizer.nextToken());
+        float stddev = Float.parseFloat(tokenizer.nextToken());
         phoneDurations.put(phone, new PhoneDuration(mean,stddev));
     }
 
@@ -87,6 +87,6 @@ public class PhoneDurationsImpl implements PhoneDurations {
      * @return the <code>PhoneDuration</code> for <code>phone</code>
      */
     public PhoneDuration getPhoneDuration(String phone) {
-        return (PhoneDuration) phoneDurations.get(phone);
+        return phoneDurations.get(phone);
     }
 }

@@ -107,10 +107,6 @@ public class FreeTTS {
             audioPlayer = new NullAudioPlayer();
         }
 
-        if (false) {
-            System.out.println("Using " + audioPlayer);
-        }
-
         voice.setAudioPlayer(audioPlayer);
     }
 

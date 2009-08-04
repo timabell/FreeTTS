@@ -7,13 +7,13 @@
  */
 package com.sun.speech.engine;
 
-import javax.speech.SpeechEvent;
-
 import java.awt.AWTEvent;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.awt.Component;
 import java.security.AccessControlException;
+
+import javax.speech.SpeechEvent;
 
 /**
  * Utilities to help with dispatch JSAPI 1.0 events on the event
@@ -208,6 +208,7 @@ public class SpeechEventUtilities {
      *
      * @see #postSpeechEvent
      */
+    @SuppressWarnings("serial")
     protected static class SpeechAWTEventTarget extends Component {
         SpeechAWTEventTarget() {
             super();
@@ -232,6 +233,7 @@ public class SpeechEventUtilities {
      *
      * @see #postSpeechEvent
      */
+    @SuppressWarnings("serial")
     protected static class SpeechAWTEvent extends AWTEvent {
         static final int EVENT_ID = AWTEvent.RESERVED_ID_MAX + 14830;
         SpeechEventDispatcher dispatcher = null;

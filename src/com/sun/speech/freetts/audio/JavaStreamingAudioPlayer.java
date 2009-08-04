@@ -542,7 +542,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
                     (bytes, curIndex, 
                      Math.min(BYTES_PER_WRITE, bytesRemaining));
 		
-		if (bytesWritten != bytesWritten) {
+		if (bytesWritten != bytesRemaining) {
 		    debugPrint
 			("RETRY! bw" +bytesWritten + " br " + bytesRemaining);
 		}
@@ -610,11 +610,11 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     }
 
     /**
-     * Determines if the output has been cancelled. Access to the
-     * cancelled variable should be within a synchronized block such
+     * Determines if the output has been canceled. Access to the
+     * canceled variable should be within a synchronized block such
      * as this to ensure that access is coherent.
      *
-     * @return true if output has been cancelled
+     * @return true if output has been canceled
      */
     private synchronized boolean isCancelled() {
 	return cancelled;

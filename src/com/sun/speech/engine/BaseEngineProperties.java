@@ -11,7 +11,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.EventObject;
-import java.util.Iterator;
 
 import javax.speech.EngineProperties;
 import javax.speech.SpeechError;
@@ -28,13 +27,14 @@ public abstract class BaseEngineProperties
      * List of <code>PropertyChangeListeners</code> registered for
      * <code>PropertyChangeEvents</code> on this object.
      */
-    protected Collection propertyChangeListeners;
+    protected Collection<PropertyChangeListener> propertyChangeListeners;
 
     /**
      * Class constructor.
      */
     protected BaseEngineProperties() {
-        propertyChangeListeners = new java.util.ArrayList();
+        propertyChangeListeners =
+            new java.util.ArrayList<PropertyChangeListener>();
     }
 
     /**
@@ -192,10 +192,7 @@ public abstract class BaseEngineProperties
         if (propertyChangeListeners == null) {
             return;
         }
-        Iterator iterator = propertyChangeListeners.iterator();
-        while (iterator.hasNext()) {
-            PropertyChangeListener pl =
-                (PropertyChangeListener) iterator.next();
+        for (PropertyChangeListener pl : propertyChangeListeners) {
             pl.propertyChange(event);
         }
     }
