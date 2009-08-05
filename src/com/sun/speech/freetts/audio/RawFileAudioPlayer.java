@@ -7,12 +7,13 @@
  */
 package com.sun.speech.freetts.audio;
 
-import com.sun.speech.freetts.util.Utilities;
-
-import java.io.IOException;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+
 import javax.sound.sampled.AudioFormat;
+
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -134,14 +135,9 @@ public class RawFileAudioPlayer implements AudioPlayer {
 
 
     /**
-     * Writes the given bytes to the audio stream
-     *
-     * @param audioData array of audio data
-     *
-     * @return <code>true</code> of the write completed successfully, 
-     *       	<code> false </code>if the write was cancelled.
+     * {@inheritDoc}
      */
-    public boolean write(byte[] audioData) {
+    public boolean write(byte[] audioData) throws IOException {
 	return write(audioData, 0, audioData.length);
     }
 
@@ -164,22 +160,12 @@ public class RawFileAudioPlayer implements AudioPlayer {
     }
 
     /**
-     * Writes the given bytes to the audio stream
-     *
-     * @param bytes audio data to write to the device
-     * @param offset the offset into the buffer
-     * @param size the size into the buffer
-     *
-     * @return <code>true</code> of the write completed successfully, 
-     *       	<code> false </code>if the write was cancelled.
+     * {@inheritDoc}
      */
-    public boolean write(byte[] bytes, int offset, int size) {
-	try {
-	    os.write(bytes, offset, size);
-	} catch (IOException ioe) {
-	    return false;
-	}
-	return true;
+    public boolean write(byte[] bytes, int offset, int size)
+        throws IOException {
+        os.write(bytes, offset, size);
+        return true;
     }
 
     /**

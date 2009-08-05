@@ -154,14 +154,9 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
     }
 
     /**
-     *  Marks the end of a set of data. Audio data for a single 
-     *  utterance should be groupd between begin/end pairs.
-     *
-     *  @return true if the audio was output properly, false if the
-     *      output was cancelled or interrupted.
-     *
+     * {@inheritDoc}
      */
-    public boolean end()  {
+    public boolean end() throws IOException {
 	ByteArrayInputStream bais = new ByteArrayInputStream(outputData);
 	AudioInputStream ais = new AudioInputStream
             (bais, currentFormat, 
@@ -173,9 +168,6 @@ public class MultiFile8BitAudioPlayer implements AudioPlayer {
 	try {
 	    AudioSystem.write(ais, outputType, file);
             System.out.println("Wrote synthesized speech to " + name);
-	} catch (IOException ioe) {
-	    System.err.println("Can't write audio to " + file);
-	    return false;
 	} catch (IllegalArgumentException iae) {
 	    System.err.println("Can't write audio type " + outputType);
 	    return false;

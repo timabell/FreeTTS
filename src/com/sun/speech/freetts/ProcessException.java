@@ -14,8 +14,8 @@ package com.sun.speech.freetts;
  * Thrown by an UtteranceProcessor if any errors
  * are encountered while processing an Utterance.
  */
+@SuppressWarnings("serial")
 public class ProcessException extends Exception {
-
     /**
      * Class constructor.
      *

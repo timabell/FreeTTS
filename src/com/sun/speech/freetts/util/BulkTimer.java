@@ -7,10 +7,9 @@
  */
 package com.sun.speech.freetts.util;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.util.Collection;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Provides a suite of timers that are used to collect and generate
@@ -25,15 +24,15 @@ public class BulkTimer {
 
     private final static String SELF = "OverallTime";
     private boolean verbose;
-    private Map timers;
+    private Map<String, Timer> timers;
     
 
     /**
      * Creates a bulk timer.
      */
     public BulkTimer() {
-	this.verbose = false;
-	timers = new LinkedHashMap();
+        this.verbose = false;
+        timers = new LinkedHashMap<String, Timer>();
     }
 
     /**
@@ -103,10 +102,10 @@ public class BulkTimer {
      * @return the timer with that name
      */
     public Timer getTimer(String name) {
-	if (!timers.containsKey(name)) {
-	    timers.put(name, new Timer(name));
-	}
-	return (Timer) timers.get(name);
+        if (!timers.containsKey(name)) {
+            timers.put(name, new Timer(name));
+        }
+        return timers.get(name);
     }
 
     /**
@@ -115,12 +114,11 @@ public class BulkTimer {
      * @param title the title for the display
      */
     public void show(String title) {
-	long overall = getTimer(SELF).getCurrentTime();
-	Collection  values = timers.values();
-	Timer.showTimesShortTitle(title);
-	for (Iterator i = values.iterator(); i.hasNext(); ) {
-	    Timer t = (Timer) i.next();
-	    t.showTimes(overall);
-	}
+        long overall = getTimer(SELF).getCurrentTime();
+        Collection<Timer>  values = timers.values();
+        Timer.showTimesShortTitle(title);
+        for (Timer timer : values) {
+            timer.showTimes(overall);
+        }
     }
 }

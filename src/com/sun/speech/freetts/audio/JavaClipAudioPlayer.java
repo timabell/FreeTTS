@@ -289,13 +289,10 @@ public class JavaClipAudioPlayer implements AudioPlayer {
     
 
     /**
-     *  Starts the output of a set of data. Audio data for a single
-     *  utterance should be grouped between begin/end pairs.
-     *
-     * @param size the size of data between now and the end
+     * {@inheritDoc}
      *
      */
-    public synchronized void begin(int size) {
+    public synchronized void begin(int size) throws IOException {
         timer.start("utteranceOutput");
         cancelled = false;
         curIndex = 0;
@@ -315,7 +312,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         }
 
         timer.start("clipGeneration");
-        
+
         boolean opened = false;
         long totalDelayMs = 0;
         do {
@@ -332,10 +329,8 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                     Thread.sleep(openFailDelayMs);
                     totalDelayMs += openFailDelayMs;
                 } catch (InterruptedException ie) {
-                    ie.printStackTrace();
+                    return;
                 }
-            } catch (IOException e) {
-                LOGGER.warning(e.getLocalizedMessage());
             }
         } while (!opened && totalDelayMs < totalOpenFailDelayMs);
         
@@ -421,31 +416,19 @@ public class JavaClipAudioPlayer implements AudioPlayer {
         ok &= !cancelled;
         return ok;
     }
-    
-    
+
     /**
-     * Writes the given bytes to the audio stream
-     *
-     * @param audioData audio data to write to the device
-     *
-     * @return <code>true</code> if the write completed successfully, 
-     *       	<code> false </code>if the write was cancelled.
+     * {@inheritDoc}
      */
-    public boolean write(byte[] audioData) {
+    public boolean write(byte[] audioData) throws IOException {
         return write(audioData, 0, audioData.length);
     }
-    
+
     /**
-     * Writes the given bytes to the audio stream
-     *
-     * @param bytes audio data to write to the device
-     * @param offset the offset into the buffer
-     * @param size the size into the buffer
-     *
-     * @return <code>true</code> if the write completed successfully, 
-     *       	<code> false </code>if the write was canceled.
+     * {@inheritDoc}
      */
-    public boolean write(byte[] bytes, int offset, int size) {
+    public boolean write(byte[] bytes, int offset, int size)
+        throws IOException {
         if (firstSample) {
             firstSample = false;
             timer.stop("firstAudio");
@@ -454,12 +437,7 @@ public class JavaClipAudioPlayer implements AudioPlayer {
                 timer.getTimer("firstAudio").showTimesShort(0);
             }
         }
-        try {
-            outputData.write(bytes, offset, size);
-        } catch (IOException e) {
-            LOGGER.warning(e.getLocalizedMessage());
-            return false;
-        }
+        outputData.write(bytes, offset, size);
         curIndex += size;
         return true;
     }

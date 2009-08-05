@@ -7,6 +7,8 @@
  */
 package com.sun.speech.freetts.audio;
 
+import java.io.IOException;
+
 import javax.sound.sampled.AudioFormat;
 
 /**
@@ -90,21 +92,23 @@ public interface AudioPlayer {
      *
      * @param size the size of data in bytes to be output before
      *    <code>end</code> is called.
+     * @exception IOException
+     *            if an error occurs while preparing the output.
      */
-    void begin(int size); 
+    void begin(int size) throws IOException;
 
     /**
      *  Signals the end of a set of data. Audio data for a single 
-     *  utterance should be groupd between <code> begin/end </code> pairs.
+     *  utterance should be grouped between <code> begin/end </code> pairs.
      *
      *  @return <code>true</code> if the audio was output properly, 
      *		<code> false</code> if the output was canceled 
      *		or interrupted.
-     *
+     * @exception IOException
+     *            if an error occurs while closing the output
      */
-    boolean end(); 
-    
-    
+    boolean end() throws IOException; 
+
     /**
      * Cancels all queued output. All 'write' calls until the next
      * reset will return false.
@@ -112,12 +116,10 @@ public interface AudioPlayer {
      */
     void cancel();
 
-    
     /**
      * Waits for all audio playback to stop, and closes this AudioPlayer.
      */
     void close();
-
 
     /**
      * Returns the current volume. The volume is specified as a number
@@ -137,7 +139,6 @@ public interface AudioPlayer {
      */
     void setVolume(float volume);
 
-
     /**
      * Gets the amount of audio played since the last resetTime
      *
@@ -145,18 +146,16 @@ public interface AudioPlayer {
      */
     long getTime(); 
 
-
     /**
      * Resets the audio clock
      */
     void resetTime();
 
-
     /**
      * Starts the first sample timer
      */
     void startFirstSampleTimer();
-    
+
     /**
      * Writes the given bytes to the audio stream
      *
@@ -164,8 +163,10 @@ public interface AudioPlayer {
      *
      * @return <code>true</code> of the write completed successfully, 
      *       	<code> false </code>if the write was cancelled.
+     * @exception IOException
+     *            if an error occurs while writing the audio data
      */
-    boolean write(byte[] audioData);
+    boolean write(byte[] audioData) throws IOException;
 
     /**
      * Writes the given bytes to the audio stream
@@ -176,8 +177,10 @@ public interface AudioPlayer {
      *
      * @return <code>true</code> of the write completed successfully, 
      *       	<code> false </code>if the write was cancelled.
+     * @exception IOException
+     *            if an error occurs while writing the audio data
      */
-    boolean write(byte[] audioData, int offset, int size);
+    boolean write(byte[] audioData, int offset, int size) throws IOException;
 
     /**
      * Shows metrics for this audio player

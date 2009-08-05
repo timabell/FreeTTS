@@ -8,6 +8,7 @@
  */
 package de.dfki.lt.freetts.mbrola;
 
+import java.io.IOException;
 import java.nio.ByteOrder;
 import java.util.Iterator;
 import java.util.List;
@@ -88,18 +89,30 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
             totalSize = 0;
         }
 
-        audioPlayer.begin(totalSize);
+        try {
+            audioPlayer.begin(totalSize);
+        } catch (IOException e) {
+            throw new ProcessException(e.getMessage());
+        }
 
         for (Iterator it = audioData.iterator(); it.hasNext();) {
             byte[] bytes = (byte[]) it.next();
-            if (!audioPlayer.write(bytes)) {
-                throw new ProcessException
-                    ("Cannot write audio data to audio player");
+            try {
+                if (!audioPlayer.write(bytes)) {
+                    throw new ProcessException
+                        ("Cannot write audio data to audio player");
+                }
+            } catch (IOException e) {
+                throw new ProcessException(e.getMessage());
             }
         }
 
-        if (!audioPlayer.end()) {
-            throw new ProcessException("audio player reports problem");
+        try {
+            if (!audioPlayer.end()) {
+                throw new ProcessException("audio player reports problem");
+            }
+        } catch (IOException e) {
+            throw new ProcessException(e.getMessage());
         }
     }
 

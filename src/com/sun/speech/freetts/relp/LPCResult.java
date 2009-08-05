@@ -11,18 +11,20 @@
 package com.sun.speech.freetts.relp;
 
 import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.text.DecimalFormat;
+
 import javax.sound.sampled.AudioFormat;
-import com.sun.speech.freetts.Utterance;
+
 import com.sun.speech.freetts.FreeTTSSpeakable;
+import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.audio.AudioPlayer;
-import com.sun.speech.freetts.util.WaveUtils;
 import com.sun.speech.freetts.util.Utilities;
+import com.sun.speech.freetts.util.WaveUtils;
 
 
 /**
@@ -398,8 +400,11 @@ public class LPCResult {
      * Synthesize a Wave  from this LPCResult
      *
      * @return the wave
+     * @exception IOException
+     *            if an error occurs while writing the audio data
      */
-    public boolean  playWave(AudioPlayer player, Utterance utterance) {
+    public boolean playWave(AudioPlayer player, Utterance utterance)
+        throws IOException {
         return playWaveSamples(player, utterance.getSpeakable(),
                                getNumberOfSamples() * 2);
     }
@@ -482,10 +487,12 @@ public class LPCResult {
      *
      * @param player where to send the audio
      * @param numberSamples the number of samples
+     * @exception IOException
+     *            if an error occurs while writing the audio data
      */
-    private boolean  playWaveSamples(AudioPlayer player, 
-                                     FreeTTSSpeakable speakable,
-                                     int numberSamples) {
+    private boolean playWaveSamples(AudioPlayer player, 
+                                    FreeTTSSpeakable speakable,
+                                    int numberSamples) throws IOException {
 	boolean ok = true;
 	int numberChannels = getNumberOfChannels();
 	int pmSizeSamples;

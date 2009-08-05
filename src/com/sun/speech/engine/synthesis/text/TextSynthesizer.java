@@ -7,14 +7,11 @@
  */
 package com.sun.speech.engine.synthesis.text;
 
-import java.net.URL;
-import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.speech.Engine;
 import javax.speech.EngineStateError;
-import javax.speech.synthesis.Speakable;
-import javax.speech.synthesis.SpeakableEvent;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
 import com.sun.speech.engine.synthesis.BaseSynthesizer;

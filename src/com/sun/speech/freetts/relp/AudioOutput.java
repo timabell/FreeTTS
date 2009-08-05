@@ -10,6 +10,7 @@
  */
 package com.sun.speech.freetts.relp;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,8 +63,12 @@ public class AudioOutput implements UtteranceProcessor {
 	    LOGGER.fine("=== " +
 		utterance.getString("input_text"));
 	}
-	if (!lpcResult.playWave(audioPlayer, utterance)) {
-	    throw new ProcessException("Output Cancelled");
+	try {
+	    if (!lpcResult.playWave(audioPlayer, utterance)) {
+	        throw new ProcessException("Output Cancelled");
+	    }
+	} catch (IOException e) {
+	    throw new ProcessException(e.getMessage());
 	}
     }
 
