@@ -59,6 +59,3 @@ public class PhoneDuration {
         return standardDeviation;
     }
 }
-
-
-  

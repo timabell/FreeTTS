@@ -16,7 +16,7 @@ package com.sun.speech.freetts;
  *
  * @see Voice
  */
-public class Gender implements Comparable {
+public class Gender implements Comparable<Gender> {
     private final String name;
 
     // Ordinal of next created
@@ -37,11 +37,11 @@ public class Gender implements Comparable {
     /**
      * Compare two genders.  If either is DONT_CARE, then returns 0.
      */
-    public int compareTo(Object o) {
-        if ((o == DONT_CARE) || (this == DONT_CARE)) {
+    public int compareTo(Gender gender) {
+        if ((gender == DONT_CARE) || (this == DONT_CARE)) {
             return 0;
         } else {
-            return ordinal - ((Gender) o).ordinal;
+            return ordinal - gender.ordinal;
         }
     }
 

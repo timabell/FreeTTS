@@ -14,6 +14,7 @@ package com.sun.speech.freetts;
  * Thrown by a Validator if any errors
  * are encountered while validating.
  */
+@SuppressWarnings("serial")
 public class ValidationException extends Exception {
 
     /**

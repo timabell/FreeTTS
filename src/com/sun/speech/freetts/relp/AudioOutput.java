@@ -68,7 +68,7 @@ public class AudioOutput implements UtteranceProcessor {
 	        throw new ProcessException("Output Cancelled");
 	    }
 	} catch (IOException e) {
-	    throw new ProcessException(e.getMessage());
+	    throw new ProcessException(e.getMessage(), e);
 	}
     }
 
@@ -105,7 +105,4 @@ public class AudioOutput implements UtteranceProcessor {
 	return "AudioOutput";
     }
 }
-
-
-
 

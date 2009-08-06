@@ -25,6 +25,6 @@ public interface UtteranceProcessor {
      *
      * @throws ProcessException if an exception occurred during the operation
      */
-    public void processUtterance(Utterance u) throws ProcessException;
+    void processUtterance(Utterance u) throws ProcessException;
 }
 

@@ -118,8 +118,10 @@ public interface AudioPlayer {
 
     /**
      * Waits for all audio playback to stop, and closes this AudioPlayer.
+     * @exception IOException
+     *            error closing the audio player
      */
-    void close();
+    void close() throws IOException;
 
     /**
      * Returns the current volume. The volume is specified as a number

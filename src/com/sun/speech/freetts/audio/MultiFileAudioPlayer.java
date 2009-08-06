@@ -164,8 +164,7 @@ public class MultiFileAudioPlayer implements AudioPlayer {
 	    AudioSystem.write(ais, outputType, file);
             System.out.println("Wrote synthesized speech to " + name);
 	} catch (IllegalArgumentException iae) {
-	    System.err.println("Can't write audio type " + outputType);
-	    return false;
+	    throw new IOException("Can't write audio type " + outputType, iae);
 	}
 	fileCount++;
 	return true;

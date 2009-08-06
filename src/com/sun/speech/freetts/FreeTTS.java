@@ -168,7 +168,11 @@ public class FreeTTS {
      * Shuts down this FreeTTS synthesizer by closing the AudioPlayer and voice.
      */
     public void shutdown() {
-        audioPlayer.close();
+        try {
+            audioPlayer.close();
+        } catch (IOException e) {
+            LOGGER.warning("error closing the audio player: " + e.getMessage());
+        }
         voice.deallocate();
     }
 

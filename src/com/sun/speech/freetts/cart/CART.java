@@ -10,10 +10,10 @@
  */
 package com.sun.speech.freetts.cart;
 
-import com.sun.speech.freetts.Item;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import com.sun.speech.freetts.Item;
 
 /**
  * Generic interface for Classification and Regression Trees (CARTs) based
@@ -29,7 +29,7 @@ public interface CART {
      *
      * @return the interpretation
      */
-    public Object interpret(Item item);
+    Object interpret(Item item);
 
     /**
      * Dumps this CART to the output stream.
@@ -38,7 +38,7 @@ public interface CART {
      *
      * @throws IOException if an error occurs during output
      */
-    public void dumpBinary(DataOutputStream os) throws IOException ;
+    void dumpBinary(DataOutputStream os) throws IOException ;
 }
 
 

@@ -17,13 +17,20 @@ package com.sun.speech.freetts;
 @SuppressWarnings("serial")
 public class ProcessException extends Exception {
     /**
-     * Class constructor.
+     * Constructs a new object.
      *
-     * @param s the reason why the exception was thrown
+     * @param message the reason why the exception was thrown
      */
-    public ProcessException(String s) {
-        super(s);
+    public ProcessException(String message) {
+        super(message);
+    }
+
+    /**
+     * Constructs a new object.
+     * @param message the reason why the exception was thrown
+     * @param cause the root cause of this exception
+     */
+    public ProcessException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
-
-  

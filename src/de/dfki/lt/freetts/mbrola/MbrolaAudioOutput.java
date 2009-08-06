@@ -92,7 +92,7 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
         try {
             audioPlayer.begin(totalSize);
         } catch (IOException e) {
-            throw new ProcessException(e.getMessage());
+            throw new ProcessException(e.getMessage(), e);
         }
 
         for (Iterator it = audioData.iterator(); it.hasNext();) {
@@ -103,7 +103,7 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
                         ("Cannot write audio data to audio player");
                 }
             } catch (IOException e) {
-                throw new ProcessException(e.getMessage());
+                throw new ProcessException(e.getMessage(), e);
             }
         }
 
@@ -112,7 +112,7 @@ public class MbrolaAudioOutput implements UtteranceProcessor {
                 throw new ProcessException("audio player reports problem");
             }
         } catch (IOException e) {
-            throw new ProcessException(e.getMessage());
+            throw new ProcessException(e.getMessage(), e);
         }
     }
 

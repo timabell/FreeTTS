@@ -8,6 +8,7 @@
 package com.sun.speech.freetts.jsapi;
 
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -152,14 +153,17 @@ public class FreeTTSSynthesizer extends BaseSynthesizer {
         outputHandler.cancelAllItems();
         outputHandler.terminate();
 
-	// Close the audio. This should flush out any queued audio data
-
-	if (audio != null) {
-	    audio.close();
-	}
+        // Close the audio. This should flush out any queued audio data
+        if (audio != null) {
+            try {
+                audio.close();
+            } catch (IOException e) {
+                throw new EngineException(e.getMessage());
+            }
+        }
 
         outputQueue.close();
-        
+
         postEngineDeallocated(states[0], states[1]);
     }
     

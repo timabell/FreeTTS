@@ -808,7 +808,3 @@ class FloatList {
     }
 }
 
-
-
-
-

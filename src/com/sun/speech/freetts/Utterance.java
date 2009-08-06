@@ -12,7 +12,6 @@ package com.sun.speech.freetts;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
-import java.util.Iterator;
 import java.util.List;
 
 import com.sun.speech.freetts.util.SegmentRelationUtils;
@@ -28,11 +27,12 @@ import com.sun.speech.freetts.util.SegmentRelationUtils;
  * found in the utterance feature set, the query is forwarded to the
  * FeatureSet of the voice associated with the utterance.
  */
+@SuppressWarnings("serial")
 public class Utterance implements FeatureSet, Serializable {
 
     private Voice voice;
-    private FeatureSetImpl features;
-    private FeatureSetImpl relations;
+    private FeatureSet features;
+    private FeatureSet relations;
     private boolean first;	// first in a connected series
     private boolean last;	// last in a connected series
     private FreeTTSSpeakable speakable;
@@ -54,7 +54,7 @@ public class Utterance implements FeatureSet, Serializable {
      * @param voice the voice associated with the utterance
      * @param tokenList the list of tokens for this utterance
      */
-    public Utterance(Voice voice, List tokenList) {
+    public Utterance(Voice voice, List<Token> tokenList) {
 	this(voice);
 	setTokenList(tokenList);
     }
@@ -423,12 +423,12 @@ public class Utterance implements FeatureSet, Serializable {
      * @param tokenList the set of tokens for this utterance
      *
      */
-    private void setInputText(List tokenList) {
-	StringBuffer sb = new StringBuffer();
-	for (Iterator i = tokenList.iterator(); i.hasNext(); ) {
-	    sb.append(i.next().toString());
-	}
-	setString("input_text", sb.toString());
+    private void setInputText(List<Token> tokenList) {
+        StringBuilder str = new StringBuilder();
+        for (Token token : tokenList) {
+            str.append(token.toString());
+        }
+        setString("input_text", str.toString());
     }
 
 
@@ -440,30 +440,29 @@ public class Utterance implements FeatureSet, Serializable {
      * @param tokenList the tokenList
      *
      */
-    private void setTokenList(List tokenList) {
-	setInputText(tokenList);
+    private void setTokenList(List<Token> tokenList) {
+        setInputText(tokenList);
 
-	Relation relation = createRelation(Relation.TOKEN);
-	for (Iterator i = tokenList.iterator(); i.hasNext(); ) {
-	    Token token = (Token) i.next();
-	    String tokenWord = token.getWord();
-	    
-	    if (tokenWord != null && tokenWord.length() > 0) {
-		Item item = relation.appendItem();
-		
-		FeatureSet featureSet = item.getFeatures();
-		featureSet.setString("name", tokenWord);
-		featureSet.setString("whitespace", token.getWhitespace());
-		featureSet.setString("prepunctuation", 
-			token.getPrepunctuation());
-		featureSet.setString("punc", token.getPostpunctuation());
-		featureSet.setString("file_pos", 
-			String.valueOf(token.getPosition()));
-		featureSet.setString("line_number", 
-			String.valueOf(token.getLineNumber()));
-		
-	    }
-	}
+        Relation relation = createRelation(Relation.TOKEN);
+        for (Token token : tokenList) {
+            String tokenWord = token.getWord();
+
+            if (tokenWord != null && tokenWord.length() > 0) {
+                Item item = relation.appendItem();
+
+                FeatureSet featureSet = item.getFeatures();
+                featureSet.setString("name", tokenWord);
+                featureSet.setString("whitespace", token.getWhitespace());
+                featureSet.setString("prepunctuation", 
+                        token.getPrepunctuation());
+                featureSet.setString("punc", token.getPostpunctuation());
+                featureSet.setString("file_pos", 
+                        String.valueOf(token.getPosition()));
+                featureSet.setString("line_number", 
+                        String.valueOf(token.getLineNumber()));
+
+            }
+        }
     }
 
     /**

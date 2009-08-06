@@ -1006,7 +1006,11 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
 
         if (!externalAudioPlayer) {
             if (audioPlayer != null) {
-                audioPlayer.close();
+                try {
+                    audioPlayer.close();
+                } catch (IOException e) {
+                    LOGGER.warning(e.getMessage());
+                }
                 audioPlayer = null;
             }
         }

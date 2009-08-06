@@ -47,7 +47,7 @@ public interface FeatureSet extends Dumpable {
      * @return the value associated with the name or null if the value
      *   is not found
      *
-     * @throws ClassCastException if theassociated value is not a
+     * @throws ClassCastException if the associated value is not a
      *   String
      */
     String getString(String name);

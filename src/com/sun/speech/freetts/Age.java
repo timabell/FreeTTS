@@ -15,7 +15,7 @@ package com.sun.speech.freetts;
  *
  * @see Voice
  */
-public class Age implements Comparable {
+public class Age implements Comparable<Age> {
     private final String name;
 
     // Ordinal of next created
@@ -37,11 +37,11 @@ public class Age implements Comparable {
      * Compare two ages.  CHILD is less than TEENAGER, and so on.  If
      * either age is DONT_CARE, then they are equal.
      */
-    public int compareTo(Object o) {
-        if ((o == DONT_CARE) || (this == DONT_CARE)) {
+    public int compareTo(Age age) {
+        if ((age == DONT_CARE) || (this == DONT_CARE)) {
             return 0;
         } else {
-            return ordinal - ((Age) o).ordinal;
+            return ordinal - age.ordinal;
         }
     }
 

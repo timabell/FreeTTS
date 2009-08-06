@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -27,6 +29,10 @@ import com.sun.speech.freetts.util.Utilities;
  *
  */
 public class SingleFileAudioPlayer implements AudioPlayer {
+    /** Logger instance. */
+    private static final Logger LOGGER =
+        Logger.getLogger(SingleFileAudioPlayer.class.getName());
+
     private AudioFormat currentFormat = null;
     private String baseName;
     private byte[] outputData;
@@ -124,23 +130,21 @@ public class SingleFileAudioPlayer implements AudioPlayer {
     /**
      * Closes this audio player
      */
-    public synchronized void close() {
+    public synchronized void close() throws IOException {
 	try {
 	    File file = new File(baseName);
 	    InputStream is = new SequenceInputStream(outputList.elements());
 	    AudioInputStream ais = new AudioInputStream(is,
 		    currentFormat, totBytes / currentFormat.getFrameSize());
-            if (false) {
-                System.out.println("Avail " + ais.available());
-                System.out.println("totBytes " + totBytes);
-                System.out.println("FS " + currentFormat.getFrameSize());
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.fine("Avail " + ais.available());
+                LOGGER.fine("totBytes " + totBytes);
+                LOGGER.fine("FS " + currentFormat.getFrameSize());
             }
-            System.out.println("Wrote synthesized speech to " + baseName);
+            LOGGER.info("Wrote synthesized speech to " + baseName);
 	    AudioSystem.write(ais, outputType, file);
-	} catch (IOException ioe) {
-	    System.err.println("Can't write audio to " + baseName);
 	} catch (IllegalArgumentException iae) {
-	    System.err.println("Can't write audio type " + outputType);
+	    throw new IOException("Can't write audio type " + outputType, iae);
 	}
     }
 

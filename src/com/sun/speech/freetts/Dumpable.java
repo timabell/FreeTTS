@@ -24,7 +24,7 @@ public interface Dumpable {
      * @param padding the number of spaces in the string
      * @param title the title for the dump
      */
-    public void dump(PrintWriter pw, int padding, String title);
+    void dump(PrintWriter pw, int padding, String title);
 }
 
   
