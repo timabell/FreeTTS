@@ -89,7 +89,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      */
     public final static String DATABASE_NAME = "databaseName";
     
-    private List utteranceProcessors;
+    private List<UtteranceProcessor> utteranceProcessors;
     private Map featureProcessors;
     private FeatureSetImpl features;
     private boolean metrics = false;
@@ -613,7 +613,7 @@ public abstract class Voice implements UtteranceProcessor, Dumpable {
      *
      * @return a List containing UtteranceProcessor instances
      */
-    public List getUtteranceProcessors() {
+    public List<UtteranceProcessor> getUtteranceProcessors() {
         return utteranceProcessors;
     }
 

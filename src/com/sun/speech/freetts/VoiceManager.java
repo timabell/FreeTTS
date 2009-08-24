@@ -20,7 +20,6 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.jar.Attributes;
 
 /**
@@ -106,11 +105,14 @@ public class VoiceManager {
      * @return the array of new instances of all available voices
      */
     public Voice[] getVoices() {
-        UniqueVector voices = new UniqueVector();
-        Collection voiceDirectories = getVoiceDirectories();
-        Iterator iterator = voiceDirectories.iterator();
-        while (iterator.hasNext()) {
-            VoiceDirectory dir = (VoiceDirectory) iterator.next();
+        final UniqueVector<Voice> voices = new UniqueVector<Voice>();
+        final Collection<VoiceDirectory> voiceDirectories;
+        try {
+            voiceDirectories = getVoiceDirectories();
+        } catch (IOException e) {
+            throw new Error(e.getMessage(), e);
+        }
+        for (VoiceDirectory dir : voiceDirectories) {
             voices.addArray(dir.getVoices());
         }
 
@@ -124,14 +126,17 @@ public class VoiceManager {
      * @return a String containing the information
      */
     public String getVoiceInfo() {
-        String infoString = "";
-        Collection voiceDirectories = getVoiceDirectories();
-        Iterator iterator = voiceDirectories.iterator();
-        while (iterator.hasNext()) {
-            VoiceDirectory dir = (VoiceDirectory) iterator.next();
-            infoString += dir.toString();
+        StringBuilder infoString = new StringBuilder();
+        Collection<VoiceDirectory> voiceDirectories;
+        try {
+            voiceDirectories = getVoiceDirectories();
+        } catch (IOException e) {
+            throw new Error(e.getMessage(), e);
         }
-        return infoString;
+        for( VoiceDirectory dir : voiceDirectories) {
+            infoString.append(dir.toString());
+        }
+        return infoString.toString();
     }
 
     /**
@@ -140,8 +145,11 @@ public class VoiceManager {
      * 
      * @return the voice directories
      * @see getVoices()
+     * @exception IOException
+     *            error loading a voice directory
      */
-    private Collection getVoiceDirectories() {
+    private Collection<VoiceDirectory> getVoiceDirectories()
+        throws IOException {
         try {
             // If there is a freetts.voices property, it means two
             // things: 1) it is a comma separated list of class names
@@ -160,7 +168,7 @@ public class VoiceManager {
             UniqueVector voiceDirectoryNames = getVoiceDirectoryNamesFromFiles();
 
             // Get list of voice jars
-            UniqueVector pathURLs = getVoiceJarURLs();
+            UniqueVector<URL> pathURLs = getVoiceJarURLs();
             voiceDirectoryNames.addVector(
                     getVoiceDirectoryNamesFromJarURLs(pathURLs));
 
@@ -206,16 +214,18 @@ public class VoiceManager {
      * Gets VoiceDirectory instances by parsing a comma separated String of
      * VoiceDirectory class names.
      */
-    private Collection getVoiceDirectoryNamesFromProperty(
+    private Collection<VoiceDirectory> getVoiceDirectoryNamesFromProperty(
             String voiceClasses) throws InstantiationException,
             IllegalAccessException, ClassNotFoundException {
 
         String[] classnames = voiceClasses.split(",");
 
-        Collection directories = new java.util.ArrayList();
+        Collection<VoiceDirectory> directories =
+            new java.util.ArrayList<VoiceDirectory>();
 
         for (int i = 0; i < classnames.length; i++) {
-            Class c = classLoader.loadClass(classnames[i]);
+            @SuppressWarnings("unchecked")
+            Class<VoiceDirectory> c = classLoader.loadClass(classnames[i]);
             directories.add(c.newInstance());
         }
 
@@ -237,55 +247,54 @@ public class VoiceManager {
      *            recursively.
      * 
      * @param dependencyURLs
-     *            a vector containing all of the dependant urls found. This
+     *            a vector containing all of the dependent urls found. This
      *            parameter is modified as urls are added to it.
+     * @exception IOException
+     *            error openig the URL connection
      */
-    private void getDependencyURLs(URL url, UniqueVector dependencyURLs) {
-        try {
-            String urlDirName = getURLDirName(url);
-            if (url.getProtocol().equals("jar")) { // only check deps of jars
+    private void getDependencyURLs(URL url, UniqueVector<URL> dependencyURLs)
+        throws IOException {
+        String urlDirName = getURLDirName(url);
+        if (url.getProtocol().equals("jar")) { // only check deps of jars
 
-                // read in Class-Path attribute of jar Manifest
-                JarURLConnection jarConnection = (JarURLConnection) url
-                        .openConnection();
-                Attributes attributes = jarConnection.getMainAttributes();
-                String fullClassPath = attributes
-                        .getValue(Attributes.Name.CLASS_PATH);
-                if (fullClassPath == null || fullClassPath.equals("")) {
-                    return; // no classpaths to add
-                }
+            // read in Class-Path attribute of jar Manifest
+            JarURLConnection jarConnection = (JarURLConnection) url
+            .openConnection();
+            Attributes attributes = jarConnection.getMainAttributes();
+            String fullClassPath = attributes
+            .getValue(Attributes.Name.CLASS_PATH);
+            if (fullClassPath == null || fullClassPath.equals("")) {
+                return; // no classpaths to add
+            }
 
-                // The URLs are separated by one or more spaces
-                String[] classPath = fullClassPath.split("\\s+");
-                URL classPathURL;
-                for (int i = 0; i < classPath.length; i++) {
-                    try {
-                        if (classPath[i].endsWith("/")) { // assume directory
-                            classPathURL = new URL("file:" + urlDirName
-                                    + classPath[i]);
-                        } else { // assume jar
-                            classPathURL = new URL("jar", "", "file:"
-                                    + urlDirName + classPath[i] + "!/");
-                        }
-                    } catch (MalformedURLException e) {
-                        System.err
-                                .println("Warning: unable to resolve dependency "
-                                        + classPath[i]
+            // The URLs are separated by one or more spaces
+            String[] classPath = fullClassPath.split("\\s+");
+            URL classPathURL;
+            for (int i = 0; i < classPath.length; i++) {
+                try {
+                    if (classPath[i].endsWith("/")) { // assume directory
+                        classPathURL = new URL("file:" + urlDirName
+                                + classPath[i]);
+                    } else { // assume jar
+                        classPathURL = new URL("jar", "", "file:"
+                                + urlDirName + classPath[i] + "!/");
+                    }
+                } catch (MalformedURLException e) {
+                    System.err
+                    .println("Warning: unable to resolve dependency "
+                            + classPath[i]
                                         + " referenced by "
                                         + url);
-                        continue;
-                    }
+                    continue;
+                }
 
-                    // don't get in a recursive loop if two jars
-                    // are mutually dependant
-                    if (!dependencyURLs.contains(classPathURL)) {
-                        dependencyURLs.add(classPathURL);
-                        getDependencyURLs(classPathURL, dependencyURLs);
-                    }
+                // don't get in a recursive loop if two jars
+                // are mutually dependant
+                if (!dependencyURLs.contains(classPathURL)) {
+                    dependencyURLs.add(classPathURL);
+                    getDependencyURLs(classPathURL, dependencyURLs);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -342,9 +351,11 @@ public class VoiceManager {
      * @return a UniqueVector of Strings representing the voice directory class
      *         names
      */
-    private UniqueVector getVoiceDirectoryNamesFromJarURLs(UniqueVector urls) {
+    private UniqueVector<String> getVoiceDirectoryNamesFromJarURLs(
+            UniqueVector<URL> urls) {
         try {
-            UniqueVector voiceDirectoryNames = new UniqueVector();
+            UniqueVector<String> voiceDirectoryNames =
+                new UniqueVector<String>();
             for (int i = 0; i < urls.size(); i++) {
                 JarURLConnection jarConnection = (JarURLConnection) ((URL) urls
                         .get(i)).openConnection();
@@ -360,7 +371,7 @@ public class VoiceManager {
             }
             return voiceDirectoryNames;
         } catch (IOException e) {
-            throw new Error("Error reading jarfile manifests. ");
+            throw new Error("Error reading jarfile manifests.");
         }
     }
 
@@ -372,8 +383,8 @@ public class VoiceManager {
      * 
      * @return a vector of URLs refering to the voice jarfiles.
      */
-    private UniqueVector getVoiceJarURLs() {
-        UniqueVector voiceJarURLs = new UniqueVector();
+    private UniqueVector<URL> getVoiceJarURLs() {
+        UniqueVector<URL> voiceJarURLs = new UniqueVector<URL>();
 
         // check in same directory as freetts.jar
         try {
@@ -408,10 +419,10 @@ public class VoiceManager {
      * @return a vector of URLs refering to the voice jarfiles
      * @see getVoiceJarURLs()
      */
-    private UniqueVector getVoiceJarURLsFromDir(String dirName)
+    private UniqueVector<URL> getVoiceJarURLsFromDir(String dirName)
             throws FileNotFoundException {
         try {
-            UniqueVector voiceJarURLs = new UniqueVector();
+            UniqueVector<URL> voiceJarURLs = new UniqueVector<URL>();
             File dir = new File(new URI("file://" + dirName));
             if (!dir.isDirectory()) {
                 throw new FileNotFoundException("File is not a directory: "
@@ -460,20 +471,22 @@ public class VoiceManager {
      *         last one.
      */
     public String toString() {
-        String names = "";
+        StringBuilder names = new StringBuilder();
         Voice[] voices = getVoices();
         for (int i = 0; i < voices.length; i++) {
             if (i == voices.length - 1) {
                 if (i == 0) {
-                    names = voices[i].getName();
+                    names.append(voices[i].getName());
                 } else {
-                    names += "or " + voices[i].getName();
+                    names.append("or ");
+                    names.append(voices[i].getName());
                 }
             } else {
-                names += voices[i].getName() + " ";
+                names.append(voices[i].getName());
+                names.append(" ");
             }
         }
-        return names;
+        return names.toString();
     }
 
     /**
@@ -685,16 +698,16 @@ class DynamicClassLoader extends URLClassLoader {
  * is that the elements are still ordered in the way they were added. If an
  * element is added that already exists, then nothing happens.
  */
-class UniqueVector {
-    private java.util.HashSet elementSet;
-    private java.util.Vector elementVector;
+class UniqueVector<T> {
+    private java.util.HashSet<T> elementSet;
+    private java.util.Vector<T> elementVector;
 
     /**
      * Creates a new vector
      */
     public UniqueVector() {
-        elementSet = new java.util.HashSet();
-        elementVector = new java.util.Vector();
+        elementSet = new java.util.HashSet<T>();
+        elementVector = new java.util.Vector<T>();
     }
 
     /**
@@ -704,7 +717,7 @@ class UniqueVector {
      * @param o
      *            the object to add
      */
-    public void add(Object o) {
+    public void add(T o) {
         if (!contains(o)) {
             elementSet.add(o);
             elementVector.add(o);
@@ -718,7 +731,7 @@ class UniqueVector {
      * @param v
      *            the vector to add
      */
-    public void addVector(UniqueVector v) {
+    public void addVector(UniqueVector<T> v) {
         for (int i = 0; i < v.size(); i++) {
             add(v.get(i));
         }
@@ -731,7 +744,7 @@ class UniqueVector {
      * @param a
      *            the array to add
      */
-    public void addArray(Object[] a) {
+    public void addArray(T[] a) {
         for (int i = 0; i < a.length; i++) {
             add(a[i]);
         }
@@ -756,7 +769,7 @@ class UniqueVector {
      * 
      * @return true if element o exists in the vector, else false.
      */
-    public boolean contains(Object o) {
+    public boolean contains(T o) {
         return elementSet.contains(o);
     }
 
@@ -768,7 +781,7 @@ class UniqueVector {
      * 
      * @return the object at index <b>index</b>
      */
-    public Object get(int index) {
+    public T get(int index) {
         return elementVector.get(index);
     }
 
@@ -778,8 +791,9 @@ class UniqueVector {
      * 
      * @return an array representation of the object
      */
-    public Object[] toArray() {
-        return elementVector.toArray();
+    @SuppressWarnings("unchecked")
+    public T[] toArray() {
+        return (T[]) elementVector.toArray();
     }
 
     /**
@@ -788,7 +802,7 @@ class UniqueVector {
      * 
      * @return an array representation of the object
      */
-    public Object[] toArray(Object[] a) {
+    public T[] toArray(T[] a) {
         return elementVector.toArray(a);
     }
 
@@ -796,7 +810,8 @@ class UniqueVector {
      * Returns the entries of this vector.
      * @return elements.
      */
-    public Collection elements() {
+    public Collection<T> elements() {
         return elementVector;
     }
 }
+ 

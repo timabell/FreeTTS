@@ -53,26 +53,56 @@ public abstract class VoiceDirectory {
     public String toString() {
         String newline = System.getProperty("line.separator");
         Voice[] voices = getVoices();
-        String s = "VoiceDirectory '" + this.getClass().getName() + "'"
-            + newline;
+        StringBuilder s = new StringBuilder();
+        s.append("VoiceDirectory '");
+        s.append(this.getClass().getName());
+        s.append("'");
+        s.append(newline);
 
         for (int i = 0; i < voices.length; i++) {
-            s += newline + "Name: " + voices[i].getName() + newline
-             + "\tDescription: " + voices[i].getDescription() + newline
-             + "\tOrganization: " + voices[i].getOrganization() + newline
-             + "\tDomain: " + voices[i].getDomain() + newline
-             + "\tLocale: " + voices[i].getLocale().toString() + newline
-             + "\tStyle: " + voices[i].getStyle() + newline
-             + "\tGender: " + voices[i].getGender().toString() + newline
-             + "\tAge: " + voices[i].getAge().toString() + newline
-             + "\tPitch: " + voices[i].getPitch() + newline
-             + "\tPitch Range: " + voices[i].getPitchRange() + newline
-             + "\tPitch Shift: " + voices[i].getPitchShift() + newline
-             + "\tRate: " + voices[i].getRate() + newline
-             + "\tVolume: " + voices[i].getVolume() + newline
-             + newline;
+            s.append(newline);
+            s.append("Name: ");
+            s.append(voices[i].getName());
+            s.append(newline);
+            s.append("\tDescription: ");
+            s.append(voices[i].getDescription());
+            s.append(newline);
+            s.append("\tOrganization: ");
+            s.append(voices[i].getOrganization());
+            s.append(newline);
+            s.append("\tDomain: ");
+            s.append(voices[i].getDomain());
+            s.append(newline);
+            s.append("\tLocale: ");
+            s.append(voices[i].getLocale().toString());
+            s.append(newline);
+            s.append("\tStyle: ");
+            s.append(voices[i].getStyle());
+            s.append(newline);
+            s.append("\tGender: ");
+            s.append(voices[i].getGender().toString());
+            s.append(newline);
+            s.append("\tAge: ");
+            s.append(voices[i].getAge().toString());
+            s.append(newline);
+            s.append("\tPitch: ");
+            s.append(voices[i].getPitch());
+            s.append(newline);
+            s.append("\tPitch Range: ");
+            s.append(voices[i].getPitchRange());
+            s.append(newline);
+            s.append("\tPitch Shift: ");
+            s.append(voices[i].getPitchShift());
+            s.append(newline);
+            s.append("\tRate: ");
+            s.append(voices[i].getRate());
+            s.append(newline);
+            s.append("\tVolume: ");
+            s.append(voices[i].getVolume());
+            s.append(newline);
+            s.append(newline);
         }
-        return s;
+        return s.toString();
     }
 
     /**

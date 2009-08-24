@@ -39,7 +39,7 @@ public class SingleFileAudioPlayer implements AudioPlayer {
     private int curIndex = 0;
     private int totBytes = 0;
     private AudioFileFormat.Type outputType;
-    private Vector outputList;
+    private Vector<InputStream> outputList;
 
 
     /**
@@ -53,7 +53,7 @@ public class SingleFileAudioPlayer implements AudioPlayer {
 	this.baseName = baseName + "." + type.getExtension();
 	this.outputType = type;
 
-	outputList = new Vector();
+	outputList = new Vector<InputStream>();
     }
 
     /**

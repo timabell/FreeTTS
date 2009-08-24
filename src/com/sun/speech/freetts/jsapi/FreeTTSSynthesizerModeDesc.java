@@ -16,7 +16,6 @@ import javax.speech.EngineCreate;
 import javax.speech.EngineException;
 import javax.speech.synthesis.SynthesizerModeDesc;
 
-import com.sun.speech.engine.synthesis.BaseVoice;
 import com.sun.speech.freetts.ValidationException;
 
 /**
@@ -78,14 +77,15 @@ implements EngineCreate {
     public void validate() throws ValidationException {
         javax.speech.synthesis.Voice[] voices = super.getVoices();
         int invalidCount = 0;
-        String validationMessage = "";
+        StringBuilder validationMessage = new StringBuilder();
 
         for (int i = 0; i < voices.length; i++) {
             try {
                 ((FreeTTSVoice) voices[i]).validate();
             } catch (ValidationException ve) {
                 invalidCount++;
-                validationMessage += (ve.getMessage() + "\n");
+                validationMessage.append(ve.getMessage());
+                validationMessage.append(System.getProperty("line.separator"));
             }
         }
         if (invalidCount == voices.length) {

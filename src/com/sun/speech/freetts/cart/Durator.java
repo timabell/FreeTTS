@@ -33,12 +33,6 @@ import com.sun.speech.freetts.UtteranceProcessor;
  */
 public class Durator implements UtteranceProcessor {
     /**
-     * The nominal speaking rate in words per minute.  Set in the
-     * constructor.
-     */
-    private final float meanRate;
-    
-    /**
      * The CART used for this duration UtteranceProcessor.  It is
      * passed into the constructor.
      */
@@ -61,15 +55,13 @@ public class Durator implements UtteranceProcessor {
      * CART and phone durations.
      *
      * @param cart contains zscore duration data
-     * @param meanRate the mean words per minute rate of the CART data
      * @param durations contains mean and standard deviation phone durations
      */
-    public Durator(CART cart, float meanRate, PhoneDurations durations) {
+    public Durator(CART cart, PhoneDurations durations) {
         this.cart = cart;
-        this.meanRate = meanRate;
         this.durations = durations;
     }
-    
+
     /**
      * Annotates the <code>Relation.SEGMENT</code> relations with
      * cumulative "end" time
@@ -85,19 +77,12 @@ public class Durator implements UtteranceProcessor {
      *         processing of the utterance
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
-        float durStretch;
         PhoneDuration durStat;
         float durationStretch = utterance.getVoice().getDurationStretch();
         float zdur;
         float dur;
         float end = 0.0f;
 	float localDurationStretch;
-        
-        // Figure out how far to stretch the durations (speed things
-        // up or slow them down.
-        //
-
-	durStretch = meanRate / utterance.getVoice().getRate();
 
         // Go through each of the segments and calculate a duration
         // for it.  Store the cumulative end time for the duration in

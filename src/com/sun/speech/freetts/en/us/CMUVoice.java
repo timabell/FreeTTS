@@ -100,7 +100,7 @@ public abstract class CMUVoice extends Voice {
      * @throws IOException throws an IOException if an error occurs
      */
     protected void setupUtteranceProcessors() throws IOException {
-	List processors = getUtteranceProcessors();
+	List<UtteranceProcessor> processors = getUtteranceProcessors();
 
 	BulkTimer.LOAD.start("CartLoading");
 	CARTImpl numbersCart = new CARTImpl(getResource("nums_cart.txt"));
@@ -125,7 +125,7 @@ public abstract class CMUVoice extends Voice {
 	processors.add(new PauseGenerator());
 	processors.add(new Intonator(accentCart, toneCart));
 	processors.add(getPostLexicalAnalyzer());
-	processors.add(new Durator(durzCart, 150.0f, phoneDurations));
+	processors.add(new Durator(durzCart, phoneDurations));
 	processors.add(new ContourGenerator
 	   (getResource("f0_lr_terms.txt"), 170.0f, 34.0f));
 
