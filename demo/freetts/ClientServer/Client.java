@@ -7,19 +7,18 @@
  */
 
 
-import com.sun.speech.freetts.audio.AudioPlayer;
-import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
-import com.sun.speech.freetts.util.Utilities;
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-
 import java.net.Socket;
 
 import javax.sound.sampled.AudioFormat;
+
+import com.sun.speech.freetts.audio.AudioPlayer;
+import com.sun.speech.freetts.audio.JavaStreamingAudioPlayer;
+import com.sun.speech.freetts.util.Utilities;
 
 
 /**
@@ -233,7 +232,7 @@ public class Client {
      *
      * @param numberSamples the number of bytes to read from the socket
      */
-    private void receiveAndPlay(int numberSamples) {
+    private void receiveAndPlay(int numberSamples) throws IOException {
 
 	int bytesToRead;
 	int bytesRemaining;
