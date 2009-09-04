@@ -165,7 +165,8 @@ public class VoiceManager {
             }
 
             // Get voice directory names from voices files
-            UniqueVector voiceDirectoryNames = getVoiceDirectoryNamesFromFiles();
+            UniqueVector<String> voiceDirectoryNames =
+                getVoiceDirectoryNamesFromFiles();
 
             // Get list of voice jars
             UniqueVector<URL> pathURLs = getVoiceJarURLs();
@@ -192,10 +193,14 @@ public class VoiceManager {
             }
 
             // Create an instance of each voice directory
-            UniqueVector voiceDirectories = new UniqueVector();
+            UniqueVector<VoiceDirectory> voiceDirectories =
+                new UniqueVector<VoiceDirectory>();
             for (int i = 0; i < voiceDirectoryNames.size(); i++) {
-                Class c = Class.forName((String) voiceDirectoryNames.get(i),
-                        true, classLoader);
+                @SuppressWarnings("unchecked")
+                Class<VoiceDirectory> c =
+                    (Class<VoiceDirectory>) Class.forName(
+                            (String) voiceDirectoryNames.get(i),
+                    true, classLoader);
                 voiceDirectories.add(c.newInstance());
             }
 
@@ -225,7 +230,8 @@ public class VoiceManager {
 
         for (int i = 0; i < classnames.length; i++) {
             @SuppressWarnings("unchecked")
-            Class<VoiceDirectory> c = classLoader.loadClass(classnames[i]);
+            Class<VoiceDirectory> c =
+                (Class<VoiceDirectory>) classLoader.loadClass(classnames[i]);
             directories.add(c.newInstance());
         }
 
@@ -303,41 +309,41 @@ public class VoiceManager {
      * voices.txt files.
      * 
      * @return a vector containing the String names of the voice directories
+     * @exception IOException
+     *            error reading voice files.
      */
-    private UniqueVector getVoiceDirectoryNamesFromFiles() {
-        try {
-            UniqueVector voiceDirectoryNames = new UniqueVector();
+    private UniqueVector<String> getVoiceDirectoryNamesFromFiles()
+        throws IOException {
+        final UniqueVector<String> voiceDirectoryNames =
+            new UniqueVector<String>();
 
-            // first, load internal_voices.txt
-            InputStream is = this.getClass().getResourceAsStream(
-                    "internal_voices.txt");
-            if (is != null) { // if it doesn't exist, move on
-                voiceDirectoryNames
-                        .addVector(getVoiceDirectoryNamesFromInputStream(is));
-            }
-
-            // next, try loading voices.txt
-            try {
-                voiceDirectoryNames
-                        .addVector(getVoiceDirectoryNamesFromFile(getBaseDirectory()
-                                + "voices.txt"));
-            } catch (FileNotFoundException e) {
-                // do nothing
-            } catch (IOException e) {
-                // do nothing
-            }
-
-            // last, read voices from property freetts.voicesfile
-            String voicesFile = System.getProperty("freetts.voicesfile");
-            if (voicesFile != null) {
-                voiceDirectoryNames
-                        .addVector(getVoiceDirectoryNamesFromFile(voicesFile));
-            }
-
-            return voiceDirectoryNames;
-        } catch (IOException e) {
-            throw new Error("Error reading voices files. " + e);
+        // first, load internal_voices.txt
+        InputStream is = this.getClass().getResourceAsStream(
+            "internal_voices.txt");
+        if (is != null) { // if it doesn't exist, move on
+            voiceDirectoryNames.addVector(getVoiceDirectoryNamesFromInputStream(
+                    is));
         }
+
+        // next, try loading voices.txt
+        try {
+            voiceDirectoryNames
+                .addVector(getVoiceDirectoryNamesFromFile(getBaseDirectory()
+                    + "voices.txt"));
+        } catch (FileNotFoundException e) {
+            // do nothing
+        } catch (IOException e) {
+            // do nothing
+        }
+
+        // last, read voices from property freetts.voicesfile
+        String voicesFile = System.getProperty("freetts.voicesfile");
+        if (voicesFile != null) {
+            voiceDirectoryNames.addVector(
+                    getVoiceDirectoryNamesFromFile(voicesFile));
+        }
+
+        return voiceDirectoryNames;
     }
 
     /**
@@ -571,7 +577,7 @@ public class VoiceManager {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    private UniqueVector getVoiceDirectoryNamesFromFile(String fileName)
+    private UniqueVector<String> getVoiceDirectoryNamesFromFile(String fileName)
             throws FileNotFoundException, IOException {
         InputStream is = new FileInputStream(fileName);
         if (is == null) {
@@ -591,10 +597,11 @@ public class VoiceManager {
      * 
      * @return a vector of the names of the VoiceDirectory subclasses
      * @throws IOException
+     *         error reading from the input stream
      */
-    private UniqueVector getVoiceDirectoryNamesFromInputStream(InputStream is)
-            throws IOException {
-        UniqueVector names = new UniqueVector();
+    private UniqueVector<String> getVoiceDirectoryNamesFromInputStream(
+            InputStream is) throws IOException {
+        final UniqueVector<String> names = new UniqueVector<String>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         while (true) {
             String line = reader.readLine();
@@ -627,7 +634,7 @@ public class VoiceManager {
  */
 class DynamicClassLoader extends URLClassLoader {
 
-    private java.util.HashSet classPath;
+    private java.util.HashSet<URL> classPath;
 
     /**
      * Constructs a new URLClassLoader for the given URLs. The URLs will be
@@ -651,7 +658,7 @@ class DynamicClassLoader extends URLClassLoader {
      */
     public DynamicClassLoader(URL[] urls, ClassLoader parent) {
         super(urls, parent);
-        classPath = new java.util.HashSet(urls.length);
+        classPath = new java.util.HashSet<URL>(urls.length);
         for (int i = 0; i < urls.length; i++) {
             classPath.add(urls[i]);
         }
@@ -675,9 +682,9 @@ class DynamicClassLoader extends URLClassLoader {
     /**
      * {@inheritDoc}
      */
-    public Class loadClass(final String name)
+    public Class<?> loadClass(final String name)
         throws ClassNotFoundException {
-        Class loadedClass = findLoadedClass(name);
+        Class<?> loadedClass = findLoadedClass(name);
         if (loadedClass == null) {
             try {
                 loadedClass = findClass(name);

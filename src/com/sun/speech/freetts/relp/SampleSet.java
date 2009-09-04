@@ -11,18 +11,12 @@
 package com.sun.speech.freetts.relp;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.DataOutputStream;
 import java.io.DataInputStream;
-import java.util.StringTokenizer;
-import java.util.NoSuchElementException;
-
-import java.nio.channels.WritableByteChannel;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.ShortBuffer;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 /**
  * Represents the frame and residual data

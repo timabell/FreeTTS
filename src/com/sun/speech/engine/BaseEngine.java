@@ -7,7 +7,7 @@
  */
 package com.sun.speech.engine;
 
-import java.util.Collection;
+import java.util.Vector;
 
 import javax.speech.AudioException;
 import javax.speech.AudioManager;
@@ -43,7 +43,7 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      * List of <code>EngineListeners</code> registered for
      * <code>EngineEvents</code> on this <code>Engine</code>.
      */
-    protected Collection<EngineListener> engineListeners;
+    protected Vector<EngineListener> engineListeners;
 
     /**
      * The <code>AudioManager</code> for this <code>Engine</code>.
@@ -81,7 +81,7 @@ abstract public class BaseEngine implements Engine, SpeechEventDispatcher {
      */
     public BaseEngine(EngineModeDesc desc) {
         engineModeDesc = desc;
-        engineListeners = new java.util.ArrayList<EngineListener>();
+        engineListeners = new Vector<EngineListener>();
         engineState = DEALLOCATED;
         engineStateLock = new Object();
         engineProperties = createEngineProperties();

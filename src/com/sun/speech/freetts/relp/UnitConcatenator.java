@@ -10,14 +10,13 @@
  */
 package com.sun.speech.freetts.relp;
 
-import com.sun.speech.freetts.Unit;
 import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.Item;
-import com.sun.speech.freetts.relp.LPCResult;
-import com.sun.speech.freetts.UtteranceProcessor;
-import com.sun.speech.freetts.Utterance;
-import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.ProcessException;
+import com.sun.speech.freetts.Relation;
+import com.sun.speech.freetts.Unit;
+import com.sun.speech.freetts.Utterance;
+import com.sun.speech.freetts.UtteranceProcessor;
 import com.sun.speech.freetts.util.Utilities;
 
 /**
@@ -49,10 +48,10 @@ public class UnitConcatenator implements UtteranceProcessor {
      *     the utterance
      */
     public void processUtterance(Utterance utterance) throws ProcessException {
-	float uIndex = 0, m;
-	int pmI = 0, targetResidualPosition = 0, nearestPM, 
-	    unitPart, targetStart = 0, targetEnd, residualSize, numberFrames;
-	Relation unitRelation = utterance.getRelation(Relation.UNIT);
+        float uIndex = 0, m;
+        int pmI = 0, targetResidualPosition = 0,
+            targetStart = 0, targetEnd, residualSize, numberFrames;
+        Relation unitRelation = utterance.getRelation(Relation.UNIT);
 
 	SampleInfo sampleInfo;
 	
@@ -95,7 +94,6 @@ public class UnitConcatenator implements UtteranceProcessor {
 	     unitItem = unitItem.getNext()) {
 	    FeatureSet featureSet = unitItem.getFeatures();
 
-	    String unitName = featureSet.getString("name");
 	    targetEnd = featureSet.getInt("target_end");
 	    Unit unit = (Unit) featureSet.getObject("unit");
 	    int unitSize = unit.getSize();
