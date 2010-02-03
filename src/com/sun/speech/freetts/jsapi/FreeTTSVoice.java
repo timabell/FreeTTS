@@ -8,8 +8,8 @@
 package com.sun.speech.freetts.jsapi;
 
 import com.sun.speech.engine.synthesis.BaseVoice;
-import com.sun.speech.freetts.Validator;
 import com.sun.speech.freetts.ValidationException;
+import com.sun.speech.freetts.Validator;
 
 /**
  * Extends the BaseVoice class to encapsulate FreeTTSSynthesizer specific data.
@@ -36,7 +36,7 @@ public class FreeTTSVoice extends BaseVoice {
         
         if (validatorName != null) {
             try {
-                Class clazz = Class.forName(validatorName);
+                Class<?> clazz = Class.forName(validatorName);
                 validator = (Validator) clazz.newInstance();
             } catch (ClassNotFoundException cnfe) {
                 cnfe.printStackTrace();

@@ -7,21 +7,12 @@
  */
 package com.sun.speech.freetts.jsapi;
 
-import javax.speech.Engine;
-import javax.speech.synthesis.Speakable;
-import javax.speech.synthesis.SpeakableEvent;
-
-import com.sun.speech.engine.synthesis.BaseSynthesizer;
-import com.sun.speech.engine.synthesis.BaseSynthesizerQueueItem;
-import com.sun.speech.freetts.FreeTTSSpeakable;
-
-import java.net.URL;
-import java.io.IOException;
 import java.io.InputStream;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.Text;
+
+import com.sun.speech.engine.synthesis.BaseSynthesizerQueueItem;
+import com.sun.speech.freetts.FreeTTSSpeakable;
 
 /**
  * Represents an object on the speech output queue of a

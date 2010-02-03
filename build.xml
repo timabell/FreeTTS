@@ -19,7 +19,10 @@
     <!-- ********************************************************** -->
     <property name="version" value="1.2.2" />
     <path id="libs">
-        <fileset dir="lib" includes="**/jsapi.jar" />
+        <fileset dir="lib">
+          <include name="jsapi.jar"/>
+          <include name="jsapi-1.0-base.jar"/>
+        </fileset>
     </path>
     <property name="src_dir" value="src" />
     <property name="build_dir" value="bld" />
@@ -346,7 +349,7 @@ jsapi.exe from the lib directory.
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="compile_lexicons"
-            depends="cmulex_db,cmudict04_db,cmutimelex_db"
+            depends="cmulex_db,cmudict04_db,cmutimelex_db,germanlex_db"
             description="Generate cmulex, cmudict04, and cmutimelex binaries">
     </target>
 
@@ -544,7 +547,7 @@ jsapi.exe from the lib directory.
 
     <!-- German dummy lexicon -->
     <!-- As this is only a dummy at the moment, it is not added -->
-    <!-- to the general compile_lexicons targert -->
+    <!-- to the general compile_lexicons target -->
     <property name="germanlex_data" value="germanlex" />
     <property name="germanlex_path" value="de/dfki/lt/freetts/de" />
 
@@ -618,6 +621,7 @@ jsapi.exe from the lib directory.
 	             mbrola_jar,
 	             en_us_jar,
 	             cmulex_jar,
+                 germanlex_jar,
 	             cmudict04_jar,
 	             cmutimelex_jar,
 	             cmu_us_kal_jar,
