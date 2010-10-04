@@ -986,7 +986,7 @@ jsapi.exe from the lib directory.
     <!-- * Make the packages for deployment.                      * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <fileset id="srcs" dir="${src_dir}" includes="com/**,de/**" />
+    <fileset id="srcs" dir="." includes="${src_dir}/**" />
 
     <fileset id="legal"
              dir="${src_dir}"
@@ -1028,6 +1028,7 @@ jsapi.exe from the lib directory.
             description="Copies files to the deploy staging directory."
             depends="all,javadoc">
         <mkdir dir="${deploy_dir}/freetts-${version}" />
+        <mkdir dir="${deploy_dir}/freetts-${version}/src" />
         <copy todir="${deploy_dir}/freetts-${version}" includeEmptyDirs="false">
             <fileset dir="."
                      includes="build.xml,
@@ -1143,7 +1144,7 @@ jsapi.exe from the lib directory.
             <fileset defaultexcludes="no"
                      dir="lib"
                      includes="**/*.jar"
-                     excludes="**/jsapi.jar" />
+                     excludes="**/jsapi.jar,**/jsapi-1.0-base.jar" />
             <fileset defaultexcludes="no"
                      dir="mbrola"
                      includes="**/mbrola.jar" />
