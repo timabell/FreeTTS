@@ -39,41 +39,43 @@ public class TokenizerImpl implements Tokenizer {
 	= "\"'`.,:;!?(){}[]";
 
 
-    // the line number
-    private int lineNumber = 0;
+    /** The line number. */
+    private int lineNumber;
     
-    // the input text (from the Utterance) to tokenize
-    private String inputText = null;
+    /** The input text (from the Utterance) to tokenize. */
+    private String inputText;
 
-    // the file to read input text from, if using file mode
-    private Reader reader = null;
+    /** The file to read input text from, if using file mode. */
+    private Reader reader;
 
-    // the token position - doesn't seem really necessary at this point
+    /** The token position - doesn't seem really necessary at this point. */
     // private int tokenPosition = 0;
 
-    // the current character, whether its from the file or the input text
-    private int currentChar = 0;
+    /** The current character, whether its from the file or the input text. */
+    private int currentChar;
     
-    // the current char position for the input text (not the file)
-    // this is called "file_pos" in flite
-    private int currentPosition = 0;
+    /**
+     * The current char position for the input text (not the file)
+     * this is called "file_pos" in flite
+     */
+    private int currentPosition;
     
     
-    // the delimiting symbols of this tokenizer
+    /** The delimiting symbols of this tokenizer. */
     private String whitespaceSymbols = DEFAULT_WHITESPACE_SYMBOLS;
     private String singleCharSymbols = DEFAULT_SINGLE_CHAR_SYMBOLS;
     private String prepunctuationSymbols = DEFAULT_PREPUNCTUATION_SYMBOLS;
     private String postpunctuationSymbols = DEFAULT_POSTPUNCTUATION_SYMBOLS;
 
-    // The error description
-    private String errorDescription = null;
+    /** The error description. */
+    private String errorDescription;
     
-    // a place to store the current token
+    /** A place to store the current token. */
     private Token token;
-    private Token lastToken = null;
+    private Token lastToken;
 
-    // for timing
-    private long duration = 0;
+    /** For timing. */
+//    private long duration = 0;
         
 
     /**
@@ -179,33 +181,33 @@ public class TokenizerImpl implements Tokenizer {
      *          <code>null</code> if no more tokens
      */
     public Token getNextToken() {
-	lastToken = token;
-	token = new Token();
-	
-	// Skip whitespace
-	token.setWhitespace(getTokenOfCharClass(whitespaceSymbols));
-	
-	// quoted strings currently ignored
-	
-	// get prepunctuation
-	token.setPrepunctuation(getTokenOfCharClass(prepunctuationSymbols));
-	
-	// get the symbol itself
-	if (singleCharSymbols.indexOf(currentChar) != -1) {
-	    token.setWord(String.valueOf((char) currentChar));
-	    getNextChar();
-	} else {
-	    token.setWord(getTokenNotOfCharClass(whitespaceSymbols));
-	}
+        lastToken = token;
+        token = new Token();
 
-	token.setPosition(currentPosition);
-	token.setLineNumber(lineNumber);
-	
-	// This'll have token *plus* postpunctuation
-	// Get postpunctuation
-	removeTokenPostpunctuation();
-	
-	return token;
+        // Skip whitespace
+        token.setWhitespace(getTokenOfCharClass(whitespaceSymbols));
+
+        // quoted strings currently ignored
+
+        // get prepunctuation
+        token.setPrepunctuation(getTokenOfCharClass(prepunctuationSymbols));
+
+        // get the symbol itself
+        if (singleCharSymbols.indexOf(currentChar) != -1) {
+            token.setWord(String.valueOf((char) currentChar));
+            getNextChar();
+        } else {
+            token.setWord(getTokenNotOfCharClass(whitespaceSymbols));
+        }
+
+        token.setPosition(currentPosition);
+        token.setLineNumber(lineNumber);
+
+        // This'll have token *plus* postpunctuation
+        // Get postpunctuation
+        removeTokenPostpunctuation();
+
+        return token;
     }
     
 
@@ -230,32 +232,32 @@ public class TokenizerImpl implements Tokenizer {
      * @return the next character EOF if no more characters exist
      */
     private int getNextChar() {
-	if (reader != null) {
-	    try {
-	        int readVal  = reader.read();
-		if (readVal == -1) {
-		    currentChar = EOF;
-		} else {
-		    currentChar = (char) readVal;
-		}
-	    } catch (IOException ioe) {
-		currentChar = EOF;
-		errorDescription = ioe.getMessage();
-	    }
-	} else if (inputText != null) {
-	    if (currentPosition < inputText.length()) {
-		currentChar = (int) inputText.charAt(currentPosition);
-	    } else {
-		currentChar = EOF;
-	    }
-	}
-	if (currentChar != EOF) {
-	    currentPosition++;
-	}
-	if (currentChar == '\n') {
-	    lineNumber++;
-	}
-	return currentChar;
+        if (reader != null) {
+            try {
+                int readVal = reader.read();
+                if (readVal == -1) {
+                    currentChar = EOF;
+                } else {
+                    currentChar = (char) readVal;
+                }
+            } catch (IOException ioe) {
+                currentChar = EOF;
+                errorDescription = ioe.getMessage();
+            }
+        } else if (inputText != null) {
+            if (currentPosition < inputText.length()) {
+                currentChar = (int) inputText.charAt(currentPosition);
+            } else {
+                currentChar = EOF;
+            }
+        }
+        if (currentChar != EOF) {
+            currentPosition++;
+        }
+        if (currentChar == '\n') {
+            lineNumber++;
+        }
+        return currentChar;
     }
     
 
@@ -313,52 +315,52 @@ public class TokenizerImpl implements Tokenizer {
      */
     private String getTokenByCharClass(String charClass, 
                                        boolean containThisCharClass) {	
-	StringBuffer buffer = new StringBuffer();
-	
-	// if we want the returned string to contain chars in charClass, then
-	// containThisCharClass is TRUE and
-	// (charClass.indexOf(currentChar) != 1) == containThisCharClass)
-	// returns true; if we want it to stop at characters of charClass,
-	// then containThisCharClass is FALSE, and the condition returns
-	// false.
-	while ((charClass.indexOf(currentChar) != -1)
-	       == containThisCharClass  &&
-	       singleCharSymbols.indexOf(currentChar) == -1 &&
-	       currentChar != EOF) {
-	    buffer.append((char) currentChar);
-	    getNextChar();
-	}
-	return buffer.toString();
+        final StringBuilder buffer = new StringBuilder();
+
+        // if we want the returned string to contain chars in charClass, then
+        // containThisCharClass is TRUE and
+        // (charClass.indexOf(currentChar) != 1) == containThisCharClass)
+        // returns true; if we want it to stop at characters of charClass,
+        // then containThisCharClass is FALSE, and the condition returns
+        // false.
+        while ((charClass.indexOf(currentChar) != -1) == containThisCharClass
+                && singleCharSymbols.indexOf(currentChar) == -1
+                && currentChar != EOF) {
+            buffer.append((char) currentChar);
+            getNextChar();
+        }
+        return buffer.toString();
     }
-    
+
     /**
      * Removes the postpunctuation characters from the current token.
      * Copies those postpunctuation characters to the class
      * variable 'postpunctuation'.
      */
     private void removeTokenPostpunctuation() {
-	if (token != null) {
-	    String tokenWord = token.getWord();
+        if (token == null) {
+            return;
+        }
+        final String tokenWord = token.getWord();
 
-	    int tokenLength = tokenWord.length();
-	    int position = tokenLength - 1;
-	    
-	    while (position > 0 &&
-		   postpunctuationSymbols.indexOf
-		   ((int)tokenWord.charAt(position)) != -1) {
-		position--;
-	    }
-	    
-	    if (tokenLength - 1 != position) {
-		// Copy postpunctuation from token
-		token.setPostpunctuation( tokenWord.substring(position+1));
-		
-		// truncate token at postpunctuation
-		token.setWord(tokenWord.substring(0, position+1));
-	    } else {
-		token.setPostpunctuation("");
-	    }
-	}
+        int tokenLength = tokenWord.length();
+        int position = tokenLength - 1;
+
+        while (position > 0
+                && postpunctuationSymbols.indexOf((int) tokenWord
+                        .charAt(position)) != -1) {
+            position--;
+        }
+
+        if (tokenLength - 1 != position) {
+            // Copy postpunctuation from token
+            token.setPostpunctuation(tokenWord.substring(position + 1));
+
+            // truncate token at postpunctuation
+            token.setWord(tokenWord.substring(0, position + 1));
+        } else {
+            token.setPostpunctuation("");
+        }
     }
 
     /**
@@ -388,42 +390,42 @@ public class TokenizerImpl implements Tokenizer {
      * @return <code>true</code> if a new sentence should be started
      */
     public boolean isBreak() {
+        String tokenWhiteSpace = token.getWhitespace();
+        String lastTokenPostpunctuation = null;
+        if (lastToken != null) {
+            lastTokenPostpunctuation = lastToken.getPostpunctuation();
+        }
 
-	String tokenWhiteSpace = token.getWhitespace();
-	String lastTokenPostpunctuation = null;
-	if (lastToken != null) {
-	    lastTokenPostpunctuation = lastToken.getPostpunctuation();
-	}
-	
-	if (lastToken == null || token == null) {
-	    return false;
-	} else if (tokenWhiteSpace.indexOf('\n') !=
-		   tokenWhiteSpace.lastIndexOf('\n')) {
-	    return true;
-	} else if (lastTokenPostpunctuation.indexOf(':') != -1 ||
-		   lastTokenPostpunctuation.indexOf('?') != -1 ||
-		   lastTokenPostpunctuation.indexOf('!') != -1) {
-	    return true;
-    	} else if (lastTokenPostpunctuation.indexOf('.') != -1 &&
-		   tokenWhiteSpace.length() > 1 &&
-		   Character.isUpperCase(token.getWord().charAt(0))) {
-	    return true;
-    	} else {
-	    String lastWord = lastToken.getWord();
-	    int lastWordLength = lastWord.length();
+        if (lastToken == null || token == null) {
+            return false;
+        } else if (tokenWhiteSpace.indexOf('\n') != tokenWhiteSpace
+                .lastIndexOf('\n')) {
+            return true;
+        } else if (lastTokenPostpunctuation.indexOf(':') != -1
+                || lastTokenPostpunctuation.indexOf('?') != -1
+                || lastTokenPostpunctuation.indexOf('!') != -1) {
+            return true;
+        } else if (lastTokenPostpunctuation.indexOf('.') != -1
+                && tokenWhiteSpace.length() > 1
+                && Character.isUpperCase(token.getWord().charAt(0))) {
+            return true;
+        } else {
+            String lastWord = lastToken.getWord();
+            int lastWordLength = lastWord.length();
 
-	    if (lastTokenPostpunctuation.indexOf('.') != -1 &&
-		/* next word starts with a capital */
-		Character.isUpperCase(token.getWord().charAt(0)) &&
-		/* last word isn't an abbreviation */
-		!(Character.isUpperCase
-		  (lastWord.charAt(lastWordLength - 1)) ||
-		  (lastWordLength < 4 &&
-		   Character.isUpperCase(lastWord.charAt(0))))) {
-		return true;
-	    }
-	}
-	return false;
+            if (lastTokenPostpunctuation.indexOf('.') != -1
+                    &&
+                    /* next word starts with a capital */
+                    Character.isUpperCase(token.getWord().charAt(0))
+                    &&
+                    /* last word isn't an abbreviation */
+                    !(Character.isUpperCase(lastWord.charAt(lastWordLength - 1)) 
+                        || (lastWordLength < 4
+                            && Character.isUpperCase(lastWord.charAt(0))))) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

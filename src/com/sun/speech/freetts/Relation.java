@@ -15,9 +15,9 @@ import java.io.PrintWriter;
 import com.sun.speech.freetts.util.Utilities;
 
 /**
- * Represents an ordered set of <code>Items</code> and their associated
+ * Represents an ordered set of {@link Item}s and their associated
  * children. A relation has a name and a list of items, and is
- * added to an <code>Utterance</code> via an <code>UtteranceProcessor</code>.
+ * added to an {@link Utterance} via an {@link UtteranceProcessor}.
  */
 public class Relation implements Dumpable {
     private String name;
@@ -116,7 +116,7 @@ public class Relation implements Dumpable {
      * @return the name of this Relation
      */
     public String getName() {
-	return name;
+        return name;
     }
 
     /**
@@ -125,7 +125,7 @@ public class Relation implements Dumpable {
      * @return the head item
      */
     public Item getHead() {
-	return head;
+        return head;
     }
 
     /**
@@ -134,7 +134,7 @@ public class Relation implements Dumpable {
      * @param item the new head item
      */
     void setHead(Item item) {
-	head = item;
+        head = item;
     }
 
     /**
@@ -143,7 +143,7 @@ public class Relation implements Dumpable {
      * @return the tail item
      */
     public Item getTail() {
-	return tail;
+        return tail;
     }
 
     /**
@@ -152,7 +152,7 @@ public class Relation implements Dumpable {
      * @param item the new tail item
      */
     void setTail(Item item) {
-	tail = item;
+        tail = item;
     }
 
     /**
@@ -162,7 +162,7 @@ public class Relation implements Dumpable {
      * @return the newly added item
      */
     public Item appendItem() {
-	return appendItem(null);
+        return appendItem(null);
     }
 
     /**
@@ -175,24 +175,24 @@ public class Relation implements Dumpable {
      * @return the newly added item
      */
     public Item appendItem(Item originalItem) {
-	ItemContents contents;
-	Item newItem;
+        ItemContents contents;
+        Item newItem;
 
-	if (originalItem == null) {
-	    contents = null;
-	} else {
-	    contents = originalItem.getSharedContents();
-	}
-	newItem = new Item(this, contents);
-	if (head == null) {
-	    head = newItem;
-	}
+        if (originalItem == null) {
+            contents = null;
+        } else {
+            contents = originalItem.getSharedContents();
+        }
+        newItem = new Item(this, contents);
+        if (head == null) {
+            head = newItem;
+        }
 
-	if (tail != null) {
-	    tail.attach(newItem);
-	}
-	tail = newItem;
-	return newItem;
+        if (tail != null) {
+            tail.attach(newItem);
+        }
+        tail = newItem;
+        return newItem;
     }
 
 
@@ -202,7 +202,7 @@ public class Relation implements Dumpable {
      * @return the utterance that contains this relation
      */
     public Utterance getUtterance() {
-	return owner;
+        return owner;
     }
 
 
@@ -216,12 +216,11 @@ public class Relation implements Dumpable {
      * @param title the title for the dump
      */
     public void dump(PrintWriter pw, int pad, String title) {
-	Utilities.dump(pw, pad, "========= Relation: " + title + 
-		               " =========");
-	Item item = head;
-	while (item != null) {
-	    item.dump(pw, pad + 4, title);
-	    item = item.getNext();
-	}
+        Utilities.dump(pw, pad, "========= Relation: " + title + " =========");
+        Item item = head;
+        while (item != null) {
+            item.dump(pw, pad + 4, title);
+            item = item.getNext();
+        }
     }
 }
