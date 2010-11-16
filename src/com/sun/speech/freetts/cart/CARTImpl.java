@@ -15,6 +15,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.StringTokenizer;
@@ -118,7 +119,7 @@ public class CARTImpl implements CART {
      * resizing.
      */
     Node[] cart = null;
-
+    
     /**
      * The number of nodes in the CART.
      */
@@ -186,6 +187,49 @@ public class CARTImpl implements CART {
 	for (int i = 0; i < cart.length; i++) {
 	    cart[i].dumpBinary(os);
 	}
+    }
+
+    /**
+     * Dump the CART tree as a dot file.
+     * 
+     * The dot tool is part of the graphviz distribution at http://www.graphviz.org/.
+     * If installed, call it as "dot -O -Tpdf *.dot" from the console to generte pdfs.
+     * 
+     * @param out The PrintWriter to write to.
+     */
+    public void dumpDot(PrintWriter out) {
+		out.write("digraph \"" + "CART Tree" + "\" {\n");
+		out.write("rankdir = LR\n");
+
+		for(Node n : cart) {
+			out.println("\tnode" + Math.abs(n.hashCode()) + " [ label=\"" + n.toString() + "\", color="
+					+ dumpDotNodeColor(n) + ", shape=" + dumpDotNodeShape(n) + " ]\n");
+			if (n instanceof DecisionNode) {
+				DecisionNode dn= (DecisionNode)n;
+				if (dn.qtrue < cart.length && cart[dn.qtrue] != null) {
+					out.write("\tnode" + Math.abs(n.hashCode()) + " -> node" + Math.abs(cart[dn.qtrue].hashCode()) + " [ label="
+							+ "TRUE" + " ]\n");
+				}
+				if (dn.qfalse < cart.length && cart[dn.qfalse] != null) {
+					out.write("\tnode" + Math.abs(n.hashCode()) + " -> node" + Math.abs(cart[dn.qfalse].hashCode()) + " [ label="
+							+ "FALSE" + " ]\n");
+				}
+			}
+		}
+		
+		out.write("}\n");
+		out.close();
+    }
+    
+    protected String dumpDotNodeColor(Node n) {
+    	if (n instanceof LeafNode) {
+    		return "green";
+    	}
+    	return "red";
+    }
+
+    protected String dumpDotNodeShape(Node n) {
+    	return "box";
     }
 
     /**
