@@ -6,12 +6,18 @@
  * WARRANTIES.
  */
 package tests;
-import junit.framework.*;
-import java.util.*;
-import java.io.*;
-import com.sun.speech.freetts.*;
-import com.sun.speech.freetts.lexicon.Lexicon;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 import com.sun.speech.freetts.en.us.CMULexicon;
+import com.sun.speech.freetts.lexicon.Lexicon;
 
 /**
  * JUnit tests Tests for the LexiconTest class
@@ -39,7 +45,10 @@ public class LexiconTest extends TestCase {
 	try {
             lex = CMULexicon.getInstance(true);
             assertTrue("Lexicon Created", lex != null);
-            reader = new BufferedReader(new FileReader("LEX.txt"));
+            final InputStream in =
+                LexiconTest.class.getResourceAsStream("LEX.txt");
+            final Reader inputReader = new InputStreamReader(in);
+            reader = new BufferedReader(inputReader);
             assertTrue("Data File opened", reader != null);
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,6 +82,10 @@ public class LexiconTest extends TestCase {
         String[] lex_phone_array;
         StringBuffer lex_phones;
 	String line;
+	lex_phone_array = lex.getPhones("dirk", null);
+	for (int k=0; k<lex_phone_array.length; k++) {
+	    System.out.println(lex_phone_array[k]);
+	}
         try {
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("***")) {

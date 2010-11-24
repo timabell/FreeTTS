@@ -39,9 +39,11 @@ public class LetterToSoundTest extends TestCase {
     protected void setUp() {
 	try {
             lts = new LetterToSoundImpl( 
-	     new URL("file:../bld/classes/com/sun/speech/freetts/en/us/cmulex_lts.bin"), true);
+	     new URL("file:bld/classes/com/sun/speech/freetts/en/us/cmulex_lts.bin"), true);
             assertTrue("LTS Rules created", lts != null);
-            reader = new BufferedReader(new FileReader("LTS.txt"));
+            InputStream in =
+                LetterToSoundTest.class.getResourceAsStream("LTS.txt");
+            reader = new BufferedReader(new InputStreamReader(in));
             assertTrue("Data File opened", reader != null);
         } catch (IOException e) {
                 e.printStackTrace();
