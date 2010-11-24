@@ -191,10 +191,12 @@ public class CARTImpl implements CART {
 
     /**
      * Dump the CART tree as a dot file.
-     * 
-     * The dot tool is part of the graphviz distribution at http://www.graphviz.org/.
-     * If installed, call it as "dot -O -Tpdf *.dot" from the console to generate pdfs.
-     * 
+     * <p>
+     * The dot tool is part of the graphviz distribution at
+     * <a href="http://www.graphviz.org/">http://www.graphviz.org/</a>.
+     * If installed, call it as "dot -O -Tpdf *.dot" from the console to
+     * generate pdfs.
+     * </p>
      * @param out The PrintWriter to write to.
      */
     public void dumpDot(PrintWriter out) {

@@ -131,7 +131,7 @@ public class CMULexicon extends LexiconImpl {
      *
      * @throws IOException if problems occurred while reading the data
      */ 
-    static public CMULexicon getInstance( String basename, boolean useBinaryIO) 
+    static public CMULexicon getInstance(String basename, boolean useBinaryIO) 
 						throws IOException {
 	CMULexicon lexicon = new CMULexicon(basename, useBinaryIO);
 	lexicon.load();

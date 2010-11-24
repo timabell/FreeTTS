@@ -514,7 +514,7 @@ public class LetterToSoundImpl implements LetterToSound {
      * @return the list of phones for word or <code>null</code>
      */
     public String[] getPhones(String word, String partOfSpeech) {
-        ArrayList phoneList = new ArrayList();
+        ArrayList<String> phoneList = new ArrayList<String>();
         State currentState;
         Integer startIndex;
         int stateIndex;

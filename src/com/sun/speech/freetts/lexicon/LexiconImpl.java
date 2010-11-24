@@ -10,9 +10,6 @@
  */
 package com.sun.speech.freetts.lexicon;
 
-import com.sun.speech.freetts.util.Utilities;
-import com.sun.speech.freetts.util.BulkTimer;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -21,25 +18,25 @@ import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.ByteBuffer;
-import java.nio.MappedByteBuffer;
-
 import java.net.MalformedURLException;
 import java.net.URL;
-
+import java.nio.ByteBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.StringTokenizer;
+
+import com.sun.speech.freetts.util.BulkTimer;
+import com.sun.speech.freetts.util.Utilities;
 
 /**
  * Provides an implementation of a Lexicon.
