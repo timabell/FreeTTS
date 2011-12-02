@@ -18,7 +18,7 @@ import com.sun.speech.freetts.PartOfSpeech;
 import com.sun.speech.freetts.PartOfSpeechImpl;
 
 /**
- * JUnit Tests for the Utterance class
+ * JUnit Tests for the PartOfSpeech class
  * 
  * @version 1.0
  */
