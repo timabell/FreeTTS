@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Test case for the PhoneDurations.
  * @author Dirk Schnelle-Walka
  *
  */
@@ -19,19 +20,13 @@ public class PhoneDurationsImplTest {
     private PhoneDurations durations;
     
     /**
+     * Set up the test environment.
      * @throws java.lang.Exception
      */
     @Before
     public void setUp() throws Exception {
         URL url = new URL("file:src/com/sun/speech/freetts/en/us/dur_stat.txt");
         durations = new PhoneDurationsImpl(url);
-    }
-
-    /**
-     * @throws java.lang.Exception
-     */
-    @After
-    public void tearDown() throws Exception {
     }
 
     /**

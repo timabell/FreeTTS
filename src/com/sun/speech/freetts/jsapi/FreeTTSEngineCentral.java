@@ -15,6 +15,7 @@ import javax.speech.EngineList;
 import javax.speech.EngineModeDesc;
 
 import com.sun.speech.freetts.ValidationException;
+import com.sun.speech.freetts.Voice;
 
 
 /**
@@ -29,7 +30,7 @@ import com.sun.speech.freetts.ValidationException;
  */
 
 public class FreeTTSEngineCentral implements EngineCentral {
-    private String engineName = "FreeTTS Synthesizer";
+    private static final String ENGINE_NAME = "FreeTTS Synthesizer";
 
     /**
      * Creates a FreeTTSEngineCentral
@@ -158,7 +159,7 @@ public class FreeTTSEngineCentral implements EngineCentral {
 class DomainLocale {
     private String domain;
     private Locale locale;
-    private Vector voices;
+    private Vector<Voice> voices;
 
     /**
      * Constructor
@@ -169,7 +170,7 @@ class DomainLocale {
     public DomainLocale(String domain, Locale locale) {
         this.domain = domain;
         this.locale = locale;
-        this.voices = new Vector();
+        this.voices = new Vector<Voice>();
     }
 
     /**
