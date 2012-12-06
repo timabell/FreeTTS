@@ -18,12 +18,6 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <property name="version" value="1.2.2" />
-    <path id="libs">
-        <fileset dir="lib">
-          <include name="jsapi.jar"/>
-          <include name="jsapi-1.0-base.jar"/>
-        </fileset>
-    </path>
     <property name="src_dir" value="src" />
     <property name="build_dir" value="bld" />
     <property name="classes_dir" value="${build_dir}/classes" />
@@ -36,66 +30,7 @@
     <property name="deploy_dir" value="deploy" />
 
 
-    <!-- ********************************************************** -->
-    <!-- *                                                        * -->
-    <!-- * Determine which sources should be compiled depending   * -->
-    <!-- * on the availability of lib/jsapi.jar.  This creates a  * -->
-    <!-- * property called "patternset_to_compile" and sets its   * -->
-    <!-- * val to either "all_files" or "no_jsapi", which refers  * -->
-    <!-- * to the name of a patternset. The value of              * -->
-    <!-- * srcs_to_compile will be used in the javac target as a  * -->
-    <!-- * patternset refid.                                      * -->
-    <!-- *                                                        * -->
-    <!-- ********************************************************** -->
     <patternset id="all_files" includes="com/**,de/**" />
-
-    <patternset id="no_jsapi"
-                includes="com/**,de/**"
-                excludes="com/sun/speech/engine/**,
-		          com/sun/speech/freetts/jsapi/**" />
-
-    <target name="set_patternset_to_compile">
-        <condition property="patternset_to_compile" value="all_files">
-            <available file="lib/jsapi.jar" />
-        </condition>
-        <condition property="patternset_to_compile" value="no_jsapi">
-            <not>
-                <available file="lib/jsapi.jar" />
-            </not>
-        </condition>
-    </target>
-
-    <!-- ********************************************************** -->
-    <!-- *                                                        * -->
-    <!-- * Handle JSAPI:                                          * -->
-    <!-- *                                                        * -->
-    <!-- *    1) If a jsapi.jar file can be found, use it and     * -->
-    <!-- *       compile all the sources.                         * -->
-    <!-- *                                                        * -->
-    <!-- *    2) If a jsapi.jar file cannot be found, issue a     * -->
-    <!-- *       message and just compile the sources that do     * -->
-    <!-- *       not depend upon jsapi.jar.                       * -->
-    <!-- *                                                        * -->
-    <!-- ********************************************************** -->
-    <target name="check_jsapi_jar.isPresent">
-        <available file="lib/jsapi.jar" property="jsapi_jar.isPresent" />
-    </target>
-
-    <target name="issue_jsapi_warning" unless="jsapi_jar.isPresent">
-        <echo>
-Cannot find lib/jsapi.jar needed to build Java Speech API
-(JSAPI) support for FreeTTS.  Will not build any sources
-that require jsapi.jar.  If you'd like to enable JSAPI
-support, please extract jsapi.jar by running jsapi.sh or 
-jsapi.exe from the lib directory.
-        </echo>
-    </target>
-
-    <target name="handle_jsapi"
-            depends="check_jsapi_jar.isPresent,
-                     issue_jsapi_warning,
-                     set_patternset_to_compile" />
-
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
@@ -120,11 +55,7 @@ jsapi.exe from the lib directory.
     <!-- * Builds just the srcs.  The tests are omitted.          * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
-    <target name="compile_src"
-            depends="check_jsapi_jar.isPresent,
-	             issue_jsapi_warning,
-	             set_patternset_to_compile"
-            description="Build just the srcs">
+    <target name="compile_src" description="Build just the srcs">
         <mkdir dir="${classes_dir}" />
         <javac debug="true"
                source="1.6"
@@ -132,7 +63,7 @@ jsapi.exe from the lib directory.
                srcdir="${src_dir}"
                excludes="tests/**"
                destdir="${classes_dir}">
-            <patternset refid="${patternset_to_compile}" />
+            <patternset refid="${all_files}" />
             <classpath refid="libs" />
         </javac>
     </target>
@@ -630,30 +561,9 @@ jsapi.exe from the lib directory.
 	             user_voice_jar"
             description="Builds all the jar files" />
 
-    <!-- freetts.jar -->
-    <property name="freetts__jsapi10_jar"
-              value="${lib_dir}/freetts-jsapi10.jar" />
     <property name="freetts_jar" value="${lib_dir}/freetts.jar" />
 
-    <target name="-freetts_jsapi10_jar" depends="compile_src">
-        <mkdir dir="${lib_dir}" />
-        <jar destfile="${freetts__jsapi10_jar}" compress="true">
-            <manifest>
-                <attribute name="Built-By" value="${user.name}" />
-                <section name="common">
-                  <attribute name="Implementation-Title"
-                      value="FreeTTS JSAPI 1.0 layer" />
-                </section>
-            </manifest>
-            <fileset dir="${classes_dir}">
-                <include name="com/sun/speech/engine/**"/>
-                <include name="com/sun/speech/freetts/jsapi/**"/>
-            </fileset>
-        </jar>
-    </target>
-
     <target name="freetts_jar"
-            depends="-freetts_jsapi10_jar,compile_src"
             description="Create ${lib_dir}/freetts.jar">
         <mkdir dir="${lib_dir}" />
         <jar destfile="${freetts_jar}" compress="true">
@@ -669,7 +579,6 @@ jsapi.exe from the lib directory.
             <fileset dir="${classes_dir}">
                 <include name="com/sun/speech/freetts/**"/>
                 <exclude name="com/sun/speech/freetts/en/**"/>
-                <exclude name="com/sun/speech/freetts/jsapi/**"/>
                 <include name="de/dfki/lt/freetts/**"/>
                 <exclude name="de/dfki/lt/freetts/en/**"/>
                 <exclude name="de/dfki/lt/freetts/de/**"/>
@@ -892,7 +801,6 @@ jsapi.exe from the lib directory.
 	             com.sun.speech.engine.synthesis,
 	             com.sun.speech.engine.synthesis.text,
 	             com.sun.speech.freetts,
-	             com.sun.speech.freetts.jsapi,
 	             com.sun.speech.freetts.en,
 	             com.sun.speech.freetts.en.us,
  	             com.sun.speech.freetts.audio,
@@ -1009,12 +917,7 @@ jsapi.exe from the lib directory.
 
     <fileset id="binaries"
              dir="."
-             includes="lib/*.jar,bin/*.jar,mbrola/*.jar"
-             excludes="lib/jsapi.jar" />
-
-    <fileset id="jsapi_sh"
-             dir="."
-             includes="lib/jsapi.sh,lib/jsapi.exe,lib/README.txt" />
+             includes="lib/*.jar,bin/*.jar,mbrola/*.jar" />
 
     <target name="deploy"
             depends="deploy_init,
@@ -1042,7 +945,6 @@ jsapi.exe from the lib directory.
             <fileset refid="tools" />
             <fileset refid="tests" />
             <fileset refid="binaries" />
-            <fileset refid="jsapi_sh" />
         </copy>
     </target>
 
@@ -1094,13 +996,11 @@ jsapi.exe from the lib directory.
 
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
-    <!-- * Make a tarball containing things free of JSAPI         * -->
-    <!-- * dependencies.  Also omits the tests.                   * -->
+    <!-- * Make a tarball.  Omits the tests.                      * -->
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <target name="freetts_only_tarball"
-            depends="set_patternset_to_compile"
-            description="Create a tarball of sources free of JSAPI dependencies.">
+            description="Create a tarball of sources.">
         <delete dir="${deploy_dir}/freetts-only-${version}" />
         <mkdir dir="${deploy_dir}/freetts-only-${version}" />
         <copy todir="${deploy_dir}/freetts-only-${version}"
@@ -1119,8 +1019,7 @@ jsapi.exe from the lib directory.
                                 mbrola/*.html,
                                 demo/**,
                                 tools/**"
-                     excludes="demo/JSAPI/**,
-                                docs/*.awk" />
+                     excludes="docs/*.awk" />
             <fileset dir=".">
                 <patternset refid="${patternset_to_compile}" />
             </fileset>
@@ -1143,8 +1042,7 @@ jsapi.exe from the lib directory.
             <fileset defaultexcludes="no" dir="." includes="**/*~" />
             <fileset defaultexcludes="no"
                      dir="lib"
-                     includes="**/*.jar"
-                     excludes="**/jsapi.jar,**/jsapi-1.0-base.jar" />
+                     includes="**/*.jar" />
             <fileset defaultexcludes="no"
                      dir="mbrola"
                      includes="**/mbrola.jar" />
@@ -1169,7 +1067,6 @@ jsapi.exe from the lib directory.
                 <pathelement path="${src_dir}" />
                 <pathelement path="bld/demo_classes/freetts/HelloWorld" />
                 <pathelement path="${classes_dir}" />
-                <pathelement location="lib/jsapi.jar" />
             </classpath>
         </java>
     </target>
