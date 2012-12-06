@@ -327,9 +327,9 @@ public class VoiceManager {
 
         // next, try loading voices.txt
         try {
-            voiceDirectoryNames
-                .addVector(getVoiceDirectoryNamesFromFile(getBaseDirectory()
-                    + "voices.txt"));
+            String fileName = getBaseDirectory() + "voices.txt";
+            UniqueVector<String> voiceDirectoryNamesFromFile = getVoiceDirectoryNamesFromFile(fileName);
+            voiceDirectoryNames.addVector(voiceDirectoryNamesFromFile);
         } catch (FileNotFoundException e) {
             // do nothing
         } catch (IOException e) {
