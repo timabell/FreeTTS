@@ -30,8 +30,6 @@
     <property name="deploy_dir" value="deploy" />
 
 
-    <patternset id="all_files" includes="com/**,de/**" />
-
     <!-- ********************************************************** -->
     <!-- *                                                        * -->
     <!-- * Builds srcs, voices, lexicons, jars, demos             * -->
@@ -63,7 +61,7 @@
                srcdir="${src_dir}"
                excludes="tests/**"
                destdir="${classes_dir}">
-            <patternset refid="${all_files}" />
+            <patternset includes="com/**,de/**" />
             <classpath refid="libs" />
         </javac>
     </target>
