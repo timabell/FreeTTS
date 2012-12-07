@@ -18,6 +18,10 @@
     <!-- *                                                        * -->
     <!-- ********************************************************** -->
     <property name="version" value="1.2.2" />
+    <path id="libs">
+        <fileset dir="lib">
+        </fileset>
+    </path>
     <property name="src_dir" value="src" />
     <property name="build_dir" value="bld" />
     <property name="classes_dir" value="${build_dir}/classes" />
