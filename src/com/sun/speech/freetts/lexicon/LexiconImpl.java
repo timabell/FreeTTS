@@ -13,6 +13,7 @@ package com.sun.speech.freetts.lexicon;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -244,7 +245,7 @@ abstract public class LexiconImpl implements Lexicon {
      */
     public void load() throws IOException {
 	BulkTimer.LOAD.start("Lexicon");
-
+	System.out.println("Loading lexicon: " + compiledURL);
 	if (compiledURL == null) {
 	    throw new IOException("Can't load lexicon");
 	}
