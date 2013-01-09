@@ -7,6 +7,8 @@
  */
 package com.sun.speech.freetts.audio;
 
+import java.util.concurrent.Semaphore;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
@@ -94,7 +96,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
     private long openFailDelayMs;
     private long totalOpenFailDelayMs;
 
-    private Object openLock = new Object();
+    private Semaphore openSemaphore; // Supports waiting for line to be ready for use. ref http://stackoverflow.com/a/11514789/10245
     private Object lineLock = new Object();
 
 
@@ -135,6 +137,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
         
         line = null;
 	setPaused(false);
+	openSemaphore = new Semaphore(1);
     }
 
     /**
@@ -194,15 +197,11 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
                 line = (SourceDataLine) AudioSystem.getLine(info);
                 line.addLineListener(new JavaStreamLineListener());
                 
-                synchronized (openLock) {
-                    line.open(format, AUDIO_BUFFER_SIZE);
-                    try {
-                        openLock.wait();
-                    } catch (InterruptedException ie) {
-                        ie.printStackTrace();
-                    }
-                    opened = true;
-                }                
+                line.open(format, AUDIO_BUFFER_SIZE);
+                openSemaphore.acquire(); // line now open, use the only available permit
+                openSemaphore.acquire(); // wait for the listener to release the permit, thus indicating the line is ready for use
+                opened = true;
+                openSemaphore.release(); // release the original permit again ready for the next line to be opened
             } catch (LineUnavailableException lue) {
                 System.err.println("LINE UNAVAILABLE: " +
                                    "Format is " + currentFormat);
@@ -212,6 +211,8 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
                 } catch (InterruptedException ie) {
                     ie.printStackTrace();
                 }
+            } catch (InterruptedException ie){ // ugh, checked exceptions.
+               ie.printStackTrace();
             }
         } while (!opened && totalDelayMs < totalOpenFailDelayMs);
 
@@ -644,9 +645,7 @@ public class JavaStreamingAudioPlayer implements AudioPlayer {
          */
         public void update(LineEvent event) {
             if (event.getType().equals(LineEvent.Type.OPEN)) {
-                synchronized (openLock) {
-                    openLock.notifyAll();
-                }
+                openSemaphore.release(); // allow the main thread to continue now that the line is ready for use
             }
         }
     }
