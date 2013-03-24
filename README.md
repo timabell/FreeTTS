@@ -6,11 +6,11 @@ This fork of freetts was created (thanks to the open source license in use) in o
 The motivation is to improve the capability of this app: https://launchpad.net/communication
 
 ----
-Original (upstream) FreeTTS readme
-==================================
+
+Original (upstream) FreeTTS readme:
 
 FreeTTS Speech Synthesis System
--------------------------------
+===============================
 
 Portions Copyright 2001-2005 Sun Microsystems, Inc.
 Portions Copyright 1999-2001 Language Technologies Institute, 
