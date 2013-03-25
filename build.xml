@@ -27,7 +27,6 @@
     <property name="classes_dir" value="${build_dir}/classes" />
     <property name="demo_classes_dir" value="${build_dir}/demo_classes" />
     <property name="lib_dir" value="lib" />
-    <property name="mbrola_dir" value="mbrola" />
     <property name="bin_dir" value="bin" />
     <property name="javadoc_dir" value="javadoc" />
     <property name="webstart_dir" value="${build_dir}/webstart" />
@@ -551,7 +550,6 @@
     <!-- ********************************************************** -->
     <target name="jars"
             depends="freetts_jar,
-	             mbrola_jar,
 	             en_us_jar,
 	             cmulex_jar,
                  germanlex_jar,
@@ -584,7 +582,6 @@
                 <include name="de/dfki/lt/freetts/**"/>
                 <exclude name="de/dfki/lt/freetts/en/**"/>
                 <exclude name="de/dfki/lt/freetts/de/**"/>
-                <exclude name="de/dfki/lt/mbrola/**"/>
                 <exclude name="tests/**"/>
                 <exclude name="**/*.bin"/>
                 <exclude name="**/*.idx"/>
@@ -592,23 +589,6 @@
             <fileset dir="${src_dir}">
                 <include name="com/sun/speech/freetts/internal_voices.txt"/>
             </fileset>
-        </jar>
-    </target>
-
-
-    <!-- mbrola.jar -->
-    <property name="mbrola_jar" value="${mbrola_dir}/mbrola.jar" />
-
-    <target name="mbrola_jar"
-            depends="compile_src"
-            description="Create ${mbrola_dir}/mbrola.jar">
-        <mkdir dir="${mbrola_dir}" />
-        <jar destfile="${mbrola_jar}"
-             manifest="${src_dir}/de/dfki/lt/freetts/en/us/Manifest"
-             compress="true">
-            <fileset dir="${classes_dir}"
-                     includes="de/dfki/lt/freetts/mbrola/**,
-                          de/dfki/lt/freetts/en/us//**" />
         </jar>
     </target>
 
@@ -812,7 +792,6 @@
 	             com.sun.speech.freetts.lexicon,
 	             com.sun.speech.freetts.relp,
 	             com.sun.speech.freetts.util,
-	             de.dfki.lt.freetts.mbrola,
 	             de.dfki.lt.freetts.en.us" />
 
     <target name="javadoc" description="Generate javadoc">
@@ -907,7 +886,7 @@
              dir="."
              includes="index.html,overview.html,README.txt,RELEASE_NOTES,
                        ANNOUNCE.txt,
-                       docs/**,mbrola/*.html,
+                       docs/**,
                        javadoc/**"
              excludes="docs/*.awk" />
 
@@ -919,7 +898,7 @@
 
     <fileset id="binaries"
              dir="."
-             includes="lib/*.jar,bin/*.jar,mbrola/*.jar" />
+             includes="lib/*.jar,bin/*.jar" />
 
     <target name="deploy"
             depends="deploy_init,
@@ -1018,7 +997,6 @@
 		                license.terms,
 		                lib/voices.txt,
                                 docs/**,
-                                mbrola/*.html,
                                 demo/**,
                                 tools/**"
                      excludes="docs/*.awk" />
@@ -1045,9 +1023,6 @@
             <fileset defaultexcludes="no"
                      dir="lib"
                      includes="**/*.jar" />
-            <fileset defaultexcludes="no"
-                     dir="mbrola"
-                     includes="**/mbrola.jar" />
         </delete>
         <delete dir="${bin_dir}" />
         <delete dir="${build_dir}" />
