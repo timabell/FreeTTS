@@ -9,5 +9,3 @@
 com.sun.speech.freetts.en.us.cmu_time_awb.AlanVoiceDirectory
 com.sun.speech.freetts.en.us.cmu_us_kal.KevinVoiceDirectory
 
-# Uncomment to allow MBROLA voices:
-#de.dfki.lt.freetts.en.us.MbrolaVoiceDirectory
