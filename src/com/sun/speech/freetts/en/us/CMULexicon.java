@@ -13,6 +13,7 @@ package com.sun.speech.freetts.en.us;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.lexicon.LexiconImpl;
@@ -23,7 +24,10 @@ import com.sun.speech.freetts.util.BulkTimer;
  * stored in a text file.
  */
 public class CMULexicon extends LexiconImpl {
-    
+
+    private static final Logger LOGGER =
+            Logger.getLogger(CMULexicon.class.getName());
+
     /**
      * Vowels
      */
@@ -98,12 +102,13 @@ public class CMULexicon extends LexiconImpl {
          * if the above didn't work.
          */
         if (letterToSoundURL == null) {
+            LOGGER.warning("Failed to load lexicon data from resource com/sun/speech/freetts/en/us/" + basename + "_lts." + type);
             Class cls = CMULexicon.class;
             letterToSoundURL = cls.getResource(basename + "_lts." + type);
             compiledURL = cls.getResource(basename + "_compiled." + type);
             addendaURL = cls.getResource(basename + "_addenda." + type);
             if (letterToSoundURL == null) {
-                throw new RuntimeException("Failed to load lexicon data from " + basename + "_lts." + type);
+                throw new RuntimeException("Failed to load lexicon data from resource " + basename + "_lts." + type);
             }
         }
         
