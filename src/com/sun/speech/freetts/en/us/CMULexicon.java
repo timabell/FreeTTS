@@ -103,8 +103,7 @@ public class CMULexicon extends LexiconImpl {
             compiledURL = cls.getResource(basename + "_compiled." + type);
             addendaURL = cls.getResource(basename + "_addenda." + type);
             if (letterToSoundURL == null) {
-                System.err.println(
-                    "CMULexicon: Oh no!  Couldn't find lexicon data!");
+                throw new RuntimeException("Failed to load lexicon data from " + basename + "_lts." + type);
             }
         }
         
