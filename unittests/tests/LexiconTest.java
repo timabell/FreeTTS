@@ -43,7 +43,7 @@ public class LexiconTest extends TestCase {
      */
     protected void setUp() {
 	try {
-            lex = CMULexicon.getInstance(true);
+            lex = CMULexicon.getInstance(false);
             assertTrue("Lexicon Created", lex != null);
             final InputStream in =
                 LexiconTest.class.getResourceAsStream("LEX.txt");
