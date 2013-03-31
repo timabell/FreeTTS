@@ -21,12 +21,14 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Collection;
 import java.util.jar.Attributes;
+import java.util.logging.Logger;
 
 /** Provides access to voices for all of FreeTTS. There is only one instance of the VoiceManager. Each call to
  * getVoices() creates a new instance of each voice.
  * @see Voice
  * @see VoiceDirectory */
 public class VoiceManager {
+	private static final Logger LOGGER = Logger.getLogger(VoiceManager.class.getName());
 
 	private static final VoiceManager INSTANCE;
 
@@ -116,6 +118,8 @@ public class VoiceManager {
 			if (voiceClasses != null) {
 				return getVoiceDirectoryNamesFromProperty(voiceClasses);
 			}
+
+			LOGGER.fine("System property freetts.voices not found, searching files for voice information");
 
 			// Get voice directory names from voices files
 			UniqueVector<String> voiceDirectoryNames = getVoiceDirectoryNamesFromFiles();
