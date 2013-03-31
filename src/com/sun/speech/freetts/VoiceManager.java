@@ -399,7 +399,7 @@ public class VoiceManager {
 				return voices[i];
 			}
 		}
-		return null;
+		throw new RuntimeException("Voice '" + voiceName + "' not found");
 	}
 
 	/** Get the directory that the jar file containing this class resides in.
