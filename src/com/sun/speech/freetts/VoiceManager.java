@@ -470,6 +470,7 @@ public class VoiceManager {
 				break;
 			}
 			line = line.trim();
+			// ignore blank lines and comments
 			if (!line.startsWith("#") && !line.equals("")) {
 				names.add(line);
 			}
