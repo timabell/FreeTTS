@@ -260,6 +260,7 @@ public class VoiceManager {
 			}
 		}
 
+		// TODO: this doesn't work in eclipse, getBaseDirectory() returns "", and voices.txt isn't in the current working directory
 		String fileName = getBaseDirectory() + "voices.txt";
 		if ((new File(fileName)).exists()) {
 			UniqueVector<String> voiceDirectoryNamesFromFile = getVoiceDirectoryNamesFromFile(fileName);
