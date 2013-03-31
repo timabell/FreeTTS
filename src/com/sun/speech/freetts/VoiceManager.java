@@ -247,6 +247,12 @@ public class VoiceManager {
 				voiceDirectoryNames.addVector(getVoiceDirectoryNamesFromInputStream(is));
 			} catch (IOException ex) {
 				throw new RuntimeException("Failed to read resource " + internalVoicesPath, ex);
+			} finally {
+				try {
+					is.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
