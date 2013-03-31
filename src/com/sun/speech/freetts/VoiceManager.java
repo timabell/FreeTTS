@@ -261,8 +261,12 @@ public class VoiceManager {
 		}
 
 		String fileName = getBaseDirectory() + "voices.txt";
-		UniqueVector<String> voiceDirectoryNamesFromFile = getVoiceDirectoryNamesFromFile(fileName);
-		voiceDirectoryNames.addVector(voiceDirectoryNamesFromFile);
+		if ((new File(fileName)).exists()) {
+			UniqueVector<String> voiceDirectoryNamesFromFile = getVoiceDirectoryNamesFromFile(fileName);
+			voiceDirectoryNames.addVector(voiceDirectoryNamesFromFile);
+		} else {
+			LOGGER.fine("'" + fileName + "' not found while searching for voices");
+		}
 
 		// last, read voices from property freetts.voicesfile
 		String voicesFile = System.getProperty("freetts.voicesfile");
