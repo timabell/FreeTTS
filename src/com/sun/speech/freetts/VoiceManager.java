@@ -260,13 +260,17 @@ public class VoiceManager {
 			}
 		}
 
-		// TODO: this doesn't work in eclipse, getBaseDirectory() returns "", and voices.txt isn't in the current working directory
 		String fileName = getBaseDirectory() + "voices.txt";
-		if ((new File(fileName)).exists()) {
+		if (!(new File(fileName)).exists()) {
+			// try again with lib, for use when running in eclipse
+			LOGGER.fine("'" + fileName + "' not found while searching for voices");
+			fileName = "lib" + File.separator + "voices.txt";
+		}
+		if (!(new File(fileName)).exists()) {
+			LOGGER.fine("'" + fileName + "' not found while searching for voices");
+		} else {
 			UniqueVector<String> voiceDirectoryNamesFromFile = getVoiceDirectoryNamesFromFile(fileName);
 			voiceDirectoryNames.addVector(voiceDirectoryNamesFromFile);
-		} else {
-			LOGGER.fine("'" + fileName + "' not found while searching for voices");
 		}
 
 		// last, read voices from property freetts.voicesfile
