@@ -402,7 +402,7 @@ public class VoiceManager {
 
 	/** Get the directory that the jar file containing this class resides in.
 	 * @return the name of the directory with a trailing "/" (or equivalent for the particular operating system), or "" if
-	 * unable to determin. (For example this class does not reside inside a jar file). */
+	 * unable to determine. (For example this class does not reside inside a jar file). */
 	private String getBaseDirectory() {
 		String name = this.getClass().getName();
 		int lastdot = name.lastIndexOf('.');
