@@ -10,19 +10,10 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Determines the part of speech of a word.
- */
+/** Determines the part of speech of a word. */
 public interface PartOfSpeech {
-    /**
-     * Returns a description of the part of speech given a word.
-     * The string is implementation dependent.
-     *
-     * @param word the word to classify
-     *
-     * @return an implementation dependent part of speech for the word
-     */
-    String getPartOfSpeech(String word);
+	/** Returns a description of the part of speech given a word. The string is implementation dependent.
+	 * @param word the word to classify
+	 * @return an implementation dependent part of speech for the word */
+	String getPartOfSpeech(String word);
 }
-
-

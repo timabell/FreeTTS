@@ -19,69 +19,49 @@ import com.sun.speech.freetts.Relation;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
 
-/**
- * Creates a <code>Relation.PHRASE</code> relation, grouping
- * <code>Relation.WORD</code> relations by breaks.
- *
+/** Creates a <code>Relation.PHRASE</code> relation, grouping <code>Relation.WORD</code> relations by breaks.
  * @see Relation#PHRASE
- * @see Relation#WORD
- */
+ * @see Relation#WORD */
 public class Phraser implements UtteranceProcessor {
-    /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(UtteranceProcessor.class.getName());
+	/** Logger instance. */
+	private static final Logger LOGGER = Logger.getLogger(UtteranceProcessor.class.getName());
 
-    /**
-     * The CART used for this Phrasing UtteranceProcessor.  It is
-     * passed into the constructor.
-     */
-    protected final CART cart;
-    
-    /**
-     * Creates a new Phrasing UtteranceProcessor with the given
-     * CART.  The phrasing CART is expected to return "BB" values
-     * for big breaks.
-     *
-     * @param cart a phrasing CART
-     */
-    public Phraser(CART cart) {
-        this.cart = cart;
-    }
-    
-    /**
-     * Creates a <code>Relation.PHRASE</code> relation, grouping
-     * <code>Relation.WORD</code> relations by breaks.
-     * Depends upon a phrasing CART that returns strings containing
-     * "BB" for big breaks.
-     *
-     * @param  utterance  the utterance to process
-     *
-     * @throws ProcessException if a problem is encountered during the
-     *         processing of the utterance
-     */
-    public void processUtterance(Utterance utterance) throws ProcessException {
-        Relation relation = utterance.createRelation(Relation.PHRASE);
-        Item p = null;
-        for (Item w = utterance.getRelation(Relation.WORD).getHead();
-			w != null; w = w.getNext()) {
-            if (p == null) {
-                p = relation.appendItem();
-                p.getFeatures().setString("name","BB");
-            }
-            p.addDaughter(w);
-            String results = (String) cart.interpret(w);
-            
-            if (LOGGER.isLoggable(Level.FINER)) {
-                LOGGER.finer("word: " + w + ", results: " + results);
-            }
-            if (results.equals("BB")) {
-                p = null;
-            }
-        }
-    }
+	/** The CART used for this Phrasing UtteranceProcessor. It is passed into the constructor. */
+	protected final CART cart;
 
-    // inherited from Object
-    public String toString() {
-        return "CARTPhraser";
-    }
+	/** Creates a new Phrasing UtteranceProcessor with the given CART. The phrasing CART is expected to return "BB" values
+	 * for big breaks.
+	 * @param cart a phrasing CART */
+	public Phraser(CART cart) {
+		this.cart = cart;
+	}
+
+	/** Creates a <code>Relation.PHRASE</code> relation, grouping <code>Relation.WORD</code> relations by breaks. Depends
+	 * upon a phrasing CART that returns strings containing "BB" for big breaks.
+	 * @param utterance the utterance to process
+	 * @throws ProcessException if a problem is encountered during the processing of the utterance */
+	public void processUtterance(Utterance utterance) throws ProcessException {
+		Relation relation = utterance.createRelation(Relation.PHRASE);
+		Item p = null;
+		for (Item w = utterance.getRelation(Relation.WORD).getHead(); w != null; w = w.getNext()) {
+			if (p == null) {
+				p = relation.appendItem();
+				p.getFeatures().setString("name", "BB");
+			}
+			p.addDaughter(w);
+			String results = (String) cart.interpret(w);
+
+			if (LOGGER.isLoggable(Level.FINER)) {
+				LOGGER.finer("word: " + w + ", results: " + results);
+			}
+			if (results.equals("BB")) {
+				p = null;
+			}
+		}
+	}
+
+	// inherited from Object
+	public String toString() {
+		return "CARTPhraser";
+	}
 }

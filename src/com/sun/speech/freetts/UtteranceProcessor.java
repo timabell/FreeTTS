@@ -10,21 +10,12 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Performs an operation on an Utterance.
- * Examples of classes that might implement
- * this interface include a Tokenizer, Normalizer, PartOfSpeechTagger, 
- * etc.
- */
+/** Performs an operation on an Utterance. Examples of classes that might implement this interface include a Tokenizer,
+ * Normalizer, PartOfSpeechTagger, etc. */
 public interface UtteranceProcessor {
 
-    /**
-     * Performs an operation on the given Utterance.
-     *
-     * @param u the utterance on which to perform operations
-     *
-     * @throws ProcessException if an exception occurred during the operation
-     */
-    void processUtterance(Utterance u) throws ProcessException;
+	/** Performs an operation on the given Utterance.
+	 * @param u the utterance on which to perform operations
+	 * @throws ProcessException if an exception occurred during the operation */
+	void processUtterance(Utterance u) throws ProcessException;
 }
-

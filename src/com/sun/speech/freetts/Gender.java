@@ -7,61 +7,47 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Provides an enumeration of Gender, following the JSAPI style.
- * (http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/)
- *
- * These are intended for use to define properties about FreeTTS
- * voices.
- *
- * @see Voice
- */
+/** Provides an enumeration of Gender, following the JSAPI style.
+ * (http://java.sun.com/products/java-media/speech/forDevelopers/jsapi-doc/) These are intended for use to define
+ * properties about FreeTTS voices.
+ * @see Voice */
 public class Gender implements Comparable<Gender> {
-    private final String name;
+	private final String name;
 
-    // Ordinal of next created
-    private static int nextOrdinal = 0;
+	// Ordinal of next created
+	private static int nextOrdinal = 0;
 
-    // Assign an ordinal to this gender
-    private final int ordinal = nextOrdinal++;
+	// Assign an ordinal to this gender
+	private final int ordinal = nextOrdinal++;
 
-    private Gender(String name) {this.name = name;}
+	private Gender(String name) {
+		this.name = name;
+	}
 
-    /**
-     * Generates a human readable name describing the gender.
-     *
-     * @return the name of the gender
-     */
-    public String toString() {return name;}
+	/** Generates a human readable name describing the gender.
+	 * @return the name of the gender */
+	public String toString() {
+		return name;
+	}
 
-    /**
-     * Compare two genders.  If either is DONT_CARE, then returns 0.
-     */
-    public int compareTo(Gender gender) {
-        if ((gender == DONT_CARE) || (this == DONT_CARE)) {
-            return 0;
-        } else {
-            return ordinal - gender.ordinal;
-        }
-    }
+	/** Compare two genders. If either is DONT_CARE, then returns 0. */
+	public int compareTo(Gender gender) {
+		if ((gender == DONT_CARE) || (this == DONT_CARE)) {
+			return 0;
+		} else {
+			return ordinal - gender.ordinal;
+		}
+	}
 
-    /**
-     * Male.
-     */
-    public static final Gender MALE = new Gender("MALE");
+	/** Male. */
+	public static final Gender MALE = new Gender("MALE");
 
-    /**
-     * Female.
-     */
-    public static final Gender FEMALE = new Gender("FEMALE");
+	/** Female. */
+	public static final Gender FEMALE = new Gender("FEMALE");
 
-    /**
-     * Neutral such as a robot or artificial.
-     */
-    public static final Gender NEUTRAL = new Gender("NEUTRAL");
+	/** Neutral such as a robot or artificial. */
+	public static final Gender NEUTRAL = new Gender("NEUTRAL");
 
-    /**
-     * Match against all other genders.
-     */
-    public static final Gender DONT_CARE = new Gender("DONT_CARE");
+	/** Match against all other genders. */
+	public static final Gender DONT_CARE = new Gender("DONT_CARE");
 }

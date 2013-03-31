@@ -13,17 +13,11 @@ package com.sun.speech.freetts.en.us;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * Implements a finite state machine that checks if a given string
- * is a prefix.
- */
+/** Implements a finite state machine that checks if a given string is a prefix. */
 public class PrefixFSM extends PronounceableFSM {
 
-    /**
-     * Constructs a PrefixFSM.
-     */
-    public PrefixFSM(URL url) throws IOException {
-	super(url, true);
-    }
+	/** Constructs a PrefixFSM. */
+	public PrefixFSM(URL url) throws IOException {
+		super(url, true);
+	}
 }
-

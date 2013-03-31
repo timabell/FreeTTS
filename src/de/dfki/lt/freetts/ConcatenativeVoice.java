@@ -16,47 +16,25 @@ import java.net.URL;
 
 import com.sun.speech.freetts.UtteranceProcessor;
 
-/**
- * A generic interface implementing what is common to all
- * concatentive voices (e.g., diphone, cluster unit and arctic voices). 
- */
-public interface ConcatenativeVoice 
-{
-    /**
-     * Gets the url to the database that defines the unit data for this
-     * voice.
-     *
-     * @return a url to the database
-     */
-    URL getDatabase();
-    
-    /**
-     * Returns the pitch mark generator to be used by this voice.
-     * 
-     * @return the pitchmark processor
-     * 
-     * @throws IOException if an IO error occurs while getting
-     *     processor
-     */
-    UtteranceProcessor getPitchmarkGenerator() throws IOException;
+/** A generic interface implementing what is common to all concatentive voices (e.g., diphone, cluster unit and arctic
+ * voices). */
+public interface ConcatenativeVoice {
+	/** Gets the url to the database that defines the unit data for this voice.
+	 * @return a url to the database */
+	URL getDatabase();
 
-    /**
-     * Returns the unit concatenator to be used by this voice.
-     * 
-     * @return the unit concatenator processor
-     * 
-     * @throws IOException if an IO error occurs while getting
-     *     processor
-     */
-    UtteranceProcessor getUnitConcatenator() throws IOException;
+	/** Returns the pitch mark generator to be used by this voice.
+	 * @return the pitchmark processor
+	 * @throws IOException if an IO error occurs while getting processor */
+	UtteranceProcessor getPitchmarkGenerator() throws IOException;
 
-    /**
-     * Returns the unit selector to be used by this voice.
-     * 
-     * @return the unit selector processor
-     * 
-     * @throws IOException if an IO error occurs while getting
-     *     processor
-     */
-    UtteranceProcessor getUnitSelector() throws IOException;
+	/** Returns the unit concatenator to be used by this voice.
+	 * @return the unit concatenator processor
+	 * @throws IOException if an IO error occurs while getting processor */
+	UtteranceProcessor getUnitConcatenator() throws IOException;
+
+	/** Returns the unit selector to be used by this voice.
+	 * @return the unit selector processor
+	 * @throws IOException if an IO error occurs while getting processor */
+	UtteranceProcessor getUnitSelector() throws IOException;
 }

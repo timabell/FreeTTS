@@ -14,95 +14,70 @@ import com.sun.speech.freetts.FeatureSet;
 import com.sun.speech.freetts.Item;
 import com.sun.speech.freetts.Relation;
 
-
-/**
- * Provides a set of utilities for the SegmentRelation. A 
- * SegmentRelation is a Relation, but has
- * features specific to Segments.
- */
+/** Provides a set of utilities for the SegmentRelation. A SegmentRelation is a Relation, but has features specific to
+ * Segments. */
 public class SegmentRelationUtils {
 
-    /**
-     * Returns the Item in the Segment Relation that corresponds to the given
-     * time.
-     *
-     * @param segmentRelation the segmentRelation of interest
-     * @param time the time
-     */
-    public static Item getItem(Relation segmentRelation, float time) {
+	/** Returns the Item in the Segment Relation that corresponds to the given time.
+	 * @param segmentRelation the segmentRelation of interest
+	 * @param time the time */
+	public static Item getItem(Relation segmentRelation, float time) {
 
-	Item lastSegment = segmentRelation.getTail();
-	
-	// if given time is closer to the front than the end, search from
-	// the front; otherwise, start search from end
-	// this might not be the best strategy though
+		Item lastSegment = segmentRelation.getTail();
 
-	float lastSegmentEndTime = SegmentRelationUtils.getSegmentEnd
-	    (lastSegment);
-	
-	if (time < 0 || lastSegmentEndTime < time) {
-	    return null;
-	} else if (lastSegmentEndTime - time > time) {
-	    return SegmentRelationUtils.findFromFront(segmentRelation, time);
-	} else {
-	    return SegmentRelationUtils.findFromEnd(segmentRelation, time);
-	}
-    }
+		// if given time is closer to the front than the end, search from
+		// the front; otherwise, start search from end
+		// this might not be the best strategy though
 
-    /**
-     * Returns the value of the feature <code>end</code> of
-     * the given Segment Item.
-     *
-     * @param segment the Segment Item
-     *
-     * @return the <code>end</code> feature of the Segment
-     */
-    public static float getSegmentEnd(Item segment) {
-	FeatureSet segmentFeatureSet = segment.getFeatures();
-	return segmentFeatureSet.getFloat("end");
-    }
-    
-    /**
-     * Starting from the front of the given Segment Relation, finds the Item
-     * that corresponds to the given time.
-     *
-     * @param segmentRelation the Segment Relation to search
-     * @param time the time of the Segment Item
-     *
-     * @return the Segment Item
-     */
-    public static Item findFromFront(Relation segmentRelation, float time) {
-	Item item = segmentRelation.getHead();
+		float lastSegmentEndTime = SegmentRelationUtils.getSegmentEnd(lastSegment);
 
-	while (item != null &&
-	       time > SegmentRelationUtils.getSegmentEnd(item)) {
-	    item = item.getNext();
+		if (time < 0 || lastSegmentEndTime < time) {
+			return null;
+		} else if (lastSegmentEndTime - time > time) {
+			return SegmentRelationUtils.findFromFront(segmentRelation, time);
+		} else {
+			return SegmentRelationUtils.findFromEnd(segmentRelation, time);
+		}
 	}
 
-	return item;
-    }
-    
-    /**
-     * Starting from the end of the given Segment Relation, go backwards
-     * to find the Item that corresponds to the given time.
-     *
-     * @param segmentRelation the Segment Relation to search
-     * @param time the time of the Segment Item
-     *
-     * @return the Segment Item
-     */
-    public static Item findFromEnd(Relation segmentRelation, float time) {
-	Item item = segmentRelation.getTail();
-		
-	while (item != null &&
-	       SegmentRelationUtils.getSegmentEnd(item) > time) {
-	    item = item.getPrevious();
+	/** Returns the value of the feature <code>end</code> of the given Segment Item.
+	 * @param segment the Segment Item
+	 * @return the <code>end</code> feature of the Segment */
+	public static float getSegmentEnd(Item segment) {
+		FeatureSet segmentFeatureSet = segment.getFeatures();
+		return segmentFeatureSet.getFloat("end");
 	}
 
-	if (item != segmentRelation.getTail()) {
-	    item = item.getNext();
+	/** Starting from the front of the given Segment Relation, finds the Item that corresponds to the given time.
+	 * @param segmentRelation the Segment Relation to search
+	 * @param time the time of the Segment Item
+	 * @return the Segment Item */
+	public static Item findFromFront(Relation segmentRelation, float time) {
+		Item item = segmentRelation.getHead();
+
+		while (item != null && time > SegmentRelationUtils.getSegmentEnd(item)) {
+			item = item.getNext();
+		}
+
+		return item;
 	}
 
-	return item;
-    }
+	/** Starting from the end of the given Segment Relation, go backwards to find the Item that corresponds to the given
+	 * time.
+	 * @param segmentRelation the Segment Relation to search
+	 * @param time the time of the Segment Item
+	 * @return the Segment Item */
+	public static Item findFromEnd(Relation segmentRelation, float time) {
+		Item item = segmentRelation.getTail();
+
+		while (item != null && SegmentRelationUtils.getSegmentEnd(item) > time) {
+			item = item.getPrevious();
+		}
+
+		if (item != segmentRelation.getTail()) {
+			item = item.getNext();
+		}
+
+		return item;
+	}
 }

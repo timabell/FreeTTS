@@ -13,21 +13,11 @@ package com.sun.speech.freetts.en.us;
 import java.io.IOException;
 import java.net.URL;
 
-/**
- * Implements a finite state machine that checks if a given string
- * is a suffix.
- */
+/** Implements a finite state machine that checks if a given string is a suffix. */
 public class SuffixFSM extends PronounceableFSM {
 
-    /**
-     * Constructs a SuffixFSM.
-     */
-    public SuffixFSM(URL url) throws IOException {
-	super(url, false);
-    }
+	/** Constructs a SuffixFSM. */
+	public SuffixFSM(URL url) throws IOException {
+		super(url, false);
+	}
 }
-
-
-
-
-

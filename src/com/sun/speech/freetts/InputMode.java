@@ -10,49 +10,34 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Specifies the input mode of FreeTTS.
- */
+/** Specifies the input mode of FreeTTS. */
 public class InputMode {
-    
-    private final String name;
-    
-    private InputMode(String name) {
-	this.name = name;
-    }
-    
-    public String toString() {
-	return name;
-    }
 
-    /**
-     * Indicates that there is no input mode
-     */
-    public static final InputMode NONE = new InputMode("none");
-    
-    /**
-     * Indicates that the input is from a file.
-     */
-    public static final InputMode FILE = new InputMode("file");
-    
-    /**
-     * Indicates that the input is from text.
-     */
-    public static final InputMode TEXT = new InputMode("text");
-    
-    /**
-     * Indicates that the input is from a URL.
-     */
-    public static final InputMode URL = new InputMode("url");
+	private final String name;
 
-    /**
-     * Indicates that the input is a set of lines in a file..
-     */
-    public static final InputMode LINES = new InputMode("lines");
-    
-    
-    /**
-     * Indicates that the input is from the keyboard.
-     */
-    public static final InputMode INTERACTIVE = new InputMode("interactive");
+	private InputMode(String name) {
+		this.name = name;
+	}
+
+	public String toString() {
+		return name;
+	}
+
+	/** Indicates that there is no input mode */
+	public static final InputMode NONE = new InputMode("none");
+
+	/** Indicates that the input is from a file. */
+	public static final InputMode FILE = new InputMode("file");
+
+	/** Indicates that the input is from text. */
+	public static final InputMode TEXT = new InputMode("text");
+
+	/** Indicates that the input is from a URL. */
+	public static final InputMode URL = new InputMode("url");
+
+	/** Indicates that the input is a set of lines in a file.. */
+	public static final InputMode LINES = new InputMode("lines");
+
+	/** Indicates that the input is from the keyboard. */
+	public static final InputMode INTERACTIVE = new InputMode("interactive");
 }

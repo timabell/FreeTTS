@@ -10,41 +10,24 @@
  */
 package com.sun.speech.freetts;
 
+import com.sun.speech.freetts.relp.Sample;
 
-import com.sun.speech.freetts.relp.Sample;	
-
-/**
- * Defines a generic interface to a Unit. 
- *
- */
+/** Defines a generic interface to a Unit. */
 public interface Unit {
-    
-    /**
-     * Returns the name of this Unit.
-     *
-     * @return the name of this Unit
-     */
-    public String getName();
 
-    /**
-     * Returns the size of this unit.
-     *
-     * @return the size of this unit
-     */
-    public int getSize();
+	/** Returns the name of this Unit.
+	 * @return the name of this Unit */
+	public String getName();
 
-    /**
-     * Retrieves the nearest sample.
-     *
-     * @param index the ideal index
-     *
-     * @return the nearest Sample
-     */
-    public Sample getNearestSample(float index);
+	/** Returns the size of this unit.
+	 * @return the size of this unit */
+	public int getSize();
 
+	/** Retrieves the nearest sample.
+	 * @param index the ideal index
+	 * @return the nearest Sample */
+	public Sample getNearestSample(float index);
 
-    /**
-     * Dumps this unit.
-     */
-    public void dump(); 
+	/** Dumps this unit. */
+	public void dump();
 }

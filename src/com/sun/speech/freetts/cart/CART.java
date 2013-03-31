@@ -15,31 +15,16 @@ import java.io.IOException;
 
 import com.sun.speech.freetts.Item;
 
-/**
- * Generic interface for Classification and Regression Trees (CARTs) based
- * on the Breiman, Friedman, Olshen, and Stone document "Classification and
- * Regression Trees."  Wadsworth, Belmont, CA, 1984.
- */
+/** Generic interface for Classification and Regression Trees (CARTs) based on the Breiman, Friedman, Olshen, and Stone
+ * document "Classification and Regression Trees." Wadsworth, Belmont, CA, 1984. */
 public interface CART {
-    /**
-     * Passes the given item through this CART and returns the
-     * interpretation.
-     *
-     * @param item the item to analyze
-     *
-     * @return the interpretation
-     */
-    Object interpret(Item item);
+	/** Passes the given item through this CART and returns the interpretation.
+	 * @param item the item to analyze
+	 * @return the interpretation */
+	Object interpret(Item item);
 
-    /**
-     * Dumps this CART to the output stream.
-     *
-     * @param os the output stream
-     *
-     * @throws IOException if an error occurs during output
-     */
-    void dumpBinary(DataOutputStream os) throws IOException ;
+	/** Dumps this CART to the output stream.
+	 * @param os the output stream
+	 * @throws IOException if an error occurs during output */
+	void dumpBinary(DataOutputStream os) throws IOException;
 }
-
-
-  

@@ -17,44 +17,27 @@ import com.sun.speech.freetts.ProcessException;
 import com.sun.speech.freetts.Utterance;
 import com.sun.speech.freetts.UtteranceProcessor;
 
-
-/**
- * Tags the words in the utterance with their part-of-speech.
- * Currently this does nothing.
- */
+/** Tags the words in the utterance with their part-of-speech. Currently this does nothing. */
 public class PartOfSpeechTagger implements UtteranceProcessor {
-    /** Logger instance. */
-    private static final Logger LOGGER =
-        Logger.getLogger(PartOfSpeechTagger.class.getName());
+	/** Logger instance. */
+	private static final Logger LOGGER = Logger.getLogger(PartOfSpeechTagger.class.getName());
 
-    /**
-     * Constructs a PartOfSpeechTagger
-     */
-    public PartOfSpeechTagger() {
-    }
+	/** Constructs a PartOfSpeechTagger */
+	public PartOfSpeechTagger() {
+	}
 
-    /**
-     * Tags the utterance with part-of-speech information. Currently
-     * this processor does nothing.
-     *
-     * @param  utterance  the utterance to process/tokenize
-     *
-     * @throws ProcessException if an error occurs while 
-     *         processing of the utterance
-     */
-    public void processUtterance(Utterance utterance) throws ProcessException {
-        if (LOGGER.isLoggable(Level.FINE)) {
-            LOGGER.fine("PartOfSpeechTagger does nothing!");
-        }
-    }
+	/** Tags the utterance with part-of-speech information. Currently this processor does nothing.
+	 * @param utterance the utterance to process/tokenize
+	 * @throws ProcessException if an error occurs while processing of the utterance */
+	public void processUtterance(Utterance utterance) throws ProcessException {
+		if (LOGGER.isLoggable(Level.FINE)) {
+			LOGGER.fine("PartOfSpeechTagger does nothing!");
+		}
+	}
 
-    /**
-     * Returns the string representation of the object
-     *
-     * @return the string representation of the object
-     */
-    public String toString() {
-        return "PartOfSpeechTagger";
-    }
+	/** Returns the string representation of the object
+	 * @return the string representation of the object */
+	public String toString() {
+		return "PartOfSpeechTagger";
+	}
 }
-

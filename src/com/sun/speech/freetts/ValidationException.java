@@ -10,19 +10,13 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Thrown by a Validator if any errors
- * are encountered while validating.
- */
+/** Thrown by a Validator if any errors are encountered while validating. */
 @SuppressWarnings("serial")
 public class ValidationException extends Exception {
 
-    /**
-     * Class constructor.
-     *
-     * @param s the reason why the exception was thrown
-     */
-    public ValidationException(String s) {
-        super(s);
-    }
+	/** Class constructor.
+	 * @param s the reason why the exception was thrown */
+	public ValidationException(String s) {
+		super(s);
+	}
 }

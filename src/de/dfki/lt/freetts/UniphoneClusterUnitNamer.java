@@ -2,11 +2,7 @@ package de.dfki.lt.freetts;
 
 import com.sun.speech.freetts.Item;
 
-/**
- * A ClusterUnitNamer using the simplest unitname, 
- * i.e. just the uniphone itself
- *
- */
+/** A ClusterUnitNamer using the simplest unitname, i.e. just the uniphone itself */
 public class UniphoneClusterUnitNamer implements ClusterUnitNamer {
 
 	public UniphoneClusterUnitNamer() {

@@ -22,103 +22,87 @@ import com.sun.speech.freetts.Voice;
 import com.sun.speech.freetts.VoiceManager;
 import com.sun.speech.freetts.audio.AudioPlayer;
 
-/**
- * Simple program to use FreeTTS as an RTP data source.
- * @author Dirk Schnelle
- */
+/** Simple program to use FreeTTS as an RTP data source.
+ * @author Dirk Schnelle */
 public class RtpServerDemo {
 
-    /**
-     * Example of how to list all the known voices.
-     */
-    public static void listAllVoices() {
-        System.out.println();
-        System.out.println("All voices available:");
-        VoiceManager voiceManager = VoiceManager.getInstance();
-        Voice[] voices = voiceManager.getVoices();
-        for (int i = 0; i < voices.length; i++) {
-            System.out.println("    " + voices[i].getName() + " ("
-                    + voices[i].getDomain() + " domain)");
-        }
-    }
+	/** Example of how to list all the known voices. */
+	public static void listAllVoices() {
+		System.out.println();
+		System.out.println("All voices available:");
+		VoiceManager voiceManager = VoiceManager.getInstance();
+		Voice[] voices = voiceManager.getVoices();
+		for (int i = 0; i < voices.length; i++) {
+			System.out.println("    " + voices[i].getName() + " (" + voices[i].getDomain() + " domain)");
+		}
+	}
 
-    /**
-     * Starts the program
-     * @param args none expected
-     */
-    public static void main(String[] args) {
+	/** Starts the program
+	 * @param args none expected */
+	public static void main(String[] args) {
 
-        listAllVoices();
+		listAllVoices();
 
-        String voiceName = (args.length > 0) ? args[0] : "kevin16";
+		String voiceName = (args.length > 0) ? args[0] : "kevin16";
 
-        System.out.println();
-        System.out.println("Using voice: " + voiceName);
+		System.out.println();
+		System.out.println("Using voice: " + voiceName);
 
-        /*
-         * The VoiceManager manages all the voices for FreeTTS.
-         */
-        VoiceManager voiceManager = VoiceManager.getInstance();
-        Voice helloVoice = voiceManager.getVoice(voiceName);
+		/* The VoiceManager manages all the voices for FreeTTS. */
+		VoiceManager voiceManager = VoiceManager.getInstance();
+		Voice helloVoice = voiceManager.getVoice(voiceName);
 
-        if (helloVoice == null) {
-            System.err.println("Cannot find a voice named " + voiceName
-                    + ".  Please specify a different voice.");
-            System.exit(1);
-        }
+		if (helloVoice == null) {
+			System.err.println("Cannot find a voice named " + voiceName + ".  Please specify a different voice.");
+			System.exit(1);
+		}
 
-        RtpServer server = null;
-        FreeTTSDataSource ds = new FreeTTSDataSource();
-        AudioPlayer player = null;
-        try {
-            server = new RtpServer();
-            server.addTarget(49150);
-            player = new RtpAudioPlayer(ds);
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SessionManagerException e) {
-            e.printStackTrace();
-        } catch (MediaException e) {
-            e.printStackTrace();
-        }
+		RtpServer server = null;
+		FreeTTSDataSource ds = new FreeTTSDataSource();
+		AudioPlayer player = null;
+		try {
+			server = new RtpServer();
+			server.addTarget(49150);
+			player = new RtpAudioPlayer(ds);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SessionManagerException e) {
+			e.printStackTrace();
+		} catch (MediaException e) {
+			e.printStackTrace();
+		}
 
-        /*
-         * Allocates the resources for the voice.
-         */
-        helloVoice.allocate();
+		/* Allocates the resources for the voice. */
+		helloVoice.allocate();
 
-        /*
-         * Synthesize speech.
-         */
-        helloVoice.setAudioPlayer(player);
-        helloVoice.speak("This is the RTP test");
-        try {
-            server.initSendStream(ds);
-            server.startSending();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (MediaException e) {
-            e.printStackTrace();
-        }
+		/* Synthesize speech. */
+		helloVoice.setAudioPlayer(player);
+		helloVoice.speak("This is the RTP test");
+		try {
+			server.initSendStream(ds);
+			server.startSending();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (MediaException e) {
+			e.printStackTrace();
+		}
 
-        // Wait until all data is being delivered.
-        ds.waitCompleted();
-        ds.disconnect();
-        
-        /*
-         * Clean up and leave.
-         */
-        helloVoice.deallocate();
-        try {
-            server.stopSending();
-            server.dispose();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        
-        System.exit(0);
-    }
+		// Wait until all data is being delivered.
+		ds.waitCompleted();
+		ds.disconnect();
+
+		/* Clean up and leave. */
+		helloVoice.deallocate();
+		try {
+			server.stopSending();
+			server.dispose();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.exit(0);
+	}
 }

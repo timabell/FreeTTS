@@ -10,22 +10,12 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Maintains a set of <code>PhoneDuration</code> instances indexed by
- * phone.
- *
- * @see PhoneDuration
- */
+/** Maintains a set of <code>PhoneDuration</code> instances indexed by phone.
+ * @see PhoneDuration */
 public interface PhoneDurations {
-    /**
-     * Gets the <code>PhoneDuration</code> for the given phone.  If no
-     * duration is applicable, returns <code>null</code>.  Note that
-     * 'applicable' implementation dependent; some implementations
-     * may return a default value.
-     *
-     * @param phone the phone to get duration information for
-     *
-     * @return the duration information for the phone
-     */
-    PhoneDuration getPhoneDuration(String phone);
+	/** Gets the <code>PhoneDuration</code> for the given phone. If no duration is applicable, returns <code>null</code>.
+	 * Note that 'applicable' implementation dependent; some implementations may return a default value.
+	 * @param phone the phone to get duration information for
+	 * @return the duration information for the phone */
+	PhoneDuration getPhoneDuration(String phone);
 }

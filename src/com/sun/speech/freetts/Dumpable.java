@@ -12,19 +12,12 @@ package com.sun.speech.freetts;
 
 import java.io.PrintWriter;
 
-/**
- * Tags an object that can be dumped for debugging purposes.
- */
+/** Tags an object that can be dumped for debugging purposes. */
 public interface Dumpable {
 
-    /**
-     * Dumps the object to a PrintWriter.
-     *
-     * @param pw the stream to send the output
-     * @param padding the number of spaces in the string
-     * @param title the title for the dump
-     */
-    void dump(PrintWriter pw, int padding, String title);
+	/** Dumps the object to a PrintWriter.
+	 * @param pw the stream to send the output
+	 * @param padding the number of spaces in the string
+	 * @param title the title for the dump */
+	void dump(PrintWriter pw, int padding, String title);
 }
-
-  

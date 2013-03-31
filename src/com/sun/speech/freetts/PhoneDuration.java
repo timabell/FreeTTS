@@ -10,52 +10,33 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Maintains the mean duration and standard deviation about a phone.
- * These are meant to be used by the code that calculates segment
- * durations via statistical methods, and are paired with the phone
- * by <code>PhoneDurations</code>.
- *
- * @see PhoneDurations
- */
+/** Maintains the mean duration and standard deviation about a phone. These are meant to be used by the code that
+ * calculates segment durations via statistical methods, and are paired with the phone by <code>PhoneDurations</code>.
+ * @see PhoneDurations */
 public class PhoneDuration {
-    /**
-     * The mean duration.
-     */
-    private float mean;
+	/** The mean duration. */
+	private float mean;
 
-    /**
-     * The standard deviation from the mean.
-     */
-    private float standardDeviation;
+	/** The standard deviation from the mean. */
+	private float standardDeviation;
 
-    /**
-     * Creates a new <code>PhoneDuration</code> with the given mean
-     * and standard deviation.
-     *
-     * @param mean mean duration, typically in seconds
-     * @param standardDeviation standardDeviation from the mean
-     */
-    public PhoneDuration(float mean, float standardDeviation) {
-        this.mean = mean;
-        this.standardDeviation = standardDeviation;
-    }
+	/** Creates a new <code>PhoneDuration</code> with the given mean and standard deviation.
+	 * @param mean mean duration, typically in seconds
+	 * @param standardDeviation standardDeviation from the mean */
+	public PhoneDuration(float mean, float standardDeviation) {
+		this.mean = mean;
+		this.standardDeviation = standardDeviation;
+	}
 
-    /**
-     * Gets the mean.  The return value is typically in seconds.
-     *
-     * @return the mean
-     */
-    public float getMean() {
-        return mean;
-    }
+	/** Gets the mean. The return value is typically in seconds.
+	 * @return the mean */
+	public float getMean() {
+		return mean;
+	}
 
-    /**
-     * Gets the standard deviation from the mean.
-     *
-     * @return the standard deviation from the mean
-     */
-    public float getStandardDeviation() {
-        return standardDeviation;
-    }
+	/** Gets the standard deviation from the mean.
+	 * @return the standard deviation from the mean */
+	public float getStandardDeviation() {
+		return standardDeviation;
+	}
 }

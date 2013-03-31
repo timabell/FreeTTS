@@ -27,77 +27,60 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Iterator;
 
-
-/**
- * Annotates an utterance with pause information.
- */
+/** Annotates an utterance with pause information. */
 public class PauseGenerator implements UtteranceProcessor {
-    private final static PathExtractor segmentPath = new
-      PathExtractorImpl("R:SylStructure.daughtern.daughtern.R:Segment", false);
-    private final static PathExtractor puncPath =
-      new PathExtractorImpl("R:Token.parent.punc", true);
+	private final static PathExtractor segmentPath = new PathExtractorImpl(
+			"R:SylStructure.daughtern.daughtern.R:Segment", false);
+	private final static PathExtractor puncPath = new PathExtractorImpl("R:Token.parent.punc", true);
 
-    /**
-     * Constructs a PauseGenerator
-     */
-     public PauseGenerator() {
-     }
-
-    /**
-     * Annotates an utterance with pause information.
-     *
-     * @param  utterance  the utterance to process
-     *
-     * @throws ProcessException if an error occurs while
-     *         processing of the utterance
-     */
-    public void processUtterance(Utterance utterance) throws ProcessException {
-	String silence = utterance.getVoice().getFeatures().
-	    	getString(Voice.FEATURE_SILENCE);
-
-	Item phraseHead = utterance.getRelation(Relation.PHRASE).getHead();
-
-	// If there are not any phrases at all, then just skip
-	// the whole thing.
-
-	if (phraseHead == null) {
-	    return;
+	/** Constructs a PauseGenerator */
+	public PauseGenerator() {
 	}
 
-	// insert initial silence
-	Relation segment = utterance.getRelation(Relation.SEGMENT);
-	Item s = segment.getHead();
-	if (s == null) {
-	    s = segment.appendItem(null);
-	} else {
-	   s = s.prependItem(null);
-	}
-	s.getFeatures().setString("name", silence);
+	/** Annotates an utterance with pause information.
+	 * @param utterance the utterance to process
+	 * @throws ProcessException if an error occurs while processing of the utterance */
+	public void processUtterance(Utterance utterance) throws ProcessException {
+		String silence = utterance.getVoice().getFeatures().getString(Voice.FEATURE_SILENCE);
 
-	for (Item phrase = phraseHead;
-		    phrase != null;
-		    phrase = phrase.getNext()) {
-	    Item word = phrase.getLastDaughter();
-	    while (word != null) {
-		Item seg = segmentPath.findItem(word);
-	    // was this an explicit change or a lost bug fix
-	    //if (seg != null && !"".equals(puncPath.findFeature(word))) {
-		if (seg != null) {
-		    Item pause = seg.appendItem(null);
-		    pause.getFeatures().setString("name", silence);
-		    break;
+		Item phraseHead = utterance.getRelation(Relation.PHRASE).getHead();
+
+		// If there are not any phrases at all, then just skip
+		// the whole thing.
+
+		if (phraseHead == null) {
+			return;
 		}
-		word = word.getPrevious();
-	    }
-	}
-    }
 
-    /**
-     * Returns the string representation of the object
-     *
-     * @return the string representation of the object
-     */
-    public String toString() {
-        return "PauseGenerator";
-    }
+		// insert initial silence
+		Relation segment = utterance.getRelation(Relation.SEGMENT);
+		Item s = segment.getHead();
+		if (s == null) {
+			s = segment.appendItem(null);
+		} else {
+			s = s.prependItem(null);
+		}
+		s.getFeatures().setString("name", silence);
+
+		for (Item phrase = phraseHead; phrase != null; phrase = phrase.getNext()) {
+			Item word = phrase.getLastDaughter();
+			while (word != null) {
+				Item seg = segmentPath.findItem(word);
+				// was this an explicit change or a lost bug fix
+				// if (seg != null && !"".equals(puncPath.findFeature(word))) {
+				if (seg != null) {
+					Item pause = seg.appendItem(null);
+					pause.getFeatures().setString("name", silence);
+					break;
+				}
+				word = word.getPrevious();
+			}
+		}
+	}
+
+	/** Returns the string representation of the object
+	 * @return the string representation of the object */
+	public String toString() {
+		return "PauseGenerator";
+	}
 }

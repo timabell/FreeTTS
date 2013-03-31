@@ -10,16 +10,10 @@
  */
 package com.sun.speech.freetts;
 
-/**
- * Implementors of this interface can be validated via the validate()
- * method.
- */
+/** Implementors of this interface can be validated via the validate() method. */
 public interface Validator {
 
-    /**
-     * Validates a certain condition.
-     *
-     * @throws a ValidationException if the condition is invalid.
-     */
-    public void validate() throws ValidationException;
+	/** Validates a certain condition.
+	 * @throws a ValidationException if the condition is invalid. */
+	public void validate() throws ValidationException;
 }

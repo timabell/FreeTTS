@@ -10,16 +10,11 @@
  */
 package com.sun.speech.freetts.en.us;
 
-/**
- * Provides a CMU time lexicon-specific implementation of a Lexicon.
- * stored in a text file.
- */
+/** Provides a CMU time lexicon-specific implementation of a Lexicon. stored in a text file. */
 public class CMUTimeLexicon extends CMULexicon {
-    
-    /**
-     * Creates a default CMUTimeLexicon which is a binary lexicon
-     */
-    public CMUTimeLexicon() {
-	super("cmutimelex");
-    }
+
+	/** Creates a default CMUTimeLexicon which is a binary lexicon */
+	public CMUTimeLexicon() {
+		super("cmutimelex");
+	}
 }
