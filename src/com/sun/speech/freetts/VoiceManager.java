@@ -439,7 +439,7 @@ public class VoiceManager {
 		}
 		int dir = urlFileName.lastIndexOf("/", i);
 		if (!urlFileName.startsWith("file:")) {
-			return "";
+			return ""; // TODO: why?
 		}
 		return urlFileName.substring(5, dir) + "/";
 	}
