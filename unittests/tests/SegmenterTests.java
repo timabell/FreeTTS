@@ -30,7 +30,11 @@ public class SegmenterTests extends TestCase {
 	 * @return the utterance */
 	public Utterance getSyllables(String text) {
 		VoiceManager voiceManager = VoiceManager.getInstance();
-		voice = voiceManager.getVoice("kevin");
+		String voiceName = "kevin";
+		voice = voiceManager.getVoice(voiceName);
+		if (voice == null) {
+			throw new RuntimeException("failed to load voice '" + voiceName + "'");
+		}
 		voice.allocate();
 		utterance = new Utterance(voice);
 		Relation words = utterance.createRelation("Word");
