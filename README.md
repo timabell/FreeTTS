@@ -1,9 +1,17 @@
 Forked FreeTTS
 ==============
 
+https://github.com/timabell/FreeTTS
+
 This fork of freetts was created (thanks to the open source license in use) in order to republish with a bugfix for a hang under OpenJDK. Binary code mixed in to the upstream repo has been stripped out as this is incompatible with the GPL.
 
 The motivation is to improve the capability of this app: https://launchpad.net/communication
+
+Contributions to this fork are welcomed, preferably through github's pull request system.
+
+Fork maintainer: Tim Abell <tim@timwise.co.uk>
+
+April 2013
 
 ----
 
