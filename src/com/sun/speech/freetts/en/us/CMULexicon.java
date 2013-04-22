@@ -60,21 +60,30 @@ public class CMULexicon extends LexiconImpl {
 	public CMULexicon(String basename, boolean useBinaryIO) {
 		java.net.URLClassLoader classLoader = VoiceManager.getVoiceClassLoader();
 		String type = (useBinaryIO ? "bin" : "txt");
+		String basePath = "com/sun/speech/freetts/en/us/" + basename;
 
-		URL letterToSoundURL = classLoader.getResource("com/sun/speech/freetts/en/us/" + basename + "_lts." + type);
-		URL compiledURL = classLoader.getResource("com/sun/speech/freetts/en/us/" + basename + "_compiled." + type);
-		URL addendaURL = classLoader.getResource("com/sun/speech/freetts/en/us/" + basename + "_addenda." + type);
+		URL letterToSoundURL = classLoader.getResource(basePath + "_lts." + type);
+		URL compiledURL = classLoader.getResource(basePath + "_compiled." + type);
+		URL addendaURL = classLoader.getResource(basePath + "_addenda." + type);
+
+		if (letterToSoundURL == null) {
+			LOGGER.warning("Failed to load lexicon data from CMULexiconom resource" + basePath + "_lts." + type);
+			basePath = "bld/classes/com/sun/speech/freetts/en/us/" + basename;
+			letterToSoundURL = classLoader.getResource(basePath + "_lts." + type);
+			compiledURL = classLoader.getResource(basePath + "_compiled." + type);
+			addendaURL = classLoader.getResource(basePath + "_addenda." + type);
+		}
 
 		/* Just another try with possibly a different class loader if the above didn't work. */
 		if (letterToSoundURL == null) {
-			LOGGER.warning("Failed to load lexicon data from resource com/sun/speech/freetts/en/us/" + basename + "_lts."
-					+ type);
-			Class cls = CMULexicon.class;
-			letterToSoundURL = cls.getResource(basename + "_lts." + type);
-			compiledURL = cls.getResource(basename + "_compiled." + type);
-			addendaURL = cls.getResource(basename + "_addenda." + type);
+			LOGGER.warning("Failed to load lexicon data from CMULexiconom resource" + basePath + "_lts." + type);
+			Class<CMULexicon> cls = CMULexicon.class;
+			basePath = basename;
+			letterToSoundURL = cls.getResource(basePath + "_lts." + type);
+			compiledURL = cls.getResource(basePath + "_compiled." + type);
+			addendaURL = cls.getResource(basePath + "_addenda." + type);
 			if (letterToSoundURL == null) {
-				throw new RuntimeException("Failed to load lexicon data from resource " + basename + "_lts." + type);
+				throw new RuntimeException("Failed to load lexicon data from resource " + basePath + "_lts." + type);
 			}
 		}
 
