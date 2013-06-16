@@ -67,7 +67,7 @@ public class CMULexicon extends LexiconImpl {
 		URL addendaURL = classLoader.getResource(basePath + "_addenda." + type);
 
 		if (letterToSoundURL == null) {
-			LOGGER.warning("Failed to load lexicon data from CMULexiconom resource" + basePath + "_lts." + type);
+			LOGGER.warning("Failed to load lexicon data from resource " + basePath + "_lts." + type);
 			basePath = "bld/classes/com/sun/speech/freetts/en/us/" + basename;
 			letterToSoundURL = classLoader.getResource(basePath + "_lts." + type);
 			compiledURL = classLoader.getResource(basePath + "_compiled." + type);
@@ -76,7 +76,7 @@ public class CMULexicon extends LexiconImpl {
 
 		/* Just another try with possibly a different class loader if the above didn't work. */
 		if (letterToSoundURL == null) {
-			LOGGER.warning("Failed to load lexicon data from CMULexiconom resource" + basePath + "_lts." + type);
+			LOGGER.warning("Failed to load lexicon data from resource " + basePath + "_lts." + type);
 			Class<CMULexicon> cls = CMULexicon.class;
 			basePath = basename;
 			letterToSoundURL = cls.getResource(basePath + "_lts." + type);
